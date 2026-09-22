@@ -1,0 +1,19 @@
+# Visual Studio build artifacts and caches
+x64/
+x86/
+Debug/
+Release/
+.vs/
+
+# Per-user VS settings
+*.user
+*.suo
+
+# Compiled objects and debug files
+*.obj
+*.pdb
+*.ilk
+*.exe
+
+# Python
+__pycache__/
