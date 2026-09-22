@@ -6,7 +6,8 @@
 
 ## 0. 工作流（git + PR）
 
-1. A 把仓库推上 GitHub（**私有**），拉 B / C 进 collaborator
+1. 仓库：`https://github.com/roxyoxy/MY_CTF_RAG`（私有，A 管 main），
+   A 拉 B / C 进 collaborator
 2. B / C：`git clone` → `git checkout -b 分支名`（如 `b-indexer`、`c-loader`）
 3. 手写代码：在伪代码注释块下方写真代码；真代码的注释用**英文纯 ASCII**
 4. 自测用例全过后：`git push` 分支 → GitHub 上开 PR（目标 `main`）
