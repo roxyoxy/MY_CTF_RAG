@@ -142,7 +142,11 @@
     <ClInclude Include="include\type.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\chunker.cpp" />
+    <ClCompile Include="src\indexer.cpp" />
+    <ClCompile Include="src\loader.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\tokenizer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
