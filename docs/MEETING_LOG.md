@@ -327,3 +327,7 @@ A 拉 PR 分支本地编译联调（兼容性测试），过了才 merge（手�
 排期 / M3-M5，含"墓碑字段 M1 无消费者"留白记录）。
 配套 `.gitignore` 就位（x64/.vs/*.user 等不进仓库）。
 B/C 开工前置链：clone → 读 TASKS.md → 第 0 步复述 → 开分支动工。
+
+## [2026-09-26 13:27] C
+
+开工 T1 tokenizer，创建分支 c-tokenizer。
