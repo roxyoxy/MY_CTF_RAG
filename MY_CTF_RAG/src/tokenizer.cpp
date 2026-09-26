@@ -1,37 +1,78 @@
-﻿// tokenizer.cpp
+// tokenizer.cpp
 // Implements the contract in include/tokenizer.h.
-
+#include <vector>
+#include <string>
+#include <cctype>
+#include <utility>
 #include "tokenizer.h"
 
-// ================================================================
-// 伪代码占位 -- 手写真代码写在本块下方，翻译完一段删一段注释，
-// 注释删光 = 竣工（真代码的注释请用英文，保持纯 ASCII）。
-// ================================================================
+// Tokenizes one piece of text into lowercase tokens.
 //
-// 函数 tokenize(text):
-//     tokens = 空字符串列表
-//     i = 0
-//     当 i < text 长度:
-//         如果 text[i] 是词内字符（字母 / 数字 / 连字符）:
-//             start = i
-//             当 i < text 长度 且 text[i] 是词内字符:
-//                 i = i + 1
-//             tokens 追加 lowercase(text[start .. i))
-//         否则:
-//             i = i + 1                     // 分隔符，跳过
-//     返回 tokens
-//
-// 提示（每条对应契约条款）:
-// - 单趟扫描，两个移动指针（start 和 i）: 经典"扫描窗口"模式
-// - "最长连续段" = 一路吞词内字符直到撞上分隔符
-// - 判断词内字符: isalnum 或者自己写（字母 || 数字 || '-'）
-// - 小写化可以扫字符时顺手做，也可以切出整词后做 -- 你定
-// - 空文本根本进不了循环 -> 自然返回空 vector，不用特判
-// - 英文语料下字母数字都是单字节，逐字节判断即可
-//
-// 自测用例（全过才算关账）:
+// Implementation notes:
+// 1. Single scan with two cursors: start marks the first byte of a
+//    word, i runs forward while word characters continue; the
+//    half-open range [start, i) is one token, cut out with substr.
+// 2. Word characters are letters, digits, and hyphens; '.' and '_'
+//    count only when both neighbors are letters or digits (the
+//    sandwich rule, tokenizer.h clause 2). The predicate is
+//    position-aware: isWordCharAt(position) captures text and checks
+//    both neighbors, so it is not a plain char predicate.
+// 3. Bytes are cast to unsigned char before isalnum/tolower because
+//    passing a negative char value to them is undefined behavior.
+
+std::vector<std::string> tokenize(const std::string& text) {
+	std::vector<std::string> tokens;
+	std::string::size_type i = 0;
+	const auto isAlphaNum = [](char ch) {
+		return std::isalnum(static_cast<unsigned char>(ch)) != 0;
+	};
+	const auto isWordCharAt = [&text, &isAlphaNum](std::string::size_type position) {
+		const char ch = text[position];
+		if (isAlphaNum(ch) || ch == '-') {
+			return true;
+		}
+
+		return (ch == '.' || ch == '_') &&
+			   position > 0 &&
+			   position + 1 < text.size() &&
+			   isAlphaNum(text[position - 1]) &&
+			   isAlphaNum(text[position + 1]);
+	};
+
+	while (i < text.size()) {
+		if (isWordCharAt(i)) {
+			const std::string::size_type start = i;
+			while (i < text.size() && isWordCharAt(i)) {
+				++i;
+			}
+
+			std::string token = text.substr(start, i - start);
+			for (char& ch : token) {
+				ch = static_cast<char>(
+					std::tolower(static_cast<unsigned char>(ch)));
+			}
+			tokens.emplace_back(std::move(token));
+		} 
+        else {
+			++i;
+		}
+	}
+
+	return tokens;
+}
+
+// Self-test cases (all must pass before closing the task;
+// decision record: MEETING_LOG 2026-09-26 AI-C):
 // - "Hello, World"           -> [hello] [world]
-// - "use-after-free"         -> [use-after-free]       连字符保留
-// - ""                       -> 空 vector
-// - "ret2libc NX libc-2.31"  -> [ret2libc] [nx] [libc-2.31]
-// - "Phrack #49!"            -> [phrack] [49]          数字是词内字符
+// - "use-after-free"         -> [use-after-free]        hyphen kept
+// - ""                       -> (empty vector)
+// - "ret2libc NX libc-2.31"  -> [ret2libc] [nx] [libc-2.31]   version dot kept
+// - "Phrack #49!"            -> [phrack] [49]           digits are word chars
+// - "It costs 2.31."         -> [it] [costs] [2.31]     sentence period splits
+// - "wait..."                -> [wait]                  ellipsis splits
+// - "127.0.0.1"              -> [127.0.0.1]             IP kept whole
+// - "exploit.py"             -> [exploit.py]            filename kept whole
+// - "buf_size"               -> [buf_size]              inner underscore kept
+// - "__libc_csu_init"        -> [libc_csu_init]         leading underscores split
+// - "_emphasis_"             -> [emphasis]              markdown underscores split
+// - "e.g."                   -> [e.g]                   known cosmetic edge

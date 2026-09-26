@@ -19,6 +19,7 @@ constexpr int CHUNK_OVERLAP = 50;
 // 1. Chunk ids are assigned globally and increase across documents.
 //    doc 0 -> ids 0..4, doc 1 -> ids 5..7, and so on.
 // 2. chunk_size and overlap are measured in words, not bytes.
+//    A word is a token as defined by tokenizer.h (clause 2).
 //    The cut point always falls on a word boundary.
 // 3. Chunk::begin and Chunk::end remain byte offsets into Document::content.
 //    Chunk::text equals content.substr(begin, end - begin).
