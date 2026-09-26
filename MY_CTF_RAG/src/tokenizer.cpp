@@ -21,44 +21,44 @@
 //    passing a negative char value to them is undefined behavior.
 
 std::vector<std::string> tokenize(const std::string& text) {
-	std::vector<std::string> tokens;
-	std::string::size_type i = 0;
-	const auto isAlphaNum = [](char ch) {
-		return std::isalnum(static_cast<unsigned char>(ch)) != 0;
-	};
-	const auto isWordCharAt = [&text, &isAlphaNum](std::string::size_type position) {
-		const char ch = text[position];
-		if (isAlphaNum(ch) || ch == '-') {
-			return true;
-		}
+    std::vector<std::string> tokens;
+    std::string::size_type i = 0;
+    const auto isAlphaNum = [](char ch) {
+        return std::isalnum(static_cast<unsigned char>(ch)) != 0;
+    };
+    const auto isWordCharAt = [&text, &isAlphaNum](std::string::size_type position) {
+        const char ch = text[position];
+        if (isAlphaNum(ch) || ch == '-') {
+            return true;
+        }
 
-		return (ch == '.' || ch == '_') &&
-			   position > 0 &&
-			   position + 1 < text.size() &&
-			   isAlphaNum(text[position - 1]) &&
-			   isAlphaNum(text[position + 1]);
-	};
+        return (ch == '.' || ch == '_') &&
+               position > 0 &&
+               position + 1 < text.size() &&
+               isAlphaNum(text[position - 1]) &&
+               isAlphaNum(text[position + 1]);
+    };
 
-	while (i < text.size()) {
-		if (isWordCharAt(i)) {
-			const std::string::size_type start = i;
-			while (i < text.size() && isWordCharAt(i)) {
-				++i;
-			}
+    while (i < text.size()) {
+        if (isWordCharAt(i)) {
+            const std::string::size_type start = i;
+            while (i < text.size() && isWordCharAt(i)) {
+                ++i;
+            }
 
-			std::string token = text.substr(start, i - start);
-			for (char& ch : token) {
-				ch = static_cast<char>(
-					std::tolower(static_cast<unsigned char>(ch)));
-			}
-			tokens.emplace_back(std::move(token));
-		} 
+            std::string token = text.substr(start, i - start);
+            for (char& ch : token) {
+                ch = static_cast<char>(
+                    std::tolower(static_cast<unsigned char>(ch)));
+            }
+            tokens.emplace_back(std::move(token));
+        } 
         else {
-			++i;
-		}
-	}
+            ++i;
+        }
+    }
 
-	return tokens;
+    return tokens;
 }
 
 // Self-test cases (all must pass before closing the task;
