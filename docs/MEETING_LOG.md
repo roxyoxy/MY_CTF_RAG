@@ -373,6 +373,21 @@ AI 参与：教练讲解 + review；经我授权AI补写注释，属一次性授
 
 开工 T2 loader，创建分支 c-loader。添加loader.cpp到解决方案。
 
+## [2026-09-27 1:12] C
+
+【竣工】T2 loader.cpp（AI-C 参与开工前契约讲解与代码 review）。
+实现对照契约逐条落地：
+- recursive_directory_iterator 递归收集 .md/.txt，扩展名忽略大小写
+- path 经 lexically_relative + generic_string，存相对 dir 的正斜杠路径
+- 先按相对路径字典序排序再编号（id = 下标）——同一语料处处产出同一
+  id 序列，M2 增量建库的地基
+- ifstream 二进制模式整文件读入，content 与磁盘字节一致
+- is_directory(error_code) 双分支：目录不存在/访问失败分别抛错（fail fast）
+- 空目录返回空 vector，不抛
+AI-C review 确认两处易错点方向正确：空文件会令 `stream << rdbuf()`
+置 failbit，故读后查 bad() 而非 fail()；tolower 前转 unsigned char
+（UB 规避纪律自 tokenizer 延续）。
+
 ## [2026-09-27 01:20] A
 
 【决策】批准 09-26 20:11 AI-C 的 tokenizer 契约变更（三明治规则）：
