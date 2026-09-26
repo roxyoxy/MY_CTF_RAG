@@ -21,11 +21,11 @@
 
 | 任务 | 文件 | 契约 | 执行人 | 状态 |
 |---|---|---|---|---|
-| T1 | `src/tokenizer.cpp` | `include/tokenizer.h` | C | 待开工 |
-| T2 | `src/loader.cpp` | `include/loader.h` | C | 待开工 |
+| T1 | `src/tokenizer.cpp` | `include/tokenizer.h` | C | ✅ 竣工，PR #1 已合并（2026-09-27） |
+| T2 | `src/loader.cpp` | `include/loader.h` | C | 进行中（C 自报接近完成） |
 | T3 | `src/chunker.cpp` | `include/chunker.h` | B | 待开工 |
 | T4 | `src/indexer.cpp` | `include/indexer.h` | B | 待开工 |
-| T0 | data/ 语料 + 集成验收 + M2/M3 设计推进 | — | A | 进行中 |
+| T0 | data/ 语料 + 集成验收 + M2/M3 设计推进 | — | A | 进行中（PR #1 验收已完成） |
 
 ## 2. 铁规则（对所有人）
 
@@ -127,6 +127,8 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
 
 - [ ] data/ 语料：3-5 篇迷你英文 writeup，分类子目录（A，联调硬前置）
 - [ ] 四个 .cpp 实现合流，main 链接从 LNK2019×4 清零（PR 流程）
+      进度 1/4：T1 tokenizer 已并入；LNK2019 仍为 4 个属预期
+      （tokenize 不被 main 直接引用，待 T2-T4 补齐后清零）
 - [ ] main.cpp catch loader 的 throw（第四轮；现在 data 缺失会直接崩）
 - [ ] tests/ 目录建立，伪代码卡自测用例转正（第四轮，YAGNI 到期）
 - [ ] 契约留白记录：墓碑字段 M1 无消费者（M2 删除路径落地时
@@ -147,4 +149,10 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
 
 ## 6. 版本
 
+- v1.1 · 2026-09-27 · T1 竣工入账（PR #1），T2 进行中
 - v1.0 · 2026-09-23 · A 拍板分工方案，AI-A 执笔
+
+> 注：tokenizer 词内字符规则已于 09-26 升级为三明治规则
+> （'.' 与 '_' 左右均为字母/数字时入词），唯一权威定义在
+> tokenizer.h 条款 2，A 于 09-27 批准（纪要有案）。B 写 chunker
+> 时以新契约为准。

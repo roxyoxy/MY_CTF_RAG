@@ -27,14 +27,19 @@ M1 的施工顺序（刻意规定，不许乱）：
 第四轮：优化——重看每个函数，问"能不能更好"，加测试盯防
 ```
 
-进度快照（2026-09-23 凌晨）：
+进度快照（2026-09-27 更新）：
 
 - 第一轮 ✅ 竣工：五份契约（type/loader/chunker/tokenizer/indexer），
   全部 A 亲手署名，字节级 ASCII 复检通过
 - 第二轮 ✅ 竣工：main.cpp 总装；当前链接红（LNK2019 ×4）= 预期中间态，
   正是第三轮的工作清单
-- 第三轮待启：由薄到厚 tokenizer → loader → chunker → indexer；
-  前置待办：data\ 语料（A 准备 3-5 篇迷你英文 writeup）
+- 第三轮（进行中）：四个 .cpp 全部下发队友手写（A 不写实现，专职
+  验收与设计，见 docs/TASKS.md）——B = chunker + indexer，
+  C = loader + tokenizer；git + GitHub + PR 工作流已上线
+  （仓库 public，A 审 PR 本地验证过才 merge）。
+  T1 tokenizer ✅ 已合并（PR #1，含三明治规则契约变更，09-27 批准）；
+  T2 loader 进行中；T3/T4 待 B 开工
+- 前置待办：data\ 语料（A 准备 3-5 篇迷你英文 writeup）
 
 为什么这个顺序：**先冻结接口再写实现**，三个人才不会互相等待；
 main 先行等于先写"验收标准"（程序到底要干什么），实现只是填空。

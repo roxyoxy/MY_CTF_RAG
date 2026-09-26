@@ -45,7 +45,10 @@ M1 内部进度（施工顺序见 PRINCIPLES.md §2）：
   （type / loader / chunker / tokenizer / indexer，全部亲手署名）
 - 第二轮：**main.cpp 总装竣工** ✅ 2026-09-23
   （当前处于"链接红"预期中间态：4 个 LNK2019 = 四个待实现函数清单）
-- 第三轮：逐个补 .cpp 实现（由薄到厚：tokenizer → loader → chunker → indexer）
+- 第三轮（进行中）：逐个补 .cpp 实现，四个任务分工下发 + PR 工作流
+  （B = chunker + indexer，C = loader + tokenizer，见 docs/TASKS.md）
+  T1 tokenizer ✅ 已合并（PR #1，2026-09-27，含三明治规则契约变更）；
+  T2 loader 进行中；T3/T4 待 B 开工
 - 第四轮：优化 + 测试（tests/ 目录此时才建，YAGNI）
 - 前置待办：data\ 语料准备（3-5 篇迷你英文 writeup，pwn/web 分类目录）
 
@@ -62,6 +65,7 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 ├── PRINCIPLES.md            ← 宪法：AI 协作规则 + 会议制度
 ├── docs/
 │   ├── MEETING_LOG.md       ← 会议纪要：全组共同记忆（scripts 可查）
+│   ├── TASKS.md             ← 任务分发与验收（B/C 开工入口）
 │   └── PARAMS.md            ← 可调参数登记表（M5 调参总账）
 ├── scripts/
 │   └── meeting_query.py     ← 纪要查询工具
