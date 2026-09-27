@@ -1,64 +1,115 @@
-﻿// indexer.cpp
+// indexer.cpp
 // Implements the contract in include/indexer.h.
 
 #include "indexer.h"
+#include "tokenizer.h"
+#include <algorithm>  // std::sort, std::min
+#include <cmath>      // std::log
+#include <unordered_map>
+#include <vector>
 
-// ================================================================
-// 伪代码占位 -- 手写真代码写在本块下方，翻译完一段删一段注释，
-// 注释删光 = 竣工（真代码的注释请用英文，保持纯 ASCII）。
-// ================================================================
-//
-// ---------- 建账 build_index(chunks) ----------
-//
-// 函数 build_index(chunks):
-//     index = 空的 InvertedIndex
-//     对每个 chunk c（按顺序，id 升序）:
-//         tokens = tokenize(c.text)                // 契约: 同一个函数
-//         index.chunk_lengths[c.id] = tokens 的个数
-//         // 本块内按词分组计数
-//         counts = 空映射: term -> tf
-//         对 tokens 里每个 t: counts[t] 加一
-//         对 counts 里每对 (term, tf):
-//             index.postings[term] 追加 {c.id, tf}
-//         // 按块顺序处理，posting 列表天然按 chunk_id 升序
-//     total = 所有 chunk_lengths 之和
-//     index.avg_chunk_length = 块数为 0 ? 0.0 : total / 块数
-//     返回 index
-//
-// ---------- 查账 search(index, query, top_k) ----------
-//
-// 函数 search(index, query, top_k):
-//     N = index.chunk_lengths.size()
-//     qtokens = tokenize(query)                    // 契约: 两端同源
-//     scores = 空映射: chunk_id -> float           // 累加器
-//     对 qtokens 里每个 t（不去重，公式本来就是逐词求和）:
-//         posting = index.postings 里查 t
-//         查不到 -> 跳过这个 t
-//         df = posting.size()                      // df 免费得到: 表长就是 df
-//         idf = ln(1 + (N - df + 0.5) / (df + 0.5))
-//         对 posting 里每项 (cid, tf):
-//             dl  = index.chunk_lengths[cid]
-//             分数 = idf * tf * (BM25_K1 + 1)
-//                    / (tf + BM25_K1 * (1 - BM25_B + BM25_B * dl / avgdl))
-//             scores[cid] += 分数
-//     把 scores 倒进 vector，排序:
-//         主关键字 score 降序; 同分 chunk_id 升序
-//     截取前 top_k 条，逐个装进 vector<SearchResult>
-//     返回
-//
-// 提示:
-// - build 和 search 都要调 tokenize() -> 想想本文件还要 include 谁（IWYU）
-// - 排序用 std::sort + 自写比较器; "严格弱序"，同分比 id 时方向别写反
-// - top_k 大于结果总数时: 全部返回，别越界
-// - 空查询 / 空索引: qtokens 为空或 N 为 0，自然返回空 vector
-// - 整数除法陷阱: total / 块数 两边都是 int 会截断，先转 double;
-//   dl / avgdl 里 avgdl 是 double，安全
-//
-// 自测用例:
-// - chunks 为空              -> 空索引（三个字段全空 / 0.0）
-// - 1 个 chunk 含 3 个词     -> chunk_lengths[0] == 3
-// - 同一词块内出现 3 次      -> postings[词] = [{0, 3}]
-// - 同一词跨 2 块            -> posting 两项，chunk_id 升序
-// - 查询含未登录词           -> 该词跳过，不炸不出 NaN
-// - 查 "gadget" 命中 2 块    -> 分高在前，同分 id 小在前，最多 top_k 条
-// - 空查询串                 -> 空 vector
+InvertedIndex build_index(const std::vector<Chunk>& chunks) {
+    InvertedIndex index;
+
+    for (const auto& c : chunks) {
+        // Tokenize with the same function queries use (contract clause 1)
+        std::vector<std::string> tokens = tokenize(c.text);
+
+        // Record chunk length; push_back is safe because ids are
+        // globally continuous and ascending from 0 (chunker contract)
+        index.chunk_lengths.push_back(static_cast<int>(tokens.size()));
+
+        // Count term frequencies within this chunk
+        std::unordered_map<std::string, int> tf_counts;
+        for (const auto& t : tokens) {
+            tf_counts[t]++;
+        }
+
+        // Append to posting lists; chunk_id ascending comes for free
+        // because we iterate chunks in order
+        for (const auto& [term, tf] : tf_counts) {
+            index.postings[term].push_back({ c.id, tf });
+        }
+    }
+
+    // Compute average chunk length; avoid integer division
+    int N = static_cast<int>(index.chunk_lengths.size());
+    if (N == 0) {
+        index.avg_chunk_length = 0.0;
+    }
+    else {
+        double total = 0.0;
+        for (int len : index.chunk_lengths) {
+            total += static_cast<double>(len);
+        }
+        index.avg_chunk_length = total / static_cast<double>(N);
+    }
+
+    return index;
+}
+
+std::vector<SearchResult> search(
+    const InvertedIndex& index,
+    const std::string& query,
+    int top_k) {
+
+    int N = static_cast<int>(index.chunk_lengths.size());
+    if (N == 0) {
+        return {};
+    }
+
+    // Tokenize query with the same function used at index time
+    std::vector<std::string> qtokens = tokenize(query);
+    if (qtokens.empty()) {
+        return {};
+    }
+
+    // Accumulator: chunk_id -> raw BM25 score (double for precision)
+    std::unordered_map<int, double> scores;
+
+    for (const auto& t : qtokens) {
+        auto it = index.postings.find(t);
+        if (it == index.postings.end()) {
+            continue; // term not in index, skip (contract clause 3)
+        }
+
+        const auto& posting_list = it->second;
+        int df = static_cast<int>(posting_list.size());
+        double idf = std::log(1.0 + (N - df + 0.5) / (df + 0.5));
+
+        for (const auto& p : posting_list) {
+            int cid = p.chunk_id;
+            int tf = p.tf;
+            int dl = index.chunk_lengths[cid];
+            double avgdl = index.avg_chunk_length;
+
+            double numerator = idf * tf * (BM25_K1 + 1.0);
+            double denominator = tf + BM25_K1 * (1.0 - BM25_B + BM25_B * dl / avgdl);
+            scores[cid] += numerator / denominator;
+        }
+    }
+
+    // Materialize results into a vector for sorting
+    std::vector<SearchResult> results;
+    for (const auto& [cid, score] : scores) {
+        SearchResult sr;
+        sr.chunk_id = cid;
+        sr.score = static_cast<float>(score); // avoid C4244 narrowing warning
+        results.push_back(sr);
+    }
+
+    // Sort: score descending; tie-break by chunk_id ascending
+    std::sort(results.begin(), results.end(),
+        [](const SearchResult& a, const SearchResult& b) {
+            if (a.score != b.score) {
+                return a.score > b.score;
+            }
+            return a.chunk_id < b.chunk_id;
+        });
+
+    // Truncate to top_k, guard against top_k > results.size()
+    int k = std::min(top_k, static_cast<int>(results.size()));
+    results.resize(k);
+
+    return results;
+}
