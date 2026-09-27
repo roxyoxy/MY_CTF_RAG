@@ -25,7 +25,7 @@
 | T2 | `src/loader.cpp` | `include/loader.h` | C | ✅ 竣工，PR #2 已合并（2026-09-28） |
 | T3 | `src/chunker.cpp` | `include/chunker.h` | B | ✅ 竣工，离线 zip 交接，A 代提交合并（2026-09-28） |
 | T4 | `src/indexer.cpp` | `include/indexer.h` | B | ✅ 竣工，同上（2026-09-28） |
-| T0 | data/ 语料 + 集成验收 + M2/M3 设计推进 | — | A | 集成验收 ✅（LNK2019 清零，端到端跑通）；语料现有 3 篇验收种子（待 A 换正式 writeup） |
+| T0 | data/ 语料 + 集成验收 + M2/M3 设计推进 | — | A | 集成验收 ✅；语料 ✅ 12 篇真实 writeup（npusec 小赛，09-28 落位）；剩 M2/M3 设计推进 |
 
 ## 2. 铁规则（对所有人）
 
@@ -128,8 +128,8 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
 - [x] 四个 .cpp 实现合流，main 链接 LNK2019×4 → **0**
       （T1 PR #1 · T2 PR #2 · T3/T4 离线交接 A 代提交，全部
       2026-09-27/28 完成；端到端检索已跑通）
-- [ ] data/ 正式语料：3-5 篇迷你英文 writeup 替换验收种子
-      （A；当前 data/ 里有 3 篇验收用种子文件）
+- [x] data/ 正式语料（09-28 清账）：12 篇真实 writeup（npusec 小赛），
+      六类目，12 文档切 29 chunks，5 条主题查询 top-1 全命中
 - [ ] main.cpp catch loader 的 throw（第四轮；现在 data 缺失会直接崩）
 - [ ] tests/ 目录建立，自测用例转正（第四轮，YAGNI 到期；
       B 的 10+9 条与 A 的验收 7+17 条都是现成素材）

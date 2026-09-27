@@ -486,3 +486,14 @@ A 以 git diff -w 复核为纯空白改动零逻辑变更，PR #1 遗留项关�
 - 附则：top_k 传负数的病态 resize 为边角遗留，记入第四轮待办
   （M1 无此调用方）；B 双编译器（g++/MSVC）自测与变异实验
   方法论全组通报表扬
+
+## [2026-09-28 15:30] A
+
+【决策】data/ 正式语料落位（T0 清账）：以本人 09-23/24 npusec 小赛的
+12 篇英文 writeup 为正式语料（来源 Desktop/xiaosai/WP_EN，拷贝入库
+原件不动），按类目归位 pwn/re/web/misc/ai_security/crypto（密码学
+目录改 ASCII 名 crypto，yaho 归 crypto）。flag 明文保留（本仓库
+public，赛后公开 writeup 属常规做法，A 拍板不洗）。3 篇合成验收
+种子删除——语料叙事统一为"全部为本人真实比赛 writeup"。
+实测：12 文档切 29 chunks，5 条主题查询 top-1 全命中，块级排序
+可见同文档多块上榜。第四轮优化/测试以本语料为靶场。
