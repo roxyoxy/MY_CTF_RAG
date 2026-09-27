@@ -533,3 +533,12 @@ tests/ 三件套 = 每模块一个 test_*.cpp + 命令行编译不进 .sln +
   （原实现 min(top_k,size) 后 resize 负数转 size_t 巨值会炸），
   test_indexer 第 9 条钉死（0 与 -3 均返空）。B 文件改动经 A 拍板，
   留痕备查。主工程重编 + 冒烟通过（12 docs / 29 chunks 照旧）。
+
+## [2026-09-28 02:37] A
+
+main.cpp 加 Windows 控制台 UTF-8 代码页切换（SetConsoleOutputCP /
+SetConsoleCP 设 CP_UTF8，#ifdef _WIN32 守可移植，B 的 g++ 侧不受
+影响），A 手写。动因：语料 writeup 含制表符树（└─ ├─）与中文题名
+（救赎之道），默认 GBK 控制台输出乱码。AI-A review 通过 + 重编冒烟
+（全输出 2079 字节合法 UTF-8，行为不变）；A 本机 F5 肉眼验收
+（中文/制表符/箭头全部正常显示）。M2 中文分词的显示层铺垫就此就位。

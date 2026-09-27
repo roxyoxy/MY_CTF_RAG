@@ -5,12 +5,22 @@
 #include <iostream>
 #include <string>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #include "type.h"
 #include "loader.h"
 #include "chunker.h"
 #include "indexer.h"
 
 int main() {
+#ifdef _WIN32
+    // Switch the Windows console to UTF-8 so Chinese text shows correctly.
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+#endif
+
     std::vector<Document> docs;
     std::vector<Chunk>    chunks;
     InvertedIndex         index;
