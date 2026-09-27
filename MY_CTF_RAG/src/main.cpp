@@ -1,6 +1,7 @@
 // main.cpp
 // Assembly line: load, chunk, index, then answer queries in a loop.
 
+#include <exception>
 #include <iostream>
 #include <string>
 
@@ -10,10 +11,20 @@
 #include "indexer.h"
 
 int main() {
+    std::vector<Document> docs;
+    std::vector<Chunk>    chunks;
+    InvertedIndex         index;
+
     // Stage 1: build the index once.
-    std::vector<Document> docs = load_documents("data");
-    std::vector<Chunk>    chunks = chunk_documents(docs);
-    InvertedIndex         index = build_index(chunks);
+    try {
+        docs = load_documents("data");
+        chunks = chunk_documents(docs);
+        index = build_index(chunks);
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << "\n";
+        return 1;
+    }
 
     std::cout << "Indexed " << docs.size()
         << " documents, " << chunks.size()
@@ -23,8 +34,8 @@ int main() {
     std::string query;
     while (true) {
         std::cout << "query> ";
-        if (!std::getline(std::cin, query)) break;   // EOF
-        if (query.empty()) continue;                 // skip blank line
+        if (!std::getline(std::cin, query)) break;
+        if (query.empty()) continue;
 
         // Stage 3: search and print.
         std::vector<SearchResult> results = search(index, query);

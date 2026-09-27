@@ -130,9 +130,13 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       2026-09-27/28 完成；端到端检索已跑通）
 - [x] data/ 正式语料（09-28 清账）：12 篇真实 writeup（npusec 小赛），
       六类目，12 文档切 29 chunks，5 条主题查询 top-1 全命中
-- [ ] main.cpp catch loader 的 throw（第四轮；现在 data 缺失会直接崩）
-- [ ] tests/ 目录建立，自测用例转正（第四轮，YAGNI 到期；
-      B 的 10+9 条与 A 的验收 7+17 条都是现成素材）
+- [x] main.cpp catch loader 的 throw（第四轮首项，2026-09-28 竣工：
+      Stage 1 入 try + catch const exception& + cerr + return 1；
+      无 data/ → 人话报错 + 退出码 1，正常路径不变）
+- [ ] tests/ 目录建立，自测用例转正（第四轮，YAGNI 到期；**A 自做，
+      不走 B 卡**。三件套已拍板：每模块一个 test_*.cpp / 命令行编译
+      不进 .sln / 共享 tests/check.h 手写断言。素材 = A 验收 7+17 条，
+      test_tokenizer.cpp 需新设计，B 的 10+9 条作参考）
 - [ ] 第四轮顺手项：search 对 top_k 为负的病态 resize 加保护
       （M1 无此调用方，验收时发现）；tokenizer/chunker 分词规则
       单一事实源可考虑抽公共判定（提案，A 裁）
@@ -154,6 +158,8 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
 
 ## 6. 版本
 
+- v1.3 · 2026-09-28 · 第四轮开工：main catch 竣工入账；tests/ 转正
+      拍板 A 自做 + 三件套决策
 - v1.2 · 2026-09-28 · 第三轮竣工入账：T2/T3/T4 全合并，LNK2019 清零
 - v1.1 · 2026-09-27 · T1 竣工入账（PR #1），T2 进行中
 - v1.0 · 2026-09-23 · A 拍板分工方案，AI-A 执笔

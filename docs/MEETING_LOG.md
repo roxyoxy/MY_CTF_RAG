@@ -497,3 +497,22 @@ public，赛后公开 writeup 属常规做法，A 拍板不洗）。3 篇合成�
 种子删除——语料叙事统一为"全部为本人真实比赛 writeup"。
 实测：12 文档切 29 chunks，5 条主题查询 top-1 全命中，块级排序
 可见同文档多块上榜。第四轮优化/测试以本语料为靶场。
+
+## [2026-09-28 02:17] A
+
+【决策】第四轮开工，首项 main.cpp catch loader 的 throw 竣工。
+此前 data/ 缺失时异常无人接，std::terminate 静默暴毙（退出码 3）。
+修法：Stage 1（load/chunk/build）整体入 try；catch (const
+std::exception&) 基类引用兜住 filesystem_error 全继承链且不切片；
+错误走 cerr，return 1。三个变量提升到 try 外（try 内声明出块即
+失效）；try 范围刻意只盖建库段（search 契约保证不抛，查询环不设防）。
+AI 参与：AI-A 教练（异常传播链讲解 + 四决策表 + review），代码 A 手写。
+验收：编译 0 错 0 警；无 data/ 目录运行 → 一行人话报错 + 退出码 1
+（改前：无输出 + abort 3）；正常跑 → 12 docs / 29 chunks 查询照旧，
+退出码 0；字节复检无 BOM、0 非 ASCII。附则：std::vector 靠 loader.h
+传递 include，A 裁不补；README/PRINCIPLES 语料信息 4 处过期随本提交同步。
+另拍板两项：第四轮 tests/ 转正 + top_k 保护由 A 自做（不走 B 卡）；
+tests/ 三件套 = 每模块一个 test_*.cpp + 命令行编译不进 .sln +
+共享 tests/check.h 手写断言（不引外部库）。
+更正：上条（data/ 语料落位）时间戳应为 2026-09-28 01:36 前后，
+"15:30" 系 AI-A 误记，按只追加规矩在此更正。
