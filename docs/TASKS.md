@@ -22,10 +22,10 @@
 | 任务 | 文件 | 契约 | 执行人 | 状态 |
 |---|---|---|---|---|
 | T1 | `src/tokenizer.cpp` | `include/tokenizer.h` | C | ✅ 竣工，PR #1 已合并（2026-09-27） |
-| T2 | `src/loader.cpp` | `include/loader.h` | C | 进行中（C 自报接近完成） |
-| T3 | `src/chunker.cpp` | `include/chunker.h` | B | 待开工 |
-| T4 | `src/indexer.cpp` | `include/indexer.h` | B | 待开工 |
-| T0 | data/ 语料 + 集成验收 + M2/M3 设计推进 | — | A | 进行中（PR #1 验收已完成） |
+| T2 | `src/loader.cpp` | `include/loader.h` | C | ✅ 竣工，PR #2 已合并（2026-09-28） |
+| T3 | `src/chunker.cpp` | `include/chunker.h` | B | ✅ 竣工，离线 zip 交接，A 代提交合并（2026-09-28） |
+| T4 | `src/indexer.cpp` | `include/indexer.h` | B | ✅ 竣工，同上（2026-09-28） |
+| T0 | data/ 语料 + 集成验收 + M2/M3 设计推进 | — | A | 集成验收 ✅（LNK2019 清零，端到端跑通）；语料现有 3 篇验收种子（待 A 换正式 writeup） |
 
 ## 2. 铁规则（对所有人）
 
@@ -123,14 +123,19 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
 
 ## 5. 全局待办总账（唯一权威清单）
 
-### M1 尾巴
+### M1 尾巴（第三轮已清，剩第四轮）
 
-- [ ] data/ 语料：3-5 篇迷你英文 writeup，分类子目录（A，联调硬前置）
-- [ ] 四个 .cpp 实现合流，main 链接从 LNK2019×4 清零（PR 流程）
-      进度 1/4：T1 tokenizer 已并入；LNK2019 仍为 4 个属预期
-      （tokenize 不被 main 直接引用，待 T2-T4 补齐后清零）
+- [x] 四个 .cpp 实现合流，main 链接 LNK2019×4 → **0**
+      （T1 PR #1 · T2 PR #2 · T3/T4 离线交接 A 代提交，全部
+      2026-09-27/28 完成；端到端检索已跑通）
+- [ ] data/ 正式语料：3-5 篇迷你英文 writeup 替换验收种子
+      （A；当前 data/ 里有 3 篇验收用种子文件）
 - [ ] main.cpp catch loader 的 throw（第四轮；现在 data 缺失会直接崩）
-- [ ] tests/ 目录建立，伪代码卡自测用例转正（第四轮，YAGNI 到期）
+- [ ] tests/ 目录建立，自测用例转正（第四轮，YAGNI 到期；
+      B 的 10+9 条与 A 的验收 7+17 条都是现成素材）
+- [ ] 第四轮顺手项：search 对 top_k 为负的病态 resize 加保护
+      （M1 无此调用方，验收时发现）；tokenizer/chunker 分词规则
+      单一事实源可考虑抽公共判定（提案，A 裁）
 - [ ] 契约留白记录：墓碑字段 M1 无消费者（M2 删除路径落地时
       chunker / indexer 加过滤——不是 bug，是排期）
 
@@ -149,6 +154,7 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
 
 ## 6. 版本
 
+- v1.2 · 2026-09-28 · 第三轮竣工入账：T2/T3/T4 全合并，LNK2019 清零
 - v1.1 · 2026-09-27 · T1 竣工入账（PR #1），T2 进行中
 - v1.0 · 2026-09-23 · A 拍板分工方案，AI-A 执笔
 
