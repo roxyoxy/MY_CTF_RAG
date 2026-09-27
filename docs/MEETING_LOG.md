@@ -516,3 +516,20 @@ tests/ 三件套 = 每模块一个 test_*.cpp + 命令行编译不进 .sln +
 共享 tests/check.h 手写断言（不引外部库）。
 更正：上条（data/ 语料落位）时间戳应为 2026-09-28 01:36 前后，
 "15:30" 系 AI-A 误记，按只追加规矩在此更正。
+
+## [2026-09-28 02:32] A
+
+【决策】第四轮主体竣工：tests/ 转正 + top_k 守卫，一次提交入账。
+- tests/ 建立（A 自做，不走 B 卡）：check.h 共享断言（C++17 inline
+  变量 + test_summary 退出码）；test_tokenizer 12 条（新设计，期望值
+  逐条对契约条款手算）、test_loader 7 条（验收用例转正）、
+  test_chunker 7 + test_indexer 11（原 17 条拆包 + 守卫新 1 条），
+  共 37 条全绿，/W4 零警告，全文件无 BOM 零非 ASCII。run_tests.bat
+  一键全编全跑，"cl 报错走 stdout"的教训烤入（失败才吐编译日志）。
+- 工作模式变更（A 拍板）：测试代码非核心算法，AI-A 执笔、A 逐条
+  审阅；产品代码人手写铁律不变。tests 不进 .sln——每个测试自带
+  main，进主工程必 LNK2005 双 main 打架，走命令行编译。
+- top_k 守卫 @B：indexer.cpp search 入口加 top_k<=0 提前返空 2 行
+  （原实现 min(top_k,size) 后 resize 负数转 size_t 巨值会炸），
+  test_indexer 第 9 条钉死（0 与 -3 均返空）。B 文件改动经 A 拍板，
+  留痕备查。主工程重编 + 冒烟通过（12 docs / 29 chunks 照旧）。

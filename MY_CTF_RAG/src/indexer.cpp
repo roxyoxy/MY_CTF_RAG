@@ -53,6 +53,13 @@ std::vector<SearchResult> search(
     const std::string& query,
     int top_k) {
 
+    // Guard: a non-positive top_k can only be a caller bug; returning
+    // early also keeps the negative value away from resize() below,
+    // where it would convert to a huge size_t (round-4 fix)
+    if (top_k <= 0) {
+        return {};
+    }
+
     int N = static_cast<int>(index.chunk_lengths.size());
     if (N == 0) {
         return {};
