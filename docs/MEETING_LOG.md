@@ -407,6 +407,51 @@ A 侧验收记录：编译 0 错 0 警（/W4）；LNK2019 保持 4 个符合预�
 ## [2026-09-27 3:26] C
 
 修复tokenizer.cpp缩进不统一的问题,因改动极小没有单独创建任务分支，在loader中附带完成。
+## [2026-09-27 20:30] B（补录）
+
+开工 T3 chunker。因梯子不通，改走 A 交接文档 §6 的备用路径：
+本地 git 存档 + 文件回传 A 代提交。分支 b-chunker。
+
+## [2026-09-27 22:30] B（补录）
+
+【竣工】T3 chunker.cpp 完成。按伪代码卡手写：第一遍扫描产出词位置表
+（start/end 为字节偏移；三明治判定位置感知、自己扫，不调 tokenize——
+它只给词不给字节位置），第二遍滑动窗口按 CHUNK_SIZE 下刀、回退
+CHUNK_OVERLAP 形成重叠。自测 10 条用例全过（g++ / MSVC 双编译器，
+0 error 0 warning）；字节检查无 BOM、0 个非 ASCII 字节。
+
+踩坑记录（值得全组看）：Document 用聚合初始化按位置填值
+（{0, generateWords(10)}），把文本填进了 path，而 content 为空。
+用例 1、2 因 content 恰好也是空而"假通过"，用例 3 才炸出来。
+教训：位置初始化会静默出错，改用逐字段赋值。
+
+测试有效性自证（变异实验）：把点号/下划线规则分别改坏成"少算词"与
+"多算词"两个方向，用例 7 / 用例 9 分别抓住；随后补用例 9、10 填上
+"多算词"方向的盲区。
+
+AI 参与：AI-B 讲解 + review（含独立编译复核与变异实验），代码全部我手写。
+
+## [2026-09-27 23:40] B（补录）
+
+【竣工】T4 indexer.cpp 完成（build_index + BM25 search）。
+build_index：逐块 tokenize 统计 tf 建倒排表；chunk_lengths 用 push_back
+（依赖 id 连续升序，注释已注明该前提）；avgdl 用 double 规避整数除法。
+search：逐查询词累加 BM25（df 由 posting 表长免费得到），结果按 score
+降序、同分 chunk_id 升序，top_k 用 min 保护。自测 9 条用例全过
+（g++ / MSVC 双编译器）；字节检查无 BOM、0 个非 ASCII 字节。
+
+变异实验：tie-break 方向写反 → 用例 6a 抓住；avgdl 退化成整数除法 →
+首轮 8 条全过（盲区），补用例 9（3 块词数 1/1/2，断言 avgdl 落在
+1.3~1.4）后抓住。结论：测试绿 ≠ 实现对，变异实验是照妖镜。
+
+IWYU 踩坑：本文件要调 tokenize()，但 indexer.h 不带 tokenizer.h，
+漏 include 报 'tokenize' was not declared；另有一次文件名拼错
+（tokensizer.h）——两次都靠编译发现，不是靠眼睛。
+
+交付方式说明：T3 / T4 两个提交在本地 b-chunker 分支
+（deeef59、14f3ba9），因梯子不通无法 push，按 A 交接文档 §6 由
+B 回传文件、A 代为提交。include/ 契约未做任何改动，.vcxproj 未动。
+
 ## [2026-09-28 01:10] A
 
 【决策】PR #2（T2 loader，c-loader 分支）验收通过并合并。
