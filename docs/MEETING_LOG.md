@@ -407,3 +407,15 @@ A 侧验收记录：编译 0 错 0 警（/W4）；LNK2019 保持 4 个符合预�
 ## [2026-09-27 3:26] C
 
 修复tokenizer.cpp缩进不统一的问题,因改动极小没有单独创建任务分支，在loader中附带完成。
+## [2026-09-28 01:10] A
+
+【决策】PR #2（T2 loader，c-loader 分支）验收通过并合并。
+A 侧验收记录：编译 0 错 0 警（/W4）；LNK2019 由 4 降为 3，符合预期
+（load_documents 落地，剩 chunk_documents / build_index / search 恰为
+T3/T4 工作面）；字节复检 loader.cpp 无 BOM、0 个非 ASCII 字节；
+A 侧独立复跑自测 7 条全过（目录不存在抛异常 / 空目录返空不抛 /
+递归收集 .md 与 .txt 且扩展名忽略大小写 / 相对路径字典序排序后
+连续编号且正斜杠分隔 / content 与磁盘字节一致含 CRLF / 墓碑字段
+默认 false）。合并无冲突。
+附则：tokenizer.cpp 缩进统一（Tab 改 4 空格）随本分支落账，
+A 以 git diff -w 复核为纯空白改动零逻辑变更，PR #1 遗留项关闭。
