@@ -139,8 +139,12 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
 - [x] search 对 top_k 为负的病态 resize 加保护（2026-09-28：search
       入口 top_k<=0 提前返空；@B 文件经 A 拍板留痕；test_indexer
       第 9 条钉死）
-- [ ] tokenizer/chunker 分词规则单一事实源可考虑抽公共判定
-      （提案，A 裁）
+- [ ] tokenizer/chunker 分词规则单一事实源（提案，A 已裁：**M2 动工
+      前再议**——M2 必改分词规则，现在抽公共判定件可能白抽）
+- [x] 第四轮优化遍历（09-28）：六函数全"不动"（量级关过不了，
+      规则 3）；search 两处优化（partial_sort O(m log k) + scores
+      稠密向量化直寻）提案成册挂 M5；查询词重复=加权语义备案。
+      **M1 正式收官**
 - [ ] 契约留白记录：墓碑字段 M1 无消费者（M2 删除路径落地时
       chunker / indexer 加过滤——不是 bug，是排期）
 
@@ -155,10 +159,14 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
 
 - [ ] M3：向量检索 Flat → 自研 HNSW + RRF 混合
 - [ ] M4：本地 LLM 后端（Ollama 原型 → llama.cpp 交付）
-- [ ] M5：对比实验（BM25 / Dense / Hybrid）+ 调参（PARAMS.md 是总账）
+- [ ] M5：对比实验（BM25 / Dense / Hybrid）+ 调参（PARAMS.md 是总账）；
+      兑现 search 优化提案（partial_sort / scores 稠密向量化，09-28
+      优化遍历成册，待真数据验证）
 
 ## 6. 版本
 
+- v1.5 · 2026-09-28 · 优化遍历竣工（六不动 + 一提案挂 M5），
+      **M1 正式收官**
 - v1.4 · 2026-09-28 · 第四轮主体竣工：tests/ 转正（37 条全绿）+
       top_k 守卫入账
 - v1.3 · 2026-09-28 · 第四轮开工：main catch 竣工入账；tests/ 转正

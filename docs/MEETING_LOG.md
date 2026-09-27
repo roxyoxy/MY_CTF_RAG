@@ -542,3 +542,25 @@ SetConsoleCP 设 CP_UTF8，#ifdef _WIN32 守可移植，B 的 g++ 侧不受
 （救赎之道），默认 GBK 控制台输出乱码。AI-A review 通过 + 重编冒烟
 （全输出 2079 字节合法 UTF-8，行为不变）；A 本机 F5 肉眼验收
 （中文/制表符/箭头全部正常显示）。M2 中文分词的显示层铺垫就此就位。
+
+## [2026-09-28 02:46] A
+
+【决策】第四轮优化遍历竣工，**M1 正式收官**。
+逐函数过堂（tokenize / load_documents / chunk_documents / build_index /
+search / main）：六项全部判决"不动"——现有规模（12 docs / 29 chunks）
+下所有候选优化均过不了优化三规则第 3 条的量级关（reserve 预估、
+tf_counts hoist、ostringstream 双跳均为微秒级收益）；loader 的双跳
+与 chunker 的重叠文本驻留记为 M2 重构时顺手处理项。
+一条提案成册挂 M5：① search 排序 sort→partial_sort（O(m log m) →
+O(m log k)，k=10；m=10^6 时排序段约 6 倍）；② scores 累加器由
+unordered_map<int,double> 改稠密 vector<double>(N) 下标直寻——契约
+保证 chunk_id 稠密连续 0..N-1，**账本格式反向给优化留门**（契约
+设计的红利）。两处待 M5 有真数据时兑现并实验验证。
+语义备案：查询词重复（libc libc）逐词累加两次 = 查询词加权，系
+契约"逐查询词累加"的直译行为，非 bug，测试按此钉死。
+分词规则单一事实源提案 A 已裁：M2 动工前再议（M2 必改分词规则，
+现在抽公共判定件可能白抽）。
+M1 四轮全部竣工：契约 → main → 实现 → 优化+测试。总产出：5 份
+契约、4 份队友手写实现、37 条回归测试全绿、12 篇真实语料切 29 块、
+LNK2019 4→0、端到端 BM25 检索可用。下一步 M2：中文 bigram +
+索引持久化 + 增量建库 + 删除路径落地（墓碑消费）。

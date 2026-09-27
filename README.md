@@ -33,7 +33,7 @@
 | 阶段 | 内容 | 状态 |
 |---|---|---|
 | M0 | 文档体系 + 会议纪要 + 查询脚本 | ✅ 2026-09-22 |
-| M1 | 纯英文检索：接口设计(.h) → main → 实现(.cpp) → 优化 | 🔨 第四轮进行中（main catch / tests 转正 / 优化） |
+| M1 | 纯英文检索：接口设计(.h) → main → 实现(.cpp) → 优化 | ✅ 2026-09-28 四轮全部竣工 |
 | M2 | 中文 bigram 分词 + 索引持久化 + 增量建库 | 待开始 |
 | M3 | 向量检索（Flat → 自研 HNSW）+ RRF 混合 | 待开始 |
 | M4 | 本地 LLM 后端（Ollama 原型 → llama.cpp 交付）| 待开始 |
@@ -49,8 +49,9 @@ M1 内部进度（施工顺序见 PRINCIPLES.md §2）：
   （B = chunker + indexer，C = loader + tokenizer，见 docs/TASKS.md）
   T1 PR #1（09-27）· T2 PR #2（09-28）· T3/T4 B 离线 zip 交接、
   A 代提交（09-28）；**LNK2019 清零，端到端检索已跑通**
-- 第四轮（进行中）：优化 + 测试（tests/ 目录此时才建，YAGNI）；
-  首项 = main.cpp catch loader 的 throw（A 手写）
+- 第四轮：**优化 + 测试竣工** ✅ 2026-09-28，**M1 收官**
+  （main catch / tests 37 条全绿 + run_tests.bat / top_k 守卫 /
+  控制台 UTF-8 / 优化遍历：六函数全"不动"，search 两处优化提案挂 M5）
 - data\ 正式语料已落位（2026-09-28）：12 篇本人真实比赛 writeup
   （npusec 小赛），pwn/re/web/misc/ai_security/crypto 六类目
 
@@ -98,9 +99,10 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 
 ## 4. 快速开始
 
-**当前状态**：第三轮竣工（2026-09-28），第四轮进行中——五个契约 +
-main + 四个实现全部就位，**编译链接全绿，F5 即可运行**；`data\`
-已有 12 篇真实 writeup，启动即建索引进入交互查询（`query>` 提示符）。构建环境既成事实（B/C 必读）：
+**当前状态**：**M1 全部竣工（2026-09-28）**——五个契约 + main +
+四个实现 + 37 条回归测试全部就位，**编译链接全绿，F5 即可运行**；
+`data\` 12 篇真实 writeup，启动即建索引进入交互查询（`query>` 提示符）。
+测试一键跑：`tests\run_tests.bat`。下一站 M2：中文 bigram + 持久化。构建环境既成事实（B/C 必读）：
 
 - VS2022 项目设置：`/utf-8` + ISO C++17 + `/W4`，作用域=所有配置×所有平台
 - 附加包含目录：`$(ProjectDir)include`（src/ 引用契约的路径来源）
