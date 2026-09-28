@@ -636,3 +636,52 @@ AI 参与：AI-A 摆甲/乙/丙三案 + 原子下沉论据 + 对账核验 + 认�
 3. **Qt GUI 全权 AI-A 执笔**：UI 设计不算核心算法，同测试代码
    先例（AI 执笔、A 审阅）；核心检索层零改动原则不变。
 AI-A 附议：atom_scan 由 A 亲手写收益最大——M2 地基 + 实现层首秀。
+
+## [2026-09-28 13:58] A
+
+【决策】atom_scan.h 设计讨论定稿（AI-A 教练对话产出，A 逐项拍板）：
+
+1. **签名走全量式**：`vector<Atom> scan_atoms(const std::string&)`。
+   两消费者检验胜出——tokenizer 组 bigram 需 lookahead 下一个原子、
+   chunker 两遍法本就要全表；与 tokenize() 返回 vector 的项目风格
+   一致。量级关：500 atoms x 24B = 12KB，无需拉取式省内存。
+2. **Atom = { begin, end, kind }**：size_t 对齐 Chunk::begin/end
+   （atom 边界直接喂切块下刀）；kind 用 enum class（堵隐式转 int
+   的手滑比较）；**不存 text 子串**——"推导成本 x 使用频率"判据的
+   反向应用：Chunk::text 跨 API 边界高频用所以存，Atom 是即用即弃
+   中间产物（500/chunk 量级）所以不存。
+3. **畸形 UTF-8 = 跳一个字节继续，不抛异常**。双链论证：契约链
+   （search 不抛承诺 → scanner 链上不能 throw）+ 现实链（A 补充：
+   投喂的 writeup 不保证干净，若抛异常一个脏文件就能让索引启动
+   瘫痪；容忍降级优于全局崩溃）。GBK 文件混入 data/ = 该篇中文
+   检索不到但程序不崩，可接受降级。
+4. 契约七条草案成立（顺序不重叠 / ASCII_WORD 显式 [A-Za-z0-9]+三明治
+   / CJK_CHAR 码点范围 U+3400-4DBF+U+4E00-9FFF / 字节偏移左闭右开 /
+   其余皆分隔符 / 畸形防御跳字节 / 宪法条款：tokenizer 与 chunker
+   禁止私实现字符规则）。
+   下一步：A 亲手创建 include\atom_scan.h，英文注释自组织，贴出
+   review + 字节自检。其余四件契约改写待本份关账后依次过。
+
+## [2026-09-28 15:11] AI-A
+
+【决策】atom_scan.h 关账（第六份契约，M2① ⓪ 步第一件竣工，1/5）。
+
+- 施工方式特例（A 拍板"直接写出来不用文档"）：A 在 VS 亲手创建
+  文件壳（#pragma once），AI-A 执笔契约全文，A 复审——宪法 §3 的
+  一次性授权，同测试代码先例，不构成产品代码惯例
+- 复审战果（AI 执笔 + A 审阅模式首杀）：A 抓出 struct Atom 尾注
+  "never crossing an API boundary" 与签名自相矛盾（返回
+  vector<Atom> 恰好跨 API 边界）。按 A 方案一并逐字修复：不存字节
+  拷贝 / 即用即弃中间产物 / 同一调用链内被 tokenize() 与
+  chunk_documents() 消费
+- A 复审另两项执行：e.g. 判例补入（施工单 8 条判例漏写 1 条）+
+  条款 2 三段式排版（规则—判例—禁区）。e.g. 处加半句澄清：
+  第一个 '.' 入词、尾部的剥离——同一字符在同一词内两次判定相反，
+  三明治规则最浓缩的展示窗
+- 验收：字节自检 PURE ASCII（2818 字节）；cl /W4 临时翻译单元
+  语法烟测零告警
+- 施工单（docs/design/atom_scan-spec.md）转设计存档，头部状态
+  已同步实际施工方式
+- 下一步：其余四件契约改写依次过——tokenizer.h 条款 2 →
+  chunker.h 条款 2 → indexer.h word count 注释 → PARAMS.md
+  500/50 口径
