@@ -1528,3 +1528,49 @@ review + 拼装完成（A 令"动"），**待 A 视觉验收**。
   中文查询 / 双击定位 / 软删除删除线 / 墓碑继承日志）；
   commit 待批（gui/ 7 件；另 03f0f99 + 436058b 两 commit 的
   push 因 7890 代理未开暂缓——"先处理QT一会再commit"）
+
+## [2026-09-29 04:30] AI-A
+
+【决策转记】A 令"开"——Qt 从 CMake 路线改裁 **VS 原生集成**（需求：
+F5 直接进 Qt 界面、mainwindow.h/.cpp 进 VS 左边栏，范本
+Desktop\StructuredLightMeasurement\cpp_qt；A 亲手装 Qt VS Tools）。
+
+- 环境三步（A 亲手执行，AI-A 验收）：扩展 Qt Visual Studio Tools
+  3.5.0 per-user 装好；Qt Versions 注册 **QT6**（路径=装歪嵌套套件
+  C:/Qt/6.5.3/msvc2022_64/bin/qmake.exe/6.9.3/msvc2022_64）且已设
+  默认版本——注册表 HKCU\QtProject\QtVsTools\Versions 实证；一条
+  "Qqmake"（多打一个 Q）死条目在册，无害
+- 【勘误入册】套件**含全部调试库与调试 DLL**（Qt6Cored.lib / .dll
+  逐一只读实证）——03:55 条"线上安装器不带调试件"结论修正：当日
+  CMake Debug 炸的真因是 DLL 未部署到 exe 旁（部署问题），非套件
+  缺件。Debug 配置无需任何特殊处理
+- 施工（AI-A 执笔，A 授权"开"）：
+  - 新项目 MY_CTF_RAG_GUI\{vcxproj, filters}——QtVS_v302 **标准
+    版本名注册制**（QtInstall=QT6 + QtModules core;gui;widgets +
+    QtDeploy 自动 windeployqt；不走 cpp_qt 的 QTDIR 环境变量改造
+    路线，那套是 .pro 转换带出的非标产物）
+  - 关键配置：七核心 .cpp 共享编译（console main.cpp 排除，
+    免 LNK2005 双 main）；LocalDebuggerWorkingDirectory=
+    $(ProjectDir).. 内置进 vcxproj（F5 cwd 自动落 MY_CTF_RAG，
+    data/ + index.bin 与 console 共用，run_gui.bat 的人肉对齐
+    进工程）；/W4 /permissive- /utf-8 C++17 与全仓纪律一致；
+    OutDir x64\$(Configuration) 落 .gitignore 全局 x64/ 防线内
+  - sln 注册（A 手建文件，授权改动）：第二项目 + Debug/Release|x64
+    双映射，x86 不映射（套件仅 64 位）
+  - gui/ CMake 三件退役删除（CMakeLists/build_gui.bat/run_gui.bat
+    + build/），gui/README.md 重写为 VS 路线说明；同一 GUI 源码
+    二次搬家，路线终裁 VS 原生
+  - QtMsBuild\ 从扩展目录拷入（VS 加载工程时扩展自动维护更新，
+    gitignore 挡库外）
+- 验收：Release + Debug 双配置**首发编译即通**（Qt/MSBuild 3.5.0
+  识别 QT6 -> qmake 6.9.3 全链正确；9 编译单元 /W4 零警告）；链接后
+  QtDeploy 自动跑 windeployqt，双风味 DLL 各归各位（Debug 目录
+  Qt6Cored.dll 实证 = 当日 CMake 翻车点正式修复）；双配置点火冒烟
+  存活（Release 109MB / Debug 142MB，58 docs + 145 chunks 快照
+  还原）；新文件字节双零（vcxproj 6081B / filters 2361B / gui
+  README 2525B，均无 BOM 纯 ASCII；sln 原生 BOM 未动）
+- 待 A：开 MY_CTF_RAG.sln -> 右键 MY_CTF_RAG_GUI "设为启动项目"
+  （一次性，.suo 记忆）-> F5 视觉验收（语料树 / 中文查询 /
+  双击定位 / 软删除删除线 / 墓碑继承日志）。commit 待批（VS 集成
+  包：vcxproj + filters + sln + gui 四件增删 + .gitignore + 纪要 +
+  TASKS；连同 0557444 及更早 4 个 commit 的 push 等 7890 代理）

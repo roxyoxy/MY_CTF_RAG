@@ -268,15 +268,19 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       附注：施工书 §4.3"search 仍返回墓碑块"语义已被 M2-④ 取代
       （删除即重建，块即刻消失）——施工书不重发，回流 review 按
       新语义验收，GUI 过滤降级 UX 辅助）
-      （**回流拼装 09-29 03:55 完成，待 A 视觉验收**：外部五件套
-      到货，AI-A review 通过（自述零幻觉，byte→QChar 定位正确，
-      主动对齐 M2-④ 语义）；拼装修订四处——CMake 补 /utf-8 +
-      corpus_diff.cpp 链 + 默认 Release（空类型映射 Debug 导入库
-      必炸）+ mainwindow.cpp 补 CORPUS_CHANGED 墓碑收获分支对齐
-      console。gui/ 落位七件（+README/build_gui.bat/run_gui.bat）；
-      首发 /W4 零警告，windeployqt 部署点火存活。环境注：本机
-      Qt 6.9.3 实装在 C:/Qt/6.5.3/msvc2022_64/bin/qmake.exe/
-      6.9.3/msvc2022_64/（安装器装歪，可用）；D 盘 5.9.5 用不上）
+      （**回流拼装 09-29 03:55 完成**：外部五件套到货，AI-A review
+      通过（自述零幻觉，byte→QChar 定位正确，主动对齐 M2-④ 语义）；
+      拼装修订四处（/utf-8 / corpus_diff 链 / Release 默认 / 墓碑
+      收获分支）；首发 /W4 零警告，点火存活）
+      （**VS 原生集成 09-29 04:30 完成，待 A F5 视觉验收**：A 需求
+      = F5 直达 Qt + 左边栏可见（范本 cpp_qt），CMake 路线退役
+      （三件删除）。A 亲手装 Qt VS Tools 3.5.0 + 注册 QT6（设默认）；
+      AI-A 建 MY_CTF_RAG_GUI 新项目（QtVS_v302 标准：QtInstall=QT6 +
+      QtDeploy 自动部署；QtMsBuild 从扩展拷入，gitignore）+ sln 注册
+      + 七核心 .cpp 共享 + cwd 内置工程。**勘误：套件含调试库/DLL
+      全套**（CMake 时代 Debug 炸=部署问题非缺件），Debug 配置零
+      特判。双配置首发编译即通 /W4 零警告，双点火存活（109/142MB）。
+      待 A：开 sln 设启动项 → F5）
 
 ### M3-M5
 
@@ -287,6 +291,10 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       优化遍历成册，待真数据验证）
 
 ## 6. 版本
+- v3.3 · 2026-09-29 · **Qt VS 原生集成完成**（待 A F5 验收）：
+  CMake 路线退役；MY_CTF_RAG_GUI 新项目 + sln 注册 + QT6 套件
+  注册；双配置首发编译即通 /W4 零警告，Debug 缺件结论勘误（套件
+  全套调试件都有），QtDeploy 自动部署，双点火存活
 - v3.2 · 2026-09-29 · **Qt 外包件回流拼装完成**（待 A 视觉验收）：
   review 通过 + 四处修订（/utf-8 / corpus_diff 链 / Release 默认 /
   墓碑收获分支）；gui/ 七件落位，/W4 零警告首发编译通过，
