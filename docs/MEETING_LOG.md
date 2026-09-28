@@ -797,6 +797,37 @@ API 边界）→ AI-A 抓 A（tokenizer.h consecutive）→ AI-A 抓 AI-A
 37 条全绿 + 主工程 msbuild 冒烟（12 docs / 29 chunks，libc 查询
 top-1 命中救赎之道 WP，退出码 0）。
 
+## [2026-09-28 17:35] AI-A
+
+【决策转记】A 拍板"修改加测试并且提交"——卡 2/3 tokenizer.cpp
+改造关账。
+
+- 复审通过 + 超卡进化记：bigram 用"首字构造 + 次字 append"两段式，
+  不依赖"汉字 = 3 字节"不变量，将来扩 Han 范围（只改 scanner 的
+  code point 判断）本文件零改动存活；ascii_to_lower 显式区间替代
+  tolower，locale 变量清零
+- 【留痕】A 转授权 AI-A 收尾一处：删 `if (run_len >= 2)` 冗余守卫
+  （for 的 k+1<run_end 自限，同 atom_scan.cpp j==0 同物种处理），
+  注释挪至 for 上方承载孤字丢弃语义
+- 测试扩容 37 → 50（AI-A 执笔 A 审，02:32 先例）：test_tokenizer
+  12 → 25 条——clause 2(b) 中文组合 10 条（\uXXXX 记法保纯 ASCII）
+  + 镜像/连字符判例 3 条（a-.b / a.-b / -abc）；全绿
+- 【事故留痕（AI-A）】加用例脚本第一版用 write_text 先截断后因
+  编码失败炸出，test_tokenizer.cpp 一度清零，`git checkout` 秒级
+  恢复重做，零净损失。教训：改文件用 write_bytes 且编码在写前完成
+- 工具链两笔：① run_tests.bat 三个链接单元（tokenizer/chunker/
+  indexer，凡带 tokenizer.cpp 者）补挂 src\atom_scan.cpp——依赖边
+  tokenizer→scanner 由 LNK2019 教出；② vcxproj 补 ClCompile 登记
+  atom_scan.cpp——16:37 冒烟通过实为"无消费者假阳性"（scan_atoms
+  无人引用，链接器不需要它），"VS 新建 .cpp 自动挂 vcxproj"假设
+  在 A 的创建流程中未成立，今日有消费者后穿帮
+- 冒烟：12 docs / 29 chunks 照旧，libc top-1 同文档；分数微移
+  2.79402 → 2.80597 = 语料中文开始以 bigram 计入 dl 的预期效应
+  （avgdl 变、排序不变），② 中文测试 + ③ 语料重切后全面复核
+
+TASKS.md 推 v2.3。① 双改造进度：tokenizer ✅，chunker（卡 3/3）
+待发。
+
 待 A：关账裁决；连字符契约修法（15:52 条，仍欠一个字）；commit
 bundle 批准（atom_scan.h + atom_scan.cpp + spec 存档 + 纪要今日
 全部条目）。
@@ -817,3 +848,17 @@ PURE ASCII（2931B）。至此 15:52 契约发现闭环：契约文本与实现
 TASKS.md 推 v2.2（① scanner 竣工入册，卡 2/3、3/3 随 A 节奏发）。
 commit 一次入账：atom_scan.h（条款修）+ atom_scan.cpp（新）+
 TASKS.md + 本纪要今日全部条目。
+
+## [2026-09-28 16:55] AI-A
+
+① 卡 2/3 发放：tokenizer.cpp 改造卡写入（13:39 工作模式第二张，
+AI-A 填卡 A 翻译）。结构：复述题 5 道（token/atom 关系、条款 2
+禁令、byte-adjacent 两读法、孤字代价、dl 口径）+ 两段伪代码
+（段 1 组合主循环+ASCII 分支显式小写化；段 2 run 探测 + bigram
+滑窗 + 孤字丢弃零特判）+ 黄金表 20 条（1-10 英文回归，
+11-20 中文组合与契约判例同源）+ 施工规则 7 条。旧 M1 实现
+（isAlphaNum / isWordCharAt / 双游标 / tolower，约 35 行）挂
+"作废参考"横幅保留在卡下方，译完即删——字符规则本地实现系
+新契约条款 2 禁令（"must not re-implement them"）。契约走查
+无新发现。验收 = 37 条全绿（test_tokenizer 12 条为主考官，
+英文行为原样不变）+ 冒烟。

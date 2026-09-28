@@ -42,5 +42,40 @@ int main() {
     check(tokenize("").empty() && tokenize("... !!! ??? ").empty(),
           "12 empty / separator-only input -> empty vector");
 
+
+    // Clause 2(b): CJK bigram composition (M2). Inputs are written as
+    // \uXXXX escapes so this file stays pure ASCII; with /utf-8 the
+    // literals carry the same UTF-8 bytes as the corpus.
+    check(tokenize("\u5929\u4E0B") == v({"\u5929\u4E0B"}),
+          "13 CJK run of 2 -> one bigram");
+    check(tokenize("\u5929\u4E0B\u65E0\u654C") == v({"\u5929\u4E0B", "\u4E0B\u65E0", "\u65E0\u654C"}),
+          "14 CJK run of 4 -> three overlapping bigrams");
+    check(tokenize("\u5929").empty(),
+          "15 isolated Han char emits nothing");
+    check(tokenize("\u5929 \u4E0B").empty(),
+          "16 space breaks the run (two isolated chars)");
+    check(tokenize("\u5929\u3002\u4E0B").empty(),
+          "17 full-width stop breaks the run (byte gap)");
+    check(tokenize("ROP\u94FE") == v({"rop"}),
+          "18 ASCII word then isolated Han char");
+    check(tokenize("ROP\u94FE\u5929\u4E0B") == v({"rop", "\u94FE\u5929", "\u5929\u4E0B"}),
+          "19 ASCII word then 3-char CJK run -> 2 bigrams");
+    check(tokenize("\u5929\xFF\u4E0B").empty(),
+          "20 malformed byte breaks the run (byte gap)");
+    check(tokenize("\u5929a\u4E0B") == v({"a"}),
+          "21 bigram never crosses an ASCII word");
+    check(tokenize("\u5929\u4E0B ROP \u65E0\u654C") == v({"\u5929\u4E0B", "rop", "\u65E0\u654C"}),
+          "22 mixed runs and words stay independent");
+
+    // Clause 2 mirror judgments (atom_scan.h clause 2, observable
+    // through the composition layer): '-' never counts as an alnum
+    // neighbor for the sandwich rule.
+    check(tokenize("a-.b") == v({"a-", "b"}),
+          "23 dot with '-' left neighbor splits");
+    check(tokenize("a.-b") == v({"a", "-b"}),
+          "24 dot with '-' right neighbor splits");
+    check(tokenize("-abc") == v({"-abc"}),
+          "25 leading hyphen stays in the word");
+
     return test_summary();
 }

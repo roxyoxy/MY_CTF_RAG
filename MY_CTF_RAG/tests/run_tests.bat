@@ -10,13 +10,13 @@ cd /d "%~dp0.."
 
 set CLFLAGS=/nologo /std:c++17 /W4 /utf-8 /EHsc /I include /I tests /Fo:tests\
 
-cl %CLFLAGS% tests\test_tokenizer.cpp src\tokenizer.cpp /Fe:tests\test_tokenizer.exe 1>tests\_b_tok.txt 2>&1
+cl %CLFLAGS% tests\test_tokenizer.cpp src\tokenizer.cpp src\atom_scan.cpp /Fe:tests\test_tokenizer.exe 1>tests\_b_tok.txt 2>&1
 if errorlevel 1 goto failtok
 cl %CLFLAGS% tests\test_loader.cpp src\loader.cpp /Fe:tests\test_loader.exe 1>tests\_b_load.txt 2>&1
 if errorlevel 1 goto failload
-cl %CLFLAGS% tests\test_chunker.cpp src\chunker.cpp src\tokenizer.cpp /Fe:tests\test_chunker.exe 1>tests\_b_chunk.txt 2>&1
+cl %CLFLAGS% tests\test_chunker.cpp src\chunker.cpp src\tokenizer.cpp src\atom_scan.cpp /Fe:tests\test_chunker.exe 1>tests\_b_chunk.txt 2>&1
 if errorlevel 1 goto failchunk
-cl %CLFLAGS% tests\test_indexer.cpp src\indexer.cpp src\tokenizer.cpp /Fe:tests\test_indexer.exe 1>tests\_b_idx.txt 2>&1
+cl %CLFLAGS% tests\test_indexer.cpp src\indexer.cpp src\tokenizer.cpp src\atom_scan.cpp /Fe:tests\test_indexer.exe 1>tests\_b_idx.txt 2>&1
 if errorlevel 1 goto failidx
 
 tests\test_tokenizer.exe || exit /b 1
