@@ -171,6 +171,13 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       18/18 + 37 绿 + 冒烟过；连字符契约修法同日落地：条款 2 首弹
       [A-Za-z0-9-] + 边缘明示，15:52 契约发现闭环。tokenizer/chunker
       双改造 = 卡 2/3、3/3，随 A 节奏发）
+      （① tokenizer 部分 09-28 竣工：卡 2/3 关账——scan_atoms 组合层
+      + bigram 实装（两段式构造不依赖 3 字节不变量）；测试 37 → 50
+      （test_tokenizer 12 → 25，中文组合 10 条 + 镜像/连字符 3 条，
+      \uXXXX 记法）；run_tests.bat 三链接单元补挂 atom_scan.cpp、
+      vcxproj + filters 补 ClCompile 登记（此前冒烟通过系无消费者
+      假阳性）；冒烟分数微移 = 中文以 bigram 计入 dl 的预期效应。
+      剩 chunker 卡 3/3）
       ② bigram 实装 + 三层中文测试（scanner 黄金 / tokenizer 组合 /
       chunker 边界 + E2E 中文查询）
       ③ 语料重切验收（29 chunks 预期变化：中文开始计数）
@@ -198,6 +205,9 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       优化遍历成册，待真数据验证）
 
 ## 6. 版本
+- v2.3 · 2026-09-28 · **① tokenizer 竣工**：卡 2/3 关账（组合层 +
+      bigram 实装）；测试扩容 37 → 50（中文组合 + 镜像判例入册）；
+      工具链两笔（run_tests 补链 / vcxproj+filters 补登记）
 
 - v2.2 · 2026-09-28 · **① scanner 竣工**：atom_scan.cpp（卡 1/3）
       A 亲手实现（首次实现层交付）+ AI-A 复审收尾三处修改留痕；
