@@ -80,5 +80,17 @@ int main() {
               (r6[1].chunk_id == 0 || r6[1].chunk_id == 2),
           "11 end-to-end query hits only ret2libc chunks");
 
+    // M2 end-to-end Chinese: bigrams on both sides of the pipeline.
+    std::vector<Chunk> cn;
+    cn.push_back(makeChunk(
+        0, 0, "\u5929\u4E0B\u65E0\u654C ret2libc \u5929\u4E0B\u65E0\u53CC"));
+    cn.push_back(makeChunk(
+        1, 0, "sql injection in the login form bypasses authentication"));
+    const auto r7 = search(build_index(cn), "\u5929\u4E0B", 5);
+    check(r7.size() == 1 && r7[0].chunk_id == 0,
+          "12 Chinese bigram query hits the Chinese chunk");
+    check(search(build_index(cn), "\u5929", 5).empty(),
+          "13 single Han char query -> empty (lone char dropped)");
+
     return test_summary();
 }

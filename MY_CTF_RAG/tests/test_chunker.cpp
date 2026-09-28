@@ -67,5 +67,43 @@ int main() {
               chunks7[2].id == 2 && chunks7[1].document_id == 1,
           "7 global contiguous chunk ids, document_id preserved");
 
+    // M2 Chinese layer: atoms are the counting unit (1 Han char = 1
+    // atom), byte offsets come from the atom table.
+    const auto han = [](int n) {
+        std::string s;
+        for (int i = 0; i < n; ++i) s += "\u5929";
+        return s;
+    };
+
+    // 501 Han chars -> 2 chunks; counting bigrams instead of atoms
+    // would yield 1 chunk (501 chars = 500 bigrams).
+    const auto c8 = chunk_documents({makeDoc(0, han(501))});
+    check(c8.size() == 2 && c8[0].begin == 0 && c8[0].end == 1500 &&
+              c8[1].begin == 1350 && c8[1].end == 1503,
+          "8 501 Han chars -> 2 chunks (atoms, not bigrams)");
+
+    // Full-width punctuation yields no atom: 499 + 1 = 500 atoms.
+    const auto c9 =
+        chunk_documents({makeDoc(0, han(499) + "\u3002" + han(1))});
+    check(c9.size() == 1 && c9[0].begin == 0 && c9[0].end == 1503,
+          "9 full-width stop yields no atom (500 atoms -> 1 chunk)");
+
+    // Malformed bytes yield no atom and swallow no neighbors.
+    const auto c10 = chunk_documents({makeDoc(0, "\u5929" "\xFF\xFF" "\u4E0B")});
+    check(c10.size() == 1 && c10[0].begin == 0 && c10[0].end == 8,
+          "10 malformed bytes skipped, neighbors intact");
+
+    // 600 Han chars: overlap of 50 atoms = 150 byte-identical bytes.
+    const auto c11 = chunk_documents({makeDoc(0, han(600))});
+    check(c11.size() == 2 && c11[1].begin == 1350 && c11[1].end == 1800 &&
+              c11[0].text.substr(1350, 150) == c11[1].text.substr(0, 150),
+          "11 overlap of 50 atoms is 150 identical bytes");
+
+    // ASCII words and Han chars weigh the same: 450 + 1 + 49 = 500.
+    const auto c12 =
+        chunk_documents({makeDoc(0, han(450) + " libc " + han(49))});
+    check(c12.size() == 1,
+          "12 ASCII and CJK atoms weigh the same");
+
     return test_summary();
 }
