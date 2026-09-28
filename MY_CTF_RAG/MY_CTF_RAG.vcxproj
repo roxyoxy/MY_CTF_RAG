@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClInclude Include="include\atom_scan.h" />
     <ClInclude Include="include\chunker.h" />
+    <ClInclude Include="include\corpus_diff.h" />
     <ClInclude Include="include\indexer.h" />
     <ClInclude Include="include\loader.h" />
     <ClInclude Include="include\persist.h" />
@@ -146,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="src\atom_scan.cpp" />
     <ClCompile Include="src\chunker.cpp" />
+    <ClCompile Include="src\corpus_diff.cpp" />
     <ClCompile Include="src\indexer.cpp" />
     <ClCompile Include="src\loader.cpp" />
     <ClCompile Include="src\main.cpp" />

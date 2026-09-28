@@ -11,6 +11,7 @@
 
 #include "type.h"
 #include "loader.h"
+#include "corpus_diff.h"
 #include "chunker.h"
 #include "indexer.h"
 #include "persist.h"
@@ -29,6 +30,28 @@ static const char* status_name(SnapshotStatus st) {
     case SnapshotStatus::CORPUS_CHANGED: return "corpus changed";
     }
     return "unknown";
+}
+
+// M2-3: when the corpus changed, the old snapshot still remembers
+// which documents were deleted. Load it, inherit the tombstones into
+// the probe corpus, and report what changed. A snapshot that fails
+// to load yields no inheritance -- plain rebuild.
+static void harvest_tombstones(const std::string& snapshot,
+                               std::vector<Document>& docs) {
+    std::vector<Document> old_docs;
+    std::vector<Chunk>    old_chunks;
+    InvertedIndex         old_index;
+    if (!load(snapshot, old_docs, old_chunks, old_index))
+        return;
+
+    const CorpusDiff diff = diff_corpora(old_docs, docs);
+    const int inherited = inherit_tombstones(old_docs, docs);
+    std::cout << "corpus changed: " << diff.added.size() << " added, "
+        << diff.removed.size() << " removed, " << diff.edited.size()
+        << " edited";
+    if (inherited > 0)
+        std::cout << ", " << inherited << " tombstone(s) inherited";
+    std::cout << "\n";
 }
 
 int main() {
@@ -59,9 +82,12 @@ int main() {
         } else {
             if (st == SnapshotStatus::OK)
                 std::cout << "Snapshot load failed, rebuilding.\n";
-            else
+            else {
                 std::cout << "Snapshot unusable ("
                     << status_name(st) << "), rebuilding.\n";
+                if (st == SnapshotStatus::CORPUS_CHANGED)
+                    harvest_tombstones(snapshot, docs);
+            }
             chunks = chunk_documents(docs);
             index = build_index(chunks);
             if (!save(snapshot, docs, chunks, index))

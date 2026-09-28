@@ -34,7 +34,7 @@
 |---|---|---|
 | M0 | 文档体系 + 会议纪要 + 查询脚本 | ✅ 2026-09-22 |
 | M1 | 纯英文检索：接口设计(.h) → main → 实现(.cpp) → 优化 | ✅ 2026-09-28 四轮全部竣工 |
-| M2 | 中文 bigram + 持久化 + 增量/删除 + Qt 管理界面 | 进行中：① bigram ✅ 09-28 · ② 持久化 ✅ 09-29 · ④ 删除 ✅ 09-29 |
+| M2 | 中文 bigram + 持久化 + 增量/删除 + Qt 管理界面 | 自家四件全 ✅（① 09-28 · ② ④ ③ 09-29）；剩 Qt 界面（外包施工中） |
 | M3 | 向量检索（Flat → 自研 HNSW）+ RRF 混合 | 待开始 |
 | M4 | 本地 LLM 后端（Ollama 原型 → llama.cpp 交付）| 待开始 |
 | M5 | 对比实验（BM25/Dense/Hybrid 三组）+ 报告答辩 | 待开始 |
@@ -75,9 +75,10 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 └── MY_CTF_RAG/              ← 代码区（VS 解决方案）
     ├── MY_CTF_RAG.sln
     ├── MY_CTF_RAG.vcxproj
-    ├── include/             ← 头文件：模块对外的"契约"（七份，M2 +atom_scan/persist）
+    ├── include/             ← 头文件：模块对外的"契约"（八份，M2 +atom_scan/persist/corpus_diff）
     │   ├── type.h           ← 基础数据结构（Document/Chunk/SearchResult）
     │   ├── loader.h         ← 搬进来：data 目录 → vector<Document>
+    │   ├── corpus_diff.h    ← 对账本：两代语料的 added/removed/edited + 墓碑继承（M2③ 新增）
     │   ├── chunker.h        ← 切开来：Document → Chunk（500 词/50 词重叠）
     │   ├── tokenizer.h      ← 磨成粉：text → tokens（词内字符集规则）
     │   ├── indexer.h        ← 账房+查账台：倒排索引 + BM25
@@ -85,7 +86,7 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
     │   └── persist.h        ← 索引快照：save/validate/load（M2② 新增）
     ├── src/                 ← 实现：对契约的"履约"
     │   └── main.cpp         ← 总装车间（M1 第二轮产物）
-    ├── data/                ← 语料，按 category 分目录（24 篇真实 writeup：EN 12 + CN 12）
+    ├── data/                ← 语料，按 category 分目录（58 篇：npusec 24 + ctf-wiki 34，含 mobile 类目）
     └── (tests/ 第四轮再建，YAGNI)
 ```
 
@@ -101,16 +102,18 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 
 ## 4. 快速开始
 
-**当前状态**：**M2-④ 墓碑消费竣工（2026-09-29）**。七份契约
-七份实现 + 100 条回归测试全绿（/W4）。启动流程：validate 快照 ->
-命中即 load（`index.bin` 缓存，损坏自动降级重建，删掉随时重建）->
-未命中 fresh build + save。查询环支持 `list` / `del <id>`：
-删除 = 墓碑 + 立即重建 + save（块即刻消失，重启仍是删除态）；
-物理清除 = 直接删文件，重启自动完成（"编辑被删文档 = 复活"为
-已知边界，继承机制挂 M2-③）。M2① 中文 bigram、M2-② 持久化
-此前竣工（atom_scan.h 词法单一事实源 + 三层中文测试 + 快照缓存）。
-`data\` 24 篇真实 writeup（EN 12 + CN 12 同源互译），`query>`
-交互查询（中英文均可）。测试一键跑：`tests\run_tests.bat`。
+**当前状态**：**M2-③ 增量建库竣工（2026-09-29），M2 自家四件套
+全清**。八份契约 + 114 条回归测试全绿（/W4）。启动流程：validate
+快照 -> 命中即 load（`index.bin` 缓存，损坏自动降级重建）-> 未命中
+fresh build + save；**语料变动（CORPUS_CHANGED）时收获旧快照：
+打一行 diff 报告（added/removed/edited）+ 按 path 继承墓碑 ->
+重建**——"编辑被删文档"不再复活（复活通道 = 物理删文件重加）。
+查询环支持 `list` / `del <id>`：删除 = 墓碑 + 立即重建 + save。
+M2① 中文 bigram、M2-② 持久化、M2-④ 墓碑消费此前竣工。
+`data\` **58 篇 writeup / 145 chunks**（npusec 小赛 24 EN+CN 同源
+互译 + ctf-wiki 34 新知识含 mobile 类目，09-29 经 CORPUS_CHANGED
+添加流程实弹入库），`query>` 交互查询（中英文均可）。测试一键跑：
+`tests\run_tests.bat`。
 构建环境既成事实（B/C 必读）：
 
 - VS2022 项目设置：`/utf-8` + ISO C++17 + `/W4`，作用域=所有配置×所有平台

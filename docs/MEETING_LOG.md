@@ -1365,3 +1365,120 @@ Qt 施工书影响备案：§4.3"search 仍会返回墓碑文档的块"语义已
 
 下一步：commit 待批；M2 自家活仅剩 M2-③ 增量建库（ctf-wiki
 35 篇实弹，id 稳定性考题），Qt 外包件回流后拼装。
+
+## [2026-09-29 03:27] AI-A
+
+【决策转记】A 拍板 M2-③ 增量建库四项（外部意见回流四项照
+推荐终裁）+ 施工方式第五项：
+
+1. 范围 = **甲**：diff 检测 + 墓碑继承 + 全量重建 + 缓议书。
+   真增量否决——打包 id（loader 字典序 doc id + 连续 chunk id +
+   chunk_lengths 红线）与增量 merging 在现行契约下互斥，中间
+   插入的重编号级联成本 O(账本总量) ≈ 全量重建，代码复杂度翻
+   几倍换零收益；乙（稳定 id 重构）杀 chunk_lengths 红线 +
+   M5 稠密向量化提案 + persist 格式且作废 Qt 外包件所依契约，
+   丙（追加式快路径）被自家弹药击毙（ctf-wiki mobile/ 新类目
+   必卡字典序中间，永不触发）
+2. 新契约之家 = 独立 include/corpus_diff.h（**第八契约**）。
+   事实归契约（added/removed/edited 是纯事实），策略归 main
+   （怎么用 diff 是策略）；纯函数可测试
+3. 继承语义 = **按 path**（内容失明）：编辑被删文档不再复活，
+   M2-④ 签字的已知边界就此关闭；复活通道 = 物理删文件再重加
+4. 会话内 reload 命令不做（YAGNI，重启即同一路径）
+5. 施工方式 = **AI-A 执笔全件（赶时间模式，persist.cpp 先例）**。
+   外部意见曾建议 A 亲手写双指针归并；A 裁定"先挂账你快写"。
+   A 亲手学习债挂账清单 +1：**④ corpus_diff.cpp 双指针归并
+   实现走读 + main harvest 分支**（与 ①②③ 同清算点：M3 发卡
+   时优先讨论 / Qt 竣工前）
+
+对外部意见对账：四项判决与 AI-A 推荐逐项一致、论证无失真、
+引用无幻觉；"事实 vs 策略""deleted 是 path 的属性"两条新论据
+收下。反向对账一处：称 AI-A 设计简报"表格贴了两遍"——查本会话
+原稿表格仅出现一次，重复发生在 A 转发给外部 AI 的粘贴环节。
+
+施工（AI-A 执笔，A 授权"你快点写吧"）：
+- include/corpus_diff.h 第八契约：CorpusDiff{added,removed,
+  edited}（相对 path 列表，升序）+ diff_corpora（双指针一趟
+  O(n+m)，条款 2 纯度与 validate 同源：id/deleted 不可见）+
+  inherit_tombstones（按 path 置 deleted，返回实际置位数，
+  条款 5 内容失明 = "编辑不复活"的契约化）+ 前置条件两头真实
+  成立（loader 字典序 / 快照还原保序）
+- src/corpus_diff.cpp：两个独立双指针归并，无内部排序，无 I/O
+- main.cpp 三处：include 补 corpus_diff.h（管线序：loader 后）；
+  harvest_tombstones 静态帮手（收获旧快照 → diff → inherit →
+  打一行 diff 报告；收获失败 = 无继承直接重建，"损坏=cache
+  miss"红线一致）；rebuild 分支在 CORPUS_CHANGED 且仅此时调用。
+  关键机理：load 不做 manifest 比对（那是 validate 职责），
+  CORPUS_CHANGED 时快照结构完好即可收获——18:47 "persist 哑三件
+  不混入 M2-③"裁定零破坏兑现
+- tests/test_corpus_diff.cpp 14 条：两空/全同/id 纯度/deleted
+  纯度（diff 与继承职责分离的钉子）/尾部追加/**中间插入
+  （mobile 场景，id 位移与 diff 无关）**/删除/同 path 异 content/
+  三态混合一趟/输出升序/**编辑墓碑不复活（边界关闭验收钉，
+  content 保留新值）**/墓碑路径消失不外溢/零墓碑返 0/已置位
+  不重计
+- run_tests.bat 第七测试单元（仅链 corpus_diff.cpp）；
+  vcxproj/filters 双登记（ClInclude + ClCompile，main 已消费）
+
+验收：字节双零（corpus_diff.h 2021B / corpus_diff.cpp 1809B /
+test_corpus_diff.cpp 6742B / main.cpp 6684B，均无 BOM 纯
+ASCII）；run_tests 套件 **100 -> 114 全绿**（新单元 14/14）；
+msbuild Debug|x64 /W4 零告警（corpus_diff.cpp 首过 MSVC 干净）；
+冒烟五连（一次性文件 data/web/zz_incr_test.md 实弹，真语料
+零接触，全程 tcache 查询作探针）：
+- 首启 not found 重建 24/77 → 二启命中 restored
+- 投放新文件：corpus changed: **1 added** → 25 docs/78 chunks，
+  新文件 id 24（web 尾部零位移），tcache top-1 命中新文件
+- del 24 墓碑：77 chunks remain，tcache 空结果
+- **编辑被删文件后重启：corpus changed: 0 added, 0 removed,
+  1 edited, 1 tombstone(s) inherited**——25 docs/77 chunks，
+  list 显示 24 [deleted] 467 bytes（探针已读入新内容但墓碑
+  存活），tcache 仍空。**"编辑即复活"边界正式关闭**
+- 物理删文件：corpus changed: **1 removed** → 24/77 归位，
+  tcache 空（文件已不在）
+冒烟后临时文件已删、index.bin 已清（还原首启态）。
+
+剩余两件挂本项：缓议书（docs/design/，id 稳定性对偶代价论证
+入册 + 乙/丙/乙′ 死因 + M5 复议触发条件，AI-A 执笔 A 审）+
+ctf-wiki 35 篇实弹入库（24 -> 59，ASCII 文件名 + UTF-8 体检
+走 18:20 先例）。commit 待批。
+
+## [2026-09-29 03:35] AI-A
+
+【决策转记】A 令"ctf-wiki 35 篇实弹入库 走添加流程进行测试；
+对了的话就commit"——同轮执行完毕，**M2-③ 至此全部竣工（五项
+拍板 + 代码 + 缓议书 + 实弹），M2 自家四件套全清，仅剩 Qt 外包件**。
+
+- 弹药现场：`Desktop\CCTF\ctf-wiki`——writeups/ 下 34 篇单题 WP
+  （全 ASCII kebab-case 命名：misc 6 / mobile 6 / pwn 6 / re 8 /
+  web 8）+ 1 篇《校赛总WP_提交版.md》
+- 【排除裁定（AI-A 现场判，A 可翻案）】总 WP = "探索解密"大赛
+  提交汇总（r0Xy 队排名表 + 呀吼等 npusec 12 题内容与现有 data/
+  重复 + 中文文件名违反 15:30 ASCII 先例）——不入库。原册"35 篇
+  24 -> 59"修正为 **34 篇 24 -> 58**（35 计数含总 WP）
+- 入库前置体检（18:20 先例）：34 篇全 UTF-8 解码合法、文件名
+  纯 ASCII、1.2~14KB 量级健康
+- 实弹流程（A 点名的添加路径）：先建基线快照（首启 24/77 +
+  save）-> 34 篇拷入 data/ 五类目（mobile/ 新目录）-> 重启 ->
+  **"corpus changed: 34 added, 0 removed, 0 edited" -> 58 docs /
+  145 chunks**（77 -> 145，+68）-> 再启还原命中 58/145
+- id 稳定性考题现场答案：mobile/ 卡进 misc 与 pwn 之间，字典序
+  中间插入实锤，doc id 全体重排由全量重建正确消化（重建 = 新
+  注册表，无跨引用，M2-④ 脚注先例）
+- 查询弹（新知识实弹）：borrowstack top-1（5.70）；蔡文姬
+  top-1（14.10，中文 bigram 新语料首杀级分数）；json beautifier
+  top-1（9.40）+ inspiration-note 等多块混排；钢琴 top-1（4.23）；
+  栈溢出 top-10 = 新语料压制（stack 8.82 / borrowstack 7.67）
+  + 旧救赎之道 CN 四块可达（6.0~7.2）——扩容后新旧知识混合
+  排序符合预期
+- 插曲入册：英文查询 piano 空结果 = 内容零 "piano"（词仅在
+  文件名，而文件名不入索引；内容用 钢琴/琴键）——契约"未知词
+  返空"正确履职，heap 先例（09-28）第二例；正弹 钢琴 top-1
+  补齐验证
+- 文档同步：README 4 处（里程碑行自家四件全清 / 状态块 58 篇
+  145 chunks / 目录树 data 行 / 语料叙事）+ PRINCIPLES 语料
+  快照行 + TASKS v3.1（增量建库 [x] 关账）；快照 index.bin
+  保留（老板 F5 直接还原 58/145）
+
+commit 获批随本条入账（M2-③ 代码 11 文件 + 语料 34 篇 +
+文档 4 件）。

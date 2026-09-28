@@ -22,6 +22,8 @@ cl %CLFLAGS% tests\test_indexer.cpp src\indexer.cpp src\tokenizer.cpp src\atom_s
 if errorlevel 1 goto failidx
 cl %CLFLAGS% tests\test_persist.cpp src\persist.cpp /Fe:tests\test_persist.exe 1>tests\_b_per.txt 2>&1
 if errorlevel 1 goto failper
+cl %CLFLAGS% tests\test_corpus_diff.cpp src\corpus_diff.cpp /Fe:tests\test_corpus_diff.exe 1>tests\_b_cdiff.txt 2>&1
+if errorlevel 1 goto failcdiff
 
 tests\test_atom_scan.exe   || exit /b 1
 tests\test_tokenizer.exe || exit /b 1
@@ -29,6 +31,7 @@ tests\test_loader.exe     || exit /b 1
 tests\test_chunker.exe    || exit /b 1
 tests\test_indexer.exe    || exit /b 1
 tests\test_persist.exe     || exit /b 1
+tests\test_corpus_diff.exe || exit /b 1
 echo ALL_TESTS_GREEN
 del tests\_b_*.txt 1>nul 2>nul
 exit /b 0
@@ -50,4 +53,7 @@ type tests\_b_idx.txt
 exit /b 1
 :failper
 type tests\_b_per.txt
+exit /b 1
+:failcdiff
+type tests\_b_cdiff.txt
 exit /b 1

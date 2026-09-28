@@ -1,0 +1,221 @@
+# 密码验证
+
+> **Category**: Mobile | **Difficulty**: Hard | **Competition**: ISCC 2026 区域赛
+> **Flag**: `ISCC{HPysO;p+vs*q);@zP#{r4F9od$Sn:}`
+
+---
+
+## Attack Chain
+
+```
+APK解包 → JADX定位native方法 → IDA逆向SO → 三段加密链逆推(TEA+GF矩阵+LCG)
+```
+
+## Key Techniques
+
+### 1. APK 解包与结构分析
+
+解包后发现 `lib/x86_64/libnativecrypto.so` 是核心 native 库，`assets/` 目录下有四个密文文件：
+
+- `cipher1.bin`（8 字节）：`41 19 10 ec 16 b8 48 12`
+- `cipher2.bin`（12 字节）：`ea 78 71 58 b2 db 20 d0 1c fc 89 18`
+- `cipher3.bin`（10 字节）：`cf f7 9a 05 da 3b 62 97 8d ca`
+- `puzzle.bin`（20 字节）：`8d 93 08 96 4b 89 3c 1e 2e 17 14 28 01 69 b5 9b 36 c7 bb 4f`
+
+通过 JADX 分析发现 `NativeBridge` 类声明了 native 方法 `verifyFlag(Context, String)`。
+
+### 2. Flag 结构与加密链
+
+程序校验 Flag 格式为 `ISCC{...}` 共 36 字节，提取中间 30 字节拆分为三段：
+
+```
+part1(8字节) + part2(12字节) + part3(10字节)
+```
+
+分别加密后与密文文件比对。
+
+### 3. 密钥派生 — 三张查找表 + 变换函数
+
+`.rodata` 段找到三张硬编码表，通过变换函数解码：
+
+```c
+unsigned char transform(unsigned char b) {
+    return ((b - 0x13) & 0xFF) ^ 0x5A;
+}
+```
+
+得到 `keyA`、`keyB`（GF(256) 单位矩阵）、`keyC`。
+
+### 4. 密钥混合与旋转（核心难点）
+
+`keyA ⊕ keyC` 的结果左旋 3 位得到中间密钥 `v74`，然后依次通过 ShiftRows 和 AES S-box + CBC 生成工作密钥。
+
+### 5. Part1 解密 — TEA + XOR
+
+```
+part1 ⊕ v87 → bswap → TEA_encrypt → cipher1
+逆向: TEA_decrypt → bswap → ⊕ v87
+```
+
+### 6. Part2 解密 — GF(256) 矩阵求逆
+
+每 4 字节独立进行 GF(256) 矩阵乘法：`cipher2 = M × part2`，对矩阵 M 高斯消元求逆。
+
+### 7. Part3 解密 — LCG 流密码
+
+64 位种子经 Knuth LCG（`a=0x5851F42D4C957F2D, c=0x14057B7EF767814F`）生成随机流，与 part3 异或。
+
+## Exploit
+
+```python
+import struct
+
+sbox = [
+    0x63,0x7c,0x77,0x7b,0xf2,0x6b,0x6f,0xc5,0x30,0x01,0x67,0x2b,0xfe,0xd7,0xab,0x76,
+    0xca,0x82,0xc9,0x7d,0xfa,0x59,0x47,0xf0,0xad,0xd4,0xa2,0xaf,0x9c,0xa4,0x72,0xc0,
+    0xb7,0xfd,0x93,0x26,0x36,0x3f,0xf7,0xcc,0x34,0xa5,0xe5,0xf1,0x71,0xd8,0x31,0x15,
+    0x04,0xc7,0x23,0xc3,0x18,0x96,0x05,0x9a,0x07,0x12,0x80,0xe2,0xeb,0x27,0xb2,0x75,
+    0x09,0x83,0x2c,0x1a,0x1b,0x6e,0x5a,0xa0,0x52,0x3b,0xd6,0xb3,0x29,0xe3,0x2f,0x84,
+    0x53,0xd1,0x00,0xed,0x20,0xfc,0xb1,0x5b,0x6a,0xcb,0xbe,0x39,0x4a,0x4c,0x58,0xcf,
+    0xd0,0xef,0xaa,0xfb,0x43,0x4d,0x33,0x85,0x45,0xf9,0x02,0x7f,0x50,0x3c,0x9f,0xa8,
+    0x51,0xa3,0x40,0x8f,0x92,0x9d,0x38,0xf5,0xbc,0xb6,0xda,0x21,0x10,0xff,0xf3,0xd2,
+    0xcd,0x0c,0x13,0xec,0x5f,0x97,0x44,0x17,0xc4,0xa7,0x7e,0x3d,0x64,0x5d,0x19,0x73,
+    0x60,0x81,0x4f,0xdc,0x22,0x2a,0x90,0x88,0x46,0xee,0xb8,0x14,0xde,0x5e,0x0b,0xdb,
+    0xe0,0x32,0x3a,0x0a,0x49,0x06,0x24,0x5c,0xc2,0xd3,0xac,0x62,0x91,0x95,0xe4,0x79,
+    0xe7,0xc8,0x37,0x6d,0x8d,0xd5,0x4e,0xa9,0x6c,0x56,0xf4,0xea,0x65,0x7a,0xae,0x08,
+    0xba,0x78,0x25,0x2e,0x1c,0xa6,0xb4,0xc6,0xe8,0xdd,0x74,0x1f,0x4b,0xbd,0x8b,0x8a,
+    0x70,0x3e,0xb5,0x66,0x48,0x03,0xf6,0x0e,0x61,0x35,0x57,0xb9,0x86,0xc1,0x1d,0x9e,
+    0xe1,0xf8,0x98,0x11,0x69,0xd9,0x8e,0x94,0x9b,0x1e,0x87,0xe9,0xce,0x55,0x28,0xdf,
+    0x8c,0xa1,0x89,0x0d,0xbf,0xe6,0x42,0x68,0x41,0x99,0x2d,0x0f,0xb0,0x54,0xbb,0x16,
+]
+
+def gf_mul(a, b):
+    r = 0
+    while b:
+        if b & 1: r ^= a
+        hi = a & 0x80
+        a = (a << 1) & 0xFF
+        if hi: a ^= 0x1b
+        b >>= 1
+    return r
+
+def transform(b):
+    return ((b - 0x13) & 0xFF) ^ 0x5A
+
+def tea_decrypt(v0, v1, key):
+    delta = 0x9E3779B9
+    s = (delta * 16) & 0xFFFFFFFF
+    M32 = 0xFFFFFFFF
+    for _ in range(16):
+        v1 = (v1 - (((key[3] + (v0 >> 5)) & M32) ^ ((s + v0) & M32) ^ \
+             ((key[2] + (v0 << 4 & M32)) & M32))) & M32
+        v0 = (v0 - (((key[1] + (v1 >> 5)) & M32) ^ ((s + v1) & M32) ^ \
+             ((key[0] + (v1 << 4 & M32)) & M32))) & M32
+        s = (s - delta) & M32
+    return v0, v1
+
+def gf_mat_inv(mat):
+    n = len(mat)
+    aug = [[0]*(2*n) for _ in range(n)]
+    for i in range(n):
+        for j in range(n): aug[i][j] = mat[i][j]
+        aug[i][n+i] = 1
+    for col in range(n):
+        pivot = -1
+        for row in range(col, n):
+            if aug[row][col] != 0: pivot = row; break
+        if pivot < 0: return None
+        aug[col], aug[pivot] = aug[pivot], aug[col]
+        inv_val = None
+        for v in range(256):
+            if gf_mul(aug[col][col], v) == 1: inv_val = v; break
+        for j in range(2*n): aug[col][j] = gf_mul(aug[col][j], inv_val)
+        for row in range(n):
+            if row != col and aug[row][col] != 0:
+                f = aug[row][col]
+                for j in range(2*n): aug[row][j] ^= gf_mul(f, aug[col][j])
+    return [[aug[i][n+j] for j in range(n)] for i in range(n)]
+
+# === 密钥派生 ===
+keyA = [transform(b) for b in [0x53,0x84,0x79,0x2a,0x17,0x48,0x3d,0xee,
+                                 0xdb,0x0c,0x01,0xb2,0x9f,0xd0,0xb5,0x66]]
+keyC = [transform(b) for b in [0x03,0xf4,0xa9,0x9a,0x5e,0x8b,0x7c,0x31,
+                                 0x22,0x4f,0x40,0xe5,0xd6,0x6d,0xb7,0xca]]
+
+v74_xor = [keyA[i] ^ keyC[i] for i in range(16)]
+v74 = v74_xor[3:] + v74_xor[:3]  # 左旋3位
+
+perm = [0x02, 0x03, 0x00, 0x01]
+v17 = v74[:]
+v73 = [0]*16
+for m in range(4):
+    for n in range(4):
+        v73[n + 4*m] = v17[n + 4*perm[m]]
+
+v72 = [sbox[v74[i] ^ v73[i] ^ keyC[i]] for i in range(16)]
+for j in range(1, 16):
+    v72[j] ^= v72[j-1]
+
+# === 解密 Part1 (TEA) ===
+cipher1 = [0x41,0x19,0x10,0xec,0x16,0xb8,0x48,0x12]
+tea_key = []
+for jj in range(4):
+    tea_key.append((v74[4*jj]<<24)|(v74[4*jj+1]<<16)|(v74[4*jj+2]<<8)|v74[4*jj+3])
+v87 = [v72[(kk+1) % 16] for kk in range(8)]
+v85_enc = struct.unpack('>I', bytes(cipher1[:4]))[0]
+v86_enc = struct.unpack('>I', bytes(cipher1[4:8]))[0]
+v85, v86 = tea_decrypt(v85_enc, v86_enc, tea_key)
+v84_bytes = list(struct.pack('>I', v85)) + list(struct.pack('>I', v86))
+part1 = [v84_bytes[i] ^ v87[i] for i in range(8)]
+
+# === 解密 Part2 (GF矩阵求逆) ===
+cipher2 = [0xea,0x78,0x71,0x58,0xb2,0xdb,0x20,0xd0,0x1c,0xfc,0x89,0x18]
+K = [[v73[k + 4*j] for j in range(4)] for k in range(4)]
+K_inv = gf_mat_inv(K)
+K_inv_T = [[K_inv[j][i] for j in range(4)] for i in range(4)]
+part2 = [0]*12
+for i in range(3):
+    for j in range(4):
+        val = 0
+        for k in range(4):
+            val ^= gf_mul(K_inv_T[j][k], cipher2[k + 4*i])
+        part2[j + 4*i] = val
+
+# === 解密 Part3 (LCG流密码) ===
+cipher3 = [0xcf,0xf7,0x9a,0x05,0xda,0x3b,0x62,0x97,0x8d,0xca]
+v42 = 0
+for nn in range(8):
+    v42 = (v42 << 8) | v72[nn]
+state = v42 & 0xFFFFFFFFFFFFFFFF
+stream = []
+for _ in range(10):
+    state = (0x5851F42D4C957F2D * state + 0x14057B7EF767814F) & 0xFFFFFFFFFFFFFFFF
+    stream.append((state >> 24) & 0xFF)
+part3 = [cipher3[i] ^ stream[i] for i in range(10)]
+
+flag = "ISCC{" + "".join(chr(b) for b in part1 + part2 + part3) + "}"
+print(f"Flag: {flag}")
+```
+
+**运行结果：**
+
+```
+part1 = HPysO;p+
+part2 = vs*q);@zP#{r
+part3 = 4F9od$Sn:
+Flag: ISCC{HPysO;p+vs*q);@zP#{r4F9od$Sn:}
+```
+
+## Distilled Knowledge
+
+| 知识点 | 关键 |
+|--------|------|
+| APK native逆向 | jadx找JNI → IDA分析SO |
+| TEA加密 | delta=0x9E3779B9, 16轮 |
+| GF(256)矩阵 | 高斯消元求逆, 模0x11B |
+| LCG流密码 | Knuth LCG 64位, XOR还原 |
+| 密钥派生链 | 查找表→变换→XOR→旋转→SBox→CBC |
+
+---
+
+*Original writeup: `C:\Users\48714\Desktop\wp\区域赛\密码验证_WriteUp_final.md`*

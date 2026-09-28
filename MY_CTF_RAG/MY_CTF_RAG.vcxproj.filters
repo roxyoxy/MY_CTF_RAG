@@ -36,6 +36,9 @@
     <ClInclude Include="include\persist.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\corpus_diff.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\loader.cpp">
@@ -57,6 +60,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\persist.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\corpus_diff.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
