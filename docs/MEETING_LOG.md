@@ -685,3 +685,35 @@ AI-A 附议：atom_scan 由 A 亲手写收益最大——M2 地基 + 实现层�
 - 下一步：其余四件契约改写依次过——tokenizer.h 条款 2 →
   chunker.h 条款 2 → indexer.h word count 注释 → PARAMS.md
   500/50 口径
+
+## [2026-09-28 15:35] AI-A
+
+【决策】tokenizer.h 条款 2 bigram 改写关账（M2① ⓪ 第二件，2/5）。
+
+- 设计定稿（AI-A 教练对话，A 三项拍板）：P1 条款 1 精确化保留
+  （"ASCII letters come out lowercase; Han characters have no case"，
+  不并入条款 2）；P2 孤字丢弃的用户可见代价（单字查询返回空）
+  不进契约——13:32 条已有案，unigram 混合挂 M5 复议；P3 判例全进
+- 新契约结构：条款 2 重写为组合政策两段式——(a) ASCII_WORD atom
+  逐个小写化输出；(b) 极大字节相邻 CJK_CHAR run 内滑窗 bigram，
+  run 长度 1 不产 token；字符级规则零复述，权威引用 atom_scan.h
+  （单一事实源条款在消费端落地）。条款 3/4/include 原样
+- A 起草英文全文，AI-A review 抓出一处定义级矛盾：run 定义词
+  "consecutive"（列表相邻读法）vs 补丁句 "separator terminates
+  the run"——判例 天。下（U+3002 不产 atom，atom 表里两汉字恰相邻）
+  按列表读法会产出跨标点 bigram 天下；修法 = 定义词换
+  "byte-adjacent" + 括号半句（each atom starts exactly where the
+  previous one ends），三个断 run 条件（ASCII atom / 分隔符 / 畸形
+  字节）统一为同一定义的推论。与 atom_scan.h 复审的 API 边界矛盾
+  同物种：定义位与补丁位打架，实现者随机选边
+- 判例 +1：U+5929 U+0020 U+4E0B -> {}（真输入空格显式记 U+0020），
+  兼治表头 notation 歧义（码点间空格是记法不是输入字节）
+- 落盘方式：A 授权 AI-A 执笔（第二次实例授权，同 atom_scan.h
+  先例；A 草稿原文 + AI-A 两处复审修，不构成惯例）
+- 验收：字节自检 PURE ASCII（1989 字节）；run_tests.bat 37 条
+  全绿（tokenizer 12 + loader 7 + chunker 7 + indexer 11，含
+  test_tokenizer 编译烟测）。契约先行中间态安全兑现：现实现对
+  英文路径的行为与新条款 (a) 一致，中文路径已定义未实现（归
+  ① 步改造）
+- 下一步：chunker.h 条款 2 改 atom 计数（⓪ 第三件，"A word is
+  a token as defined by tokenizer.h" 作废换血）
