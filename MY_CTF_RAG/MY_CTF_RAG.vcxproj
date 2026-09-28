@@ -149,6 +149,7 @@
     <ClCompile Include="src\indexer.cpp" />
     <ClCompile Include="src\loader.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\persist.cpp" />
     <ClCompile Include="src\tokenizer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

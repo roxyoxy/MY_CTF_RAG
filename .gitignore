@@ -15,5 +15,9 @@ Release/
 *.ilk
 *.exe
 
+# Index snapshot cache (derived from data/, safe to delete and rebuild)
+index.bin
+index.bin.tmp
+
 # Python
 __pycache__/

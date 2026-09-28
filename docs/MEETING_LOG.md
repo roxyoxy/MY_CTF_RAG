@@ -1215,3 +1215,95 @@ AI-A 单独写一份解释文档。
   TASKS v2.7；卡体不提交，先例）。push 待 A 示下
 - 下一步：A 口答复述题 -> 翻译施工卡 -> 黄金表 + 冒烟三连 ->
   main 接线（登记 vcxproj）-> test_persist（AI-A 执笔 A 审）
+
+## [2026-09-29 02:19] AI-A
+
+【决策转记】A 赶时间裁定：persist.cpp 改 AI-A 执笔（一次性实例
+授权，同测试代码先例；09-28 13:39"M2 A 亲手实现"工作模式就本文件
+修订）。复述题 5/5 已于授权前先行通过，设计层理解入账；各题脚注
+补课：Q1 seekp 反例与依赖链硬逻辑 / Q2 事务原子性 + 未触及输出
+= main 兜底安全性地基 / Q3 宽度设防 vs 字节序不设防逐条算账 /
+Q4 save->load->save 换插入历史是手术刀设计 / Q5 探针三段
+职业生涯（比对 -> 兜底原料 -> 被覆盖退休）。
+
+挂账清单（A 定：M2-⑤ Qt 竣工前择机清算，M3 发卡时优先研究
+讨论）：① persist.cpp 实现层走读（对照施工卡六部分）② 卡缝
+五处（下）③ 黄金表 3/8/12 号构造思路。
+
+【留痕】卡缝五处认账（AI-A 填卡笔误，施工中抓获）：
+1. validate 卡序逐字执行在 <24B 文件上越界读（magic/FORMAT
+   检查先于长度门）——裁定：magic 守卫带 size>=8 前置，长度门
+   归 check 4（截断语义）；"检查顺序管语义优先级，守卫管不读
+   越界"，两层分离
+2. load 恢复段漏 begin/end 合法性守卫——substr 在坏偏移上抛
+   out_of_range，违反 never-throw；补 begin>end ||
+   end>content.size() + lengths/chunks 等长 + postings
+   chunk_id 界内三根保险（防"指纹修好的坏账本"后续 UB）
+3. 卡 IWYU 清单漏 <algorithm>（sort）/ <system_error>
+   （error_code）/ <unordered_map>
+4. load 侧不可信计数禁 reserve——伪造计数 + reserve 可触发
+   bad_alloc 抛出，违反 never-throw；向量自然增长受实际字节
+   约束
+5. 黄金 12 号正解澄清：payload 翻转 + 修指纹仅当落在结构性
+   字节（计数/长度域）才 BAD_FORMAT；内容字节 + 修指纹 = 设计
+   上不可检出（FNV 防意外不防对抗，18:55 裁定的直接推论），
+   测试按结构性构造（doc 计数域翻转 + 重算 FNV 修头）
+
+施工：persist.cpp 全量落盘（AI-A 执笔；卡体随竣工删除，卡体
+本就不提交，先例）。地基件（fnv1a64 + 拼盘族 + 越界安全读盘族
+Reader）+ save（内存拼载荷 -> 24B 头 -> .tmp 原子替换带两步
+兜底）+ validate（八字检查链 + 结构走查 + 尾字节检查）+ load
+（头部自检 -> 局部临时解析 -> substr/avgdl 恢复 -> 全有时刻
+字段级 move）。
+
+验收四件：① 字节双零（17016B，无 BOM + 0 非 ASCII）② g++
+-Wall -Wextra -fsyntax-only 零告警 ③ 全模块真实链接编译零
+告警（persist + chunker + tokenizer + atom_scan + indexer，
+WSL g++）④ 黄金表 28/28 绿（%TEMP% 临时 main 跑完即删）——
+含 3c save->load->save 字节一致性（确定性判决）、6b 失败时
+探针保持原状（全有或全无实证）、8 号 FORMAT 翻转指纹不炸
+（头部不入指纹）、12 号结构层独立于指纹层抓获伪造。MSVC /W4
+真编译随 main 接线时做（vcxproj 登记即挂），atom_scan 17:35
+先例。
+
+下一步：main 接线（~10 行，动 A 手写的 main.cpp，待 A 一句话
+授权）+ vcxproj/filters ClCompile 登记 + test_persist 转正
+（七坏一好矩阵，AI-A 执笔 A 审）-> M3 开张（向量检索 HNSW/RRF
+契约设计 + B/C 任务卡）。commit 待 A 批。
+
+## [2026-09-29 02:32] AI-A
+
+【决策转记】A 三令：① main 接线 + M2-② 收尾（含 commits）授权
+AI-A 执行；② **Qt GUI 改外包**——外部 AI 施工，AI-A 出施工书 +
+附件清单，交付物回流后 A 审 + AI-A review 再拼装（09-28 13:39
+"Qt 全权 AI-A 执笔"就此修订）；③ M3 发卡照计划（B/C 回归分工）。
+
+- 【留痕】AI-A 改 A 的 main.cpp 三处（授权"你继续做你的这个
+  main"）：1. include 补 "persist.h"；2. status_name 帮手（八态
+  人话，控制台只打印、调用方动作恒为重建）；3. Stage 1 换缓存
+  分支 validate -> (OK && load) 命中 : {chunk+build+save（save
+  失败仅 cerr 警告）}。快照路径 index.bin 由 main 决定（契约
+  分工），.gitignore 补 index.bin / index.bin.tmp
+- 【留痕】filters 补 persist.cpp 源文件条目；vcxproj ClCompile
+  系 A 建壳时已被 VS 自动登记（17:35"VS 自动挂 vcxproj"假设的
+  首次反例，留档）
+- test_persist 22 条转正（run_tests 第六单元）：七坏一好全矩阵
+  （IO_ERROR 用目录路径构造；BAD_PARAMS 与结构破坏走"修指纹
+  正攻"构造，专测指纹层背后的守卫）+ 字节一致性 + 失败探针
+  保持 + 空语料 avgdl 守卫
+- 【事故留痕（AI-A）】test_persist 首轮 5 红（9-13 号）：伤害
+  用例逐段 slurp 现场读，8 号改坏文件后后续在尸体上继续改，
+  BAD_MAGIC 恒抢先返回——黄金表原有"先存一份 good 快照"细节
+  转正时丢失。修测试不修实现，复跑全绿。"测试红先审测试"
+  第三例（B tokenizer 期望值、AI-A 黄金 e.g. 笔误之后）
+- 验收：msbuild Debug|x64 /W4 全量零告警（persist.cpp 首次过
+  MSVC 真编译）；冒烟四连：首启 miss(not found) 重建 24/77 ->
+  二启命中 restored -> 魔数位翻转 miss(bad magic) 降级重建 ->
+  自愈再命中；无 .tmp 残留，快照 458KB；run_tests 全套
+  75 -> 97 绿；字节双零（persist.cpp 17016B / test_persist.cpp
+  10105B / main.cpp 3603B）
+- 文档同步：README（M2 状态行 + 当前状态块）+ TASKS v2.8（索引
+  持久化 [x] 竣工 + Qt 外包改裁）；commit bundle 本条后入账
+- Qt 外包施工书随本条交付：Desktop\给GPT的外包QTprompt.md +
+  附件清单（七份契约 .h + src/main.cpp 参考消费者 + PRINCIPLES +
+  README），见施工书尾节
