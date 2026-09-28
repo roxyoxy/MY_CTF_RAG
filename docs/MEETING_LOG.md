@@ -746,3 +746,74 @@ PARAMS.md 口径一次改完（3/5、4/5、5/5）。
   indexer.h + PARAMS.md 五件齐装，契约层 bigram-ready。下一步 =
   ① scanner 落地 + tokenizer/chunker 双改造（A 亲手实现，13:39
   拍板；AI-A 出伪代码卡，验收 = 37 条英文测试原样全绿）
+
+## [2026-09-28 15:52] AI-A
+
+① scanner 落地开工：A 在 VS 亲手创建 src\atom_scan.cpp，AI-A 获
+授权写入伪代码施工卡（M2① 第 1/3 张，四件套：复述题 / 三段伪代码
+/ 15 条黄金自测表 / 施工规则；UTF-8 带 BOM 供 VS 显示，竣工时卡
+删光另存无 BOM）。姊妹卡 2/3（tokenizer.cpp 改造）、3/3（chunker.cpp
+改造）待本卡竣工后依次发。
+
+【契约发现】atom_scan.h 条款 2 "'-' is unconditionally
+word-internal" 措辞与 M1 语义冲突：字面读法（词内 = 需两侧词字符）
+使边缘连字符与孤立 "-" 不成 atom；但 M1 契约（09-26 变更，A 批准）
+原文是"连字符**无条件入词**"，且 test_chunker 第 6 条（孤立连字符
+成词）钉死旧行为，① 验收标准（37 条原样全绿）强制 M1 语义。定性：
+AI-A 起草 atom_scan.h 时把"入词"压缩成"词内"，措辞失真，drafting
+bug 而非语义变更。修法提案：条款 2 首弹改 "a maximal run of
+[A-Za-z0-9-]"，判例 stay-whole 清单补 "-abc, abc- and a standalone
+-"。待 A 拍板后 AI-A 改契约。施工卡伪代码与黄金表（第 8 号）暂按
+M1 语义编写。
+
+今日定义级矛盾三连（复审模式双向战果）：A 抓 AI-A（atom_scan.h
+API 边界）→ AI-A 抓 A（tokenizer.h consecutive）→ AI-A 抓 AI-A
+（atom_scan.h 词内措辞）。
+
+## [2026-09-28 16:37] AI-A
+
+① scanner 落地竣工（待 A 关账）：A 亲手翻译三段真码（本人首次
+实现层产物，含超卡进化 is_alnum/is_word_char 帮手层——GPT 八条
+"显式字符集不走 isalnum"随之落地），复审过。
+
+【留痕】A 授权"修什么自己改"，AI-A 改 A 的 atom_scan.cpp 三处：
+1. include 补 <cstdint>（复审必改：uint32_t 无传递路径，<utility>
+   A 已自补）
+2. 删三明治分支 `if (j == 0) break;` 死分支（卡注 1：词首集不含
+   '.'/'_'，可达时 j>=1），换一行推论注释承载知识（卡删光后载体）
+3. 修正 cp > U+10FFFF 注释理由：原句"不判会吞掉后面的真词"不成立
+   ——源头是 AI-A 卡段 3 注（A 注释继承同错）。证明：F4 引导的
+   溢出序列续字节必为 80-BF，判畸形走跳 1 字节级联与跳整段消耗
+   相同跨度，scan_atoms 外部不可观察。检查保留改标 defense-in-depth
+   （解码器自守"只返回合法码点"承诺），黄金表 18 号钉行为。
+
+【黄金表首跑 17/18】7 号 e.g. 期望 (W,0,4) 为 AI-A 卡笔误——词是
+"e.g"（首点入词尾点剥），应为 (W,0,3)；实现正确，契约判例 [e.g]
+与现行 tokenizer 行为佐证。"测试红先审测试"反向验证（B 09-28
+教训先例）。18 号 "\xF4\x90\xBF\xBF"+"a" -> (W,4,5) 新增钉 cp 守卫。
+
+验收三件全过：字节自检双零（5728B，无 BOM 纯 ASCII，原 BOM 已剥）
+/ 黄金表 18 条全绿（%TEMP% 临时 main，用完即删）/ run_tests.bat
+37 条全绿 + 主工程 msbuild 冒烟（12 docs / 29 chunks，libc 查询
+top-1 命中救赎之道 WP，退出码 0）。
+
+待 A：关账裁决；连字符契约修法（15:52 条，仍欠一个字）；commit
+bundle 批准（atom_scan.h + atom_scan.cpp + spec 存档 + 纪要今日
+全部条目）。
+
+## [2026-09-28 16:43] AI-A
+
+【决策转记】A 三连拍板（"三件事都做"）：① 卡 1/3 atom_scan.cpp
+关账 ② 连字符契约修法批准（15:52 条的"改"字落地）③ commit
+bundle 批准。
+
+契约修已执行（atom_scan.h 条款 2）：首弹 [A-Za-z0-9] →
+[A-Za-z0-9-]；连字符弹补 "including at the leading and trailing
+edges of a word"（堵死"词内"字面歧义，措辞与 A 实码注释同款）；
+判例 stay-whole 清单补 "-abc, abc- and a standalone -"。字节复检
+PURE ASCII（2931B）。至此 15:52 契约发现闭环：契约文本与实现
+（M1 语义）对齐，test_chunker 第 6 条与 37 条验收基线不再悬空。
+
+TASKS.md 推 v2.2（① scanner 竣工入册，卡 2/3、3/3 随 A 节奏发）。
+commit 一次入账：atom_scan.h（条款修）+ atom_scan.cpp（新）+
+TASKS.md + 本纪要今日全部条目。

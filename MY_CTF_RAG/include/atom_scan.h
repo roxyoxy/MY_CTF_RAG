@@ -30,13 +30,15 @@ struct Atom {
 //    Separator bytes belong to no atom. Empty input or separator-only
 //    input yields an empty vector.
 // 2. ASCII_WORD:
-//    - a maximal run of [A-Za-z0-9]
-//    - '-' is unconditionally word-internal
+//    - a maximal run of [A-Za-z0-9-]
+//    - '-' is unconditionally word-internal, including at the leading
+//      and trailing edges of a word
 //    - '.' and '_' are word-internal only when the characters on both
 //      sides are [A-Za-z0-9] (the sandwich rule)
 //    Examples: libc-2.31, 127.0.0.1, exploit.py and buf_size stay
-//    whole; done., wait..., __libc_csu_init and e.g. split -- in
-//    e.g. the first '.' joins the word, the trailing one does not.
+//    whole, and so do -abc, abc- and a standalone -; done., wait...,
+//    __libc_csu_init and e.g. split -- in e.g. the first '.' joins
+//    the word, the trailing one does not.
 //    No lowercasing happens here: an atom is a byte span, not a word;
 //    normalization belongs to tokenize().
 // 3. CJK_CHAR: one code point in U+3400..U+4DBF or U+4E00..U+9FFF,
