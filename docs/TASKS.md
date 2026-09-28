@@ -178,9 +178,18 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       vcxproj + filters 补 ClCompile 登记（此前冒烟通过系无消费者
       假阳性）；冒烟分数微移 = 中文以 bigram 计入 dl 的预期效应。
       剩 chunker 卡 3/3）
-      ② bigram 实装 + 三层中文测试（scanner 黄金 / tokenizer 组合 /
-      chunker 边界 + E2E 中文查询）
-      ③ 语料重切验收（29 chunks 预期变化：中文开始计数）
+      （① chunker 部分 09-28 竣工：卡 3/3 关账——私扫换血一行
+      scan_atoms，滑窗骨架照 B、计数单位 words→atoms；复述 Q4 裁决
+      落地（chunk.end 恒为 atoms[e-1].end，块边界 ≠ 下块起点）；
+      BOM 由 AI-A 剥（tokenizer 先例）；黄金照妖镜 AI-A 独立复跑
+      14/14（501 字两刀/全角句号/畸形吞邻/重叠 150B 同/尾不吞空格）；
+      37 英文原样绿 + 冒烟 12 docs/30 chunks（29→30，中文 atom 计入
+      切窗的预期漂移坐实；heap 返空经 grep 实证 = 语料真无此词）。
+      **① 双改造收官**：scanner/tokenizer/chunker 三件全吃
+      scan_atoms，甲″地基层贯通，转 ②）
+      ② 三层中文测试（scanner 黄金 18 条转正 test_atom_scan.cpp /
+      tokenizer 组合层已落 13 条 / chunker 边界补测 + E2E 中文查询）
+      ③ 语料重切验收（30 chunks 入册 + 5 主题查询 top-1 全查）
       冻结细则：孤字丢弃 / 不跨 ASCII / 标点断 run / 计数不加权 /
       dl = token 数 / 汉字 U+3400-4DBF + U+4E00-9FFF 先解码后分类
       （禁 lead-byte 猜）/ ASCII 显式 [A-Za-z0-9] / BM25 不补偿 M5 实验
@@ -205,6 +214,11 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       优化遍历成册，待真数据验证）
 
 ## 6. 版本
+- v2.4 · 2026-09-28 · **① 双改造收官**：卡 3/3 chunker.cpp 关账
+      （私扫→scan_atoms 一行换血、end=atoms[e-1].end 裁决落地、
+      冒烟 29→30 chunks 中文 atom 正式计入）；附带 /W4 修复全四配置
+      （Level3→Level4，msbuild 重建零告警，main.cpp 首过 W4 干净）
+
 - v2.3 · 2026-09-28 · **① tokenizer 竣工**：卡 2/3 关账（组合层 +
       bigram 实装）；测试扩容 37 → 50（中文组合 + 镜像判例入册）；
       工具链两笔（run_tests 补链 / vcxproj+filters 补登记）
