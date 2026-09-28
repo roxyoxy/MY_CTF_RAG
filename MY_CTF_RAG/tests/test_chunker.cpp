@@ -105,5 +105,29 @@ int main() {
     check(c12.size() == 1,
           "12 ASCII and CJK atoms weigh the same");
 
+    // M2-4 tombstones: a deleted doc produces no chunks and shifts no
+    // ids; surviving docs keep contiguous ids.
+    Document delmid = makeDoc(1, "d e f");
+    delmid.deleted = true;
+    const auto c13 = chunk_documents(
+        {makeDoc(0, "a b c"), delmid, makeDoc(2, "g h")});
+    check(c13.size() == 2 && c13[0].document_id == 0 &&
+              c13[1].document_id == 2 && c13[1].id == 1,
+          "13 deleted doc -> 0 chunks, ids stay contiguous");
+
+    // A deleted doc of multi-chunk size still contributes nothing.
+    std::string bigdel;
+    for (int i = 0; i < 600; ++i) bigdel += "x" + std::to_string(i) + " ";
+    Document deldoc = makeDoc(0, bigdel);
+    deldoc.deleted = true;
+    check(chunk_documents({deldoc}).empty(),
+          "14 multi-chunk deleted doc -> 0 chunks");
+
+    // All docs deleted -> empty vector (empty-index path stays legal).
+    Document delall = makeDoc(0, "a b");
+    delall.deleted = true;
+    check(chunk_documents({delall}).empty(),
+          "15 all-deleted corpus -> 0 chunks");
+
     return test_summary();
 }

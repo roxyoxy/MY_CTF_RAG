@@ -31,4 +31,9 @@ constexpr int CHUNK_OVERLAP = 50;
 //    that crosses a cut point appears intact in the next chunk.
 // 5. A non-empty document shorter than CHUNK_SIZE produces exactly one chunk.
 //    An empty document produces no chunks at all.
+// 6. A document with deleted == true produces no chunks. Tombstones are
+//    consumed here, at the gate between corpus and derived data: deletion
+//    is a corpus lifecycle event, not a query concern. The index and
+//    search never see tombstoned content, so no downstream consumer
+//    needs to filter.
 std::vector<Chunk> chunk_documents(const std::vector<Document>& docs);

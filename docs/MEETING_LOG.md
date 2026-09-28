@@ -1307,3 +1307,61 @@ AI-A 执行；② **Qt GUI 改外包**——外部 AI 施工，AI-A 出施工书
 - Qt 外包施工书随本条交付：Desktop\给GPT的外包QTprompt.md +
   附件清单（七份契约 .h + src/main.cpp 参考消费者 + PRINCIPLES +
   README），见施工书尾节
+
+## [2026-09-29 03:05] AI-A
+
+【决策转记】A 拍板 M2-④ 墓碑消费四项（"按推荐 开写 签"）：
+
+1. 墓碑消费者 = chunker 过滤（甲）。删除是语料生命周期事件，在
+   语料 -> 派生数据的闸门生效，索引与检索永不见墓碑内容
+2. 删除深度 = 打标记 + 立即重建 + save（甲）。快照与运行时永不
+   两态——"甲把删除变成事实，乙把删除变成约定"；M2 规模下便宜
+   删除收益为零（优化三规则第 3 条），Lucene 式合并留给 ③ 后复盘
+3. 两层删除语义入册（零代码）：逻辑删除 = 墓碑 + 文件留 data/；
+   物理清除 = 直接删文件，重启经 CORPUS_CHANGED 自动完成。
+   **"编辑被删文档 = 复活"经 A 签字为已知边界**——修复需按 path
+   继承墓碑的合并机制，系 M2-③ 增量 diff 的自然副产品，挂 ③
+   交接；墓碑独立注册表案 M2 不做（第二份持久状态 + 永脏黑名单）
+4. 命令形态 = 保留字优先（甲）+ 启动一行命令提示。撞车条件仅为
+   整条输入恰为 list/del（"linked list" 多词查询不撞车）
+
+外部意见回流对账（A 转发）：引用逐条核验为真无幻觉——
+InvertedIndex 无 deleted 维（indexer.h 结构体）/ validate 纯度
+只比 path+content（persist.h）/ loader 默认 deleted=false
+（test_loader #7）。外审两条新论据收下：乙案致命伤在"索引里
+存了什么"而非签名污染（改签名或塞索引结构两条都是生命周期
+混进检索）；甲案消灭快照/运行时两态不一致。list/del 保留字
+冲突三案分析为外审首提，附议其甲并加零成本骑士（启动提示行）。
+
+施工前现场对齐两修正：chunker.h 原本无 deleted 条款（"M1 不过滤"
+只活在 TASKS 卡预答），本次是**加条款**不是改条款；test_chunker
+无 deleted=true 用例，零既有测试冲突。search 签名确认 top_k 带
+默认参（main 两参调用）。
+
+施工（A 授权"开写"，AI-A 执笔，赶时间模式同 persist.cpp 先例）：
+- chunker.h 加条款 6：deleted == true 产 0 块，墓碑在此消费，
+  下游消费者零过滤义务
+- chunker.cpp 循环顶三行过滤（doc.deleted 跳过）
+- main.cpp 三处：snapshot 声明提升到 try 外（del 分支要访问）；
+  启动横幅加命令提示行；查询环加 list（id / 墓碑标记 / 字节数 /
+  path）与 del <id>（纯数字校验 -> 范围校验 -> 幂等拒绝 -> 打
+  标记 -> chunk+build+save 一条龙，手工数字解析免新 include）
+- test_chunker +3：中位删除 id 不位移（doc1 删，doc2 块接 0 后）/
+  600 词体积删除 0 贡献 / 全删空语料
+
+验收：字节双零（chunker.h 1619B / chunker.cpp 1826B / main.cpp
+5539B / test_chunker.cpp 5877B，均无 BOM 纯 ASCII）；run_tests
+97 -> 100 全绿；msbuild Debug|x64 /W4 零告警；冒烟三连 + 三边角：
+首启 24/77 重建 -> 二启快照命中 del 19（救赎之道 CN）73 chunks
+剩余、libc top-1 由 CN 5.32 换 EN 3.47（重建后 df/avgdl 再平衡，
+排序符合预期）-> 三启 restored 24 docs / 73 chunks 墓碑存活
+（删除重启持久化验收点）；重复 del / del 99 / del abc 人话报错。
+冒烟后 index.bin 已清（还原首启态，缓存随时重建）。
+
+Qt 施工书影响备案：§4.3"search 仍会返回墓碑文档的块"语义已被
+本裁决取代（删除即重建，块即刻消失）——施工书不重发（外部已在
+施工），回流 review 按新语义验收，GUI 显示层过滤降级 UX 辅助
+（双保险保留）。
+
+下一步：commit 待批；M2 自家活仅剩 M2-③ 增量建库（ctf-wiki
+35 篇实弹，id 稳定性考题），Qt 外包件回流后拼装。

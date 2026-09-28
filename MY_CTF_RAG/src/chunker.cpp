@@ -11,6 +11,10 @@ std::vector<Chunk> chunk_documents(const std::vector<Document>& docs) {
     std::vector<Chunk> chunks;
 
     for (const auto& doc : docs) {
+        if (doc.deleted) {
+            continue;  // tombstone: contributes no chunks (clause 6)
+        }
+
         // Pass 1: one call to the single source of truth for lexical units.
         // The atom table carries three things at once: count (chunk unit),
         // begin/end (byte span), and kind (which we do not need here --

@@ -41,6 +41,7 @@ int main() {
     std::vector<Document> docs;
     std::vector<Chunk>    chunks;
     InvertedIndex         index;
+    const std::string snapshot = "index.bin";
 
     // Stage 1: build the index once. The snapshot is a cache: restore
     // it when valid, otherwise rebuild and overwrite it (persist.h
@@ -48,7 +49,6 @@ int main() {
     try {
         docs = load_documents("data");
 
-        const std::string snapshot = "index.bin";
         const SnapshotStatus st = validate(snapshot, docs);
         bool restored = false;
         if (st == SnapshotStatus::OK)
@@ -77,13 +77,58 @@ int main() {
     std::cout << "Indexed " << docs.size()
         << " documents, " << chunks.size()
         << " chunks.\n";
+    std::cout << "commands: list, del <id>  (anything else is a query)\n";
 
-    // Stage 2: query loop.
+    // Stage 2: query loop. "list" and "del <id>" are reserved words;
+    // every other line is a search query.
     std::string query;
     while (true) {
         std::cout << "query> ";
         if (!std::getline(std::cin, query)) break;
         if (query.empty()) continue;
+
+        if (query == "list") {
+            for (size_t i = 0; i < docs.size(); ++i) {
+                std::cout << docs[i].id
+                    << (docs[i].deleted ? "  [deleted]  " : "  ")
+                    << docs[i].content.size() << " bytes  "
+                    << docs[i].path << "\n";
+            }
+            continue;
+        }
+
+        if (query.rfind("del ", 0) == 0) {
+            const std::string arg = query.substr(4);
+            bool digits = !arg.empty();
+            for (size_t k = 0; k < arg.size(); ++k)
+                if (arg[k] < '0' || arg[k] > '9') digits = false;
+            if (!digits) {
+                std::cout << "usage: del <doc id>\n";
+                continue;
+            }
+            int id = 0;
+            for (size_t k = 0; k < arg.size(); ++k)
+                id = id * 10 + (arg[k] - '0');
+            if (id >= static_cast<int>(docs.size())) {
+                std::cout << "no document with id " << id << "\n";
+                continue;
+            }
+            if (docs[id].deleted) {
+                std::cout << docs[id].path << " is already deleted\n";
+                continue;
+            }
+            // Delete = tombstone + immediate rebuild + save, so the
+            // snapshot and the running state never disagree.
+            docs[id].deleted = true;
+            chunks = chunk_documents(docs);
+            index = build_index(chunks);
+            if (!save(snapshot, docs, chunks, index))
+                std::cerr << "Warning: snapshot save failed; "
+                    "the in-memory index is still updated.\n";
+            std::cout << "deleted " << docs[id].path
+                << " (" << chunks.size() << " chunks remain)\n";
+            continue;
+        }
 
         // Stage 3: search and print.
         std::vector<SearchResult> results = search(index, query);
