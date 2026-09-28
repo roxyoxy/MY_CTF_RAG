@@ -268,6 +268,15 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       附注：施工书 §4.3"search 仍返回墓碑块"语义已被 M2-④ 取代
       （删除即重建，块即刻消失）——施工书不重发，回流 review 按
       新语义验收，GUI 过滤降级 UX 辅助）
+      （**回流拼装 09-29 03:55 完成，待 A 视觉验收**：外部五件套
+      到货，AI-A review 通过（自述零幻觉，byte→QChar 定位正确，
+      主动对齐 M2-④ 语义）；拼装修订四处——CMake 补 /utf-8 +
+      corpus_diff.cpp 链 + 默认 Release（空类型映射 Debug 导入库
+      必炸）+ mainwindow.cpp 补 CORPUS_CHANGED 墓碑收获分支对齐
+      console。gui/ 落位七件（+README/build_gui.bat/run_gui.bat）；
+      首发 /W4 零警告，windeployqt 部署点火存活。环境注：本机
+      Qt 6.9.3 实装在 C:/Qt/6.5.3/msvc2022_64/bin/qmake.exe/
+      6.9.3/msvc2022_64/（安装器装歪，可用）；D 盘 5.9.5 用不上）
 
 ### M3-M5
 
@@ -278,6 +287,10 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       优化遍历成册，待真数据验证）
 
 ## 6. 版本
+- v3.2 · 2026-09-29 · **Qt 外包件回流拼装完成**（待 A 视觉验收）：
+  review 通过 + 四处修订（/utf-8 / corpus_diff 链 / Release 默认 /
+  墓碑收获分支）；gui/ 七件落位，/W4 零警告首发编译通过，
+  windeployqt 点火存活；Qt 实装位置勘误入册
 - v3.1 · 2026-09-29 · **M2-③ 实弹竣工关账**：ctf-wiki 34 篇入库
   （总 WP 排除，语料 24 → 58 / 145 chunks，mobile 中间插入由
   全量重建消化）；"34 added" diff 报告 + 还原 + 查询弹全对；

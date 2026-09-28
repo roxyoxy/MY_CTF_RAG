@@ -21,3 +21,6 @@ index.bin.tmp
 
 # Python
 __pycache__/
+
+# Qt GUI CMake build directory
+MY_CTF_RAG/gui/build/

@@ -1482,3 +1482,49 @@ ctf-wiki 35 篇实弹入库（24 -> 59，ASCII 文件名 + UTF-8 体检
 
 commit 获批随本条入账（M2-③ 代码 11 文件 + 语料 34 篇 +
 文档 4 件）。
+
+## [2026-09-29 03:55] AI-A
+
+【决策转记】Qt 外包件回流（外部 AI 交付，Desktop\QT\）——AI-A
+review + 拼装完成（A 令"动"），**待 A 视觉验收**。
+
+- 到货对账：五件套（mainwindow.h / mainwindow.cpp / qt_main.cpp /
+  CMakeLists.txt / READ.md 存根）自述逐条核验为真——全 UTF-8 无
+  BOM、注释纯 ASCII（mainwindow.cpp 873 非 ASCII 字节 = 中文 UI
+  字面量）、无 fromStdString、CMake 不编 console main。外部自述
+  两处亮点：主动发现施工书 §4.3 与附件现行契约矛盾并按契约走
+  （删除 = 墓碑 + 重切 + 重建 + save，M2-④ 语义先行对齐）；诚实
+  声明无 Qt 环境未能编译验证。完整 README.md 未随件到达（在外部
+  ZIP 内），集成 README 由 AI-A 重写（gui/README.md）
+- 代码质量评价：byte→QChar 定位正确（[0,begin) 与 [begin,end)
+  分别解码换算光标位置，没把字节数当字符下标）；快照三分支 /
+  越界守卫 / 墓碑删除线显隐 / 状态栏（含双版本与 avgdl）全齐；
+  核心层零改动纯消费者
+- 【留痕】拼装修订四处（修改外部交付件，A 授权"动"）：
+  ① CMake MSVC 分支补 /utf-8（中文 UI 字面量的编译器读取面）
+  ② CMake 补链 ../src/corpus_diff.cpp（第八契约，外部交付时不知
+  M2-③ 已竣工）③ mainwindow.cpp loadCorpusAndIndex 的
+  CORPUS_CHANGED 分支补墓碑收获（diff 报告 + inherit，对齐
+  console 语义——否则 GUI 侧语料变更重建会丢墓碑）④ CMake 补
+  默认 CMAKE_BUILD_TYPE=Release（空构建类型会映射 Qt Debug 导入
+  库 Qt6Cored.dll，线上安装器不带调试件，必炸）
+- 环境侦察两发现：① 本机 Qt 线上安装器装歪——真实 Qt 6.9.3 整套
+  位于 C:/Qt/6.5.3/msvc2022_64/bin/qmake.exe/6.9.3/msvc2022_64/
+  （"qmake.exe"是目录，6.9.3 在里面；C:/Qt/6.5.3 本体是空壳）；
+  可用，路径已写进 build 脚本，日后 Maintenance Tool 规整后同步
+  改两处 ② 老板记忆的 Qt 5.9.5 在 D 盘（D:/Qt5.9.5），本工程
+  用不上（交付件 find_package(Qt6 REQUIRED)）
+- 拼装产物 gui/ 目录：五件套（mainwindow (1).cpp 改名落位）+
+  README.md + build_gui.bat（一键：vcvars + VS 自带 CMake 3.31
+  + Ninja + Qt 6.9.3）+ run_gui.bat（cwd 自动指 MY_CTF_RAG，
+  与 console 共用 data/ 与 index.bin，双击即用）；
+  .gitignore 补 gui/build/
+- 验收：**首发编译即通**——10 编译单元 + 链接，/W4 零警告
+  （Qt 6.9.3 头文件 + 七核心源全干净）；windeployqt 部署后点火
+  冒烟：进程 7 秒存活、工作集 119MB（Qt + 58 篇语料 + 145
+  chunks 快照还原全链路走通），无崩溃；补丁后 mainwindow.cpp
+  仍 UTF-8 无 BOM（924 非 ASCII）
+- 待 A：Qt Creator 或 gui\run_gui.bat 双击视觉验收（语料树 /
+  中文查询 / 双击定位 / 软删除删除线 / 墓碑继承日志）；
+  commit 待批（gui/ 7 件；另 03f0f99 + 436058b 两 commit 的
+  push 因 7890 代理未开暂缓——"先处理QT一会再commit"）
