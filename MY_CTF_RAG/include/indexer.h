@@ -27,7 +27,7 @@ struct InvertedIndex {
     // term -> posting list; chunk ids ascending
     std::unordered_map<std::string, std::vector<Posting>> postings;
 
-    // chunk_id -> word count (dl); index is the registry
+    // chunk_id -> token count (dl); index is the registry
     std::vector<int> chunk_lengths;
 
     // avgdl; 0.0 for an empty index
@@ -41,7 +41,9 @@ struct InvertedIndex {
 //    -- the same function queries use.
 // 2. postings: for each term, a list of (chunk_id, tf);
 //    chunk ids ascending.
-// 3. chunk_lengths[chunk_id] = word count of that chunk.
+// 3. chunk_lengths[chunk_id] = token count of that chunk (what
+//    tokenize() returns for its text; with bigrams this is at
+//    most the atom count).
 // 4. avg_chunk_length = average over all chunks; 0.0 for empty input.
 // 5. Empty input yields an empty index (all structures empty).
 InvertedIndex build_index(const std::vector<Chunk>& chunks);

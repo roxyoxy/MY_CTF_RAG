@@ -8,8 +8,8 @@
 
 | 参数 | 默认值 | 住址 | 含义 | M5 调参方向 |
 |---|---|---|---|---|
-| CHUNK_SIZE | 500 词 | chunker.h | 每块词数上限 | 大块上下文全但词频被稀释；小块反之 |
-| CHUNK_OVERLAP | 50 词 | chunker.h | 相邻块重叠词数 | 惯例 10–20%，跨刀口句子完整性 vs 冗余存储 |
+| CHUNK_SIZE | 500 atoms | chunker.h | 每块原子数上限（1 atom = 1 个 ASCII 词或 1 个汉字） | 大块上下文全但词频被稀释；小块反之；中文块字节更轻（汉字 3B/atom vs 英文词 ~6B/atom），M5 复核均衡 |
+| CHUNK_OVERLAP | 50 atoms | chunker.h | 相邻块重叠原子数 | 惯例 10–20%，跨刀口句子完整性 vs 冗余存储 |
 | BM25_K1 | 1.2 | indexer.h | TF 饱和速度 | 惯例 1.2–2.0；越大饱和越慢 |
 | BM25_B | 0.75 | indexer.h | 长度归一化强度 | 0（不看长度）– 1（全额归一） |
 | TOP_K | 10 | indexer.h | 检索返回条数 | 受 M4 LLM 上下文预算约束 |
@@ -22,4 +22,7 @@
 
 ## 版本
 
+- v1.1 · 2026-09-28 · 500/50 口径 words→atoms（M2① 甲″契约变更，
+  chunker 计数单位下沉到 atom）；dl 口径不变 = tokenize() 输出的
+  token 数（atom ≠ token，见 indexer.h）；中文块字节更轻的观察入账
 - v1.0 · 2026-09-23 · 随 indexer 设计讨论建立，首批 5 参数

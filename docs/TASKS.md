@@ -159,11 +159,11 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       条款 2 改 bigram + chunker.h 条款 2 改 atom 计数（"A word is
       a token"作废）+ indexer.h word count 注释改 token count +
       PARAMS.md 500/50 口径同步改 atoms
-      （⓪ 进度 2/5：atom_scan.h 已关账 09-28——AI-A 执笔 A 复审
-      特例，复审抓出 API 边界矛盾注释，spec 转存档 docs/design/；
-      tokenizer.h 条款 2 bigram 改写已关账 09-28——A 起草 +
-      AI-A 复审（consecutive vs byte-adjacent 定义级矛盾）+
-      A 授权 AI-A 落盘，37 测试全绿）
+      （⓪ **五件套 09-28 竣工**：atom_scan.h + tokenizer.h 条款 2 +
+      chunker.h 条款 2 + indexer.h dl 注释 + PARAMS.md 口径全部关账；
+      前两件 A 复审逐条过，后三件 A 批量授权 AI-A 执笔统一汇报；
+      权威引用链 chunker→atom_scan 落地，tokenizer.h/chunker.h 对
+      word 的字面依赖清零；37 测试全程绿）
       ① scanner 落地 + tokenizer/chunker 双改造（验收 = 37 条英文
       测试原样全绿）
       ② bigram 实装 + 三层中文测试（scanner 黄金 / tokenizer 组合 /
@@ -194,6 +194,9 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
 
 ## 6. 版本
 
+- v2.1 · 2026-09-28 · **⓪ 契约五件套竣工**：chunker.h + indexer.h +
+      PARAMS.md 收尾（A 批量授权 AI-A 执笔）；契约层 bigram-ready，
+      下一步 ① scanner 落地
 - v2.0 · 2026-09-28 · tokenizer.h 条款 2 关账（⓪ 进度 2/5；组合
       政策 + byte-adjacent 定义修正，A 起草 AI-A 复审后授权落盘）
 - v1.9 · 2026-09-28 · atom_scan.h 关账（M2① ⓪ 进度 1/5；AI-A 执笔

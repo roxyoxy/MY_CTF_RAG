@@ -717,3 +717,32 @@ AI-A 附议：atom_scan 由 A 亲手写收益最大——M2 地基 + 实现层�
   ① 步改造）
 - 下一步：chunker.h 条款 2 改 atom 计数（⓪ 第三件，"A word is
   a token as defined by tokenizer.h" 作废换血）
+
+## [2026-09-28 15:39] AI-A
+
+【决策】⓪ 契约五件套竣工：chunker.h 条款 2 + indexer.h dl 注释 +
+PARAMS.md 口径一次改完（3/5、4/5、5/5）。
+
+- 落盘方式：A 批量授权（"剩下的几个 .h 你一起改了之后统一讲"，
+  第三次实例授权，批量式；关键设计判断统一汇报由 A 事后审）
+- chunker.h：计数单位 words→atoms（含 CHUNK_SIZE/CHUNK_OVERLAP
+  常量注释、条款 3 "Atom-to-byte"、条款 4 同步）；权威引用
+  tokenizer.h→atom_scan.h，chunker 对 tokenizer 的依赖归零
+  （甲″双依赖落地）；点题句入契约："a Han run of n characters
+  is n atoms, not n-1 bigrams -- the bigram pairing happens later,
+  inside tokenize()"（钉死计数不加权 + 防"在 chunker 里数 bigram"
+  的错误实现）；include 不动（scan_atoms 由 chunker.cpp 消费）
+- indexer.h：chunk_lengths 注释 word count→token count（两处），
+  契约条款 3 加防混句 "with bigrams this is at most the atom
+  count"——atom ≠ token 拆分在 dl 侧的钉子（500 atoms 的纯中文
+  块 dl ≈ 499 bigram，不等于 500）
+- PARAMS.md v1.1：500/50 口径 atoms + 含义列注明 1 atom = 1 个
+  ASCII 词或 1 个汉字；中文块字节更轻的观察入调参方向列（汉字
+  3B/atom vs 英文词 ~6B/atom，500 atoms 中文块 ≈1.5KB 英文块
+  ≈3KB），挂 M5 复核均衡——体感观察按 P2 先例进 PARAMS 不进契约
+- 验收：chunker.h / indexer.h 双 PURE ASCII（1309 / 2341 字节）；
+  run_tests.bat 37 条全绿（契约先行中间态持续安全）
+- **⓪ 全部完成**：atom_scan.h + tokenizer.h + chunker.h +
+  indexer.h + PARAMS.md 五件齐装，契约层 bigram-ready。下一步 =
+  ① scanner 落地 + tokenizer/chunker 双改造（A 亲手实现，13:39
+  拍板；AI-A 出伪代码卡，验收 = 37 条英文测试原样全绿）
