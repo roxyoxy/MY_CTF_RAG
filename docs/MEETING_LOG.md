@@ -987,3 +987,231 @@ push 一并批准。
   M2① 竣工）、PRINCIPLES 2 处（当前阶段行 + 语料快照）、TASKS
   推 v2.6；ctf-wiki 35 篇（含 mobile 新类目）挂 M2-③，届时
   id 稳定性（字典序下标遇中间插入连锁位移）正是渠道设计核心考题
+
+## [2026-09-28 18:25] AI-A
+
+【决策转记】A 手动 F5 验收语料甲案通过（24 docs / 77 chunks，
+中文查询行为符合预期），下令开下一部分。**M2-② 持久化开张**：
+契约先行（A 亲手第七份 .h），设计讨论启动——三议题：存什么 /
+  格式选型（二进制 vs JSON）/ 失效检测（语料变动怎么发现）。
+讨论记录随后续条目入册。
+
+## [2026-09-28 18:32] AI-A
+
+【决策】M2-② 持久化设计冻结（A 交回冻结结论拍板生效：乙 + 自定义
+二进制 + FNV-1a manifest，另补三条红线 = 双版本维度 / 确定性序列化 /
+损坏降级重建）。AI-A 对账：契约引用逐条核验为真——
+
+- Chunk::text = content.substr：chunker.h 条款 3 原文；begin/end
+  半开字节区间：type.h（且为 size_t——平台宽度类型，固定宽度
+  磁盘协议的直接论据）
+- id is never recycled：type.h 墓碑注释原文
+- postings chunk_id 升序：indexer.h 账本红线（排序写盘的内部序
+  前提成立）
+- avgdl 为 chunk_lengths 汇总：indexer.h 条款 4 成立。**AI-A 对账
+  新增一抓**：条款 4 同时规定空索引 avgdl=0.0，load 侧重建必须带
+  同款守卫（sum/size 在空表上是除零）
+- "你们要求 MSVC + g++"轻微失真（双编译器是 B 的自测方法论，
+  M2 全程 MSVC），不改结论
+
+冻结结论十四项（存储集合乙 / text 不存 substr 恢复 / avgdl 不存
+从 chunk_lengths 恢复 / deleted 存 / 自定义二进制 / 禁裸 dump 逐字段
+编解码 / 固定宽度整数 / postings 按 term 字典序写盘 / magic +
+FORMAT_VERSION + PIPELINE_VERSION 三层头 / CHUNK_SIZE/OVERLAP 入
+盘并核对 / 排序 manifest 相等判定 / 损坏视 cache miss 全量重建 /
+临时文件写全后替换 / 不提前设计 M2-③ 局部改表）。
+
+AI-A 补充工程注记：① PIPELINE_VERSION 是全设计唯一手动 bump 的
+零件，需定住址 + 触发清单注释（Han 范围 / bigram 政策 / 三明治
+规则 / 切块参数变动都要 bump，漏 bump = 静默旧索引）；② validate
+仍要读全语料算指纹——持久化省的是 chunk+tokenize+build，不省
+文件 I/O（预期管理）；③ Windows rename 覆盖语义实现卡里验证，
+兜底 remove+rename；④ M2-④ 交互点预告：墓碑 vs manifest（被删
+文档的文件若离开 data/ 会触发全量重建把文件加回来），M2-④ 再裁；
+⑤ save→load→save 字节一致性背书 → test_persist 基石用例。
+
+开放小项（写 .h 前待 A 定）：load 返回即用状态（text 在 load 内
+填好，"与 fresh build 逻辑等价"验收要求它）/ PIPELINE_VERSION
+住址 / magic 字符串 / persist.h 只做哑 save-load-validate，"有效
+则 load 否则 build"的分支放 main。
+
+下一步：A 亲手写 include/persist.h（第七契约），贴出 review +
+字节自检。
+
+## [2026-09-28 18:47] AI-A
+
+【决策转记】A 四项开放小项拍板（外部意见辅助，A 终裁）：
+
+1. **load 返回即用状态**：load() 内部按 document_id + begin/end
+   从 Document::content substr 恢复 chunk.text，调用者拿到即可
+   search，main 不做二次修复
+2. **PIPELINE_VERSION 放 persist.h**（不放 atom_scan.h）：它是
+   chunk→tokenize→index 整条派生管线的语义兼容版本，不属于任一
+   底层模块；放 atom_scan 附近会误导"只有 scanner 改才 bump"
+   （tokenizer/chunker/index/切块参数/embedding 模型变化都要 bump）
+3. **magic = MYRAGIDX**：固定 8 字节 ASCII，无 \0 终止
+4. **persist.h 只做哑三件**：save / load / validate；"有效则 load
+   否则 fresh build + save"分支在 main；persist 不调用
+   loader/chunker/indexer，防职责膨胀、不提前混入 M2-③
+
+AI-A 对账：本条引用（type.h substr 语义 / README main 总装定位）
+已在前条核验为真，四项与冻结结论自洽，无异议。
+
+**API 形状三小题摆出**（写 .h 最后拼图，AI-A 教练 A 拍板）：
+① 传参形态：三独立参数 vs Snapshot 聚合结构体；
+② validate 签名：AI-A 提案 validate(snapshot, docs)——main 先
+load_documents（读文件不可避免），把 docs 喂给 validate 哈希
+content 比对 manifest：persist 不走目录、不依赖 loader、哈希用
+内存字节零重复 I/O；目录遍历政策（.md/.txt 递归字典序）留在
+loader 单一事实源，不复制
+③ 失败原因报告：bool vs enum（五类失败分开报，启动打一行
+人话"快照过期：pipeline 不符"，调试价值大）
+
+## [2026-09-28 18:55] AI-A
+
+【对账】API 形状三小题外部意见回流，AI-A 逐条核验 + 附议：
+
+- 引用三处全真：Chunk::text 由 content + [begin,end) 唯一决定
+  （chunker.h 条款 3 substr 原文）/ loader 契约独占递归 + .md/.txt +
+  相对路径正斜杠 + 字典序 + id 分配（loader.h 原文）/ 契约先行纪律
+  （PRINCIPLES.md §2）。无幻觉
+- 三项裁定全附议：①甲（三独立参数，无 Snapshot 壳）+ load 强保证
+  ——全有或全无，失败时三个输出保持原状，text 在 load 内恢复后
+  返回即用；②validate(snapshot_path, docs) 采纳 + 纯度钉死：只比
+  path + content，不比 id/deleted（manifest 回答"磁盘输入是否同一批
+  字节"，非运行时状态）；当前 loader docs 是现实探针，验证后使命
+  结束，运行时 docs 由 load 从快照恢复——main 侧变量命名应区分；
+  ③enum 采纳，状态集八字：OK / NOT_FOUND / IO_ERROR / BAD_MAGIC /
+  BAD_FORMAT / BAD_PIPELINE / BAD_PARAMS / CORPUS_CHANGED
+- AI-A 自认两处出题盲区被补：NOT_FOUND（首启无快照是正常态非失败）
+  与 IO_ERROR（文件在但读不动，与内容坏分开）；BAD_FORMAT 内部
+  不再细分（main 动作相同，M2 不为诊断颗粒膨胀 API）——均附议
+- validate 与 load 不合并（validate_and_load 反模式）——与 A 18:47
+  "哑三件"裁定同向，附议
+- **AI-A 对账新抓（第四小题，待 A 拍）**：五类失败检测存在载荷盲区
+  ——magic/版本/参数/manifest 全过但载荷中段位翻转（结构仍可解析）
+  时会静默加载出错误索引，"损坏 = cache miss"红线在此场景失明。
+  提案：头部 +8B 载荷 FNV 指纹（save 写入、validate/load 核对，
+  不符报 BAD_FORMAT），成本 8 字节 + 一次 FNV 顺序扫描；快照格式
+  未出厂，现在改零代价；与确定性序列化自洽（载荷确定 → 指纹确定，
+  save→load→save 字节一致性不受影响）；定位沿用 manifest 同款
+  "content fingerprint"（防意外不防对抗）。甲 = 加 / 乙 = 不加
+  （信本地磁盘，坏例后果 = 分数悄悄错不崩）。AI-A 倾向甲
+- main 侧预案一句（不进 persist.h，写 main 时记得）：validate OK
+  但 load 半路 IO 失败 → 兜底 fresh build + save
+- 第四小题拍定后 A 动笔 include/persist.h（第七契约）。写作骨架
+  （英文 A 自组织）：三签名 + SnapshotStatus enum（八字）+
+  PIPELINE_VERSION（含触发清单注释，本设计唯一手动 bump 零件）+
+  FORMAT_VERSION + 契约条款（乙案存储集 / text 不存 substr 恢复 /
+  avgdl 空索引 0.0 守卫 / load 全有或全无 / validate 纯度 path+content /
+  save 临时文件全写后替换 / 失败判定优先级 magic→format→pipeline→
+  params→manifest 写进契约保测试断言确定性 / 快照路径由 main 传入
+  persist 不规定位置）
+
+## [2026-09-28 19:08] AI-A
+
+【决策转记】A 两令：① 第四小题拍板**甲案**——头部加 8B 载荷 FNV
+指纹（16 -> 24 字节头），save 写入、validate/load 核对，不符报
+BAD_FORMAT；② A 自述首次做 C++ 持久化设计"有点不能理解"，令
+AI-A 单独写一份解释文档。
+
+- 附带三件动笔小事一并入册（18:55 对账补充项定稿）：CHUNK_SIZE/
+  OVERLAP 出处 = persist.cpp include chunker.h（persist.h 只引
+  type.h + indexer.h + 标准库）；三函数异常政策 = 全不抛，失败全走
+  返回值；load 自检头部（defense-in-depth，同 atom_scan cp 守卫先例）
+- 实现阶段备忘两笔：.gitignore 补快照文件（派生缓存不进仓库）；
+  test_persist 验收矩阵（enum 七坏一好 + 字节一致性 + load ≡ fresh
+  build + 空语料往返 + load 后 id 与 loader 重编号一致）
+- **设计解读文档交付**：`docs/design/persist-explained.md`（A 点名，
+  教学向，13 节 + FAQ：缓存总纲 / 乙案判据 / 内存结构 ≠ 磁盘协议
+  两堂课 / 24B 头字节布局图 / 三版本维度灵魂 / validate 七问八态 /
+  FNV 指纹与排序比对 / 确定性序列化 / 原子替换 / 全有或全无 /
+  API 分工与 main 流程 / M2-③④ 边界 / FAQ 五问）。同 atom_scan-spec
+  先例归 docs/design/；非契约，冲突时以 persist.h 为准
+- 设计阶段至此闭环，无阻塞疑问。下一步：A 读文档 -> 亲手写
+  include/persist.h（第七契约）-> 贴出 review + 字节自检
+
+## [2026-09-28 19:52] AI-A
+
+【对账】persist.h 设计稿（19:40 一稿）外部意见回流三条，AI-A 逐条
+核验，A 待拍板：
+
+- 建议 1（**采纳**）：save 条款 1 存储清单漏头部字段（magic / 双
+  版本 / 载荷指纹）与 CHUNK_SIZE/OVERLAP——BAD_PARAMS 等检查隐含
+  其入盘但条款未声明，"存什么"必须唯一权威。补丁 1 已出
+- 建议 3（**诊断采纳、处方驳回**）：外部 AI 不知 19:08 甲案上下文，
+  误把 payload fingerprint 当可删的 CRC 提案。它是 A 当日拍板的
+  载荷指纹（8B FNV-1a 盖偏移 24 后全部字节，堵"五关全过但载荷
+  中段坏"盲区），删除 = 撤销既有裁定；BAD_CHECKSUM 拆分 18:55
+  已裁不做。但诊断成立：草稿提及未声明名词 = 契约不自包含
+  （atom_scan.h API 边界矛盾同物种），随补丁 1 一并治好。方法论
+  入册：契约自包含检验标准 = 不知上下文的实现者光读 .h 能否动工
+  ——本轮外部 AI 无意间完成一次真实验收
+- 小问题（**采纳**）：load 条款 1/2/4 张力——失败时 docs 保持
+  探针态未明说，fallback 安全性显式化。补丁 3 已出
+- 位置小纠：CHUNK_SIZE/OVERLAP 按 §4 布局住载荷开头，不在 24B
+  头内；外部 AI"头部字段"表述不确，补丁按 §4 写
+- 补丁三块：save 条款 1 整换（完整清单 + 双指纹命名区分 payload
+  fingerprint / content fingerprint）/ BAD_FORMAT 不动（自包含
+  已达成）/ load 条款 1 整换（untouched 语义显式到 probe）
+
+待 A 拍板三条判决后落笔 persist.h。外部意见若有建议 2 未转达，
+一并贴来。
+
+## [2026-09-28 20:05] AI-A
+
+【决策转记】A 亲手写完 include/persist.h（第七契约，基于补丁前
+设计稿誊写，6583B 纯 ASCII 无 BOM，誊写零错只有一处注释续行顶格），
+并授权"你自己改一下吧 / 别忘了加到 VS 项目里"——AI-A 修订 + 项目
+登记一次完成。19:52 三条判决以本授权实质采纳（按补丁执行）。
+
+- 【留痕】AI-A 改 A 的 persist.h 三处（一次性实例授权，同
+  atom_scan.cpp 先例）：
+  1. save 条款 1 整换 = 补丁 1：快照内容完整清单（头部
+     magic / 双版本 / 载荷指纹 + 载荷 CHUNK_SIZE/OVERLAP + 数据集
+     +"nothing else is stored"），治"存什么"唯一权威
+  2. BAD_FORMAT 枚举注释续行对齐修复（A 誊写时顶格，纯排版）
+  3. load 条款 1 整换 = 补丁 3：失败时三输出 untouched 显式到
+     "docs 保持探针态"，fallback 安全性入条款；half-loaded 句保留
+- 【留痕】项目登记：vcxproj 补 ClInclude include\persist.h
+  （字母序位 loader 与 tokenizer 之间）；filters 补同项挂"头文件"
+  过滤器（创建序位 atom_scan 之后）。filters 为 UTF-8 带 BOM
+  （138 非 ASCII 字节全为中文过滤器名），Edit 前经 py 验证解码
+  良构，GBK 事故未复现
+- 验收四件全过：① persist.h 字节双零（7142B，无 BOM + 0 非
+  ASCII）② 两项目文件 XML 良构 + filters UTF-8 复验 ③ g++
+  -fsyntax-only -Wall -Wextra 语法烟测零告警（WSL 路径；cl 不在
+  bash PATH）④ A 手稿备份 %TEMP%\persist.h.A-handwritten.bak
+  （commit 后可清）
+- 工程注记：.h 注册 vcxproj 仅为 Solution Explorer 显示与后续
+  消费；persist.h 暂无消费者，msbuild 不会编译它（17:35"无消费者
+  假阳性"先例的同面），MSVC 侧真编译验证落在 persist.cpp 建壳时
+- 遗留三件：A 对三处改动的终审一眼（VS 里 diff 即可）；README
+  "契约六份"→七份随 commit bundle 同步；commit + push 待批
+  （未提交包：今日 18:25 起全部纪要 + persist-explained.md +
+  persist.h + vcxproj/filters）
+- 下一步：persist.cpp 伪代码施工卡（AI-A 填卡 → A 翻译，M2-②
+  第 1 张卡）
+
+## [2026-09-28 20:20] AI-A
+
+【决策转记】A 一声"好"三连：persist.h 关账（三处改动终审通过，
+第七契约正式落账）+ commit bundle 批准 + persist.cpp 卡开工。
+
+- 文档同步：README 3 处（M2 状态行 +② 持久化契约 / 目录树七份
+  契约 +atom_scan/persist 两行 / 当前状态块改写）+ TASKS v2.7 +
+  索引持久化条目挂进度注记
+- 【发现】git 现场见 src/persist.cpp（0 字节空壳）——A 已在 VS
+  建壳。vcxproj 暂不登记：无消费者不挂（atom_scan 17:35 先例），
+  登记随 main 接线时一并做；卡期编译自检走临时 main
+- 施工卡 1/1 发放（11318B，UTF-8 带 BOM，竣工时剥）：复述题 5
+  （payload 先拼内存的必然性 / 全有或全无 / size_t vs 固定宽度 /
+  双排序与确定性 / 探针 vs 运行时 docs）+ 伪代码六部分（地基件
+  FNV+拼盘族+读盘族 / save / validate / load / 黄金表 12 条 /
+  施工规则 7 条）。卡内两处裁决引用：validate 检查顺序一字不得
+  调换（契约确定性）；字节序不设防（18:32 本机缓存裁定）
+- commit 一次入账（7 文件：纪要今日 18:25 起全部条目 +
+  persist-explained.md + persist.h + vcxproj/filters + README +
+  TASKS v2.7；卡体不提交，先例）。push 待 A 示下
+- 下一步：A 口答复述题 -> 翻译施工卡 -> 黄金表 + 冒烟三连 ->
+  main 接线（登记 vcxproj）-> test_persist（AI-A 执笔 A 审）

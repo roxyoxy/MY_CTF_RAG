@@ -206,6 +206,13 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       实现，老三步 .h → 伪代码卡 → 真代码）；M3 恢复 B/C 分工；
       Qt GUI 全权 AI-A 执笔 A 审阅（UI 非核心算法）
 - [ ] 索引持久化（现在每次启动重建）
+      （契约 09-28 落地：include/persist.h 第七契约——哑三件
+      save/validate/load + SnapshotStatus 八态 + FORMAT/PIPELINE
+      双版本 + 24B 头 FNV-1a 载荷指纹；设计冻结 18:32 十四项 +
+      外部意见对账 19:52 三判决 + A 手写 AI-A 三处修订留痕 +
+      vcxproj/filters 登记，字节双零 7142B + g++ 语法烟测零告警；
+      讲解文档 docs/design/persist-explained.md。下一步：persist.cpp
+      施工卡 -> A 翻译 -> main 接线 -> test_persist 七坏一好矩阵）
 - [ ] 增量建库（语料弹药甲案已裁 09-28：WP_cn 12 篇已手动入库
       ——data/ 12 → 24 篇（EN/CN 同源互译），文件名 EN 孪生 +
       _cn 后缀走 ASCII 路径；ctf-wiki writeups 35 篇留作本项渠道
@@ -227,6 +234,13 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       优化遍历成册，待真数据验证）
 
 ## 6. 版本
+- v2.7 · 2026-09-28 · **M2-② persist.h 第七契约落地**：设计冻结
+      （乙案存储/自定义二进制逐字段编解码/双版本维度/确定性序列化/
+      原子替换/损坏=cache miss）+ 外部意见对账三判决（补存储清单
+      采纳；删载荷指纹处方驳回——19:08 甲案不动；load 失败探针态
+      显式化）+ A 手写 AI-A 修订留痕 + 项目双登记；讲解文档
+      persist-explained.md 同日交付
+
 - v2.6 · 2026-09-28 · **语料甲案落地**：WP_cn 12 篇入库（12 →
       24 docs / 77 chunks），中文全文检索开通——救赎之道 CN 全文
       top-3（15.73）压制 EN 元数据（7.62），时间/红警首杀与 grep

@@ -139,6 +139,7 @@
     <ClInclude Include="include\chunker.h" />
     <ClInclude Include="include\indexer.h" />
     <ClInclude Include="include\loader.h" />
+    <ClInclude Include="include\persist.h" />
     <ClInclude Include="include\tokenizer.h" />
     <ClInclude Include="include\type.h" />
   </ItemGroup>

@@ -34,7 +34,7 @@
 |---|---|---|
 | M0 | 文档体系 + 会议纪要 + 查询脚本 | ✅ 2026-09-22 |
 | M1 | 纯英文检索：接口设计(.h) → main → 实现(.cpp) → 优化 | ✅ 2026-09-28 四轮全部竣工 |
-| M2 | 中文 bigram + 持久化 + 增量/删除 + Qt 管理界面 | 进行中：① bigram ✅ 09-28 |
+| M2 | 中文 bigram + 持久化 + 增量/删除 + Qt 管理界面 | 进行中：① bigram ✅ 09-28 · ② 持久化契约 ✅ |
 | M3 | 向量检索（Flat → 自研 HNSW）+ RRF 混合 | 待开始 |
 | M4 | 本地 LLM 后端（Ollama 原型 → llama.cpp 交付）| 待开始 |
 | M5 | 对比实验（BM25/Dense/Hybrid 三组）+ 报告答辩 | 待开始 |
@@ -75,12 +75,14 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 └── MY_CTF_RAG/              ← 代码区（VS 解决方案）
     ├── MY_CTF_RAG.sln
     ├── MY_CTF_RAG.vcxproj
-    ├── include/             ← 头文件：模块对外的"契约"（六份，M2① +atom_scan.h）
+    ├── include/             ← 头文件：模块对外的"契约"（七份，M2 +atom_scan/persist）
     │   ├── type.h           ← 基础数据结构（Document/Chunk/SearchResult）
     │   ├── loader.h         ← 搬进来：data 目录 → vector<Document>
     │   ├── chunker.h        ← 切开来：Document → Chunk（500 词/50 词重叠）
     │   ├── tokenizer.h      ← 磨成粉：text → tokens（词内字符集规则）
-    │   └── indexer.h        ← 账房+查账台：倒排索引 + BM25
+    │   ├── indexer.h        ← 账房+查账台：倒排索引 + BM25
+    │   ├── atom_scan.h      ← 词法单一事实源：Atom 扫描（M2① 新增）
+    │   └── persist.h        ← 索引快照：save/validate/load（M2② 新增）
     ├── src/                 ← 实现：对契约的"履约"
     │   └── main.cpp         ← 总装车间（M1 第二轮产物）
     ├── data/                ← 语料，按 category 分目录（24 篇真实 writeup：EN 12 + CN 12）
@@ -99,12 +101,14 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 
 ## 4. 快速开始
 
-**当前状态**：**M2① 中文 bigram 竣工（2026-09-28）**——六份契约
-（新增 atom_scan.h 词法单一事实源）+ 六个实现 + 75 条回归测试全部就位，
-**编译链接全绿（/W4），F5 即可运行**；`data\` 24 篇真实 writeup
-（EN 12 + CN 12 同源互译，09-28 甲案入库），启动即建索引进入交互
-查询（`query>` 提示符，中英文查询均可）。
-测试一键跑：`tests\run_tests.bat`。下一站 M2-②：索引持久化。构建环境既成事实（B/C 必读）：
+**当前状态**：**M2-② 索引持久化开工（2026-09-28）**。M2① 中文
+bigram 已竣工：六份契约（含 atom_scan.h 词法单一事实源）+ 六个实现
++ 75 条回归测试全绿，编译链接全绿（/W4），F5 即可运行。M2② 第七份
+契约 persist.h 当日落地（save/validate/load 三哑件 + SnapshotStatus
+八态 + FORMAT/PIPELINE 双版本 + 24B 头含 FNV-1a 载荷指纹），实现
+施工中。`data\` 24 篇真实 writeup（EN 12 + CN 12 同源互译），启动
+即建索引进入交互查询（`query>` 提示符，中英文查询均可）。
+测试一键跑：`tests\run_tests.bat`。构建环境既成事实（B/C 必读）：
 
 - VS2022 项目设置：`/utf-8` + ISO C++17 + `/W4`，作用域=所有配置×所有平台
 - 附加包含目录：`$(ProjectDir)include`（src/ 引用契约的路径来源）
