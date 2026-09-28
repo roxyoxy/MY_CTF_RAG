@@ -574,3 +574,65 @@ LNK2019 4→0、端到端 BM25 检索可用。下一步 M2：中文 bigram +
 消费者（load/chunk/build/search 均为自由函数，无需为 GUI 改核心）；
 持久化就位后 GUI 启动即用。风险预告：Qt + 中文文本是 GBK 编码
 事故高危区，施工时改 .ui/.cpp 前必查编码（套用既有教训档案）。
+
+## [2026-09-28 12:50] A
+
+M2 开张，第一议题 = 分词规则单一事实源（09-28 02:46 拍板"M2 动工
+前再议"，现在就是动工前）。AI-A 摆出三案：甲（抽公共原子扫描件，
+bigram 只改一处）/ 乙（维持两份实现，契约+测试盯防）/ 丙（先 bigram
+双改再抽），并给出新论据：bigram 使 tokenizer 的 token 与 chunker 的
+计数单位分裂（重叠 bigram vs 单汉字计数），两端同源需从"词"下沉到
+"原子"（字节区间 + 类型），英文路径同构测试必重写。
+【决策】裁决暂缓，先外部征询：AI-A 执笔架构征询书
+（Desktop\MY_RAG_M2_分词架构征询.md，自包含：规则判例表/三案对垒/
+七个次级难点/编号提问/项目约束），A 拿去与其他 AI 交流后再裁。
+次级难点一并入册：原子粒度 / 扫描件归属 / chunker 计数口径失衡 /
+汉字判定范围与全角标点排除 / bigram 边界三连 / BM25 TF 膨胀 /
+同构测试中文版设计。
+
+## [2026-09-28 13:32] A
+
+【决策】M2 单一事实源裁决落地（外部 AI 会诊回流后终裁）。
+外部意见（GPT，Desktop\GPT2.md）经 AI-A 逐条对账——引用契约原文
+核验为真，非幻觉——A 拍板如下：
+
+1. **路线 = 甲″**：抽公共 Atom Scanner，tokenizer 与 chunker 双依赖
+   它（非 chunker 依赖 tokenizer）；放置为 **include/atom_scan.h，
+   第六份契约**（对 GPT"内部头文件"案的修正：本项目 include/ 即
+   契约层，且 M2⑤ GUI 命中词高亮是预见的第三消费者，藏内部自欺）。
+2. **GPT 八条细则全盘采纳**：孤字丢弃（单字查询返回空，unigram
+   混合索引留 M5 复议）/ bigram 不跨 ASCII / 中文标点断 run /
+   切块计数不加权（1 atom = 1 unit）/ BM25 不补偿（M5 实验）/
+   三层测试（scanner 黄金 + tokenizer 组合 + chunker 边界 + E2E）/
+   汉字判定先解 code point 再分类（禁 lead-byte 粗判：E4-E9 会漏
+   Ext-A 段、误收易经卦符 U+4DC0-4DFF）/ ASCII 词显式 [A-Za-z0-9]
+   不走 isalnum（消灭 locale 变量）。
+3. **概念框架入册**：atom（切块单位）≠ token（索引单位）≠ byte
+   （定位单位）。M1 中"一个英文词三职合一"是偶然重合，bigram 起
+   正式拆分。BM25 的 dl 永远 = tokenize() 输出 token 数（indexer.h
+   "word count"注释随之改 token count）。
+4. **汉字范围冻结**：U+3400-4DBF（Ext-A）+ U+4E00-9FFF（基本区）；
+   Ext-B+/兼容区不管，扩范围只加 code point 判断不推翻 scanner。
+5. **本次属契约语义变更**（chunker.h 条款 2 "A word is a token as
+   defined by tokenizer.h" 在 bigram 后为假），按宪法先改契约后动
+   实现。施工程序四步：⓪ 契约变更五件套（新增 atom_scan.h +
+   tokenizer.h 条款 2 + chunker.h 条款 2 + indexer.h 注释 + PARAMS.md
+   口径）→ ① scanner 落地 + 两消费者改造（验收 = 37 条英文测试
+   原样全绿）→ ② bigram 实装 + 三层中文测试 → ③ 语料重切验收
+   （29 chunks 预期变化：中文开始计数）。
+AI 参与：AI-A 摆甲/乙/丙三案 + 原子下沉论据 + 对账核验 + 认领一处
+自身推理错误（"TF ×2 均匀放大"说法被 GPT 纠正：bigram 是换 token
+空间，不是均匀放大）；A 终裁。待决：atom_scan.h 及消费者改造谁写
+（A 亲手 vs B/C 卡）。
+
+## [2026-09-28 13:39] A
+
+【决策】M2 工作模式拍板（上一条待决项清账）：
+1. **M2 全程独立完成**（A + AI-A），不发 B/C 卡。流程照 M1 老样子：
+   先动 .h（A 手写契约）→ AI-A 获授权填 .cpp 伪代码卡 → A 亲手
+   补全真代码。M1 第三轮"A 不写实现"的策略到此为止，A 首次进入
+   实现层（atom_scan / tokenizer / chunker 改造全部亲手）。
+2. **M3 恢复分工下发**（B/C 任务卡 + PR 流照旧）。
+3. **Qt GUI 全权 AI-A 执笔**：UI 设计不算核心算法，同测试代码
+   先例（AI 执笔、A 审阅）；核心检索层零改动原则不变。
+AI-A 附议：atom_scan 由 A 亲手写收益最大——M2 地基 + 实现层首秀。

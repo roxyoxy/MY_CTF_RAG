@@ -139,8 +139,11 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
 - [x] search 对 top_k 为负的病态 resize 加保护（2026-09-28：search
       入口 top_k<=0 提前返空；@B 文件经 A 拍板留痕；test_indexer
       第 9 条钉死）
-- [ ] tokenizer/chunker 分词规则单一事实源（提案，A 已裁：**M2 动工
-      前再议**——M2 必改分词规则，现在抽公共判定件可能白抽）
+- [x] tokenizer/chunker 分词规则单一事实源（2026-09-28 裁决落地：
+      **甲″** —— 新增 include/atom_scan.h 第六契约，tokenizer/chunker
+      双依赖；三单位拆分 atom ≠ token ≠ byte；GPT 会诊八条细则全盘
+      采纳；GPT 引用经 AI-A 核验为真。征询书 Desktop\
+      MY_RAG_M2_分词架构征询.md，GPT 意见 Desktop\GPT2.md）
 - [x] 第四轮优化遍历（09-28）：六函数全"不动"（量级关过不了，
       规则 3）；search 两处优化（partial_sort O(m log k) + scores
       稠密向量化直寻）提案成册挂 M5；查询词重复=加权语义备案。
@@ -148,15 +151,33 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
 - [ ] 契约留白记录：墓碑字段 M1 无消费者（M2 删除路径落地时
       chunker / indexer 加过滤——不是 bug，是排期）
 
-### M2 排期（有意后置，非遗忘）
+### M2 排期（有意后置，非遗忘；M2① 路线已裁 09-28）
 
-- [ ] 中文 bigram 分词
+- [ ] M2① 中文 bigram——施工程序（甲″，09-28 拍板）：
+      ⓪ 契约变更五件套先行：新增 include/atom_scan.h（第六契约，
+      Atom = {begin, end, kind: ASCII_WORD|CJK_CHAR}）+ tokenizer.h
+      条款 2 改 bigram + chunker.h 条款 2 改 atom 计数（"A word is
+      a token"作废）+ indexer.h word count 注释改 token count +
+      PARAMS.md 500/50 口径同步改 atoms
+      ① scanner 落地 + tokenizer/chunker 双改造（验收 = 37 条英文
+      测试原样全绿）
+      ② bigram 实装 + 三层中文测试（scanner 黄金 / tokenizer 组合 /
+      chunker 边界 + E2E 中文查询）
+      ③ 语料重切验收（29 chunks 预期变化：中文开始计数）
+      冻结细则：孤字丢弃 / 不跨 ASCII / 标点断 run / 计数不加权 /
+      dl = token 数 / 汉字 U+3400-4DBF + U+4E00-9FFF 先解码后分类
+      （禁 lead-byte 猜）/ ASCII 显式 [A-Za-z0-9] / BM25 不补偿 M5 实验
+      工作模式（09-28 拍板）：M2 全程 A + AI-A 独立完成（A 亲手补全
+      实现，老三步 .h → 伪代码卡 → 真代码）；M3 恢复 B/C 分工；
+      Qt GUI 全权 AI-A 执笔 A 审阅（UI 非核心算法）
 - [ ] 索引持久化（现在每次启动重建）
 - [ ] 增量建库
 - [ ] 删除路径落地（墓碑真正消费：删除命令 + 定期全链路重建）
 - [ ] Qt 图形化管理界面（收尾件，四件套竣工后做：语料树/查询框/
       结果列表/墓碑删除可视化；核心检索层零改动——GUI 只是五份
-      契约的新消费者；Qt+中文=GBK 事故高危区，施工套用编码教训）
+      契约的新消费者；Qt+中文=GBK 事故高危区，施工套用编码教训。
+      **09-28 拍板：全权 AI-A 执笔、A 审阅**——UI 设计非核心算法，
+      同测试代码先例）
 
 ### M3-M5
 
@@ -168,6 +189,10 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
 
 ## 6. 版本
 
+- v1.8 · 2026-09-28 · 工作模式拍板：M2 独立完成（A 亲手实现，
+      老三步流程），M3 恢复分工；Qt 全权 AI-A 执笔
+- v1.7 · 2026-09-28 · 单一事实源裁决落地（甲″：atom_scan 第六契约
+      + GPT 八条细则全冻），M2① 施工程序 ⓪-③ 入册
 - v1.6 · 2026-09-28 · M2 范围扩容：+Qt 图形化管理界面（收尾件）
 - v1.5 · 2026-09-28 · 优化遍历竣工（六不动 + 一提案挂 M5），
       **M1 正式收官**
