@@ -1574,3 +1574,23 @@ Desktop\StructuredLightMeasurement\cpp_qt；A 亲手装 Qt VS Tools）。
   双击定位 / 软删除删除线 / 墓碑继承日志）。commit 待批（VS 集成
   包：vcxproj + filters + sln + gui 四件增删 + .gitignore + 纪要 +
   TASKS；连同 0557444 及更早 4 个 commit 的 push 等 7890 代理）
+
+## [2026-09-29 10:36] AI-A
+
+【决策转记】A F5 视觉验收通过（"过了"）+ commit/push 完成，**M2 全线
+收官**——Qt 图形化管理界面（M2 第五件）正式竣工，M2 核心四件套 +
+GUI 全部交付，下一站 M3。
+
+- A 开 sln → 右键 MY_CTF_RAG_GUI 设启动项 → F5 直达 Qt 界面，
+  左边栏 mainwindow.h/.cpp 可见（cpp_qt 同款观感达成），视觉验收
+  五样全过（语料树 / 中文查询 / 双击定位 / 软删除删除线 / 墓碑
+  继承日志）
+- commit 132b42b（Qt VS 原生集成包）+ push 完成
+  （14435d9..132b42b，6 commit 一气上 origin/main，7890 代理已通）
+- 补记：04:30 条"待 A 验收 / commit 待批 / push 等代理"三项就此
+  清账；GUI 页面讲解四块（语料工具栏三分支 / 软删除四动作链 /
+  字节→字符高亮换算 / snippet 与 corpus_diff 双指针）系教学对话
+  ，不入决策档，如需追溯见本会话记录
+- M2 状态：自家四件套（bigram / 持久化 / 增量 / 删除）+ Qt GUI
+  全部竣工并推送。下一步 M3（向量检索 Flat→自研 HNSW + RRF 混合）
+  契约设计，B/C 恢复分工下发
