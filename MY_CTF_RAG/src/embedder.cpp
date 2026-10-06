@@ -3,7 +3,8 @@
 // 契约：include/embedder.h（第九契约）——动工前逐条读完条款 1-7
 // 必读：PRINCIPLES.md §3（AI 规则）/ README §4（编码纪律）/
 //       docs/MEETING_LOG.md 09-29 19:37 + 10-07 两条（M3 定档 + 契约执笔）/
-//       third_party/README.md（三方库规矩）
+//       third_party/README.md（三方库规矩）；
+//       + docs/m3-batch1-briefing.md（你 AI 的任务简报，先喂给它）
 // 交付：本卡翻译完毕（注释删光）+ 离线自测 + Ollama 冒烟 + PR
 //
 // ── 第 0 步 · 复述题（动工前答给你的 AI，答不清回炉）────────────

@@ -3,7 +3,8 @@
 // 契约：include/vector_index.h（第十契约）——条款逐条读完
 // 必读：PRINCIPLES.md §3 / README §4 / docs/MEETING_LOG.md 10-07
 //       （含"Flat 不设 virtual"的裁定与理由）/ include/embedder.h
-//       条款 3（单位长度——你的点积合法性的来源）
+//       条款 3（单位长度——你的点积合法性的来源）；
+//       + docs/m3-batch1-briefing.md（你 AI 的任务简报，先喂给它）
 // 交付：本卡翻译完毕（注释删光）+ 黄金表全绿 + PR
 //
 // ── 第 0 步 · 复述题（答给你的 AI）────────────────────────────

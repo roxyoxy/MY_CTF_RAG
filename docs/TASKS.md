@@ -327,6 +327,9 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
 | T5 | `src/vector_index.cpp` | vector_index.h 第十 | B | 黄金 10 条全手算（二进制精确值）；tie-break 双例钉死；9 号钉"不二次归一" |
 | T6 | `src/rrf.cpp` | rrf.h 第十一 | B | 黄金 6 条；双 tie 用例一次考透；重复 id 首现计次 |
 
+- **先把 `docs/m3-batch1-briefing.md` 喂给你的 AI**（写给协作 AI
+  的任务简报：阅读地图 / 复述评分口径 / 硬红线 / FAQ——不是给人
+  看的说明书，是教 AI 怎么带这张卡）
 - 工作流照 M1（§0）：clone → 读卡 → 第 0 步复述 → 开分支
   （c-embedder / b-vector / b-rrf）→ 译一段删一段 → 自测全绿
   → push 开 PR
@@ -340,6 +343,11 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
   HNSW 三旋钮）
 
 ## 6. 版本
+- v3.7 · 2026-10-07 · **批 1 发卡就绪 + push**：docs/
+  m3-batch1-briefing.md 新增（写给 B/C 协作 AI 的任务简报——
+  仓库地形 / 角色红线 / 阅读地图 / 复述 rubric / 硬红线 / FAQ）；
+  T6 卡 k=60 出处自包含修正（AI-BRIEFING 在仓外 B 不可达）；
+  三卡必读区补简报指引；push 后 B/C 可开工
 - v3.6 · 2026-10-07 · **M3 批 1 下发**：五契约 AI-A 执笔（A 赶时间
   授权，A 学习转事后复习 + review 补课；两新裁定：vector_index
   不设 virtual / vector_persist 独立成件）+ T8/T5/T6 三卡落位
