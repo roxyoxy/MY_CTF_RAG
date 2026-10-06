@@ -1594,3 +1594,179 @@ GUI 全部交付，下一站 M3。
 - M2 状态：自家四件套（bigram / 持久化 / 增量 / 删除）+ Qt GUI
   全部竣工并推送。下一步 M3（向量检索 Flat→自研 HNSW + RRF 混合）
   契约设计，B/C 恢复分工下发
+
+## [2026-09-29 19:37] AI-A
+
+【决策】M3 路线初步定档（丁案）+ 新目标叙事确立。触发：老师
+线上反馈（"到目前为止就已经还不错了；引用别人训练好的也不是
+不可以；性能优先，重心从以自己手搓为主到以实用好用为主，
+手写必要算法为辅——不影响效果、不涉及机器学习与训练"）。
+A 对 GPT 3 意见（Desktop\GPT 3.md）的裁决原话："他说的非常好，
+正是我所理解的内容"——全文采纳；AI-A 附议并补强三点。
+
+- 通道定档**丁案**：真实预训练模型 + 本地 Ollama localhost
+  HTTP + C++ 客户端（甲 ONNX 进程内 / 乙 mock / 丙 Python
+  sidecar 三案弃，死因见 docs/m3-plan.md §2）。核心工程抽象
+  = provider 可替换（M4 本就 Ollama→llama.cpp，M3 提前复用
+  该边界）
+- **双后端**：Flat 自研（exact 基线；145 chunks × 1024 维
+  ≈ 0.57MB，全扫亚毫秒——当前规模的实用最优）+ HNSW 自研
+  **降位保留**（算法核心 + M5 实验对象，非产品必需）。与
+  AI-A 晨间"乙案 HNSW 挂缓议"的差异统一：降位保留 + Go/No-Go
+  开关（M4 工期挤压可整体顺延不阻塞，缓议思想转为风险控制
+  而非砍件）
+- **模型不写死**：bge-m3 vs qwen3-embedding:0.6b A/B 实测
+  拍板（自建 ~20 条中英混合 CTF 查询集，数据拍不印象拍；
+  平局选 bge-m3）
+- **快照拆分**：index.bin 不动不膨胀，新增 vector.bin——身份
+  四件套 model_id / dimension / embedding_policy /
+  VECTOR_PIPELINE_VERSION（PIPELINE 版本"换 embedding 模型
+  也要 bump"的伏笔正式兑现；Qwen3 instruction-aware，建库/
+  查询前缀策略成对冻结）；hnsw.bin 后议（145 点建图毫秒级
+  不值缓存，派生数据判据第三次应用）。AI-A 补强：向量增量
+  复用 = vector.bin 按 doc 组织（path + content_hash），
+  corpus_diff 报告驱动——未变 doc 直接复用向量，added/edited
+  才重嵌
+- **分层铁律**：embedding 与 vector search 彻底分层，索引层
+  只认 vector<float>，不知道模型/HTTP/JSON
+- **叙事升级**："从零手写版" → "核心检索算法自研 + 模型推理
+  采用成熟开源组件的全离线 RAG"（README 已改，自研边界表入
+  README §1）。三条不自研红线：不自研神经网络 / 不自研
+  Transformer 推理 / 不自己解析模型权重
+- 文档五件落位：docs/m3-plan.md（施工计划 + B/C 任务卡
+  T5-T10 初拟 + 明日老师沟通议题清单）、docs/
+  m1-m2-retrospective.md（M1-M2 阶段复习档：数字仪表盘 /
+  八模块复习卡 / 方法论八条 / 挂账清单）、README 叙事更新
+  （标题 + §1 边界表 + §2 路线表 + §4 状态 + 目录树除旧）、
+  TASKS v3.5、本条。PRINCIPLES §1 叙事修订提案已备，挂明日
+  老师线下确认后落盘（宪法级不抢跑）
+- 下一步：明日 A 与老师线下详聊（录音留证）→ 语音回流 →
+  M3 正式计划修订 → 发卡前挂账清算 ①-④（persist 走读 /
+  卡缝五 / 黄金构造 / 双指针走读）→ B/C 任务卡正式下发
+
+## [2026-10-05 19:28] AI-A
+
+【决策】M3 发卡前置双件竣工：**环境 ⓪ 落地 + 学习债 ①-④ 全清**
+（A 令"对关键对话进行必要的会议 md 归档"，本条归档 09-29 19:37
+以来的教学与清账对话）。挂账清算窗口（09-29 03:27 裁定）正式
+关闭，下一步 M3 契约设计。
+
+1. **老师线下会取消**（A："还没聊 取消了"）→ 改出复习简报
+   （半小时讲透现状前因后果）+ QQ 留言稿交付，A 拟发老师；
+   M3 正式计划升级等老师回复，PRINCIPLES §1 叙事修订继续挂起
+   （宪法级不抢跑）
+2. **工作流确认（A）**："先装环境然后清账 然后聊契约我们写好
+   所有的 .h 把 cpp 拟一个伪代码发放下去写"
+3. **环境 ⓪**：Ollama 0.35.1（winget；代理 7890 先决，
+   0x80072efd 网络错 → 查 VPN 首则奏效）；bge-m3 +
+   qwen3-embedding:0.6b 双模型拉取；首次 /api/embed 实弹
+   （%TEMP%\m3_first_embed.py 保留，T10 工具种子）。
+   **契约级事实三枚**：① 返回向量已归一化 norm≈1.0 →
+   余弦 = 点积，T5 免归一化优化入册 ② dim=1024 ③ 跨模型同句
+   余弦 ≈ -0.02（公理③"库与查询必须同模型"实证）；组内同义对
+   分离度 qwen3 0.63 vs bge 0.33（n=3，A/B 预演非结论）。
+   插曲入册：ollama launch codex 系 app 启动指令与本项目无关
+4. **清账记录（①-④ 逐笔）**：
+   - **①②**：persist.cpp 四段走读 + 卡缝五处讲座后复述 4/4——
+     但答卷带"本回答由 AI 生成"页脚 + 两条过期建议
+     （corpus_diff 契约草案 / M2-② 收尾，均已完成不存在），
+     判疑似 AI 辅助；以即兴口试（vector.bin/BAD_MODEL 转移题）
+     为真实封印，A 过且答出讲稿外两个层次 → ①② 销账。
+     方法论入册：不指控，换即兴转移题验真
+   - **③**：黄金测试构造三手法讲座——双趟字节一致 4b（序列化
+     的唯一证人，字段相等对顺序不敏感）/ 头部手术 8/9/11（11 号
+     才是"头部不入指纹"的 Discriminating 用例，9 号殊途同归无
+     证明力）/ repaired() 修指纹 12/13（拆外墙测内墙，逐层验
+     独立）+ 编号漂移披露（账上 3/8/12 黄金表时代 ≡ 今 4b/
+     9+11/13）+ 两疫苗（good 原始副本防尸体连改 / 目录路径
+     构造 IO_ERROR）。转移题（T9 三刀口）**A 自答不清，令
+     AI-A 代答后放行**（"你替我回答一下 我答不清楚 然后过"）。
+     代答要点入册（T9 测试矩阵直接引用）：model_id 刀+修指纹
+     → BAD_MODEL（证件层独立抓获，枚举分叉 = 用户故事分叉）；
+     dimension 1024→999 刀+修指纹 → 结构走查脱轨 BAD_FORMAT
+     （13 号手法向量版）；**单向量浮点刀+修指纹 = 设计上不可
+     检出**（验证成本 = 重建成本，向量无第二真相源——index.bin
+     靠 manifest 对账因磁盘有原文件），防线转移到 content_hash
+     失配拒绝复用（在增量复用层测），不可检出事实入
+     vector_persist.h 契约注释
+   - **④**：corpus_diff 双指针主体已由 GUI 讲解（09-29 10:36
+     补记第四块）+ M2-③ 实弹覆盖，今日概要收尾（两头升序
+     不变量 / i-j 对进 O(n+m) / 纯度 path+content / inherit
+     内容失明 / harvest 仅 CORPUS_CHANGED）→ 销账
+5. **下一步**：M3 契约设计开张——A 亲手写五份 .h（embedder
+   第九 / vector_index 第十 / rrf 第十一 / hnsw 第十二 /
+   vector_persist 第十三，AI-A 教练对话逐份过）→ 伪代码卡 →
+   两批发放（批 1：C·T8 + B·T5/T6；批 2：C·T9/T10 + B·T7）
+6. 待办：QQ 留言待发；五文档批（m3-plan / retrospective /
+   README / TASKS v3.5 / 纪要 19:37）+ 本条未 commit，待 A 批
+
+## [2026-10-07 02:52] AI-A
+
+【决策】A 赶时间授权 AI-A 执笔 M3 五份契约（"你写一个吧 时间来
+不及了 我明天必须把任务发下去 我最后写完复习"——persist.cpp 赶
+时间先例第 N 次；**A 的学习模式转为事后复习 + review 补课**，
+手写学习债挂账：契约精读代替手写）。
+
+- **设计讨论先落地**（A 对六议题逐项拍板："乙 成对入口 可以
+  可以 甲 ok"）：注入缝 = 乙（EmbedProvider virtual 接口，全仓
+  首个多态；M4 provider 模板）/ 成对入口 embed_documents +
+  embed_query（前缀策略成对冻结封装在 provider 内）/ throw
+  runtime_error 不自动重试（loader 先例）/ 归一化出口保证
+  （T5 点积 = 余弦的契约地基）/ glue vendor 甲案（cpp-httplib +
+  nlohmann/json 进 third_party/，MIT 登记许可证）/ 配置三字段
+  + dimension 从输出读（身份问 provider，尺寸问输出）
+- A 随后要求全景对齐（"先告诉我 M3 要新增几个 .h"），AI-A 出
+  五份契约总图（每份职责 + 函数清单 + 条款要点）后获执笔授权
+- **两处新裁定随写随裁**（A 复习时重点看）：
+  1. vector_index 不引入 virtual——Flat/HNSW 互换是实验开关
+     非运行时注入，两份独立契约更诚实（m3-plan §6 T5 "抽象
+     接口"措辞据此修正，理由注释写入 vector_index.h 头部）
+  2. vector_persist 独立成件（m3-plan §10 开放项落锤）：身份
+     模型 / 失效语义 / 增量复用与 index.bin 生命周期全不同，
+     并入会撑肥 M2 冻结件——裁定注释写入文件头部
+- **交付五件**：include/embedder.h（4009B，第九）/ vector_index.h
+  （2277B，第十）/ rrf.h（1659B，第十一）/ hnsw.h（2637B，
+  第十二，契约现在写、实现第 5 步 Go/No-Go）/ vector_persist.h
+  （4368B，第十三）。六状态 VectorSnapshotStatus（BAD_MODEL
+  位检查链第 6，口试定案兑现）；身份区入指纹覆盖（③ 代答三刀
+  口的物理前提）；检查顺序 magic→版本→指纹→结构→身份 写进
+  契约（测试断言确定性）
+- **验收**：字节双零五连（无 BOM + 0 非 ASCII，合计 14950B）；
+  WSL g++ -fsyntax-only -std=c++17 -Wall -Wextra 五连过（唯一
+  warning 系".h 当主文件编译"方法论噪音，代码零告警）
+- 遗留四件：vcxproj/filters 登记（无消费者先例挂起，.cpp 建壳
+  时一并做）/ 伪代码卡批 1（C·T8 + B·T5/T6）待 A 点头即出 /
+  A 复习 + review（六议题 + 两新裁定 + 七条款逐条）/ commit
+  待批（与 10-05 前批合并或分批由 A 定）
+
+## [2026-10-07 05:02] AI-A
+
+【决策转记】A 令"出"——**M3 批 1 三卡发放完毕，B/C 可开工**。
+
+- 三张伪代码卡落位：src/embedder.cpp（C·T8，最厚）/ src/
+  vector_index.cpp（B·T5）/ src/rrf.cpp（B·T6，热身件）。
+  M1 四件套同款（复述题 / 伪代码分段 / 黄金自测表 / 施工规则），
+  UTF-8 带 BOM 供 VS 显示（竣工时卡删光 + 剥 BOM 回归纯 ASCII）；
+  卡体随 M1 先例提交进仓（M2"卡体不提交"仅适用 A 自施工场景）
+- **third_party/ 落位（vendor 甲案兑现）**：cpp-httplib 单头
+  （344KB，v0.18.3，fallback master）+ nlohmann/json v3.11.3
+  单头（920KB）+ 双 MIT 许可证 + README（来源/版本/规矩：只许
+  include 不许改、消费者唯一 embedder.cpp、相对路径 include
+  零工程配置、push/pop 隔离 /W4）
+- 文档同步：TASKS v3.6（M3 批 1 卡区：任务表 + 工作流 + 批 2
+  说明）+ PARAMS v1.2（六参数入账：EMBEDDER 两项 / RRF_K=60 /
+  HNSW_M=16 / EF_C=200 / EF_S=100；model_id 系运行时配置非参数，
+  A/B 拍板后默认值另行入册）
+- **卡内新冻结一处**：qwen3 系查询侧 instruction 前缀文本 +
+  policy 标识 "qwen3-instruct-v1"（其他模型 "none"）——成对冻结
+  的代码级落点；改文本 = 换坐标系 = 旧 vector.bin 作废（卡内已
+  向 C 讲明因果）
+- 黄金表设计注记（B/C 复习价值）：T5 十条全用二进制精确值
+  （0/±1/±0.5）免浮点容差纠纷；9 号故意喂未归一向量钉"不二次
+  归一"契约行为（调用方违约 vs 实现方职责的分界）；T6 1 号双
+  tie 用例——doc0 与 doc1 恰同分 1/61+1/62（IEEE 加法交换律
+  保证位级相等），一次考透两个 tie-break；4 号钉"重复 id 首现
+  计次 + 后续文档名次不前移"
+- 待 A：commit 批准（五契约 + 三卡 + third_party 9 件 + 文档 3
+  件，与 10-05 前批合并或分批由 A 定）；B/C 复述回收后随时
+  答疑；批 2（T9/T10/T7）待批 1 验收

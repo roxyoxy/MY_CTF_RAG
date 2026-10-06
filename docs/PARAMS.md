@@ -13,6 +13,12 @@
 | BM25_K1 | 1.2 | indexer.h | TF 饱和速度 | 惯例 1.2–2.0；越大饱和越慢 |
 | BM25_B | 0.75 | indexer.h | 长度归一化强度 | 0（不看长度）– 1（全额归一） |
 | TOP_K | 10 | indexer.h | 检索返回条数 | 受 M4 LLM 上下文预算约束 |
+| EMBEDDER_DEFAULT_ENDPOINT | http://localhost:11434 | embedder.h | 本地 embedding 服务地址（provider 可替换的物理落点） | M4 换 llama.cpp server 时更改 |
+| EMBEDDER_DEFAULT_TIMEOUT_SECONDS | 180 | embedder.h | 单次 HTTP 调用超时（建库批量 CPU 推理慢，给足） | GPU 常驻可收紧；M5 latency 记账 |
+| RRF_K | 60 | rrf.h | RRF 排名融合阻尼 | 立项定档零调参（AI-BRIEFING Q6）；M5 可扫 10-100 |
+| HNSW_M | 16 | hnsw.h | 每层每节点最大连接数（图连接度） | 惯例 8-48；大 M 图肥建慢 recall 升 |
+| HNSW_EF_CONSTRUCTION | 200 | hnsw.h | 建图候选宽度（建图质量） | 惯例 100-500 |
+| HNSW_EF_SEARCH | 100 | hnsw.h | 查询束宽（recall-latency 旋钮） | M5 主旋钮：升 recall 升延迟 |
 
 ## 维护规则
 

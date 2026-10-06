@@ -282,15 +282,82 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       特判。双配置首发编译即通 /W4 零警告，双点火存活（109/142MB）。
       **09-29 10:36 A F5 视觉验收通过 + push 完成，M2 全线收官**）
 
-### M3-M5
+### M3-M5（M3 路线 09-29 初步定档；正式计划待 09-30 老师线下确认后修订）
 
-- [ ] M3：向量检索 Flat → 自研 HNSW + RRF 混合
-- [ ] M4：本地 LLM 后端（Ollama 原型 → llama.cpp 交付）
-- [ ] M5：对比实验（BM25 / Dense / Hybrid）+ 调参（PARAMS.md 是总账）；
-      兑现 search 优化提案（partial_sort / scores 稠密向量化，09-28
-      优化遍历成册，待真数据验证）
+- [ ] M3：向量检索 + RRF 混合——丁案（计划全文与任务卡初拟见
+      `docs/m3-plan.md`），六步严格按序：
+      ⓪ 发卡前挂账清算 ①-④（persist 走读/卡缝五/黄金构造/
+      双指针走读；03:27 裁定的清算窗口）
+      （⓪ **2026-10-05 竣工**：含环境 ⓪——Ollama 0.35.1 +
+      bge-m3 / qwen3-embedding:0.6b 双模型 + 首 /api/embed 实弹
+      （向量已归一化 norm≈1.0 → 余弦=点积；dim=1024；跨模型
+      同句余弦 ≈ -0.02 = 公理③实证）。清账：①② 复述 4/4 +
+      即兴口试过（复述答卷疑似 AI 辅助，以口试封印）；③ 三手法
+      讲座后转移题 A 令 AI-A 代答放行——T9 三刀口入册：model_id
+      刀→BAD_MODEL / dimension 刀→结构脱轨 BAD_FORMAT / 单向量
+      浮点刀→设计上不可检出（防线转移到 content_hash 拒绝复用）；
+      ④ GUI 讲解 + 概要收尾。**①-④ 全清，转契约设计**。
+      归档纪要 10-05）
+      ① embedder.h 第九契约 + Ollama localhost HTTP 接通（C·T8；
+      接口允许注入 fake provider，单测离线可跑）
+      ② 模型 A/B 实测拍板：bge-m3 vs qwen3-embedding:0.6b，
+      自建 ~20 条中英混合 CTF 查询集——数据拍，不印象拍
+      （A 主导判据，C 出工具 T10）
+      ③ vector_index.h 第十契约 + Flat 自研（B·T5；exact 基线，
+      145 chunks 规模即实用默认）
+      ④ rrf.h 第十一契约 + 混合查询链 + 人工效果验收（B·T6；
+      k=60 维持立项定档）——①至④完成 = 产品能力成型
+      ⑤ vector.bin 快照（C·T9；身份四件套 + 按 doc 组织的
+      diff 驱动增量复用，index.bin 不动）
+      ⑥ hnsw.h 第十二契约 + 自研 HNSW（B·T7；**Go/No-Go
+      评审点**：算法核心 + M5 实验对象，可顺延不阻塞）
+- [ ] M4：本地 LLM 后端（Ollama 原型 → llama.cpp 交付；M3 的
+      embedding 通道提前复用此边界，provider 可替换）
+- [ ] M5：对比实验（BM25 / Dense-Flat / Dense-HNSW / Hybrid
+      四路；recall/nDCG/latency/memory 裁生产默认）+ 调参
+      （PARAMS.md 是总账）+ HNSW 与真增量缓议复议（语料×1000
+      触发）；兑现 search 优化提案（partial_sort / scores
+      稠密向量化，09-28 优化遍历成册，待真数据验证）
+
+### M3 批 1 任务卡（2026-10-07 下发；卡体在 src/*.cpp 注释块，M1 同款）
+
+| 任务 | 文件 | 契约 | 执行人 | 自测要点 |
+|---|---|---|---|---|
+| T8 | `src/embedder.cpp` | embedder.h 第九 | C | 离线三题（拒连 throw / 空批零网络 / FakeProvider 多态）+ Ollama 冒烟四题 |
+| T5 | `src/vector_index.cpp` | vector_index.h 第十 | B | 黄金 10 条全手算（二进制精确值）；tie-break 双例钉死；9 号钉"不二次归一" |
+| T6 | `src/rrf.cpp` | rrf.h 第十一 | B | 黄金 6 条；双 tie 用例一次考透；重复 id 首现计次 |
+
+- 工作流照 M1（§0）：clone → 读卡 → 第 0 步复述 → 开分支
+  （c-embedder / b-vector / b-rrf）→ 译一段删一段 → 自测全绿
+  → push 开 PR
+- 三方库已落位 `MY_CTF_RAG/third_party/`（cpp-httplib +
+  nlohmann/json v3.11.3 + 双 MIT 许可证 + README）——只许
+  include 不许改，消费者唯一 embedder.cpp
+- 批 2（T9 vector_persist / T10 A/B 工具 / T7 hnsw-GoNoGo）待
+  批 1 验收后下发
+- vcxproj/filters 登记随批 1 验收时做（M1 09-27 合并先例）
+- 新契约参数已入 PARAMS.md（v1.2：EMBEDDER 两项 / RRF_K /
+  HNSW 三旋钮）
 
 ## 6. 版本
+- v3.6 · 2026-10-07 · **M3 批 1 下发**：五契约 AI-A 执笔（A 赶时间
+  授权，A 学习转事后复习 + review 补课；两新裁定：vector_index
+  不设 virtual / vector_persist 独立成件）+ T8/T5/T6 三卡落位
+  src/*.cpp + third_party/ vendor（cpp-httplib + nlohmann/json
+  v3.11.3，MIT）+ PARAMS v1.2（M3 六参数入账）。批 2 与 commit
+  待 A 示下
+- v3.5 · 2026-09-29 · **M3 路线初步定档（丁案）**：老师定调
+  性能优先/实用为主/引用成熟模型/手写必要算法（不涉 ML 训练）；
+  GPT 3 意见 A 全文采纳 + AI-A 补强三点（向量增量复用 / HNSW
+  Go-No-Go 开关 / Ollama 离线交付预案）。定档六要素：Ollama
+  localhost HTTP 通道（provider 可替换）/ Flat+HNSW 双后端
+  （Flat=exact 基线+实用默认，HNSW=算法核心降位保留）/ 模型
+  A-B 实测定板 / 快照拆分（index.bin 不动，新增 vector.bin
+  身份四件套）/ embedding 与向量检索彻底分层 / 叙事升级
+  "核心算法自研+模型推理成熟组件"。文档五件：m3-plan.md（新）
+  + m1-m2-retrospective.md（新）+ README 叙事更新 + TASKS 本条
+  + 纪要 19:37；PRINCIPLES 修订提案挂明日老师线下确认。
+  正式计划待 09-30 录音回流
 - v3.4 · 2026-09-29 · **M2 全线收官**：A F5 视觉验收通过 + push 完成
   （132b42b，6 commit 上 origin/main）；M2 核心四件套 + Qt GUI 全清，
   下一站 M3（向量检索 + B/C 分工）
