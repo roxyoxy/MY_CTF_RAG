@@ -1998,3 +1998,60 @@ A 侧验收记录（全部独立复跑，未采信自报）：
 待 A：push 示下（本 commit 含 merge + 转正 + 缓议书 + 文档 3 件）；
 GitHub 网页确认 C 是否开了 PR（本机无 gh）；B 两卡（T5/T6）催办
 与否由 A 定。
+
+## [2026-10-11 02:46] AI-A
+
+【决策转记】A 裁——周三（10-14）汇报倒逼排期：**B 转岗做 PPT，
+T5/T6 改 AI-A 赶时间执笔**（persist.cpp / corpus_diff.cpp / 五契约
+先例第 N 次），A 学习债挂账 T5/T6 契约与实现 review（与复习计划
+合一）。时间线：今晚 T5/T6 竣工验收，周一 main + GUI 接线（步骤④
+混合查询链），周二 A 复习 + 录演示视频，周三汇报。
+
+**A 原提"替 B 做 + 挂 B 名"被否（AI-A 谏，A 采）**：伪造施工记录
+不可为——验收制度的全部价值建立在"记录为真"上（同日 02:18 条
+C 自报失实案例为镜）；答辩现场 B 答不上自己"写"的代码比"B 没写
+这张卡"难看十倍；如实记录对外叙事零损伤（老师已定调实用优先）。
+B 账目摆平：合并后 B 轻量走读（对 AI 复述两卡 + 纪要一条）+
+**批 2 T7（HNSW）归 B 手写**——算法含金量最高的一张，手写收益
+留到那里兑现。
+
+## [2026-10-11 03:02] AI-A
+
+【竣工】T5 + T6 落地（02:46 裁定执行：AI-A 赶时间执笔，卡删光 +
+黄金转正 + 双编译器验证，B 名未挂——如实记录）：
+
+- **src/rrf.cpp**（T6，1732B 纯 ASCII 无 BOM）：acc 累加器
+  1/(RRF_K+rank)、每列表 unordered_set 去重（重复 id 首现 = 最优
+  名次，其后文档名次不前移——黄金 4 号语义）、排序 score 降序 /
+  同分 chunk_id 升序。卡注"无第三段，YAGNI 典型区"兑现：单流程
+  即全部流程
+- **src/vector_index.cpp**（T5，3199B 纯 ASCII 无 BOM）：build 三态
+  （空语料合法 / 维度不一致 fail-fast 报下标与两侧维度 / 原样存储
+  不归一不查单位长度）；search 守卫序 top_k<=0 → 空索引 → 维度
+  throw，double 累加点积，M1 tie-break 惯例，min 截断。partial_sort
+  提案与 M1 search 同款挂 M5，第一版 std::sort 不提前优化
+- **g++ 跨编译器首杀**：-Wnarrowing 抓出 SearchResult::score 是
+  float（type.h 自 M1 即如此，AI-A 想当然按 double 写了聚合初始化）
+  ——显式 static_cast<float> 修在输出边界，测试期望同式运算后
+  同样收窄。双编译器方法论（M1 对 B 通报表扬）第 N 次自证价值
+- **卡缝一处入册**：T5 卡"整表 std::move 进 FlatIndex"与契约
+  const& 签名物理冲突（const 不可 move）——实现走深拷贝一次
+  （145 x 1024 float 约 0.6MB，建库一次性成本可忽略），缘由写进
+  代码注释
+- **黄金转正**：tests/test_rrf.cpp 16 条（case1 双 tie 的位级相等
+  经 float 舍入仍相等——同 double 舍入必得同 float，tie 可观察性
+  保持）+ tests/test_vector_index.cpp 14 条（期望全二进制精确值，
+  9 号喂未归一向量钉"得分 2.0 不二次归一"）；run_tests.bat 挂
+  第九 / 第十单元（各仅链自身 .cpp，零依赖零网络）
+- vcxproj/filters 注册 rrf + vector_index 的 .h 与 .cpp（hnsw.h /
+  vector_persist.h 仍无 .cpp，挂起至批 2——无消费者先例）
+- **验收三连**：run_tests **156/156**（126 + 30 新）；msbuild
+  Debug|x64 /W4 零警告零错误（两文件首次进工程编译即净）；冒烟
+  EXIT=0——快照还原 58 docs / 145 chunks，libc top-1 不变（两函数
+  尚无消费者，零回归符合设计）
+- 字节自检四文件双零（1732 / 3199 / 4637 / 4591B）
+
+下一步（02:46 时间线）：main + GUI 接线（步骤④ 混合查询链，
+含 RRF_K 查询环融合 + embedder 上电）→ A 复习 review（挂账：
+T5/T6 契约与实现）→ 演示视频。批 1 三卡全部落地，批 2（T9/
+T10/T7）待 A 示下。

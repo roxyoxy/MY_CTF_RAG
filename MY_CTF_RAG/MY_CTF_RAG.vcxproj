@@ -142,8 +142,10 @@
     <ClInclude Include="include\indexer.h" />
     <ClInclude Include="include\loader.h" />
     <ClInclude Include="include\persist.h" />
+    <ClInclude Include="include\rrf.h" />
     <ClInclude Include="include\tokenizer.h" />
     <ClInclude Include="include\type.h" />
+    <ClInclude Include="include\vector_index.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\atom_scan.cpp" />
@@ -154,7 +156,9 @@
     <ClCompile Include="src\loader.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\persist.cpp" />
+    <ClCompile Include="src\rrf.cpp" />
     <ClCompile Include="src\tokenizer.cpp" />
+    <ClCompile Include="src\vector_index.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

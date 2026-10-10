@@ -1,74 +1,46 @@
-﻿// ============================================================================
-// T6 · rrf.cpp 施工卡（M3 批 1 · 执行人 B · 分支建议 b-rrf）
-// 本批最小件，热身用——一天量级的卡
-// 契约：include/rrf.h（第十一契约）
-// 必读：docs/MEETING_LOG.md 09-22 09:20（RRF 在检索进化谱系的位置）；
-//       k=60 = RRF 原论文（Cormack 2009）惯例值，立项定档零调参；
-//       + docs/m3-batch1-briefing.md（你 AI 的任务简报，先喂给它）
-//
-// ── 第 0 步 · 复述题（答给你的 AI）────────────────────────────
-// Q1 为什么只融合排名不融合分数？BM25 的 8.73 和余弦的 0.81 相加，
-//    错在哪一层（数学上）？
-// Q2 k=60 起什么作用？调小到 1 会发生什么？（头部排名权重暴涨，
-//    融合退化为"谁有一两个第一名谁说了算"）
-// Q3 一条列表里 chunk_id 重复怎么算？（契约条款 2：该 id 只计首次
-//    出现=最优名次；它后面的文档名次仍按列表原位置，不因去重前移
-//    ——黄金表 4 号钉这个）
-// Q4 输出的 SearchResult::score 装的是什么？它和 BM25 分能直接比
-//    大小吗？和另一次 RRF 的输出能比吗？
-// Q5 单路输入退化成什么？空输入呢？
-//
-// ── 伪代码（真代码写注释下方，译一段删一段，全删 = 竣工）────────
-//
-// 【段 1】#include "rrf.h"（自带 type.h）
-//         #include <algorithm>        // std::sort
-//         #include <unordered_map>    // acc 累加器
-//         #include <unordered_set>    // 每列表去重
-//         #include <vector>
-//
-// 【段 2 · 主流程（也是全部流程）】
-//   std::unordered_map<int, double> acc;
-//   for (每条 ranked_list):
-//     std::unordered_set<int> seen_in_list;
-//     for (pos = 0; pos < list.size(); ++pos):
-//       id = list[pos].chunk_id
-//       if (seen_in_list 里有 id) continue;
-//         // 该 id 本列表只计首现（= 最优名次）；
-//         // 注意 pos 仍是原下标，不前移
-//       seen_in_list.insert(id)
-//       acc[id] += 1.0 / (RRF_K + pos + 1)
-//         // rank = pos + 1（排名从 1 起，条款 1）
-//   收集 acc 到 vector<SearchResult>{id, score}
-//   sort：score 降序、同分 chunk_id 升序（M1 tie-break 惯例，
-//     比较器方向别写反，黄金表 1 号一次考两个 tie）
-//   return
-//   （无第三段。YAGNI 典型区：想优化 = 想多了）
-//
-// ── 黄金自测表（手算死；1/61 这类表达式直接照抄进测试代码，
-//    与实现同式运算，避免笔误与浮点书写差异）──────────────────
-// 编号 | 用例 | 期望
-//  1 | L1=[0,1,2], L2=[1,0,3]
-//    | doc0 = 1/61+1/62；doc1 = 1/62+1/61——两数位级相等
-//    | （IEEE 加法交换律），同分 tie 升序 doc0 先；
-//    | doc2 与 doc3 均 1/63，tie 升序 doc2 先
-//    | 输出顺序 [0,1,2,3]，双 tie 一次考透
-//  2 | 单路 [[5,7]] | [(5, 1/61), (7, 1/62)]——重打分直通
-//  3 | 空 {} 与 {[[],[]]} | 均空
-//  4 | 重复 [[4,4,9]]
-//    | doc4 = 1/61（只计首现）；doc9 = 1/63（原位次 3，
-//    | 不因去重前移）——钉条款 2 的重复政策
-//  5 | 三路 [[0],[0],[1]] | doc0 = 2/61 > doc1 = 1/61，顺序 [0,1]
-//  6 | 两路完全不相交 [[0,1],[2,3]]
-//    | doc0=1/61 与 doc2=1/61 同分 tie 升序 0 先；doc1=1/62 与
-//    | doc3=1/62 同分 tie 升序 1 先；输出 [0,2,1,3]
-//
-// ── 施工规则 ────────────────────────────────────────────────
-// 1. 先答复述题，答不清回炉
-// 2. 真代码写在注释下方，译一段删一段；本卡删光 = 竣工
-// 3. 真代码注释英文纯 ASCII（破折号用 --）
-// 4. IWYU；/W4 零告警
-// 5. 契约看死：发现 rrf.h 有 bug 或模糊——停手，纪要留言，不得擅改
-// 6. 临时测试 main 用完即删，不进 PR
-// 7. 自测全过再 push 开 PR；PR 描述：自测结果 + 对六条契约的逐条
-//    自查（哪条在哪行兑现）
-// ============================================================================
+#include "rrf.h"
+
+#include <algorithm>
+#include <cstddef>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
+std::vector<SearchResult>
+rrf_fuse(const std::vector<std::vector<SearchResult>>& ranked_lists) {
+    std::unordered_map<int, double> acc;
+
+    for (const std::vector<SearchResult>& list : ranked_lists) {
+        std::unordered_set<int> seen_in_list;
+        for (std::size_t pos = 0; pos < list.size(); ++pos) {
+            // Clause 2: a repeated chunk_id counts once per list, at
+            // its best (first) position; entries after a duplicate
+            // keep their original offsets, nothing shifts up.
+            if (!seen_in_list.insert(list[pos].chunk_id).second)
+                continue;
+            // Clause 1: ranks start at 1.
+            acc[list[pos].chunk_id] +=
+                1.0 / (RRF_K + static_cast<int>(pos) + 1);
+        }
+    }
+
+    std::vector<SearchResult> out;
+    out.reserve(acc.size());
+    for (const auto& entry : acc)
+        out.push_back(
+            SearchResult{entry.first, static_cast<float>(entry.second)});
+
+    // Clause 3: fused score descending, ties chunk_id ascending.
+    // Scores compare for exact equality on purpose: golden case 1
+    // relies on IEEE addition being commutative, so 1/61+1/62 and
+    // 1/62+1/61 are bit-equal as doubles, and rounding the same
+    // double to the stored float keeps them equal, so the
+    // chunk_id tie-break stays observable.
+    std::sort(out.begin(), out.end(),
+              [](const SearchResult& a, const SearchResult& b) {
+                  if (a.score != b.score)
+                      return a.score > b.score;
+                  return a.chunk_id < b.chunk_id;
+              });
+    return out;
+}
