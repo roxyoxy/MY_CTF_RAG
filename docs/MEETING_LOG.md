@@ -1886,3 +1886,24 @@ policy 返回 "qwen3-instruct-v1"；其余 -> 两侧不加、policy 返回
 不给自由输入框——自由输入会落入"未适配族静默降效"的陷阱（掉进
 else 分支：不加前缀、不报错，结果可用但不对）。清单建议登记入
 PARAMS.md，与 A/B 拍板后的默认值同处。
+
+## [2026-10-10 17:16] C
+
+【竣工】T8 embedder.cpp（AI-C 参与复述闸门、代码 review 与测试）。
+实现对照契约逐条落地：
+- 段 2 前缀策略：model_id 以 "qwen3" 开头 -> 查询侧加 instruction
+  前缀、policy 返回 "qwen3-instruct-v1"；其余两侧不加、policy
+  返回 "none"（成对冻结，编译期字面量，一字不许运行时拼）
+- 段 3 构造函数：endpoint / timeout 空值落默认、policy 一次算好
+  存住，零网络（条款 6）；model_id 为空直接抛 runtime_error
+- 段 4/5 共用私有帮手 request_embeddings（HTTP 通路只写一遍）：
+  空批次提前返空（条款 2 零网络）；全部失败分支抛 runtime_error
+  带人话；响应条数与请求条数不符即判畸形（无部分结果）；逐条校验
+  维度一致与数值有限性；norm == 0 判畸形；出口统一归一化（条款 3）
+- 段 6 工厂一行
+- 顺序保证：数组天然保序 + 对角余弦用例钉死
+自测：黄金表 7/7 全绿、20 断言 0 失败（离线三题 + 冒烟四题，
+Ollama 双模型实弹）；竣工字节 no BOM / nonascii: 0；MSVC /W4 零警告。
+AI-C review 认可三处判断：抽私有帮手、expected_dimension == 0 哨兵
+顺序正确（空向量先抛，0 不可能与合法维度撞车）、catch(json::exception)
+不误捕自身 runtime_error（两者无继承关系，具体错误原因不被二次包装）。
