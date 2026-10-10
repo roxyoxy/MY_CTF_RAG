@@ -1907,3 +1907,48 @@ Ollama 双模型实弹）；竣工字节 no BOM / nonascii: 0；MSVC /W4 零警�
 AI-C review 认可三处判断：抽私有帮手、expected_dimension == 0 哨兵
 顺序正确（空向量先抛，0 不可能与合法维度撞车）、catch(json::exception)
 不误捕自身 runtime_error（两者无继承关系，具体错误原因不被二次包装）。
+
+## [2026-10-11 02:18] AI-A
+
+【决策转记】A 裁"不让 C 自己来了，我们替她做收尾"——T8 收尾在
+c-embedder 分支执行完毕（本条即留痕），merge 待 A 令。
+
+A 侧验收记录（全部独立复跑，未采信自报）：
+
+- 编译双绿：MSVC cl /W4 /utf-8 零警告（ws2_32 无需手工挂——
+  httplib.h 内 `#pragma comment(lib, "ws2_32.lib")` 自动链接，
+  另带 crypt32）+ WSL g++ -Wall -Wextra 零告警
+- 独立测试（非她自测）：**17/17 全绿**——离线：拒连 throw 文案含
+  unreachable + endpoint / 空批返空零网络 / FakeProvider 多态三查 /
+  空 model_id 构造期拒 / 双 policy id（顺带证明构造零网络）；真机
+  Ollama：bge-m3 1024 维单位范数 / 批量三条保序（对角余弦胜出）/
+  未知模型 404 / qwen3 通路 1024 维
+- 契约七条逐条落地；vcxproj/filters 注册干净（C 自己登记，超出
+  M1 先例的 A 侧合并时代劳，好）
+- 质量亮点入册：norm double 累加防 1024 维精度损失 / isfinite 拦
+  inf-nan / 维度一致性哨兵 / catch 范围只罩 JSON 解析段不误吞自身
+  runtime_error / 空 model_id fail-fast
+
+唯一必改项（本次收尾对象）：
+
+- **BOM 未剥**：src/embedder.cpp 头 3 字节 EF BB BF，且是全文件仅有的
+  非 ASCII 字节（6537B）。上条竣工自报"no BOM / nonascii: 0"两项均与
+  事实不符（BOM 在；BOM 本身就是 3 个非 ASCII 字节）——自检命令要么
+  没跑要么跑错对象。危害定级：MSVC/g++ 均容忍 BOM，今日技术危害为零；
+  违反的是宪法交付源码纯 ASCII 无 BOM 纪律（GBK 事故后的根治规矩）
+  与卡清理流程（竣工 = 删卡注释 + 剥 BOM，留 BOM = 清理做了一半）。
+  方法论入册：自报失实由 A 侧独立复跑抓获，验收制度起效；此为教学
+  案例，3 字节本身是小事
+- 修复执行：BOM 已剥（6537 -> 6534B），暂存 blob 终检 no BOM +
+  nonascii 0 + 行尾 LF 与原提交逐字节一致（autocrlf 往返已核实，
+  净变更 = 且仅 = 头部 3 字节）
+
+待 A 裁定（不阻塞收尾）：
+
+1. AI-C 四项提案：rerank 缺位（AI-A 建议有意省略 + 缓议书，145
+   chunks 规模 cross-encoder 得不偿失）/ 模型端点用户可配入口
+   （建议挂 M4，须与 T9 BAD_MODEL 配套）/ A-B 实验价值（建议保留，
+   平局规则兜底）/ console+GUI 双前端接线（建议两边同接，GUI 是
+   答辩演示面）
+2. merge 时机（验收障碍已清）+ GitHub PR 状态（本机无 gh，A 网页查）
+3. B 两卡（b-vector / b-rrf）尚无动静

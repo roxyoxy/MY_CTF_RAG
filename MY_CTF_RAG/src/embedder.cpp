@@ -1,4 +1,4 @@
-﻿#include "embedder.h"
+#include "embedder.h"
 
 // Both headers are warning-clean under /W4 with this toolchain
 // (verified 2026-10-10); the push/pop pair is kept as a guard.
