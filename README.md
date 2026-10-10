@@ -46,7 +46,7 @@
 | M0 | 文档体系 + 会议纪要 + 查询脚本 | ✅ 2026-09-22 |
 | M1 | 纯英文检索：接口设计(.h) → main → 实现(.cpp) → 优化 | ✅ 2026-09-28 四轮全部竣工 |
 | M2 | 中文 bigram + 持久化 + 增量/删除 + Qt 管理界面 | ✅ 2026-09-29 全线收官（F5 验收 + push） |
-| M3 | 向量检索（Ollama embedding + Flat 基线 + 自研 HNSW 双后端）+ RRF 混合 | 路线已定档（09-29），计划见 `docs/m3-plan.md` |
+| M3 | 向量检索（Ollama embedding + Flat 基线 + 自研 HNSW 双后端）+ RRF 混合 | 施工中：批 1 三卡落地 + 混合查询链双前端接线（10-11）；批 2（T9/T10/T7）待发 |
 | M4 | 本地 LLM 后端（Ollama 原型 → llama.cpp 交付）| 待开始 |
 | M5 | 对比实验（BM25/Dense/Hybrid 三组）+ 报告答辩 | 待开始 |
 
@@ -98,9 +98,9 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
     │   ├── indexer.h        ← 账房+查账台：倒排索引 + BM25
     │   ├── atom_scan.h      ← 词法单一事实源：Atom 扫描（M2① 新增）
     │   └── persist.h        ← 索引快照：save/validate/load（M2② 新增）
-    ├── src/                 ← 实现：对契约的"履约"（八份已实现 + T5/T6 卡待译 + main.cpp 总装）
+    ├── src/                 ← 实现：对契约的"履约"（十一份已实现 + main.cpp 总装，M3 混合查询链已接线）
     ├── data/                ← 语料，按 category 分目录（58 篇：npusec 24 + ctf-wiki 34，含 mobile 类目）
-    ├── tests/               ← 回归测试（126 条全绿）+ run_tests.bat 一键跑
+    ├── tests/               ← 回归测试（156 条全绿）+ run_tests.bat 一键跑
     └── gui/                 ← Qt GUI 源码三件（MY_CTF_RAG_GUI 工程编译，F5 直达）
 ```
 
@@ -116,10 +116,12 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 
 ## 4. 快速开始
 
-**当前状态**：**M2 全线收官（2026-09-29），M3 施工中**。十三份
-契约 + 126 条回归测试全绿（/W4），console + Qt GUI 双前端；
-M3 批 1 首件 T8（embedder，Ollama HTTP 通道）已验收合并
-（2026-10-11）。
+**当前状态**：**M3 施工中（10-11 步骤④ 接线完成）**。十三份契约 +
+156 条回归测试全绿（/W4），console + Qt GUI 双前端均已接入
+**BM25 + 语义向量 + RRF 混合查询链**（qwen3-embedding:0.6b @ 本地
+Ollama，A/B 实测拍板 10-11，服务不可达自动降级 BM25-only）；
+M3 批 1 三卡全部落地
+（T8 embedder · T5 Flat · T6 RRF，10-11）。
 启动流程：validate
 快照 -> 命中即 load（`index.bin` 缓存，损坏自动降级重建）-> 未命中
 fresh build + save；**语料变动（CORPUS_CHANGED）时收获旧快照：

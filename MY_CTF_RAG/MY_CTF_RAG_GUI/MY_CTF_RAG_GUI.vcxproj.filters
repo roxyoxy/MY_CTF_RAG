@@ -39,6 +39,15 @@
     <ClCompile Include="..\src\corpus_diff.cpp">
       <Filter>Core Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\embedder.cpp">
+      <Filter>Core Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rrf.cpp">
+      <Filter>Core Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\vector_index.cpp">
+      <Filter>Core Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\gui\mainwindow.h">
@@ -66,6 +75,15 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\include\type.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\embedder.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\rrf.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\vector_index.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

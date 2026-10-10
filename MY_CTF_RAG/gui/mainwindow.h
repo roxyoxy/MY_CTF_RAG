@@ -1,13 +1,16 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <vector>
 
 #include <QMainWindow>
 #include <QString>
 
+#include "embedder.h"
 #include "indexer.h"
 #include "type.h"
+#include "vector_index.h"
 
 class QCheckBox;
 class QLabel;
@@ -28,6 +31,7 @@ private:
 
     void chooseDataDirectory();
     void loadCorpusAndIndex(const QString& dataDir);
+    void embedChunks(const QString& reason);
     void rebuildIndex();
     void runSearch();
     void deleteSelectedDocument();
@@ -58,6 +62,7 @@ private:
 
     QLabel* docsLabel_ = nullptr;
     QLabel* chunksLabel_ = nullptr;
+    QLabel* denseLabel_ = nullptr;
     QLabel* snapshotLabel_ = nullptr;
     QLabel* versionsLabel_ = nullptr;
     QLabel* avgdlLabel_ = nullptr;
@@ -65,6 +70,13 @@ private:
     std::vector<Document> docs_;
     std::vector<Chunk> chunks_;
     InvertedIndex index_;
+
+    // M3 step 4: dense route (semantic search). Vectors live in memory
+    // only until T9 (vector.bin) lands.
+    std::unique_ptr<EmbedProvider> provider_;
+    FlatIndex denseIndex_;
+    bool denseReady_ = false;
+    QString denseStateText_ = QStringLiteral("dense: off");
 
     std::string snapshotPath_ = "index.bin";
     QString snapshotStateText_ = QStringLiteral("not loaded");

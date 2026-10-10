@@ -1,10 +1,14 @@
 #include "mainwindow.h"
 
+#include <algorithm>
+#include <chrono>
 #include <exception>
 #include <limits>
+#include <unordered_set>
 #include <utility>
 
 #include <QAbstractItemView>
+#include <QApplication>
 #include <QByteArray>
 #include <QCheckBox>
 #include <QDockWidget>
@@ -32,8 +36,11 @@
 
 #include "chunker.h"
 #include "corpus_diff.h"
+#include "embedder.h"
 #include "loader.h"
 #include "persist.h"
+#include "rrf.h"
+#include "vector_index.h"
 
 namespace {
 constexpr int kRoleItemKind = Qt::UserRole;
@@ -42,6 +49,13 @@ constexpr int kRoleChunkId = Qt::UserRole + 2;
 constexpr int kCategoryItem = 0;
 constexpr int kDocumentItem = 1;
 constexpr int kSnippetChars = 180;
+// Caller-side wiring constants for the hybrid query chain (M3 step 4),
+// registered in docs/PARAMS.md; mirrored in src/main.cpp.
+constexpr int kHybridRouteK = 20;
+constexpr int kEmbedSlice = 32;
+// Dense model decided by the A/B experiment (M3 step 2, 2026-10-11):
+// qwen3-embedding:0.6b beat bge-m3 on every metric; see docs/PARAMS.md.
+constexpr const char* kDenseModel = "qwen3-embedding:0.6b";
 
 QString fromUtf8(const std::string& text) {
     return QString::fromUtf8(text.data(), static_cast<qsizetype>(text.size()));
@@ -135,9 +149,10 @@ void MainWindow::buildUi() {
     rootLayout->addLayout(corpusBar);
 
     auto* queryBar = new QHBoxLayout();
-    queryBar->addWidget(new QLabel(QStringLiteral("BM25 查询:"), central));
+    queryBar->addWidget(new QLabel(QStringLiteral("混合检索:"), central));
     queryEdit_ = new QLineEdit(central);
-    queryEdit_->setPlaceholderText(QStringLiteral("输入关键词，按回车检索"));
+    queryEdit_->setPlaceholderText(
+        QStringLiteral("关键词或自然语言问句，回车检索（BM25+语义双路）"));
     searchButton_ = new QPushButton(QStringLiteral("检索"), central);
     queryBar->addWidget(queryEdit_, 1);
     queryBar->addWidget(searchButton_);
@@ -163,10 +178,11 @@ void MainWindow::buildUi() {
     previewEdit_->setPlaceholderText(QStringLiteral("双击左侧文档，或双击检索结果以定位源文档。"));
 
     resultsTable_ = new QTableWidget(rightSplitter);
-    resultsTable_->setColumnCount(5);
+    resultsTable_->setColumnCount(6);
     resultsTable_->setHorizontalHeaderLabels({
         QStringLiteral("Rank"),
         QStringLiteral("Score"),
+        QStringLiteral("Routes"),
         QStringLiteral("Doc Path"),
         QStringLiteral("Chunk ID"),
         QStringLiteral("Snippet")
@@ -178,9 +194,10 @@ void MainWindow::buildUi() {
     resultsTable_->verticalHeader()->setVisible(false);
     resultsTable_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     resultsTable_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
-    resultsTable_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
-    resultsTable_->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
-    resultsTable_->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
+    resultsTable_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+    resultsTable_->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
+    resultsTable_->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeToContents);
+    resultsTable_->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
 
     rightSplitter->setStretchFactor(0, 3);
     rightSplitter->setStretchFactor(1, 2);
@@ -201,12 +218,14 @@ void MainWindow::buildUi() {
 
     docsLabel_ = new QLabel(this);
     chunksLabel_ = new QLabel(this);
+    denseLabel_ = new QLabel(this);
     snapshotLabel_ = new QLabel(this);
     versionsLabel_ = new QLabel(this);
     avgdlLabel_ = new QLabel(this);
 
     statusBar()->addPermanentWidget(docsLabel_);
     statusBar()->addPermanentWidget(chunksLabel_);
+    statusBar()->addPermanentWidget(denseLabel_);
     statusBar()->addPermanentWidget(snapshotLabel_, 1);
     statusBar()->addPermanentWidget(versionsLabel_);
     statusBar()->addPermanentWidget(avgdlLabel_);
@@ -306,12 +325,78 @@ void MainWindow::loadCorpusAndIndex(const QString& dataDir) {
         previewEdit_->clear();
         refreshStatusBar();
         appendLog(branchLog);
+        embedChunks(QStringLiteral("启动"));
     } catch (const std::exception& e) {
         snapshotStateText_ = QStringLiteral("load error");
         refreshStatusBar();
         appendLog(QStringLiteral("加载失败: %1").arg(QString::fromUtf8(e.what())));
         QMessageBox::critical(this, QStringLiteral("加载失败"), QString::fromUtf8(e.what()));
     }
+}
+
+// M3 step 4: embed every chunk through the local Ollama provider,
+// sliced so the UI can pump events between requests (the embed itself
+// still runs on the GUI thread tonight; a worker thread is an M4
+// hardening item). Any failure degrades to BM25-only, never blocks.
+void MainWindow::embedChunks(const QString& reason) {
+    denseIndex_ = FlatIndex{};
+    denseReady_ = false;
+
+    if (chunks_.empty()) {
+        denseStateText_ = QStringLiteral("dense: idle");
+        refreshStatusBar();
+        return;
+    }
+
+    if (!provider_)
+        provider_ = make_ollama_provider(
+            EmbedderConfig{std::string(), std::string(kDenseModel), 0});
+
+    appendLog(QStringLiteral("%1: 正在嵌入 %2 个块（%3，本地 Ollama）...")
+        .arg(reason)
+        .arg(static_cast<qulonglong>(chunks_.size()))
+        .arg(QString::fromUtf8(kDenseModel)));
+    QApplication::processEvents();
+
+    const auto t0 = std::chrono::steady_clock::now();
+    try {
+        std::vector<std::vector<float>> vectors;
+        vectors.reserve(chunks_.size());
+        const size_t total = chunks_.size();
+        for (size_t begin = 0; begin < total; begin += kEmbedSlice) {
+            const size_t end = std::min(begin + kEmbedSlice, total);
+            std::vector<std::string> texts;
+            texts.reserve(end - begin);
+            for (size_t i = begin; i < end; ++i)
+                texts.push_back(chunks_[i].text);
+            const std::vector<std::vector<float>> part =
+                provider_->embed_documents(texts);
+            vectors.insert(vectors.end(), part.begin(), part.end());
+            QApplication::processEvents();
+        }
+        denseIndex_ = build_flat_index(vectors);
+        denseReady_ = true;
+        const double secs = std::chrono::duration<double>(
+            std::chrono::steady_clock::now() - t0).count();
+        denseStateText_ = QStringLiteral("dense: %1 (%2x%3, %4s)")
+            .arg(QString::fromUtf8(kDenseModel))
+            .arg(static_cast<qulonglong>(denseIndex_.vectors.size()))
+            .arg(denseIndex_.dimension)
+            .arg(secs, 0, 'f', 1);
+        appendLog(QStringLiteral("%1: 语义路就绪 -- %2 个向量，dim %3（%4 秒）。")
+            .arg(reason)
+            .arg(static_cast<qulonglong>(denseIndex_.vectors.size()))
+            .arg(denseIndex_.dimension)
+            .arg(secs, 0, 'f', 1));
+    } catch (const std::exception& e) {
+        denseIndex_ = FlatIndex{};
+        denseReady_ = false;
+        denseStateText_ = QStringLiteral("dense: off");
+        appendLog(QStringLiteral("%1: 语义路不可用（%2），检索退回仅 BM25。")
+            .arg(reason)
+            .arg(QString::fromUtf8(e.what())));
+    }
+    refreshStatusBar();
 }
 
 void MainWindow::rebuildIndex() {
@@ -332,6 +417,7 @@ void MainWindow::rebuildIndex() {
     appendLog(saved
         ? QStringLiteral("重建: chunk + build_index + save 完成。")
         : QStringLiteral("重建: 内存索引已更新，但快照保存失败。"));
+    embedChunks(QStringLiteral("重建"));
 }
 
 void MainWindow::runSearch() {
@@ -342,10 +428,38 @@ void MainWindow::runSearch() {
         return;
     }
 
-    const std::vector<SearchResult> results = search(index_, toUtf8(query), TOP_K);
+    // M3 step 4: BM25 (lexical) + vector (semantic) routes fused by
+    // RRF while the dense side is alive; plain BM25 otherwise.
+    std::vector<SearchResult> bm25 =
+        search(index_, toUtf8(query), kHybridRouteK);
+    std::vector<SearchResult> dense;
+    if (denseReady_) {
+        try {
+            dense = search_flat(denseIndex_,
+                                provider_->embed_query(toUtf8(query)),
+                                kHybridRouteK);
+        } catch (const std::exception& e) {
+            appendLog(QStringLiteral("查询: 语义路失败（%1），本次退回 BM25。")
+                .arg(QString::fromUtf8(e.what())));
+        }
+    }
+
+    const bool hybrid = !dense.empty();
+    std::unordered_set<int> bm25Ids;
+    std::unordered_set<int> denseIds;
+    for (const SearchResult& r : bm25)
+        bm25Ids.insert(r.chunk_id);
+    for (const SearchResult& r : dense)
+        denseIds.insert(r.chunk_id);
+    const std::vector<SearchResult> results =
+        hybrid ? rrf_fuse({bm25, dense}) : bm25;
+
+    const int shown = static_cast<int>(
+        std::min<size_t>(results.size(), static_cast<size_t>(TOP_K)));
     int visibleRank = 0;
 
-    for (const SearchResult& result : results) {
+    for (int i = 0; i < shown; ++i) {
+        const SearchResult& result = results[static_cast<size_t>(i)];
         if (result.chunk_id < 0 || static_cast<size_t>(result.chunk_id) >= chunks_.size()) {
             continue;
         }
@@ -360,6 +474,17 @@ void MainWindow::runSearch() {
             continue;
         }
 
+        QString routes;
+        if (hybrid) {
+            const bool inBm25 = bm25Ids.count(result.chunk_id) != 0;
+            const bool inDense = denseIds.count(result.chunk_id) != 0;
+            routes = inBm25 && inDense ? QStringLiteral("bm25+vec")
+                  : inBm25 ? QStringLiteral("bm25")
+                  : QStringLiteral("vec");
+        } else {
+            routes = QStringLiteral("bm25");
+        }
+
         const int row = resultsTable_->rowCount();
         resultsTable_->insertRow(row);
         ++visibleRank;
@@ -368,14 +493,17 @@ void MainWindow::runSearch() {
         rankItem->setData(kRoleChunkId, result.chunk_id);
         resultsTable_->setItem(row, 0, rankItem);
         resultsTable_->setItem(row, 1, new QTableWidgetItem(QString::number(result.score, 'g', 8)));
-        resultsTable_->setItem(row, 2, new QTableWidgetItem(fromUtf8(doc.path)));
-        resultsTable_->setItem(row, 3, new QTableWidgetItem(QString::number(result.chunk_id)));
-        resultsTable_->setItem(row, 4, new QTableWidgetItem(snippetForChunk(chunk)));
+        resultsTable_->setItem(row, 2, new QTableWidgetItem(routes));
+        resultsTable_->setItem(row, 3, new QTableWidgetItem(fromUtf8(doc.path)));
+        resultsTable_->setItem(row, 4, new QTableWidgetItem(QString::number(result.chunk_id)));
+        resultsTable_->setItem(row, 5, new QTableWidgetItem(snippetForChunk(chunk)));
     }
 
-    appendLog(QStringLiteral("查询: \"%1\" -> %2 条结果。")
+    appendLog(QStringLiteral("查询: \"%1\" -> %2 条结果（%3）。")
         .arg(query)
-        .arg(visibleRank));
+        .arg(visibleRank)
+        .arg(hybrid ? QStringLiteral("BM25+语义 RRF 混合")
+                    : QStringLiteral("仅 BM25")));
 }
 
 void MainWindow::deleteSelectedDocument() {
@@ -422,6 +550,7 @@ void MainWindow::deleteSelectedDocument() {
     appendLog(saved
         ? QStringLiteral("删除: %1 -> 墓碑 + 重建 + 保存完成。").arg(fromUtf8(doc.path))
         : QStringLiteral("删除: %1 -> 内存已更新，但快照保存失败。").arg(fromUtf8(doc.path)));
+    embedChunks(QStringLiteral("删除重建"));
 }
 
 void MainWindow::showSelectedDocument(QTreeWidgetItem* item, int column) {
@@ -505,6 +634,7 @@ void MainWindow::refreshDocumentTree() {
 void MainWindow::refreshStatusBar() {
     docsLabel_->setText(QStringLiteral("docs: %1").arg(static_cast<qulonglong>(docs_.size())));
     chunksLabel_->setText(QStringLiteral("chunks: %1").arg(static_cast<qulonglong>(chunks_.size())));
+    denseLabel_->setText(denseStateText_);
     snapshotLabel_->setText(QStringLiteral("snapshot: %1").arg(snapshotStateText_));
     versionsLabel_->setText(QStringLiteral("format/pipeline: %1/%2")
         .arg(FORMAT_VERSION)

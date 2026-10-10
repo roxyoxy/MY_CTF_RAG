@@ -2055,3 +2055,106 @@ B 账目摆平：合并后 B 轻量走读（对 AI 复述两卡 + 纪要一条�
 含 RRF_K 查询环融合 + embedder 上电）→ A 复习 review（挂账：
 T5/T6 契约与实现）→ 演示视频。批 1 三卡全部落地，批 2（T9/
 T10/T7）待 A 示下。
+
+## [2026-10-11 03:42] AI-A
+
+【决策转记 + 竣工】A 令"推进进度 别管计划了 我今晚要出成果，我会
+一直陪你一步一步做下去"——M3 步骤④ 混合查询链双前端接线当晚执行
+完毕（AI-A 执笔，赶时间先例第 N 次；A 学习债挂账：接线代码 review
+与复习计划合一）。
+
+设计四裁定（随做随裁，A 在场陪跑）：
+
+1. 每路候选宽度 HYBRID_ROUTE_K=20（RRF 吃深列表，展示仍 TOP_K=10）
+2. 建库嵌入分片 EMBED_SLICE=32（进度可见 + GUI 切片间
+   processEvents 保响应；真工作线程挂 M4 硬化清单）
+3. 降级策略：启动嵌入失败 → 警告 + 本会话 BM25-only；查询时
+   embed_query 失败 → 该查询退回 BM25——检索永不因 Ollama 缺席罢工
+4. dense 默认模型 bge-m3（provisional：A/B 实验是步骤② 未做，
+   平局规则兜底；PARAMS 备注入册）
+
+两常量入 PARAMS v1.3（住址 = 调用方策略，main.cpp 与
+mainwindow.cpp 镜像两份——"POLICY lives in the caller" + 双前端
+的既定代价，AI-C 10-09 附注预判兑现）。
+
+施工（console + GUI 对称）：
+
+- src/main.cpp：启动上电（provider 构造零网络 → 分片嵌 145 块 →
+  build_flat_index）；查询环 search(BM25,20) + search_flat(vec,20)
+  → rrf_fuse → 打印 rrf=/bm25=/vec= 三列分数（缺路打 "-"，演示
+  价值：哪路召回一目了然）；del/重建后强制重嵌（块 id 位移，旧
+  向量会指错文本）；BM25-only 模式保持原打印格式
+- gui/mainwindow.{h,cpp}：embedChunks(reason) 统一入口（启动/重建/
+  删除三调用点）；runSearch 同款双路 + 结果表新增 Routes 列
+  （bm25+vec / bm25 / vec）；状态栏新增 dense 标签；查询栏改
+  "混合检索"
+- GUI vcxproj/filters：embedder/rrf/vector_index 三 .cpp + 三 .h
+  补注册（console 侧 10-11 凌晨已注册）
+
+实现层两坑入册（跨编译器纪律连场建功）：
+
+1. g++ 三秒首抓：embed_documents 系非 const 虚函数，帮手函数收
+   const EmbedProvider& 不合法（MSVC 同样要炸，g++ 先到一步）
+2. windows.h min/max 宏污染 std::min（C2589）——console 工程无
+   NOMINMAX 预处理定义（GUI 工程有），main.cpp windows.h 前加
+   #define NOMINMAX；M1 的 main 从未用过 std::min 所以从未炸过
+
+验证记录（全部真机，Ollama 0.35.1 在线）：
+
+- 双工程 msbuild Debug|x64 /W4 零警告零错误；run_tests 156/156
+  全绿（回归零破坏）
+- console 冒烟：快照还原 58/145 → 嵌入 145 向量 dim=1024（冷启
+  22.9s / 热启 8.0s）→ "栈溢出覆盖返回地址" top-1 双路全中
+  （bm25=11.13 vec=0.61）；"debugging a crash caused by heap
+  corruption" top-1 双路（4.99/0.56）
+- **金弹**：同义词查询"金丝雀保护与跳转地址覆盖"（金丝雀≠canary、
+  跳转地址≠return address，词法错位）——top-10 出现两条 bm25=-
+  vec=0.53 纯语义召回（web/reverse-traversal、re/caterpillar），
+  BM25 完全没召回、向量路捞回——答辩演示的教科书案例
+- GUI 冒烟：进程存活 + netstat 抓到与 11434 的分片嵌入连接现场
+  （ESTABLISHED 轮番起落 × 5 切片）+ 工作集 146MB（与 09-29 Debug
+  基准 142MB 吻合）；视觉验收留给 A F5
+
+已知边界（T9 前的诚实代价）：向量不持久化 → 每次启动重嵌（冷约
+23s 热约 8s）；GUI 嵌入跑在 UI 线程（切片间 processEvents 保
+响应），真工作线程挂 M4。
+
+待 A：手动效果验收（建议弹：同义词金弹 / 中英互查 / GUI Routes
+列 / Ollama 关掉看降级警告）；commit 待批（main.cpp + mainwindow
+三件 + GUI 双工程文件 + PARAMS/README/TASKS/纪要本条）。
+
+## [2026-10-11 04:41] AI-A
+
+【决策转记 + 竣工】A 令"那就比比"——M3 步骤② A/B 实验当晚执行
+完毕，**qwen3-embedding:0.6b 全指标胜出，DENSE_MODEL 已切**（
+"哪个好用哪个"裁决兑现；A 直觉"这个应该更好"被数据证实）。
+
+- 题集 23 条（草案 20，A 过目后执行中三修正）：三类混编（词面
+  直给 / 同义错位 / 中英互查），doc 级标签 EN/CN 孪生前缀匹配，
+  六类目全覆盖。标签逐条 grep 验证，两处翻案入册：①"堆破坏调试"
+  全语料零真值（此前冒烟 top-1 系词法碰巧，非真相关）→ 换"线性
+  同余生成器复现密码"双标签判别题（bomb-expert 与 dual-protection
+  双双用 LCG，考区分度）；②dual-protection 非 canary 系（实为
+  PE 反调试 + 三层字节变换），"双重保护绕过"原标签作废
+- 工具两件（T10 最小交付，住址 %TEMP%\acc，转正 scripts/ 待 A
+  裁）：dump_chunks.cpp（复用真 chunker，145 块与产品口径一致，
+  不重造切块逻辑；cl 命令行构建零告警）+ ab_eval.py（纯标准库；
+  qwen 查询侧用 embedder.cpp 冻结前缀原文一字不差，bge 裸喂，
+  与产品行为同款）
+- 结果（145 块纯 dense 对比，Flat 余弦 top-10）：**qwen top1
+  16/23 · hit@5 91% · hit@10 96% · MRR@10 0.777 · 嵌入 27.8s**；
+  bge 15 · 78% · 83% · 0.697 · 40.2s。质差关键：qwen 救回 bge
+  三个完全脱靶（#4 canary 英文同义 / #8 乐谱谜语 / #13 LCG 判别），
+  bge 赢的四题全是"第 1 名 vs 第 2-4 名"小差且双双重叠命中。已知
+  双脱靶一题：base64 rot13（gray-signature / Alchemy 的编码叙述
+  更典型抢走名次，非标签错，记已知难题）。备注：评测查询为批式
+  嵌入（23 条一请求），产品为单条——embedding 无跨文本注意力，
+  向量逐条等价
+- 落地五件：main.cpp DENSE_MODEL + mainwindow.cpp kDenseModel
+  双切（注释改 A/B 拍板记录）；PARAMS v1.4；README 状态块模型名
+  同步；console 重编冒烟过（快照还原 → qwen 嵌 145 块 20.1s →
+  金弹三列分数正常）；GUI 增量重编通过（LNK1168 排障：A 桌面
+  遗留 bge 旧实例占 exe，taskkill 后重建，A 侧 F5 即新版）
+- 平局规则（原定 tie→bge-m3）未触发不适用；m3-plan §8 该句随
+  本条作废。**批 2 连带变化：C 的卡缩为 T9 单卡**，T10 已由本条
+  最小交付，转正（scripts/ 入仓）或撤销随发卡时 A 裁
