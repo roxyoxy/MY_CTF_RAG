@@ -373,7 +373,7 @@ AI 参与：教练讲解 + review；经我授权AI补写注释，属一次性授
 
 开工 T2 loader，创建分支 c-loader。添加loader.cpp到解决方案。
 
-## [2026-09-27 1:12] C
+## [2026-09-27 01:12] C
 
 【竣工】T2 loader.cpp（AI-C 参与开工前契约讲解与代码 review）。
 实现对照契约逐条落地：
@@ -404,7 +404,7 @@ A 侧验收记录：编译 0 错 0 警（/W4）；LNK2019 保持 4 个符合预�
 内容对之外还必须纪要 @ 对方留痕。遗留不阻塞项：tokenizer.cpp
 缩进 Tab/空格混用，C 下次提交 loader 前顺手统一。
 
-## [2026-09-27 3:26] C
+## [2026-09-27 03:26] C
 
 修复tokenizer.cpp缩进不统一的问题,因改动极小没有单独创建任务分支，在loader中附带完成。
 ## [2026-09-27 20:30] B（补录）
@@ -1801,3 +1801,200 @@ AI 的任务简报（"不是说给他们人听的 是教会他们的 ai 怎么�
 - push：f6c849a + e018ef1 + 本 commit 上 origin/main——B/C 动线
   就绪：clone → 简报喂 AI → TASKS 批 1 区 → 卡 + 契约 → 复述 →
   分支动工
+
+## [2026-10-09 14:45] AI-C
+
+【状态同步 + 议题提请】M3 批 1 前置情况（C 侧），附一条提请 A 裁定
+的计划观察。
+
+一、状态同步。C 本地仓库已整理至与 origin/main 完全一致（98bb111，
+无 ahead/behind）；T8 卡 / include/embedder.h 第九契约 / third_party/
+三件就位，GUI 本机跑通（Qt 6.8.3 msvc2022_64 + Qt VS Tools 注册名
+QT6）。环境澄清一则备查：vcxproj 的 `<QtInstall>QT6</QtInstall>` 存
+的是**版本名而非路径**，须在 HKCU\QtProject\QtVsTools\Versions 注册
+同名项；工程文件因此零路径依赖，换机器只改本机注册表——与"仓库写
+逻辑名、本机写实际位置"同构。T8 尚未动工（第 0 步复述未答）。
+
+二、议题提请 A：**M3 链路没有独立的 rerank 阶段**。全仓检索
+"重排 / rerank / re-rank" 无命中（仅 incremental-deferral 与纪要中
+doc id 重编号的无关表述）。当前形态止于"两路召回（BM25 + Flat
+dense）→ RRF 融合 → top-k"，缺 cross-encoder 式交互重排（query 与
+候选文档拼接打分，精度高于双塔，代价是每候选一次推理）。这与标准
+RAG 流水线图上的常见环节存在差异，答辩若被追问需有说法。需 A 裁定：
+属"当前规模（145 chunks）有意省略"还是"挂 M5 的优化项"？若前者，
+建议按 incremental-deferral 先例补一条缓议书，留死因与触发条件。
+
+三、附注（澄清而非新决策）：本次逐段对齐 M1→M3 全链，确认两件事。
+① 批 1 三卡（embedder / vector_index / rrf）均为"造零件"——各自无
+调用方，混合查询链接线在 M3 第 ④ 步由 A 总装。② **接线须覆盖两个
+前端**：console 的 src/main.cpp 与 GUI 的 gui/mainwindow.cpp 各自
+独立实现了一遍策略（缓存分支 / 墓碑收获 / del 重建——mainwindow.cpp
+第 245-289 行对应 main.cpp 第 73-96 行），根源是 persist.h 明写
+"POLICY lives in the caller"，有两个调用方就有两份策略。批 1 接线时
+须两边同接，或由 A 明确裁定舍弃一边，避免"console 有语义检索、GUI
+没有"的能力分裂。另：C 按 m3-plan §6 对口 M4 LLM 后端，与 T8 同属
+"外部模型胶水"角色。教学问答内容不入册。
+
+## [2026-10-09 15:36] AI-C
+
+【提案 + 记录】C 在 T8 复述准备阶段提出一项产品层提案，另附两段
+方案讨论（均为澄清，非新决策）。提案部分提请 A 裁定。
+
+一、提案（提请 A）：**embedding 的模型与端点可否做成用户可更换的
+配置入口？** 现状澄清：embedder.h 已把 model_id / endpoint /
+timeout_seconds 全部设计为运行时字段（EmbedderConfig），契约明写
+"both are legal configurations"，代码层零硬编码——即"可换"在通路层
+已经成立。**真正的空白是"值从哪来"**：命令行参数 / 配置文件 /
+GUI 输入框尚未设计（属调用方领域，不在 embedder.h 管辖内）。若
+采纳，需明确入口形态与默认值来源。附带一条已覆盖项："用户填入
+的模型不存在"的报错无须新设计——契约条款 4 + 卡黄金表第 6 号已
+钉死（Ollama 回 404 -> throw，what() 含 404 与响应体）。
+
+二、附注 1（澄清）：C 质疑 M3 第 ② 步 A/B 实验的价值（语料仅
+58 篇 / 145 chunks，数据薄）。评估：担忧已被计划覆盖——m3-plan
+§8 风险 3 已定"平局选 bge-m3"规则，正是为"数据不足看不出差异"
+预备；且该约 20 条查询集是 M5 复用资产与答辩素材，"用户可换"与
+"选好默认"并存不替代。A/B 保留与否由 A 裁。
+
+三、联动提醒：若"用户可换模型"落地，**必须与 T9（vector_persist
+实现，批 2）配套上线**——缺 BAD_MODEL 防线时，该功能等于给用户
+一个能静默产出错误结果的开关。对 T8 本身无影响：通路层契约不变，
+实现仍是"给什么 model_id 都能正确工作"。
+
+## [2026-10-09 16:03] C
+
+完成内容梳理，开c-embedder分支，添加头文件和源文件到解决方案。
+
+## [2026-10-09 17:22] AI-C
+
+【补记】承接本日"配置入口"提案条，补一条边界说明（讨论中澄清）。
+
+**模型切换的现实边界 = 已在代码中适配的族。** embedder 的前缀策略
+只认两类：model_id 以 "qwen3" 开头 -> 查询侧加 instruction 前缀、
+policy 返回 "qwen3-instruct-v1"；其余 -> 两侧不加、policy 返回
+"none"。由此：① 族内任意模型（bge-* 系、qwen3-embedding-* 系等）
+可自由切换，改配置即可，零代码改动；② 引入需要新前缀模板的新族
+= 改代码 + 改契约（policy id 属冻结词汇）+ 旧 vector.bin 作废重建。
+
+根因不是实现缺陷，而是问题的本质：embedding 模型没有标准化的输入
+接口，各模型对"怎么喂"的要求不同（前缀 / 指令模板 / 最大输入长度）。
+"支持换模型"在工程上等于"支持换适配器"，provider 抽象的价值
+正是把适配集中在一处。另有硬约束：换模型必然重建向量库（公理③，
+10-05 实测跨模型同句余弦 ≈ -0.02），与适配好坏无关。
+
+【若做切换 UI】须在界面内**明示可选模型清单**（即已适配的族），
+不给自由输入框——自由输入会落入"未适配族静默降效"的陷阱（掉进
+else 分支：不加前缀、不报错，结果可用但不对）。清单建议登记入
+PARAMS.md，与 A/B 拍板后的默认值同处。
+
+## [2026-10-10 17:16] C
+
+【竣工】T8 embedder.cpp（AI-C 参与复述闸门、代码 review 与测试）。
+实现对照契约逐条落地：
+- 段 2 前缀策略：model_id 以 "qwen3" 开头 -> 查询侧加 instruction
+  前缀、policy 返回 "qwen3-instruct-v1"；其余两侧不加、policy
+  返回 "none"（成对冻结，编译期字面量，一字不许运行时拼）
+- 段 3 构造函数：endpoint / timeout 空值落默认、policy 一次算好
+  存住，零网络（条款 6）；model_id 为空直接抛 runtime_error
+- 段 4/5 共用私有帮手 request_embeddings（HTTP 通路只写一遍）：
+  空批次提前返空（条款 2 零网络）；全部失败分支抛 runtime_error
+  带人话；响应条数与请求条数不符即判畸形（无部分结果）；逐条校验
+  维度一致与数值有限性；norm == 0 判畸形；出口统一归一化（条款 3）
+- 段 6 工厂一行
+- 顺序保证：数组天然保序 + 对角余弦用例钉死
+自测：黄金表 7/7 全绿、20 断言 0 失败（离线三题 + 冒烟四题，
+Ollama 双模型实弹）；竣工字节 no BOM / nonascii: 0；MSVC /W4 零警告。
+AI-C review 认可三处判断：抽私有帮手、expected_dimension == 0 哨兵
+顺序正确（空向量先抛，0 不可能与合法维度撞车）、catch(json::exception)
+不误捕自身 runtime_error（两者无继承关系，具体错误原因不被二次包装）。
+
+## [2026-10-11 02:18] AI-A
+
+【决策转记】A 裁"不让 C 自己来了，我们替她做收尾"——T8 收尾在
+c-embedder 分支执行完毕（本条即留痕），merge 待 A 令。
+
+A 侧验收记录（全部独立复跑，未采信自报）：
+
+- 编译双绿：MSVC cl /W4 /utf-8 零警告（ws2_32 无需手工挂——
+  httplib.h 内 `#pragma comment(lib, "ws2_32.lib")` 自动链接，
+  另带 crypt32）+ WSL g++ -Wall -Wextra 零告警
+- 独立测试（非她自测）：**17/17 全绿**——离线：拒连 throw 文案含
+  unreachable + endpoint / 空批返空零网络 / FakeProvider 多态三查 /
+  空 model_id 构造期拒 / 双 policy id（顺带证明构造零网络）；真机
+  Ollama：bge-m3 1024 维单位范数 / 批量三条保序（对角余弦胜出）/
+  未知模型 404 / qwen3 通路 1024 维
+- 契约七条逐条落地；vcxproj/filters 注册干净（C 自己登记，超出
+  M1 先例的 A 侧合并时代劳，好）
+- 质量亮点入册：norm double 累加防 1024 维精度损失 / isfinite 拦
+  inf-nan / 维度一致性哨兵 / catch 范围只罩 JSON 解析段不误吞自身
+  runtime_error / 空 model_id fail-fast
+
+唯一必改项（本次收尾对象）：
+
+- **BOM 未剥**：src/embedder.cpp 头 3 字节 EF BB BF，且是全文件仅有的
+  非 ASCII 字节（6537B）。上条竣工自报"no BOM / nonascii: 0"两项均与
+  事实不符（BOM 在；BOM 本身就是 3 个非 ASCII 字节）——自检命令要么
+  没跑要么跑错对象。危害定级：MSVC/g++ 均容忍 BOM，今日技术危害为零；
+  违反的是宪法交付源码纯 ASCII 无 BOM 纪律（GBK 事故后的根治规矩）
+  与卡清理流程（竣工 = 删卡注释 + 剥 BOM，留 BOM = 清理做了一半）。
+  方法论入册：自报失实由 A 侧独立复跑抓获，验收制度起效；此为教学
+  案例，3 字节本身是小事
+- 修复执行：BOM 已剥（6537 -> 6534B），暂存 blob 终检 no BOM +
+  nonascii 0 + 行尾 LF 与原提交逐字节一致（autocrlf 往返已核实，
+  净变更 = 且仅 = 头部 3 字节）
+
+待 A 裁定（不阻塞收尾）：
+
+1. AI-C 四项提案：rerank 缺位（AI-A 建议有意省略 + 缓议书，145
+   chunks 规模 cross-encoder 得不偿失）/ 模型端点用户可配入口
+   （建议挂 M4，须与 T9 BAD_MODEL 配套）/ A-B 实验价值（建议保留，
+   平局规则兜底）/ console+GUI 双前端接线（建议两边同接，GUI 是
+   答辩演示面）
+2. merge 时机（验收障碍已清）+ GitHub PR 状态（本机无 gh，A 网页查）
+3. B 两卡（b-vector / b-rrf）尚无动静
+
+## [2026-10-11 02:44] AI-A
+
+【决策转记】A 令"按照你的建议来 然后合并 然后测试 最后commit"——
+四项 AI-C 提案依 AI-A 建议裁定，T8 合并 + 测试 + 一次 commit 收账。
+
+**四项裁定**：
+
+1. **rerank 缺位** → 当前规模有意省略 + 缓议书：
+   docs/design/rerank-deferral.md 落位（145 chunks 下 cross-encoder
+   秒级延迟换边缘排序收益的量级账 + M5 nDCG 复议触发条件 +
+   复议方向指路，incremental-deferral 同款格式）
+2. **模型/端点用户可配入口** → 挂 M4，与 LLM 后端 provider 配置
+   一并设计；硬依赖 = T9 vector_persist 的 BAD_MODEL 防线先行，
+   否则是静默产出错误结果的开关（AI-C 指出的依赖成立）
+3. **A/B 实验保留**：数据薄由平局选 bge-m3 规则兜底；~20 条查询集
+   是 M5 评测复用资产 + 答辩素材
+4. **双前端接线**：console + GUI 两边同接（步骤④ 混合查询链时）；
+   GUI vcxproj 届时补注册 embedder.cpp——GUI 是答辩演示面，语义
+   检索缺席 GUI = 能力分裂
+
+**T8 合并执行**（手动 CI：merge --no-ff，测试绿后随本条一次 commit）：
+
+- 合并内容：embedder.cpp（BOM 已剥 6534B）+ vcxproj/filters 注册
+  （C 自登记）+ 她的六条纪要 + 02:18 收尾条目
+- **test_embedder 转正**（tests/ 第八单元，AI-A 执笔 A 审，09-28
+  02:32 先例）：离线 12 条——拒连 throw 文案三查 / 空批返空 /
+  构造零网络下身份四查（model_id 透传、qwen3-instruct-v1、none、
+  空 model_id 构造期拒）/ FakeProvider 多态四查（基类指针消费、
+  query、保序、身份透传）。真机冒烟（dim/单位范数/404/批量保序）
+  留在人工验收步不进 CI——测试不依赖 Ollama 在线
+- run_tests.bat 挂第八单元（链接 embedder.cpp；ws2_32 走 httplib
+  pragma 自动链，无需手工挂库）
+- **验收三连全绿**：run_tests 126/126（114 + 12 新）；msbuild
+  Debug|x64 /W4 零警告零错误（embedder.cpp 首次进工程编译即净，
+  链接通过 = 工程内 pragma 自动链坐实）；冒烟 EXIT=0——快照还原
+  58 docs / 145 chunks，libc top-1 pwn/notepad.md，行为与合并前
+  一致（embedder 无消费者，零回归符合预期）
+- 字节自检：test_embedder.cpp 4490B 纯 ASCII 无 BOM；run_tests.bat
+  维持纯 ASCII；rerank-deferral.md UTF-8 中文（docs 规范）
+- README 同步 4 处（契约十三份 / src 行 / tests 126 / 状态块 +
+  T8 合并记）；TASKS v3.8
+
+待 A：push 示下（本 commit 含 merge + 转正 + 缓议书 + 文档 3 件）；
+GitHub 网页确认 C 是否开了 PR（本机无 gh）；B 两卡（T5/T6）催办
+与否由 A 定。

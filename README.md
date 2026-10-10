@@ -89,7 +89,7 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 └── MY_CTF_RAG/              ← 代码区（VS 解决方案）
     ├── MY_CTF_RAG.sln
     ├── MY_CTF_RAG.vcxproj
-    ├── include/             ← 头文件：模块对外的"契约"（八份，M2 +atom_scan/persist/corpus_diff）
+    ├── include/             ← 头文件：模块对外的"契约"（十三份：M1 五 + M2 三 + M3 五）
     │   ├── type.h           ← 基础数据结构（Document/Chunk/SearchResult）
     │   ├── loader.h         ← 搬进来：data 目录 → vector<Document>
     │   ├── corpus_diff.h    ← 对账本：两代语料的 added/removed/edited + 墓碑继承（M2③ 新增）
@@ -98,9 +98,9 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
     │   ├── indexer.h        ← 账房+查账台：倒排索引 + BM25
     │   ├── atom_scan.h      ← 词法单一事实源：Atom 扫描（M2① 新增）
     │   └── persist.h        ← 索引快照：save/validate/load（M2② 新增）
-    ├── src/                 ← 实现：对契约的"履约"（八份 .cpp + main.cpp 总装）
+    ├── src/                 ← 实现：对契约的"履约"（八份已实现 + T5/T6 卡待译 + main.cpp 总装）
     ├── data/                ← 语料，按 category 分目录（58 篇：npusec 24 + ctf-wiki 34，含 mobile 类目）
-    ├── tests/               ← 回归测试（114 条全绿）+ run_tests.bat 一键跑
+    ├── tests/               ← 回归测试（126 条全绿）+ run_tests.bat 一键跑
     └── gui/                 ← Qt GUI 源码三件（MY_CTF_RAG_GUI 工程编译，F5 直达）
 ```
 
@@ -116,8 +116,10 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 
 ## 4. 快速开始
 
-**当前状态**：**M2 全线收官（2026-09-29），M3 路线定档**。八份
-契约 + 114 条回归测试全绿（/W4），console + Qt GUI 双前端。
+**当前状态**：**M2 全线收官（2026-09-29），M3 施工中**。十三份
+契约 + 126 条回归测试全绿（/W4），console + Qt GUI 双前端；
+M3 批 1 首件 T8（embedder，Ollama HTTP 通道）已验收合并
+（2026-10-11）。
 启动流程：validate
 快照 -> 命中即 load（`index.bin` 缓存，损坏自动降级重建）-> 未命中
 fresh build + save；**语料变动（CORPUS_CHANGED）时收获旧快照：

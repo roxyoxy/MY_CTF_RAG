@@ -327,6 +327,14 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
 | T5 | `src/vector_index.cpp` | vector_index.h 第十 | B | 黄金 10 条全手算（二进制精确值）；tie-break 双例钉死；9 号钉"不二次归一" |
 | T6 | `src/rrf.cpp` | rrf.h 第十一 | B | 黄金 6 条；双 tie 用例一次考透；重复 id 首现计次 |
 
+- **T8 ✅ 验收合并 2026-10-11**（C · c-embedder 分支）：A 侧独立
+  复跑 17/17（含 Ollama 真机双模型冒烟）+ 双编译器 /W4 零警告；
+  唯一违规 BOM 未剥由 A 侧代修收尾（6534B 纯 ASCII，自报失实
+  更正入册）；test_embedder 转正离线 12 条（套件 114 → 126）；
+  AI-C 四项提案裁定见纪要 10-11（rerank 缓议书 docs/design/
+  rerank-deferral.md / 配置入口挂 M4 配 T9 / A-B 保留 /
+  双前端同接）。批 1 剩 T5 / T6 待 B
+
 - **先把 `docs/m3-batch1-briefing.md` 喂给你的 AI**（写给协作 AI
   的任务简报：阅读地图 / 复述评分口径 / 硬红线 / FAQ——不是给人
   看的说明书，是教 AI 怎么带这张卡）
@@ -343,6 +351,13 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
   HNSW 三旋钮）
 
 ## 6. 版本
+- v3.8 · 2026-10-11 · **T8 验收合并 + 四项提案裁定**：BOM 收尾
+  （A 裁 A 侧代修 + 纪要更正自报失实）后 merge --no-ff 入 main；
+  test_embedder 转正（离线 12 条，套件 114 → 126）；msbuild /W4
+  零警告 + 冒烟零回归；AI-C 四提案裁定入册（rerank 缓议书
+  docs/design/rerank-deferral.md / 配置入口挂 M4 配 T9 BAD_MODEL /
+  A-B 实验保留 / console+GUI 双前端同接）；README 契约计数勘误
+  （八 → 十三，M3 五契约早已落位未同步）。批 1 剩 B 两卡（T5/T6）
 - v3.7 · 2026-10-07 · **批 1 发卡就绪 + push**：docs/
   m3-batch1-briefing.md 新增（写给 B/C 协作 AI 的任务简报——
   仓库地形 / 角色红线 / 阅读地图 / 复述 rubric / 硬红线 / FAQ）；
