@@ -318,6 +318,20 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       验收 A 待做——产品能力就此成型）
       ⑤ vector.bin 快照（C·T9；身份四件套 + 按 doc 组织的
       diff 驱动增量复用，index.bin 不动）
+      （⑤ **2026-10-11 竣工，A 侧自做**（04:54 收摊裁定后首件，
+      AI-A 执笔 A 审甲案）：src/vector_persist.cpp 实现契约十三条 +
+      双前端接线（main/mainwindow 对账帮手，POLICY lives in caller）
+      + test_vector_persist 28 条转正（套件 156 → 184，三刀口全钉死：
+      model 刀 BAD_MODEL / dimension 刀结构层 BAD_FORMAT / 单向量
+      浮点刀不可检出按设计钉住防"好心修复"）；契约微增一处：
+      vector_content_hash 导出帮手（防 main/GUI 各养 FNV 副本漂移）
+      + expected.dimension=0 哨兵（启动时维度问输出不问 provider，
+      embedder 条款 5）。冒烟五连：冷嵌 145/20.0s → 全复用
+      145/0.01s → 单文档编辑 144+1/0.47s → 还原重嵌 1 → 再启全
+      复用；del 不再全量重嵌（幸存文档全复用，零网络）。
+      Ollama 缺席 + 快照有效 = dense 照常上电（查询侧才降级）。
+      隐藏福利入册；同日 GUI F5 人工验收通过——A 亲测两启全复用
+      0.0 秒秒上、手动重建向量缓存零触碰，纪要 11:52 代录）
       ⑥ hnsw.h 第十二契约 + 自研 HNSW（B·T7；**Go/No-Go
       评审点**：算法核心 + M5 实验对象，可顺延不阻塞）
 - [ ] M4：本地 LLM 后端（Ollama 原型 → llama.cpp 交付；M3 的
@@ -362,11 +376,26 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
   include 不许改，消费者唯一 embedder.cpp
 - 批 2（T9 vector_persist / T10 A/B 工具 / T7 hnsw-GoNoGo）待
   批 1 验收后下发
+  （**10-11 04:54 改裁：任务卡制度收摊**——A 令"不给 B C 了，
+  剩下的我们一人搞定"，M3-M5 剩余工程全部 A + AI-A 自做。
+  T9 归 A 侧（原 C 免卡）；T7 归 A 侧（02:46"归 B 手写"承诺
+  作废，B 账目定格 = 周三 PPT）；T10 已由 10-11 04:41 A/B 实验
+  最小交付闭环。纪要 04:54）
+  （T10 转正落地 10-11：dump_chunks.cpp + ab_eval.py（23 题集
+  内嵌）入仓 scripts/，随 T9 commit；%TEMP%\acc scratch 使命
+  结束）
 - vcxproj/filters 登记随批 1 验收时做（M1 09-27 合并先例）
 - 新契约参数已入 PARAMS.md（v1.2：EMBEDDER 两项 / RRF_K /
   HNSW 三旋钮）
 
 ## 6. 版本
+- v4.2 · 2026-10-11 · **步骤⑤ T9 vector.bin 竣工（A 侧自做首件）**：
+  vector_persist.cpp + 双前端对账接线 + test_vector_persist 28 条
+  （套件 156 → 184）；契约微增 vector_content_hash 导出帮手 +
+  expected.dimension=0 哨兵；冒烟五连（全复用 0.01s / 单编辑
+  0.47s / del 零重嵌）；T10 工具转正 scripts/；GUI F5 人工验收
+  通过（纪要 11:52）。M3 六步只剩
+  ⑥（T7 HNSW，Go/No-Go 可滑）
 - v4.1 · 2026-10-11 · **步骤② A/B 实验竣工**：23 题实测 qwen3-
   embedding:0.6b 全指标胜出，DENSE_MODEL 双前端已切（PARAMS v1.4）；
   题集标签 grep 验证翻案两处；工具两件 = T10 最小交付；C 批 2 卡

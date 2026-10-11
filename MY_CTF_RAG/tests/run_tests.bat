@@ -30,6 +30,8 @@ cl %CLFLAGS% tests\test_rrf.cpp src\rrf.cpp /Fe:tests\test_rrf.exe 1>tests\_b_rr
 if errorlevel 1 goto failrrf
 cl %CLFLAGS% tests\test_vector_index.cpp src\vector_index.cpp /Fe:tests\test_vector_index.exe 1>tests\_b_vec.txt 2>&1
 if errorlevel 1 goto failvec
+cl %CLFLAGS% tests\test_vector_persist.cpp src\vector_persist.cpp /Fe:tests\test_vector_persist.exe 1>tests\_b_vper.txt 2>&1
+if errorlevel 1 goto failvper
 
 tests\test_atom_scan.exe   || exit /b 1
 tests\test_tokenizer.exe || exit /b 1
@@ -41,6 +43,7 @@ tests\test_corpus_diff.exe || exit /b 1
 tests\test_embedder.exe || exit /b 1
 tests\test_rrf.exe || exit /b 1
 tests\test_vector_index.exe || exit /b 1
+tests\test_vector_persist.exe || exit /b 1
 echo ALL_TESTS_GREEN
 del tests\_b_*.txt 1>nul 2>nul
 exit /b 0
@@ -74,4 +77,7 @@ type tests\_b_rrf.txt
 exit /b 1
 :failvec
 type tests\_b_vec.txt
+exit /b 1
+:failvper
+type tests\_b_vper.txt
 exit /b 1

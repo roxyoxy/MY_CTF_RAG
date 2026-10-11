@@ -10,6 +10,7 @@
 #include <sstream>
 #include <string>
 #include <unordered_map>
+#include <utility>
 
 #ifdef _WIN32
 #define NOMINMAX  // keep windows.h min/max macros out of std::min
@@ -24,6 +25,7 @@
 #include "persist.h"
 #include "embedder.h"
 #include "vector_index.h"
+#include "vector_persist.h"
 #include "rrf.h"
 
 // Caller-side wiring constants for the hybrid query chain (M3 step 4),
@@ -73,34 +75,124 @@ static void harvest_tombstones(const std::string& snapshot,
     std::cout << "\n";
 }
 
-// M3 step 4: embed every chunk through the provider, sliced so the
-// console can report progress and no single HTTP request carries the
-// whole corpus. Empty chunks -> empty result, zero network (clause 2).
-static std::vector<std::vector<float>>
-embed_all_chunks(EmbedProvider& provider,
-                 const std::vector<Chunk>& chunks) {
-    std::vector<std::string> texts;
-    texts.reserve(chunks.size());
-    for (const Chunk& c : chunks)
-        texts.push_back(c.text);
-
-    std::vector<std::vector<float>> vectors;
-    vectors.reserve(texts.size());
-    const std::size_t total = texts.size();
-    for (std::size_t begin = 0; begin < total; begin += EMBED_SLICE) {
-        const std::size_t end = std::min(begin + EMBED_SLICE, total);
-        const std::vector<std::string> slice(
-            texts.begin() + static_cast<std::ptrdiff_t>(begin),
-            texts.begin() + static_cast<std::ptrdiff_t>(end));
-        const std::vector<std::vector<float>> part =
-            provider.embed_documents(slice);
-        vectors.insert(vectors.end(), part.begin(), part.end());
-        std::cout << "  embedding chunks " << end << "/" << total
-                  << std::flush << "\r";
+// Human-readable name for a vector snapshot status. The console only
+// prints it; the caller action is always the same (fall back to
+// embedding through the provider).
+static const char* vstatus_name(VectorSnapshotStatus st) {
+    switch (st) {
+    case VectorSnapshotStatus::OK:         return "ok";
+    case VectorSnapshotStatus::NOT_FOUND:  return "not found (first run)";
+    case VectorSnapshotStatus::IO_ERROR:   return "io error";
+    case VectorSnapshotStatus::BAD_MAGIC:  return "bad magic";
+    case VectorSnapshotStatus::BAD_FORMAT: return "corrupt";
+    case VectorSnapshotStatus::BAD_MODEL:  return "built by a different model";
     }
-    if (total > 0)
+    return "unknown";
+}
+
+// Chunk-order vector table assembled from the per-document records
+// (chunker emits chunks in document order, so concatenation restores
+// chunk ids 0..n-1).
+static std::vector<std::vector<float>>
+flatten_doc_vectors(const std::vector<DocVectors>& docs) {
+    std::vector<std::vector<float>> all;
+    for (const DocVectors& dv : docs)
+        all.insert(all.end(), dv.vectors.begin(), dv.vectors.end());
+    return all;
+}
+
+// M3 step 5 (T9): per-document vector table with snapshot reuse.
+// A document's vectors are reused when path + content hash + chunk
+// count all match the snapshot -- the chunker is deterministic, so an
+// unchanged document always re-cuts into the same chunks. Everything
+// else re-embeds through the provider, sliced for progress
+// (EMBED_SLICE). Reuse policy lives here in the caller, per the
+// vector_persist contract (facts vs policy, the corpus_diff rule).
+static std::vector<DocVectors>
+build_doc_vectors(EmbedProvider& provider,
+                  const std::vector<Document>& docs,
+                  const std::vector<Chunk>& chunks,
+                  const std::string& snapshot,
+                  const char* when) {
+    std::vector<DocVectors> cached;
+    const VectorIdentity expected{provider.model_id(),
+                                  provider.embedding_policy(), 0};
+    const VectorSnapshotStatus st =
+        load_vector_snapshot(snapshot, expected, cached);
+    if (st == VectorSnapshotStatus::BAD_MODEL)
+        std::cout << "vector snapshot " << vstatus_name(st)
+                  << ", re-embedding everything.\n";
+    else if (st != VectorSnapshotStatus::OK &&
+             st != VectorSnapshotStatus::NOT_FOUND)
+        std::cout << "vector snapshot unusable ("
+                  << vstatus_name(st) << "), re-embedding.\n";
+
+    std::unordered_map<std::string, const DocVectors*> old;
+    for (const DocVectors& d : cached)
+        old.emplace(d.path, &d);
+
+    // chunk indices grouped per document
+    std::vector<std::vector<std::size_t>> per_doc(docs.size());
+    for (std::size_t i = 0; i < chunks.size(); ++i)
+        per_doc[static_cast<std::size_t>(
+            chunks[i].document_id)].push_back(i);
+
+    std::vector<DocVectors> out;
+    out.reserve(docs.size());
+    std::vector<std::string> to_embed;  // texts in chunk order
+    std::vector<std::pair<std::size_t, std::size_t>> pending;  // (out, n)
+    std::size_t reused = 0;
+    for (const Document& doc : docs) {
+        if (doc.deleted)
+            continue;  // tombstones never reach the vector side
+        DocVectors rec;
+        rec.path = doc.path;
+        rec.content_hash = vector_content_hash(doc.content);
+        const std::size_t n =
+            per_doc[static_cast<std::size_t>(doc.id)].size();
+        const auto it = old.find(doc.path);
+        if (it != old.end() &&
+            it->second->content_hash == rec.content_hash &&
+            it->second->vectors.size() == n) {
+            rec.vectors = it->second->vectors;
+            reused += n;
+        } else {
+            for (std::size_t ci : per_doc[static_cast<std::size_t>(doc.id)])
+                to_embed.push_back(chunks[ci].text);
+            pending.emplace_back(out.size(), n);
+        }
+        out.push_back(std::move(rec));
+    }
+
+    if (!to_embed.empty()) {
+        std::cout << "embedding " << to_embed.size() << " chunk(s) ("
+                  << when << ", " << provider.model_id()
+                  << " via local Ollama)...\n";
+        std::vector<std::vector<float>> embeds;
+        embeds.reserve(to_embed.size());
+        const std::size_t total = to_embed.size();
+        for (std::size_t begin = 0; begin < total; begin += EMBED_SLICE) {
+            const std::size_t end = std::min(begin + EMBED_SLICE, total);
+            const std::vector<std::string> slice(
+                to_embed.begin() + static_cast<std::ptrdiff_t>(begin),
+                to_embed.begin() + static_cast<std::ptrdiff_t>(end));
+            const std::vector<std::vector<float>> part =
+                provider.embed_documents(slice);
+            embeds.insert(embeds.end(), part.begin(), part.end());
+            std::cout << "  embedding chunks " << end << "/" << total
+                      << std::flush << "\r";
+        }
         std::cout << "\n";
-    return vectors;
+        std::size_t k = 0;
+        for (const auto& p : pending) {
+            DocVectors& rec = out[p.first];
+            for (std::size_t j = 0; j < p.second; ++j)
+                rec.vectors.push_back(embeds[k++]);
+        }
+    }
+    std::cout << "dense vectors: " << reused << " reused from snapshot, "
+              << to_embed.size() << " embedded (" << when << ")\n";
+    return out;
 }
 
 static std::unordered_map<int, float>
@@ -173,21 +265,31 @@ int main() {
         << " documents, " << chunks.size()
         << " chunks.\n";
 
-    // M3 step 4: dense route. Vectors are not persisted until T9
-    // (vector.bin), so every start re-embeds the corpus. Provider
-    // construction performs no network I/O (embedder.h clause 6); the
-    // first embed call is the health check. Failure degrades this
-    // session to BM25-only -- queries never block on the service.
+    // M3 steps 4 + 5 (T9): dense route with vector.bin caching.
+    // An unchanged corpus comes up with zero network (the snapshot
+    // loads before any provider call); changed documents re-embed; a
+    // snapshot from a different model reports BAD_MODEL and the whole
+    // corpus re-embeds. Provider construction performs no network I/O
+    // (embedder.h clause 6); the first real embed call is the health
+    // check. Failure degrades this session to BM25-only.
     std::unique_ptr<EmbedProvider> provider =
         make_ollama_provider(EmbedderConfig{"", DENSE_MODEL, 0});
     FlatIndex dense_index;
     bool dense_ready = false;
+    const std::string vector_snapshot = "vector.bin";
     if (!chunks.empty()) {
         const auto t0 = std::chrono::steady_clock::now();
-        std::cout << "embedding corpus (" << DENSE_MODEL
-                  << " via local Ollama)...\n";
         try {
-            dense_index = build_flat_index(embed_all_chunks(*provider, chunks));
+            const std::vector<DocVectors> doc_vectors =
+                build_doc_vectors(*provider, docs, chunks,
+                                  vector_snapshot, "startup");
+            dense_index = build_flat_index(flatten_doc_vectors(doc_vectors));
+            if (!vector_save(vector_snapshot,
+                    VectorIdentity{provider->model_id(),
+                                   provider->embedding_policy(),
+                                   dense_index.dimension},
+                    doc_vectors))
+                std::cerr << "Warning: vector snapshot save failed.\n";
             const double secs = std::chrono::duration<double>(
                 std::chrono::steady_clock::now() - t0).count();
             dense_ready = true;
@@ -254,12 +356,23 @@ int main() {
             std::cout << "deleted " << docs[id].path
                 << " (" << chunks.size() << " chunks remain)\n";
             // Re-chunking shifts chunk ids, so the dense side must be
-            // rebuilt too -- stale vectors would point at wrong text.
+            // rebuilt too -- but the surviving documents hit the
+            // snapshot (path + hash match), so a delete normally
+            // costs zero re-embedding.
             try {
+                const std::vector<DocVectors> doc_vectors =
+                    build_doc_vectors(*provider, docs, chunks,
+                                      vector_snapshot, "after delete");
                 dense_index =
-                    build_flat_index(embed_all_chunks(*provider, chunks));
+                    build_flat_index(flatten_doc_vectors(doc_vectors));
+                if (!vector_save(vector_snapshot,
+                        VectorIdentity{provider->model_id(),
+                                       provider->embedding_policy(),
+                                       dense_index.dimension},
+                        doc_vectors))
+                    std::cerr << "Warning: vector snapshot save failed.\n";
                 dense_ready = true;
-                std::cout << "dense route re-embedded: "
+                std::cout << "dense route rebuilt: "
                           << dense_index.vectors.size() << " vectors\n";
             } catch (const std::exception& e) {
                 dense_index = FlatIndex{};

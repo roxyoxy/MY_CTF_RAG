@@ -4,6 +4,7 @@
 #include <chrono>
 #include <exception>
 #include <limits>
+#include <unordered_map>
 #include <unordered_set>
 #include <utility>
 
@@ -41,6 +42,7 @@
 #include "persist.h"
 #include "rrf.h"
 #include "vector_index.h"
+#include "vector_persist.h"
 
 namespace {
 constexpr int kRoleItemKind = Qt::UserRole;
@@ -334,10 +336,13 @@ void MainWindow::loadCorpusAndIndex(const QString& dataDir) {
     }
 }
 
-// M3 step 4: embed every chunk through the local Ollama provider,
-// sliced so the UI can pump events between requests (the embed itself
-// still runs on the GUI thread tonight; a worker thread is an M4
-// hardening item). Any failure degrades to BM25-only, never blocks.
+// M3 steps 4 + 5 (T9): build the dense side through the local Ollama
+// provider with vector.bin caching. A document whose path + content
+// hash + chunk count all match the snapshot reuses its vectors, so an
+// unchanged corpus needs zero network and comes up instantly; a
+// snapshot from a different model re-embeds everything. The embed
+// still runs on the GUI thread (a worker thread is an M4 hardening
+// item). Any failure degrades to BM25-only, never blocks.
 void MainWindow::embedChunks(const QString& reason) {
     denseIndex_ = FlatIndex{};
     denseReady_ = false;
@@ -352,29 +357,98 @@ void MainWindow::embedChunks(const QString& reason) {
         provider_ = make_ollama_provider(
             EmbedderConfig{std::string(), std::string(kDenseModel), 0});
 
-    appendLog(QStringLiteral("%1: 正在嵌入 %2 个块（%3，本地 Ollama）...")
-        .arg(reason)
-        .arg(static_cast<qulonglong>(chunks_.size()))
-        .arg(QString::fromUtf8(kDenseModel)));
-    QApplication::processEvents();
-
     const auto t0 = std::chrono::steady_clock::now();
     try {
-        std::vector<std::vector<float>> vectors;
-        vectors.reserve(chunks_.size());
-        const size_t total = chunks_.size();
-        for (size_t begin = 0; begin < total; begin += kEmbedSlice) {
-            const size_t end = std::min(begin + kEmbedSlice, total);
-            std::vector<std::string> texts;
-            texts.reserve(end - begin);
-            for (size_t i = begin; i < end; ++i)
-                texts.push_back(chunks_[i].text);
-            const std::vector<std::vector<float>> part =
-                provider_->embed_documents(texts);
-            vectors.insert(vectors.end(), part.begin(), part.end());
-            QApplication::processEvents();
+        std::vector<DocVectors> cached;
+        const VectorIdentity expected{provider_->model_id(),
+                                      provider_->embedding_policy(), 0};
+        const VectorSnapshotStatus st = load_vector_snapshot(
+            vectorSnapshotPath_, expected, cached);
+        if (st == VectorSnapshotStatus::BAD_MODEL) {
+            appendLog(QStringLiteral("%1: 向量快照是别的模型建的，全量重嵌。")
+                .arg(reason));
+        } else if (st != VectorSnapshotStatus::OK &&
+                   st != VectorSnapshotStatus::NOT_FOUND) {
+            appendLog(QStringLiteral("%1: 向量快照不可用，全量重嵌。")
+                .arg(reason));
         }
-        denseIndex_ = build_flat_index(vectors);
+
+        std::unordered_map<std::string, const DocVectors*> old;
+        for (const DocVectors& d : cached)
+            old.emplace(d.path, &d);
+
+        std::vector<std::vector<size_t>> perDoc(docs_.size());
+        for (size_t i = 0; i < chunks_.size(); ++i)
+            perDoc[static_cast<size_t>(
+                chunks_[i].document_id)].push_back(i);
+
+        std::vector<DocVectors> records;
+        records.reserve(docs_.size());
+        std::vector<std::string> toEmbed;
+        std::vector<std::pair<size_t, size_t>> pending;
+        size_t reused = 0;
+        for (const Document& doc : docs_) {
+            if (doc.deleted)
+                continue;
+            DocVectors rec;
+            rec.path = doc.path;
+            rec.content_hash = vector_content_hash(doc.content);
+            const size_t n = perDoc[static_cast<size_t>(doc.id)].size();
+            const auto it = old.find(doc.path);
+            if (it != old.end() &&
+                it->second->content_hash == rec.content_hash &&
+                it->second->vectors.size() == n) {
+                rec.vectors = it->second->vectors;
+                reused += n;
+            } else {
+                for (size_t ci : perDoc[static_cast<size_t>(doc.id)])
+                    toEmbed.push_back(chunks_[ci].text);
+                pending.emplace_back(records.size(), n);
+            }
+            records.push_back(std::move(rec));
+        }
+
+        if (!toEmbed.empty()) {
+            appendLog(QStringLiteral("%1: 正在嵌入 %2 个块（%3，本地 Ollama）...")
+                .arg(reason)
+                .arg(static_cast<qulonglong>(toEmbed.size()))
+                .arg(QString::fromUtf8(kDenseModel)));
+            QApplication::processEvents();
+
+            std::vector<std::vector<float>> embeds;
+            embeds.reserve(toEmbed.size());
+            const size_t total = toEmbed.size();
+            for (size_t begin = 0; begin < total; begin += kEmbedSlice) {
+                const size_t end = std::min(begin + kEmbedSlice, total);
+                std::vector<std::string> texts;
+                texts.reserve(end - begin);
+                for (size_t i = begin; i < end; ++i)
+                    texts.push_back(toEmbed[i]);
+                const std::vector<std::vector<float>> part =
+                    provider_->embed_documents(texts);
+                embeds.insert(embeds.end(), part.begin(), part.end());
+                QApplication::processEvents();
+            }
+            size_t k = 0;
+            for (const auto& p : pending) {
+                DocVectors& rec = records[p.first];
+                for (size_t j = 0; j < p.second; ++j)
+                    rec.vectors.push_back(embeds[k++]);
+            }
+        }
+
+        std::vector<std::vector<float>> all;
+        for (const DocVectors& dv : records)
+            all.insert(all.end(), dv.vectors.begin(), dv.vectors.end());
+        denseIndex_ = build_flat_index(all);
+        if (!vector_save(vectorSnapshotPath_,
+                VectorIdentity{provider_->model_id(),
+                               provider_->embedding_policy(),
+                               denseIndex_.dimension},
+                records)) {
+            appendLog(QStringLiteral("%1: 向量快照保存失败（内存向量仍可用）。")
+                .arg(reason));
+        }
         denseReady_ = true;
         const double secs = std::chrono::duration<double>(
             std::chrono::steady_clock::now() - t0).count();
@@ -383,10 +457,12 @@ void MainWindow::embedChunks(const QString& reason) {
             .arg(static_cast<qulonglong>(denseIndex_.vectors.size()))
             .arg(denseIndex_.dimension)
             .arg(secs, 0, 'f', 1);
-        appendLog(QStringLiteral("%1: 语义路就绪 -- %2 个向量，dim %3（%4 秒）。")
+        appendLog(QStringLiteral(
+            "%1: 语义路就绪 -- %2 复用 / %3 新嵌，共 %4 向量（%5 秒）。")
             .arg(reason)
+            .arg(static_cast<qulonglong>(reused))
+            .arg(static_cast<qulonglong>(toEmbed.size()))
             .arg(static_cast<qulonglong>(denseIndex_.vectors.size()))
-            .arg(denseIndex_.dimension)
             .arg(secs, 0, 'f', 1));
     } catch (const std::exception& e) {
         denseIndex_ = FlatIndex{};

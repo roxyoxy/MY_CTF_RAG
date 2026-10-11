@@ -48,6 +48,9 @@
     <ClInclude Include="include\vector_index.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\vector_persist.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\loader.cpp">
@@ -81,6 +84,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\vector_index.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vector_persist.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

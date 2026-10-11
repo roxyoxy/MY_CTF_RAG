@@ -104,6 +104,7 @@
     <ClCompile Include="..\src\embedder.cpp" />
     <ClCompile Include="..\src\rrf.cpp" />
     <ClCompile Include="..\src\vector_index.cpp" />
+    <ClCompile Include="..\src\vector_persist.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\gui\mainwindow.h" />
@@ -118,6 +119,7 @@
     <ClInclude Include="..\include\type.h" />
     <ClInclude Include="..\include\rrf.h" />
     <ClInclude Include="..\include\vector_index.h" />
+    <ClInclude Include="..\include\vector_persist.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

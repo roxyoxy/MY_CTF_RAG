@@ -2158,3 +2158,97 @@ mainwindow.cpp 镜像两份——"POLICY lives in the caller" + 双前端
 - 平局规则（原定 tie→bge-m3）未触发不适用；m3-plan §8 该句随
   本条作废。**批 2 连带变化：C 的卡缩为 T9 单卡**，T10 已由本条
   最小交付，转正（scripts/ 入仓）或撤销随发卡时 A 裁
+
+## [2026-10-11 04:54] AI-A
+
+【决策转记】A 裁（commit 后口头令）："不给 B C 了，剩下的我们
+一人搞定"——**任务卡制度自批 2 起收摊，M3-M5 剩余工程全部
+A + AI-A 自行完成**（M2 工作模式回归：AI-A 执笔 / 出伪代码卡，
+A 审阅 / 亲手，逐件授权）。连带账目三笔：① T9 归 A 侧自做，
+C 免卡；② 02:46 "批 2 T7 HNSW 归 B 手写"承诺作废，B 账目定格
+= 周三汇报 PPT（如实记录，无挂名问题）；③ T10 已由 04:41 条
+最小交付闭环，工具转正随 T9 commit 一并裁。B/C 通知由 A 自行
+转达。commit c756268（步骤④ 接线 + 步骤② A/B，九文件 497 行）
+随令落地；push（累计 3 commit）待示下
+
+## [2026-10-11 11:40] AI-A
+
+【竣工】T9 vector.bin 快照落地（M3 步骤⑤，04:54 收摊裁定后 A 侧
+首件；施工方式 = 甲案：AI-A 执笔 A 审，赶时间先例第 N 次）。**M3
+六步只剩 ⑥（T7 HNSW，Go/No-Go 本就可滑）**。
+
+- **三令执行前置**：push 已放行落地（98bb111..c756268 三 commit 上
+  origin/main：T8 合并 + T5/T6 + 步骤④② A/B）；B/C 通知 A 自行
+  转达（04:54 裁定）；T10 转正随本件 commit
+- **实现**：src/vector_persist.cpp（9908B 纯 ASCII 无 BOM）履约契约
+  十三条——24B 头（magic MYRAGVEC + 双版本 + FNV 指纹盖全载荷）+
+  身份块（dimension/model_id/embedding_policy，位于指纹覆盖下，
+  修指纹的身份篡改仍可抓）+ per-doc 记录（path/content_hash/向量，
+  path 升序钉确定性）；检查序 magic→版本→指纹→结构走查（盘内
+  dimension vs 实际向量字节）→身份比对殿后；never-throw + 全有或
+  全无 + 不可信计数零 reserve（persist.cpp 全套模式复刻）；原子
+  .tmp 替换
+- **两处契约微增（A 审阅要点）**：① vector_content_hash 导出帮手
+  ——否则 main/GUI 各养 FNV 副本，hash 漂移 = 复用永远 miss 的
+  静默废快照，单一事实源胜出；② expected.dimension=0 哨兵——启动
+  时维度问输出不问 provider（embedder.h 条款 5），model_id+policy
+  已锁坐标系；非 0 时仍强制比对
+- **测试**：test_vector_persist 28 条转正（14323B，run_tests 第十一
+  单元，套件 156 → 184 全绿）。**三刀口（10-05 T9 裁决）全部钉死**：
+  model 刀+修指纹 → BAD_MODEL（11 号）；policy 刀同（12 号）；
+  dimension 4→3 刀+修指纹 → 结构走查 BAD_FORMAT 先于身份比对
+  （13 号）；单向量浮点刀+修指纹 → 照常加载**按设计钉住**（15 号
+  断言 0.25f，防未来"好心修复"成意外校验和）。修复指纹手法沿
+  test_persist repaired() 先例。首轮 2 红均系测试自误（14 号忘恢复
+  good 文件 / 15 号期望值算错 0x3E800000=0.25f 非 0.5f）——
+  "测试红先审测试"第 N 例
+- **双前端接线**（复用策略在调用方，契约条款 4）：main.cpp 换血
+  embed_all_chunks → build_doc_vectors（快照对账：path+content_hash
+  +块数三全才复用；miss 才分片重嵌）+ del 段改为快照重建（幸存
+  文档全复用，**del 不再 20s 重嵌，零网络**）；mainwindow.cpp
+  embedChunks 同款 + vectorSnapshotPath_ 成员。vcxproj/filters 双
+  工程登记（vector_persist.h 此前无消费者未注册，随本件补）；
+  .gitignore 补 vector.bin/.tmp
+- **验收**：g++ -Wall -Wextra 双文件语法零告警；msbuild 双工程
+  Debug|x64 /W4 零警告；run_tests 184/184；真机冒烟五连——冷嵌
+  145 块 20.0s 建快照 → 二启 **145 复用 0 嵌 0.01s**（2000 倍）→
+  编辑 aurora-guard 一篇 → **144 复用 + 1 嵌 0.47s** → 还原该篇
+  （hash 换回原版重嵌 1，防线正确履职）→ 再启 145 全复用。查询
+  三列分数正常，vec 微差 = 查询侧推理非确定性（排序不变）
+- **隐藏福利入册**：快照有效时启动零网络——**Ollama 关着 dense
+  照常上电**，只有查询侧 embed_query 失败才单查询降级 BM25；
+  原版是"Ollama 挂 = 全场 BM25-only"
+- **T10 转正**：dump_chunks.cpp（真 chunker 导出 JSONL，头注带仓内
+  构建命令）+ ab_eval.py（23 题集内嵌，docstring 记录 A/B 判决
+  数据）入仓 scripts/，%TEMP%\acc scratch 使命结束
+- 文档四件同步：PARAMS v1.5（vector.bin 入册 + 工具住址更新）/
+  README（状态块 + 路线表 + 目录树 tests 184）/ TASKS v4.2（⑤
+  竣工注记 + T10 转正 + 版本）/ 本条
+- 字节自检：vector_persist.cpp / test_vector_persist.cpp /
+  vector_persist.h / main.cpp / dump_chunks.cpp 全部无 BOM 零非
+  ASCII；mainwindow.cpp 无 BOM（1323 非 ASCII = 中文 UI 字面量，
+  预期）
+- 待 A：commit 批准（15 改 + 4 新）；A 复习清单 +1（T9 契约与
+  实现 + 两处微增的追认）；GUI 侧 F5 效果验收（看状态栏 dense
+  秒上 + 日志"复用/新嵌"行）
+
+## [2026-10-11 11:52] A（AI-A 代录）
+
+【决策】T9 GUI F5 验收通过；commit + push 放行（14 改 + 4 新，T10
+转正 scripts/ 随行）；两处契约微增随 commit 追认生效。
+
+A 亲自 F5 MY_CTF_RAG_GUI 并贴回三段日志，AI-A 判读全中预期：
+
+- 两次启动：index.bin 快照命中 + 语义路 145 复用 / 0 新嵌 0.0 秒
+  ——双快照命中，dense 秒上电；
+- 手动重建（按钮）：chunk 重切 + BM25 重算 + save 后，语义路仍是
+  145 复用 / 0 新嵌 0.0 秒——索引全量重建不再触碰向量缓存（旧版
+  这个按键 = 20 秒全量重嵌），本次验收最有价值的一条。
+
+判定：F5 验收过。查询侧与 del 增量复用已由 console 冒烟五连钉死，
+GUI 走同一段 build 逻辑，不重复验收。两处契约微增
+（vector_content_hash 导出 + expected.dimension=0 哨兵）A 未提异议，
+按 11:40 纪要所标口径随 commit 追认生效。M3 步骤 ⓪-⑤ 全部竣工
+含人工验收，只剩 ⑥ T7 HNSW（Go/No-Go 可滑）。下一步：周一 M4
+console 最小版（生成链），周二 A 复习 + 演示视频，周三 10-14 汇报
+（B 出 PPT）。

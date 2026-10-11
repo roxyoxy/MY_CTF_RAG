@@ -91,3 +91,11 @@ bool vector_save(const std::string& path,
 VectorSnapshotStatus load_vector_snapshot(const std::string& path,
                                           const VectorIdentity& expected,
                                           std::vector<DocVectors>& out);
+
+// FNV-1a 64 of a document's content -- the exact hash this snapshot
+// compares through DocVectors::content_hash. Exported so the reuse
+// policy in the callers (main / GUI) computes its keys with the same
+// algorithm instead of growing private copies: a drifted hash never
+// matches, so reuse would quietly stop working while everything still
+// runs. Single source of truth (persist.cpp manifest precedent).
+std::uint64_t vector_content_hash(const std::string& content);

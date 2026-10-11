@@ -71,14 +71,15 @@ private:
     std::vector<Chunk> chunks_;
     InvertedIndex index_;
 
-    // M3 step 4: dense route (semantic search). Vectors live in memory
-    // only until T9 (vector.bin) lands.
+    // M3 steps 4 + 5: dense route (semantic search) with vector.bin
+    // caching (path + content hash reuse, T9).
     std::unique_ptr<EmbedProvider> provider_;
     FlatIndex denseIndex_;
     bool denseReady_ = false;
     QString denseStateText_ = QStringLiteral("dense: off");
 
     std::string snapshotPath_ = "index.bin";
+    std::string vectorSnapshotPath_ = "vector.bin";
     QString snapshotStateText_ = QStringLiteral("not loaded");
     int previewDocumentId_ = -1;
     bool corpusLoaded_ = false;

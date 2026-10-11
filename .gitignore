@@ -19,6 +19,11 @@ Release/
 index.bin
 index.bin.tmp
 
+# Dense vector snapshot cache (derived from data/ + the embedding
+# model, safe to delete and re-embed)
+vector.bin
+vector.bin.tmp
+
 # Python
 __pycache__/
 

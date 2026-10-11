@@ -46,7 +46,7 @@
 | M0 | 文档体系 + 会议纪要 + 查询脚本 | ✅ 2026-09-22 |
 | M1 | 纯英文检索：接口设计(.h) → main → 实现(.cpp) → 优化 | ✅ 2026-09-28 四轮全部竣工 |
 | M2 | 中文 bigram + 持久化 + 增量/删除 + Qt 管理界面 | ✅ 2026-09-29 全线收官（F5 验收 + push） |
-| M3 | 向量检索（Ollama embedding + Flat 基线 + 自研 HNSW 双后端）+ RRF 混合 | 施工中：批 1 三卡落地 + 混合查询链双前端接线（10-11）；批 2（T9/T10/T7）待发 |
+| M3 | 向量检索（Ollama embedding + Flat 基线 + 自研 HNSW 双后端）+ RRF 混合 | 施工中：步骤⓪-⑤ 竣工（A/B 拍板 + 混合链 + vector.bin 持久化，10-11）；剩⑥ T7 HNSW（Go/No-Go 可滑） |
 | M4 | 本地 LLM 后端（Ollama 原型 → llama.cpp 交付）| 待开始 |
 | M5 | 对比实验（BM25/Dense/Hybrid 三组）+ 报告答辩 | 待开始 |
 
@@ -85,7 +85,9 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 │   ├── m1-m2-retrospective.md ← M1-M2 阶段总结（复习专用）
 │   └── design/              ← 设计文档（缓议书等）
 ├── scripts/
-│   └── meeting_query.py     ← 纪要查询工具
+│   ├── meeting_query.py     ← 纪要查询工具
+│   ├── dump_chunks.cpp      ← T10：真 chunker 导出 JSONL（评测口径与产品一致）
+│   └── ab_eval.py           ← T10：A/B 评测脚本（23 题集内嵌，M5 复用资产）
 └── MY_CTF_RAG/              ← 代码区（VS 解决方案）
     ├── MY_CTF_RAG.sln
     ├── MY_CTF_RAG.vcxproj
@@ -98,9 +100,9 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
     │   ├── indexer.h        ← 账房+查账台：倒排索引 + BM25
     │   ├── atom_scan.h      ← 词法单一事实源：Atom 扫描（M2① 新增）
     │   └── persist.h        ← 索引快照：save/validate/load（M2② 新增）
-    ├── src/                 ← 实现：对契约的"履约"（十一份已实现 + main.cpp 总装，M3 混合查询链已接线）
+    ├── src/                 ← 实现：对契约的"履约"（十二份已实现 + main.cpp 总装，M3 混合查询链 + vector.bin 已接线）
     ├── data/                ← 语料，按 category 分目录（58 篇：npusec 24 + ctf-wiki 34，含 mobile 类目）
-    ├── tests/               ← 回归测试（156 条全绿）+ run_tests.bat 一键跑
+    ├── tests/               ← 回归测试（184 条全绿）+ run_tests.bat 一键跑
     └── gui/                 ← Qt GUI 源码三件（MY_CTF_RAG_GUI 工程编译，F5 直达）
 ```
 
@@ -116,10 +118,13 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 
 ## 4. 快速开始
 
-**当前状态**：**M3 施工中（10-11 步骤④ 接线完成）**。十三份契约 +
-156 条回归测试全绿（/W4），console + Qt GUI 双前端均已接入
+**当前状态**：**M3 施工中（10-11 步骤⑤ vector.bin 竣工，六步只剩⑥ 可滑）**。
+十三份契约 + 184 条回归测试全绿（/W4），console + Qt GUI 双前端均已接入
 **BM25 + 语义向量 + RRF 混合查询链**（qwen3-embedding:0.6b @ 本地
 Ollama，A/B 实测拍板 10-11，服务不可达自动降级 BM25-only）；
+**向量持久化 vector.bin（T9）落地**：per-doc path+content_hash
+复用键——语料未变启动零网络秒上（145 向量 0.01s，冷嵌 20s），单文档
+编辑只重嵌该文档，换模型自动识别全量重嵌（BAD_MODEL）。
 M3 批 1 三卡全部落地
 （T8 embedder · T5 Flat · T6 RRF，10-11）。
 启动流程：validate

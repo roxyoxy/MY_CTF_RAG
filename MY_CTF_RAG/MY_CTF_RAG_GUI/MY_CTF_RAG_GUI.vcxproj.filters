@@ -48,6 +48,9 @@
     <ClCompile Include="..\src\vector_index.cpp">
       <Filter>Core Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\vector_persist.cpp">
+      <Filter>Core Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\gui\mainwindow.h">
@@ -84,6 +87,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\include\vector_index.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\vector_persist.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

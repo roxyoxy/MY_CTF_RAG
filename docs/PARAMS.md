@@ -27,9 +27,15 @@
 - dense 模型 `model_id` = `qwen3-embedding:0.6b`（**M3 ② A/B 实测拍板
   2026-10-11**：23 条中英混合查询 × 145 块纯 dense 对比，qwen 全指标
   胜出——top1 16/23 vs 15、hit@5 91% vs 78%、hit@10 96% vs 83%、
-  MRR@10 0.777 vs 0.697、嵌入 27.8s vs 40.2s；题集与脚本为 T10 最小
-  交付，住址 %TEMP%\acc，转正 scripts/ 待 A 裁）。查询侧自动挂
+  MRR@10 0.777 vs 0.697、嵌入 27.8s vs 40.2s；题集与脚本 = T10 交付，
+  **已转正 `scripts/`**（dump_chunks.cpp + ab_eval.py，随 T9 commit
+  入仓 10-11），23 题集内嵌 ab_eval.py 为 M5 复用资产）。查询侧自动挂
   qwen3-instruct-v1 前缀（embedder.h 成对冻结策略）
+- 向量快照 `vector.bin`（T9，2026-10-11）：身份四件套
+  model_id/embedding_policy/dimension/VECTOR_PIPELINE_VERSION +
+  per-doc path+content_hash 复用键；语料未变启动 0 网络秒上
+  （145 向量 0.01s，对比冷嵌 20s），单文档编辑只重嵌该文档
+  （0.5s 量级）
 
 ## 维护规则
 
@@ -39,6 +45,9 @@
 
 ## 版本
 
+- v1.5 · 2026-10-11 · **T9 竣工**：vector.bin 快照入册（身份四件套 +
+  per-doc 复用键，语义与行为见运行时配置节）；T10 工具转正
+  scripts/（dump_chunks.cpp + ab_eval.py，23 题集内嵌）
 - v1.4 · 2026-10-11 · **M3 ② A/B 拍板**：dense 默认模型 bge-m3 →
   qwen3-embedding:0.6b（23 题实测全指标胜出，数据见运行时配置节）
 - v1.3 · 2026-10-11 · 步骤④ 接线：调用方常量两条入账（HYBRID_ROUTE_K
