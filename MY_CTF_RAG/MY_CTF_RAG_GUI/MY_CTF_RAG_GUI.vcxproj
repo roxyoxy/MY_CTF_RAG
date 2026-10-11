@@ -94,6 +94,7 @@
   <ItemGroup>
     <ClCompile Include="..\gui\qt_main.cpp" />
     <ClCompile Include="..\gui\mainwindow.cpp" />
+    <ClCompile Include="..\gui\query_worker.cpp" />
     <ClCompile Include="..\src\loader.cpp" />
     <ClCompile Include="..\src\chunker.cpp" />
     <ClCompile Include="..\src\tokenizer.cpp" />
@@ -105,13 +106,18 @@
     <ClCompile Include="..\src\rrf.cpp" />
     <ClCompile Include="..\src\vector_index.cpp" />
     <ClCompile Include="..\src\vector_persist.cpp" />
+    <ClCompile Include="..\src\context.cpp" />
+    <ClCompile Include="..\src\generator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\gui\mainwindow.h" />
+    <ClInclude Include="..\gui\query_worker.h" />
     <ClInclude Include="..\include\atom_scan.h" />
     <ClInclude Include="..\include\chunker.h" />
+    <ClInclude Include="..\include\context.h" />
     <ClInclude Include="..\include\corpus_diff.h" />
     <ClInclude Include="..\include\embedder.h" />
+    <ClInclude Include="..\include\generator.h" />
     <ClInclude Include="..\include\indexer.h" />
     <ClInclude Include="..\include\loader.h" />
     <ClInclude Include="..\include\persist.h" />

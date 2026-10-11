@@ -18,6 +18,9 @@
     <ClCompile Include="..\gui\mainwindow.cpp">
       <Filter>Qt Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\gui\query_worker.cpp">
+      <Filter>Qt Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\loader.cpp">
       <Filter>Core Sources</Filter>
     </ClCompile>
@@ -51,15 +54,27 @@
     <ClCompile Include="..\src\vector_persist.cpp">
       <Filter>Core Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\context.cpp">
+      <Filter>Core Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\generator.cpp">
+      <Filter>Core Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\gui\mainwindow.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gui\query_worker.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\include\atom_scan.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\include\chunker.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\context.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\include\corpus_diff.h">
@@ -81,6 +96,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\include\embedder.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\generator.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\include\rrf.h">

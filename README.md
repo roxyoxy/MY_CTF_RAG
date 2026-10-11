@@ -47,7 +47,7 @@
 | M1 | 纯英文检索：接口设计(.h) → main → 实现(.cpp) → 优化 | ✅ 2026-09-28 四轮全部竣工 |
 | M2 | 中文 bigram + 持久化 + 增量/删除 + Qt 管理界面 | ✅ 2026-09-29 全线收官（F5 验收 + push） |
 | M3 | 向量检索（Ollama embedding + Flat 基线 + 自研 HNSW 双后端）+ RRF 混合 | 施工中：步骤⓪-⑤ 竣工（A/B 拍板 + 混合链 + vector.bin 持久化，10-11）；剩⑥ T7 HNSW（Go/No-Go 可滑） |
-| M4 | 本地 LLM 后端（Ollama 原型 → llama.cpp 交付）| 施工中：①②③ + ③½ 竣工（10-12：双契约 + console 生成链端到端；生成模型 A/B 冻结 qwen3:4b-instruct，稳态 8.4s/答）；→ ④ Qt chat 页 + worker |
+| M4 | 本地 LLM 后端（Ollama 原型 → llama.cpp 交付）| ①②③ + ③½ 竣工（10-12）；④ Qt chat 页 + worker 竣工待 F5 验收（10-12：QueryWorker 全链后台线程 + [n] 点击回源 + 越界引用标红）→ ⑤ llama.cpp provider → ⑥ 注入金弹并入 M5 |
 | M5 | 对比实验（BM25/Dense/Hybrid 三组）+ 报告答辩 | 待开始 |
 
 M1 内部进度（施工顺序见 PRINCIPLES.md §2）：
@@ -103,7 +103,7 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
     ├── src/                 ← 实现：对契约的"履约"（十二份已实现 + main.cpp 总装，M3 混合查询链 + vector.bin 已接线）
     ├── data/                ← 语料，按 category 分目录（58 篇：npusec 24 + ctf-wiki 34，含 mobile 类目）
     ├── tests/               ← 回归测试（217 条全绿）+ run_tests.bat 一键跑
-    └── gui/                 ← Qt GUI 源码三件（MY_CTF_RAG_GUI 工程编译，F5 直达）
+    └── gui/                 ← Qt GUI 源码四件（MY_CTF_RAG_GUI 工程编译，F5 直达；含 M4 查询 worker）
 ```
 
 为什么这样分（面试常问）：
@@ -119,10 +119,13 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 ## 4. 快速开始
 
 **当前状态**：**M3 主体竣工（六步只剩⑥ T7 HNSW 可滑）+ M4 施工中
-（10-12 ①②③ + ③½ 竣工：generator/context 双契约 + console Stage 4
+（10-12 ①②③ + ③½ + ④ 竣工：generator/context 双契约 + console Stage 4
 生成链端到端——检索列表后直接出带 [n] 引用与 sources 账本的模型答案；
 生成模型经 A/B 冻结 qwen3:4b-instruct（8.4s/答，实验档
-docs/m4-generation-ab.md），生成失败自动降级仅出检索列表）**。
+docs/m4-generation-ab.md），生成失败自动降级仅出检索列表；
+④ GUI chat 页 + worker——QueryWorker 包全链后台线程（embed_query 与
+chat 两段 HTTP 均不碰 UI 线程），单轮问答、[n] 点击跳源高亮、
+越界引用标红计数（citation sanity check）、生成失败降级检索列表）**。
 十五份契约 + 217 条回归测试全绿（/W4），console + Qt GUI 双前端均已接入
 **BM25 + 语义向量 + RRF 混合查询链**（qwen3-embedding:0.6b @ 本地
 Ollama，A/B 实测拍板 10-11，服务不可达自动降级 BM25-only）；

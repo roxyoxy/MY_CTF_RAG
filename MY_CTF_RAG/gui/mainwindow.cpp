@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <chrono>
 #include <exception>
+#include <functional>
 #include <limits>
 #include <unordered_map>
 #include <unordered_set>
@@ -24,10 +25,13 @@
 #include <QMessageBox>
 #include <QPlainTextEdit>
 #include <QPushButton>
+#include <QRegularExpression>
 #include <QSplitter>
 #include <QStatusBar>
 #include <QTableWidget>
+#include <QTextBrowser>
 #include <QTextCursor>
+#include <QThread>
 #include <QTimer>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -51,13 +55,19 @@ constexpr int kRoleChunkId = Qt::UserRole + 2;
 constexpr int kCategoryItem = 0;
 constexpr int kDocumentItem = 1;
 constexpr int kSnippetChars = 180;
-// Caller-side wiring constants for the hybrid query chain (M3 step 4),
-// registered in docs/PARAMS.md; mirrored in src/main.cpp.
-constexpr int kHybridRouteK = 20;
+// Caller-side wiring constant for corpus embedding (M3 step 4),
+// registered in docs/PARAMS.md; mirrored in src/main.cpp. The query
+// chain's own policy constants moved to query_worker.cpp with the
+// chain itself (M4 step 4).
 constexpr int kEmbedSlice = 32;
 // Dense model decided by the A/B experiment (M3 step 2, 2026-10-11):
 // qwen3-embedding:0.6b beat bge-m3 on every metric; see docs/PARAMS.md.
 constexpr const char* kDenseModel = "qwen3-embedding:0.6b";
+// Generation model frozen by the step-3.5 A/B (2026-10-12):
+// qwen3:4b-instruct beat qwen3:1.7b on groundedness, citations and
+// language following; see docs/m4-generation-ab.md. Never "qwen3:4b"
+// -- that plain tag currently points at the thinking variant.
+constexpr const char* kGenerationModel = "qwen3:4b-instruct";
 
 QString fromUtf8(const std::string& text) {
     return QString::fromUtf8(text.data(), static_cast<qsizetype>(text.size()));
@@ -109,6 +119,48 @@ QString snippetForChunk(const Chunk& chunk) {
     }
     return text;
 }
+
+// One QThread per query. Deliberately NOT a QObject with Q_OBJECT --
+// this GUI avoids moc by design (gui/README.md); the two UI-thread
+// notifications are marshaled through QMetaObject::invokeMethod
+// functors, which need no Q_OBJECT and no metatype registration. The
+// context object (the window) guarantees the functors run on the UI
+// thread or not at all; the callbacks themselves are MainWindow member
+// lambdas, so they die with the window and never dangle.
+class QueryThread final : public QThread {
+public:
+    using StartedCallback = std::function<void()>;
+    using FinishedCallback = std::function<void(QueryResultPtr)>;
+
+    QueryThread(QueryRequest request, QObject* context,
+                StartedCallback onStarted, FinishedCallback onFinished)
+        : request_(std::move(request)), context_(context),
+          onStarted_(std::move(onStarted)),
+          onFinished_(std::move(onFinished)) {}
+
+    void run() override {
+        const QueryResultPtr result = run_query_chain(request_, [this]() {
+            if (onStarted_) {
+                const StartedCallback callback = onStarted_;
+                QMetaObject::invokeMethod(
+                    context_, [callback]() { callback(); },
+                    Qt::QueuedConnection);
+            }
+        });
+        if (onFinished_) {
+            const FinishedCallback callback = onFinished_;
+            QMetaObject::invokeMethod(
+                context_, [callback, result]() { callback(result); },
+                Qt::QueuedConnection);
+        }
+    }
+
+private:
+    QueryRequest request_;
+    QObject* context_ = nullptr;
+    StartedCallback onStarted_;
+    FinishedCallback onFinished_;
+};
 }
 
 MainWindow::MainWindow(QWidget* parent)
@@ -120,6 +172,15 @@ MainWindow::MainWindow(QWidget* parent)
     QTimer::singleShot(0, this, [this]() {
         loadCorpusAndIndex(dataDirEdit_->text());
     });
+}
+
+MainWindow::~MainWindow() {
+    // QueryThread::run borrows this window's members, and its HTTP
+    // calls are not interruptible: the only safe shutdown is to wait.
+    // This blocks only when the window is closed mid-generation.
+    if (chatBusy_ && busyThread_ != nullptr) {
+        busyThread_->wait();
+    }
 }
 
 void MainWindow::buildUi() {
@@ -201,8 +262,63 @@ void MainWindow::buildUi() {
     resultsTable_->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeToContents);
     resultsTable_->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
 
+    // M4 step 4: the chat panel. One window, everything visible -- the
+    // answer with clickable [n] citations, the sources ledger, and the
+    // shared source preview above for the jump-to-chunk highlight.
+    auto* chatPanel = new QWidget(rightSplitter);
+    auto* chatLayout = new QVBoxLayout(chatPanel);
+
+    auto* chatHeader = new QHBoxLayout();
+    chatHeader->addWidget(new QLabel(QStringLiteral("RAG 问答（单轮）"), chatPanel));
+    chatStageLabel_ = new QLabel(chatPanel);
+    chatStageLabel_->setText(QStringLiteral("就绪"));
+    chatHeader->addWidget(chatStageLabel_, 1);
+    chatLayout->addLayout(chatHeader);
+
+    auto* chatSplitter = new QSplitter(Qt::Horizontal, chatPanel);
+    answerBrowser_ = new QTextBrowser(chatSplitter);
+    answerBrowser_->setOpenLinks(false);
+    answerBrowser_->setOpenExternalLinks(false);
+    answerBrowser_->setPlaceholderText(QStringLiteral(
+        "输入问题并点“生成回答”。答案中的 [n] 引用可点击，跳转到来源"
+        "片段并高亮；越界引用会标红。"));
+
+    sourcesTable_ = new QTableWidget(chatSplitter);
+    sourcesTable_->setColumnCount(4);
+    sourcesTable_->setHorizontalHeaderLabels({
+        QStringLiteral("[n]"),
+        QStringLiteral("路径"),
+        QStringLiteral("Chunk"),
+        QStringLiteral("摘要")
+    });
+    sourcesTable_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    sourcesTable_->setSelectionBehavior(QAbstractItemView::SelectRows);
+    sourcesTable_->setSelectionMode(QAbstractItemView::SingleSelection);
+    sourcesTable_->setAlternatingRowColors(true);
+    sourcesTable_->verticalHeader()->setVisible(false);
+    sourcesTable_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    sourcesTable_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    sourcesTable_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+    sourcesTable_->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
+
+    chatSplitter->setStretchFactor(0, 3);
+    chatSplitter->setStretchFactor(1, 2);
+    chatLayout->addWidget(chatSplitter, 1);
+
+    auto* askBar = new QHBoxLayout();
+    askBar->addWidget(new QLabel(QStringLiteral("提问:"), chatPanel));
+    askEdit_ = new QLineEdit(chatPanel);
+    askEdit_->setPlaceholderText(QStringLiteral(
+        "自然语言问句，回车生成（检索 + 本地模型作答，约 10 秒）"));
+    askButton_ = new QPushButton(QStringLiteral("生成回答"), chatPanel);
+    askBar->addWidget(askEdit_, 1);
+    askBar->addWidget(askButton_);
+    chatLayout->addLayout(askBar);
+
+    rightSplitter->addWidget(chatPanel);
     rightSplitter->setStretchFactor(0, 3);
     rightSplitter->setStretchFactor(1, 2);
+    rightSplitter->setStretchFactor(2, 3);
     mainSplitter->setStretchFactor(0, 1);
     mainSplitter->setStretchFactor(1, 3);
     rootLayout->addWidget(mainSplitter, 1);
@@ -240,8 +356,12 @@ void MainWindow::connectUi() {
     });
     connect(rebuildButton_, &QPushButton::clicked, this, &MainWindow::rebuildIndex);
     connect(deleteButton_, &QPushButton::clicked, this, &MainWindow::deleteSelectedDocument);
-    connect(searchButton_, &QPushButton::clicked, this, &MainWindow::runSearch);
-    connect(queryEdit_, &QLineEdit::returnPressed, this, &MainWindow::runSearch);
+    connect(searchButton_, &QPushButton::clicked, this, &MainWindow::startRetrieval);
+    connect(queryEdit_, &QLineEdit::returnPressed, this, &MainWindow::startRetrieval);
+    connect(askButton_, &QPushButton::clicked, this, &MainWindow::startChatQuery);
+    connect(askEdit_, &QLineEdit::returnPressed, this, &MainWindow::startChatQuery);
+    connect(answerBrowser_, &QTextBrowser::anchorClicked, this, &MainWindow::onAnswerAnchorClicked);
+    connect(sourcesTable_, &QTableWidget::cellClicked, this, &MainWindow::onSourceRowClicked);
     connect(documentTree_, &QTreeWidget::itemDoubleClicked, this, &MainWindow::showSelectedDocument);
     connect(resultsTable_, &QTableWidget::cellDoubleClicked, this, &MainWindow::openSearchResult);
     connect(showDeletedCheck_, &QCheckBox::toggled, this, &MainWindow::updateDeletedVisibility);
@@ -262,6 +382,10 @@ void MainWindow::chooseDataDirectory() {
 }
 
 void MainWindow::loadCorpusAndIndex(const QString& dataDir) {
+    if (chatBusy_) {
+        appendLog(QStringLiteral("加载: 问答仍在进行，请等本轮结束后再切换语料。"));
+        return;
+    }
     try {
         std::vector<Document> newDocs = load_documents(toUtf8(dataDir));
         std::vector<Chunk> newChunks;
@@ -476,6 +600,10 @@ void MainWindow::embedChunks(const QString& reason) {
 }
 
 void MainWindow::rebuildIndex() {
+    if (chatBusy_) {
+        appendLog(QStringLiteral("重建: 问答仍在进行，请等本轮结束后再操作。"));
+        return;
+    }
     if (!corpusLoaded_) {
         appendLog(QStringLiteral("重建: 当前没有已加载语料。"));
         return;
@@ -496,46 +624,83 @@ void MainWindow::rebuildIndex() {
     embedChunks(QStringLiteral("重建"));
 }
 
-void MainWindow::runSearch() {
-    resultsTable_->setRowCount(0);
-
+void MainWindow::startRetrieval() {
     const QString query = queryEdit_->text().trimmed();
     if (query.isEmpty()) {
         return;
     }
+    launchWorker(query, false);
+}
 
-    // M3 step 4: BM25 (lexical) + vector (semantic) routes fused by
-    // RRF while the dense side is alive; plain BM25 otherwise.
-    std::vector<SearchResult> bm25 =
-        search(index_, toUtf8(query), kHybridRouteK);
-    std::vector<SearchResult> dense;
-    if (denseReady_) {
-        try {
-            dense = search_flat(denseIndex_,
-                                provider_->embed_query(toUtf8(query)),
-                                kHybridRouteK);
-        } catch (const std::exception& e) {
-            appendLog(QStringLiteral("查询: 语义路失败（%1），本次退回 BM25。")
-                .arg(QString::fromUtf8(e.what())));
-        }
+void MainWindow::startChatQuery() {
+    if (!corpusLoaded_) {
+        appendLog(QStringLiteral("问答: 当前没有已加载语料。"));
+        return;
+    }
+    const QString query = askEdit_->text().trimmed();
+    if (query.isEmpty()) {
+        return;
+    }
+    if (!generator_) {
+        // Zero-network factory (generator.h clause 6); the first chat
+        // call inside the worker doubles as the health check.
+        generator_ = make_ollama_chat_provider(
+            GeneratorConfig{std::string(), std::string(kGenerationModel), 0});
+    }
+    launchWorker(query, true);
+}
+
+// M4 step 4 hard gate: no query work on the UI thread. Both the
+// retrieval-only search and the full RAG ask run the whole chain
+// (BM25 + embed_query HTTP + dense + RRF + prompt + chat) inside a
+// QueryThread; this window only launches, renders and refuses corpus
+// mutations while the worker is busy.
+void MainWindow::launchWorker(const QString& query, bool withGeneration) {
+    if (chatBusy_) {
+        return;
     }
 
-    const bool hybrid = !dense.empty();
-    std::unordered_set<int> bm25Ids;
-    std::unordered_set<int> denseIds;
-    for (const SearchResult& r : bm25)
-        bm25Ids.insert(r.chunk_id);
-    for (const SearchResult& r : dense)
-        denseIds.insert(r.chunk_id);
-    const std::vector<SearchResult> results =
-        hybrid ? rrf_fuse({bm25, dense}) : bm25;
+    chatBusy_ = true;
+    lastQuestion_ = query;
+    lastResult_.reset();
+    setChatBusy(true);
+    resultsTable_->setRowCount(0);
+    if (withGeneration) {
+        chatStageLabel_->setText(QStringLiteral("检索中…（UI 不阻塞）"));
+    }
 
-    const int shown = static_cast<int>(
-        std::min<size_t>(results.size(), static_cast<size_t>(TOP_K)));
+    QueryRequest request;
+    request.query = toUtf8(query);
+    request.index = &index_;
+    request.denseIndex = &denseIndex_;
+    request.docs = &docs_;
+    request.chunks = &chunks_;
+    request.embedProvider = provider_.get();
+    request.generator = withGeneration ? generator_.get() : nullptr;
+    request.denseReady = denseReady_;
+
+    auto* thread = new QueryThread(
+        std::move(request), this,
+        [this]() { onWorkerGenerationStarted(); },
+        [this](QueryResultPtr result) { onWorkerFinished(result); });
+    connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+
+    busyThread_ = thread;
+    thread->start();
+}
+
+void MainWindow::fillResultsTable(const std::vector<SearchResult>& results,
+                                  bool hybrid,
+                                  const std::unordered_set<int>& bm25Ids,
+                                  const std::unordered_set<int>& denseIds) {
+    resultsTable_->setRowCount(0);
+
+    const size_t shown =
+        std::min(results.size(), static_cast<size_t>(TOP_K));
     int visibleRank = 0;
 
-    for (int i = 0; i < shown; ++i) {
-        const SearchResult& result = results[static_cast<size_t>(i)];
+    for (size_t i = 0; i < shown; ++i) {
+        const SearchResult& result = results[i];
         if (result.chunk_id < 0 || static_cast<size_t>(result.chunk_id) >= chunks_.size()) {
             continue;
         }
@@ -574,15 +739,174 @@ void MainWindow::runSearch() {
         resultsTable_->setItem(row, 4, new QTableWidgetItem(QString::number(result.chunk_id)));
         resultsTable_->setItem(row, 5, new QTableWidgetItem(snippetForChunk(chunk)));
     }
+}
 
-    appendLog(QStringLiteral("查询: \"%1\" -> %2 条结果（%3）。")
-        .arg(query)
-        .arg(visibleRank)
-        .arg(hybrid ? QStringLiteral("BM25+语义 RRF 混合")
-                    : QStringLiteral("仅 BM25")));
+void MainWindow::setChatBusy(bool busy) {
+    searchButton_->setEnabled(!busy);
+    askButton_->setEnabled(!busy);
+    browseButton_->setEnabled(!busy);
+    reloadButton_->setEnabled(!busy);
+    rebuildButton_->setEnabled(!busy);
+    deleteButton_->setEnabled(!busy);
+}
+
+void MainWindow::onWorkerGenerationStarted() {
+    chatStageLabel_->setText(QStringLiteral("生成中…（本地模型 %1，约 10 秒，UI 不阻塞）")
+        .arg(QString::fromUtf8(kGenerationModel)));
+}
+
+void MainWindow::onWorkerFinished(QueryResultPtr result) {
+    chatBusy_ = false;
+    busyThread_ = nullptr;
+    setChatBusy(false);
+    lastResult_ = result;
+
+    if (!result->denseError.empty()) {
+        appendLog(QStringLiteral("查询: 语义路失败（%1），本次退回 BM25。")
+            .arg(QString::fromUtf8(result->denseError)));
+    }
+
+    std::unordered_set<int> bm25Ids;
+    std::unordered_set<int> denseIds;
+    for (const SearchResult& r : result->bm25)
+        bm25Ids.insert(r.chunk_id);
+    for (const SearchResult& r : result->dense)
+        denseIds.insert(r.chunk_id);
+    fillResultsTable(result->ranked, result->hybrid, bm25Ids, denseIds);
+
+    // The sources ledger: exactly the materials the model actually saw
+    // (context.h), one row per [n].
+    const auto& materials = result->prompt.used_materials;
+    sourcesTable_->setRowCount(static_cast<int>(materials.size()));
+    for (int i = 0; i < static_cast<int>(materials.size()); ++i) {
+        const RagMaterial& material = materials[static_cast<size_t>(i)];
+        auto* numberItem = new QTableWidgetItem(QStringLiteral("[%1]").arg(i + 1));
+        numberItem->setData(kRoleChunkId, material.chunk_id);
+        sourcesTable_->setItem(i, 0, numberItem);
+        sourcesTable_->setItem(i, 1, new QTableWidgetItem(fromUtf8(material.source)));
+        sourcesTable_->setItem(i, 2, new QTableWidgetItem(QString::number(material.chunk_id)));
+        QString snippet;
+        if (material.chunk_id >= 0 &&
+            static_cast<size_t>(material.chunk_id) < chunks_.size()) {
+            snippet = snippetForChunk(chunks_[static_cast<size_t>(material.chunk_id)]);
+        }
+        sourcesTable_->setItem(i, 3, new QTableWidgetItem(snippet));
+    }
+
+    appendLog(QStringLiteral("查询: \"%1\" -> %2 条结果（%3，检索 %4 秒）。")
+        .arg(lastQuestion_)
+        .arg(resultsTable_->rowCount())
+        .arg(result->hybrid ? QStringLiteral("BM25+语义 RRF 混合")
+                            : QStringLiteral("仅 BM25"))
+        .arg(result->retrievalSeconds, 0, 'f', 2));
+
+    if (!result->chat.attempted) {
+        return;
+    }
+
+    if (!result->chat.ok) {
+        chatStageLabel_->setText(QStringLiteral("生成失败，本轮降级为仅检索"));
+        answerBrowser_->setHtml(QStringLiteral(
+            "<p><b>%1</b> %2</p><hr>"
+            "<p style=\"color:#b00020;\">%3</p>"
+            "<p>%4</p>")
+            .arg(QStringLiteral("问:"),
+                 lastQuestion_.toHtmlEscaped(),
+                 QStringLiteral("生成失败: %1")
+                     .arg(QString::fromUtf8(result->chat.error).toHtmlEscaped()),
+                 QStringLiteral("已降级为仅检索：上方结果列表与来源账本仍然有效。")));
+        appendLog(QStringLiteral("问答: 生成失败（%1），本轮降级为仅检索。")
+            .arg(QString::fromUtf8(result->chat.error)));
+        return;
+    }
+
+    // Citation rendering + sanity check: [n] inside 1..used.size()
+    // becomes a clickable link to the ledger row and the highlighted
+    // source chunk; anything else is flagged red and counted -- the
+    // model's citation honesty stays visible instead of hiding it.
+    const QString escaped = fromUtf8(result->chat.answer).toHtmlEscaped();
+    static const QRegularExpression citationRx(
+        QStringLiteral("\\[(\\d{1,5})\\]"));
+
+    QString body;
+    qsizetype cursor = 0;
+    int validCitations = 0;
+    int invalidCitations = 0;
+    auto matches = citationRx.globalMatch(escaped);
+    while (matches.hasNext()) {
+        const QRegularExpressionMatch match = matches.next();
+        body += escaped.mid(cursor, match.capturedStart() - cursor);
+        const int number = match.captured(1).toInt();
+        if (number >= 1 && number <= static_cast<int>(materials.size())) {
+            ++validCitations;
+            body += QStringLiteral("<a href=\"cite:%1\">[%1]</a>").arg(number);
+        } else {
+            ++invalidCitations;
+            body += QStringLiteral("<span style=\"color:#b00020;\">[%1]</span>")
+                .arg(number);
+        }
+        cursor = match.capturedEnd();
+    }
+    body += escaped.mid(cursor);
+    body.replace(QChar('\n'), QStringLiteral("<br>"));
+
+    answerBrowser_->setHtml(QStringLiteral(
+        "<p><b>%1</b> %2</p><hr>%3<hr>"
+        "<p style=\"color:gray;\">%4 · 生成 %5 秒 · 引用 %6 有效 / %7 越界</p>")
+        .arg(QStringLiteral("问:"),
+             lastQuestion_.toHtmlEscaped(),
+             body,
+             fromUtf8(result->chat.modelId),
+             QString::number(result->chat.seconds, 'f', 1))
+        .arg(validCitations)
+        .arg(invalidCitations));
+
+    chatStageLabel_->setText(QStringLiteral("完成: 生成 %1 秒 · 引用 %2 有效 / %3 越界")
+        .arg(result->chat.seconds, 0, 'f', 1)
+        .arg(validCitations)
+        .arg(invalidCitations));
+    appendLog(QStringLiteral("问答: %1 秒出答，引用 %2 有效 / %3 越界。")
+        .arg(result->chat.seconds, 0, 'f', 1)
+        .arg(validCitations)
+        .arg(invalidCitations));
+}
+
+void MainWindow::onAnswerAnchorClicked(const QUrl& url) {
+    const QString reference = url.toString();
+    if (!reference.startsWith(QStringLiteral("cite:"))) {
+        return;
+    }
+    bool parsed = false;
+    const int number = reference.mid(static_cast<qsizetype>(5)).toInt(&parsed);
+    if (!parsed || !lastResult_) {
+        return;
+    }
+    const auto& materials = lastResult_->prompt.used_materials;
+    if (number < 1 || number > static_cast<int>(materials.size())) {
+        return;
+    }
+    const RagMaterial& material = materials[static_cast<size_t>(number - 1)];
+    sourcesTable_->selectRow(number - 1);
+    highlightChunk(material.chunk_id);
+    appendLog(QStringLiteral("引用: [%1] -> chunk %2。")
+        .arg(number)
+        .arg(material.chunk_id));
+}
+
+void MainWindow::onSourceRowClicked(int row, int column) {
+    Q_UNUSED(column);
+    const QTableWidgetItem* numberItem = sourcesTable_->item(row, 0);
+    if (numberItem == nullptr) {
+        return;
+    }
+    highlightChunk(numberItem->data(kRoleChunkId).toInt());
 }
 
 void MainWindow::deleteSelectedDocument() {
+    if (chatBusy_) {
+        appendLog(QStringLiteral("删除: 问答仍在进行，请等本轮结束后再操作。"));
+        return;
+    }
     QTreeWidgetItem* item = documentTree_->currentItem();
     if (item == nullptr || item->data(0, kRoleItemKind).toInt() != kDocumentItem) {
         QMessageBox::information(this, QStringLiteral("软删除"), QStringLiteral("请先选中一个文档。"));
@@ -663,8 +987,8 @@ void MainWindow::updateDeletedVisibility(bool showDeleted) {
         category->setHidden(visibleChildren == 0);
     }
 
-    if (!queryEdit_->text().trimmed().isEmpty()) {
-        runSearch();
+    if (!chatBusy_ && !queryEdit_->text().trimmed().isEmpty()) {
+        startRetrieval();
     }
 }
 

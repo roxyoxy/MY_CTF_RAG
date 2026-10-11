@@ -2429,3 +2429,79 @@ AI-A 执笔 A 审（23:56 授权），commit 待 A 批。
 - commit 随本条请批，push 随批放行。④ 开工要点：QueryWorker 包全链
   （embed_query HTTP 与 chat HTTP 都阻塞 UI，不只 generator——评审
   §7 论点），单轮不做多轮，[n] 点击回源为特色功能
+
+## [2026-10-12 02:12] AI-A
+
+【竣工】M4 ④ Qt chat 页 + worker 落地（01:39 条"3.go"开工令 +
+23:56 施工单授权延续，AI-A 执笔 A 审；待 A F5 验收）。**M4 剩 ⑤
+llama.cpp provider + ⑥（已定并入 M5）。**
+
+- **硬门槛兑现（评审 §7）**：gui/query_worker.{h,cpp} = 全链纯 C++
+  函数 run_query_chain（BM25 → embed_query HTTP → dense → RRF →
+  TOP_K 截断 → RagMaterial 组装 → build_rag_prompt → chat），零 Qt
+  类型；检索按钮与问答按钮两路同骑（检索路 generator=nullptr）——
+  连 M3 遗留的"纯检索 embed_query 也跑 UI 线程"一并根治
+- **no-moc 房规延续（施工中转折）**：首版 QueryWorker 走 QObject +
+  signals 路线，LNK2001 六连（metaObject/qt_metacall/两个 signal）——
+  查实本 GUI 刻意无 Q_OBJECT（gui/README.md 明文 no moc/uic/rcc），
+  QtMsBuild 根本没接 moc 管线，MainWindow 自身无 Q_OBJECT 也因此
+  一直链接通过。改判：worker 降为纯函数 + mainwindow.cpp 内
+  QueryThread（QThread 子类，不自声明 signal），跨线程回调走
+  QMetaObject::invokeMethod functor（window 作 context object，
+  零 Q_OBJECT 零 metatype 注册，lambda 随窗口消亡不悬空）
+- **chat 页 UI**：右栏三分（预览 / 结果表 / 问答面板）一屏全览；
+  问答面板 = QTextBrowser 答案区 + sources 账本表（[n]/路径/chunk/
+  摘要，即 used_materials 逐行）+ 提问栏；生成中标签 + 完成摘要
+  （模型 · 秒数 · 引用 N 有效 / M 越界）；生成失败 = 红字降级页 +
+  检索列表照常（console 同款哲学；GUI 侧每问重试不全会话禁用——
+  拒连类失败秒回，重试对演示友好，与 console 的会话禁用并存为
+  两种已记录策略）
+- **citation sanity check 并入（01:39 外部评审裁定兑现）**：答案
+  渲染时正则扫 [n]，n ∈ [1, used.size()] 渲染为可点击锚点（点击 →
+  sources 行选中 + highlightChunk 跳源高亮，复用 M2 双击定位件）；
+  越界 n 标红保留原文并计数——引用诚实度可见而非隐藏
+- **线程纪律**：查询期间六个按钮禁用 + loadCorpus/rebuild/del 三
+  入口软拒（借出指针全程有效）；窗口析构 wait() 收尾（chat HTTP
+  不可中断，仅关窗中途生成时阻塞一下）；QThread 用毕 deleteLater
+- **登记**：GUI vcxproj/filters +context/generator/query_worker 六件
+  （console 侧早已注册）；HYBRID_ROUTE_K 随链搬家 gui/query_worker.cpp
+  （PARAMS v1.8 住址更新，EMBED_SLICE 不动仍在 mainwindow.cpp）
+- **验证**：msbuild Debug + Release|x64 /W4 零警告零错误（仅 QtDeploy
+  dxcompiler.dll 环境噪音，e73be0e 已有先例记录）；run_tests 217/217
+  （13 单元回归零破坏）；GUI exe 12 秒存活冒烟（快照还原 + chat 面板
+  初始化无崩溃）；**无头假 main 实弹全链**（%TEMP% 假 main 直链
+  query_worker.cpp + 全部核心源，跑金丝雀中文题：hybrid 检索 0.3s
+  → 快照全复用 → 4b 中文作答 9.8s → [1]=entrance 泄 canary /
+  [4]=combination 环境变量定位 saved RIP，6 引用全有效 0 越界——
+  与 A/B 实验档 Q4 同型，GUI worker 链不靠 UI 即钉死）。插曲：假
+  main 首跑把"雀"(E9 9B 80) 误写成"雇"(E9 9B 87)，模型如实答
+  "材料未提及金丝雇保护"——错字下有据不胡编，降级路径意外受检，
+  修正字节后同题出正答
+- **字节自检**：query_worker.h/.cpp、mainwindow.h 纯 ASCII 无 BOM；
+  mainwindow.cpp 无 BOM 2184 非 ASCII（中文 UI 字面量，预期）；
+  两工程文件纯 ASCII
+- 文档同步：README 三处（状态块 / 路线表 / 目录树 gui 行）、
+  gui/README.md 全量更新（四源文件 / 十五契约 / 十三核心 cpp /
+  线程与 chat 页设计节——该文件自 M2 后未随 M3/M4 更新，本次
+  还账）、PARAMS v1.8、TASKS v4.3、本条
+- 待 A：F5 验收清单——① 问答页提"金丝雀保护与跳转地址覆盖"看
+  中文答案 + 点 [1] 跳源高亮；② 越界引用（若出现）红色样式；
+  ③ 生成中拖动窗口/拖分隔条验证 UI 不卡（约 10 秒）；④ 生成中
+  六按钮灰 + 语料操作被拒提示；⑤ 关 Ollama 提问 → 红字降级页 +
+  检索列表照常。commit 随本条请批，push 随批放行
+
+## [2026-10-12 02:16] A（AI-A 代录）
+
+【决策】④ F5 验收通过（A 报"测试完毕"）+ "继续推进"令——④
+bundle（9 改 + 2 新）commit + push 随令执行完毕。**M4 只剩 ⑤
+llama.cpp provider**（⑥ 注入金弹已定并入 M5）。
+
+- A 按 02:12 五条清单验收后回报测试完毕，具体逐条结果未逐项
+  报数，按"验收通过"入册
+- 剩余设计盘点（AI-A 同轮汇报）：产品级仅剩两件——⑤ llama.cpp
+  接口适配（成功标准 = 换 provider 时 main/context/检索层零改动）
+  与配置入口（模型/端点可换，10-11 02:44 裁定挂 M4、AI-C 清单制
+  边界在册，BAD_MODEL 防线已随 T9 就位）；T7 HNSW（契约在、实现
+  无，Go/No-Go A 裁）与 M5 两层实验细案（指标工具/标签口径/题集
+  扩充/注入金弹场景）为后续设计件。动线建议：今夜 ⑤ → 周二
+  （10-13）A 复习 + 演示视频 → 周三（10-14）汇报

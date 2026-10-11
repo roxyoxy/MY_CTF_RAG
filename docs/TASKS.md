@@ -336,7 +336,7 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       评审点**：算法核心 + M5 实验对象，可顺延不阻塞）
 - [ ] M4：本地 LLM 后端（Ollama 原型 → llama.cpp 交付；M3 的
       embedding 通道提前复用此边界，provider 可替换）
-      （施工单 v2 = 纪要 10-11 23:56。**⓪①②③ + ③½ 竣工 2026-10-12**：
+      （施工单 v2 = 纪要 10-11 23:56。**⓪①②③ + ③½ + ④ 竣工 2026-10-12**：
       双模型冒烟 + generator/context 双契约（十四/十五，套件
       184 → 217）+ console Stage 4 端到端（生成失败降级检索列表）
       + **③½ 生成 A/B 冻结 GENERATION_MODEL = qwen3:4b-instruct**
@@ -345,9 +345,19 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       num_ctx 封口补跑——外部评审两刀全采纳）；实弹两坑入册：
       /api/chat 默认流式（stream:false 必发）+ 4b 默认窗口 4096
       触发 HTTP 400（GENERATOR_NUM_CTX=8192 入 generator.h +
-      PARAMS v1.7）。剩 ④ Qt chat 页 + worker（硬门槛：不开
-      worker 不接生成；citation sanity check 并入此步——外部评审
-      2026-10-12 裁定）→ ⑤ llama.cpp provider → ⑥ 注入金弹并入 M5）
+      PARAMS v1.7）。**④ Qt chat 页 + worker 竣工待 A F5 验收**：
+      gui/query_worker.{h,cpp} 全链纯 C++ 函数（BM25 + embed_query
+      HTTP + dense + RRF + RagPrompt + chat，检索与问答两路同骑）
+      + MainWindow chat 面板（QTextBrowser 答案区 [n] 可点击回源
+      高亮 + sources 账本表 + 越界引用标红计数 = citation sanity
+      check 并入，外部评审裁定兑现）；worker 刻意无 Q_OBJECT
+      （房规 no-moc 延续，QMetaObject::invokeMethod functor 编排跨
+      线程回调，无 metatype 注册）；查询期间语料变更被拒、窗口
+      析构等待 worker 收尾；GUI vcxproj/filters 登记 context/
+      generator/query_worker 六件；无头假 main 实弹全链验证
+      （金丝雀中文题 6 引用全有效 9.8s 出答，与 A/B Q4 同型）；
+      HYBRID_ROUTE_K 随链搬家 gui/query_worker.cpp（PARAMS v1.8）。
+      剩 ⑤ llama.cpp provider → ⑥ 注入金弹并入 M5）
 - [ ] M5：对比实验（BM25 / Dense-Flat / Dense-HNSW / Hybrid
       四路；recall/nDCG/latency/memory 裁生产默认）+ 调参
       （PARAMS.md 是总账）+ HNSW 与真增量缓议复议（语料×1000
@@ -406,6 +416,13 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
   HNSW 三旋钮）
 
 ## 6. 版本
+- v4.3 · 2026-10-12 · **M4 ④ Qt chat 页 + worker 竣工（待 A F5 验收）**：
+      gui/query_worker 全链纯 C++（无 Qt 类型，一 QThread 一查）+
+      chat 面板（[n] 点击回源高亮 / sources 账本表 / 越界引用标红 =
+      citation sanity check 并入）+ no-moc 设计延续（invokeMethod
+      functor 编排）+ GUI vcxproj/filters 登记 + 无头假 main 实弹
+      全链验证；HYBRID_ROUTE_K 搬家 gui/query_worker.cpp（v1.8）。
+      M4 剩 ⑤ llama.cpp provider + ⑥（并入 M5）
 - v4.2 · 2026-10-11 · **步骤⑤ T9 vector.bin 竣工（A 侧自做首件）**：
   vector_persist.cpp + 双前端对账接线 + test_vector_persist 28 条
   （套件 156 → 184）；契约微增 vector_content_hash 导出帮手 +

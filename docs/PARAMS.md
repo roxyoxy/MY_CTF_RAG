@@ -19,7 +19,7 @@
 | HNSW_M | 16 | hnsw.h | 每层每节点最大连接数（图连接度） | 惯例 8-48；大 M 图肥建慢 recall 升 |
 | HNSW_EF_CONSTRUCTION | 200 | hnsw.h | 建图候选宽度（建图质量） | 惯例 100-500 |
 | HNSW_EF_SEARCH | 100 | hnsw.h | 查询束宽（recall-latency 旋钮） | M5 主旋钮：升 recall 升延迟 |
-| HYBRID_ROUTE_K | 20 | 调用方策略（main.cpp / mainwindow.cpp） | 每路喂给 RRF 的候选条数（展示仍 TOP_K=10） | M5 可扫 10-50：列表越深，双路共识越受青睐 |
+| HYBRID_ROUTE_K | 20 | 调用方策略（main.cpp / gui/query_worker.cpp） | 每路喂给 RRF 的候选条数（展示仍 TOP_K=10） | M5 可扫 10-50：列表越深，双路共识越受青睐 |
 | EMBED_SLICE | 32 | 调用方策略（main.cpp / mainwindow.cpp） | 建库嵌入的每批块数（进度可见 + 单请求体上限） | M5 latency 记账 |
 | GEN_TIMEOUT_SECONDS | 300 | generator.h | 单次生成 HTTP 超时（CPU 4B 一答几十秒，给足） | GPU 常驻可收紧；M5 latency 记账 |
 | GEN_TEMPERATURE | 0.2 | generator.h（GeneratorConfig 默认值） | 生成温度（忠实汇总取向，不是诗歌创作） | M5 可扫 0~1：faithfulness vs 多样性 |
@@ -62,6 +62,9 @@
 
 ## 版本
 
+- v1.8 · 2026-10-12 · **M4 ④ 竣工**：HYBRID_ROUTE_K 住址随链搬家
+  mainwindow.cpp → gui/query_worker.cpp（查询链整体迁入 worker 线程，
+  GUI 侧策略常量与链同住；console 侧 main.cpp 不变）
 - v1.7 · 2026-10-12 · **M4 ③½ A/B 冻结**：GENERATION_MODEL =
   qwen3:4b-instruct 入册（实验档 docs/m4-generation-ab.md）；
   GENERATOR_NUM_CTX 8192 从 generator.cpp 搬入 generator.h 正式登记
