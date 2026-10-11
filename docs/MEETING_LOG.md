@@ -2252,3 +2252,131 @@ GUI 走同一段 build 逻辑，不重复验收。两处契约微增
 含人工验收，只剩 ⑥ T7 HNSW（Go/No-Go 可滑）。下一步：周一 M4
 console 最小版（生成链），周二 A 复习 + 演示视频，周三 10-14 汇报
 （B 出 PPT）。
+
+## [2026-10-11 23:56] AI-A
+
+【决策】M4 开工（比周一排期提前一天）；GPT 3 回流 22 节全附议 +
+AI-A 两微调 = 施工单修订版，A 拍板采纳；generator/context 两契约 +
+实现 + 测试 AI-A 执笔 A 审（T5/T6/T9 赶时间先例）。追溯生效：GPT
+入伙 M4+ 设计顾问、未来 Qt UI 外包给他（原计划单独开条，并入本条）。
+
+- **GPT 第三轮核验零幻觉**（外部引用 ollama.com 官方页直查全真）：
+  qwen3:1.7b 1.4GB 真；qwen3:4b-instruct 2.5GB 真（digest 同
+  4b-instruct-2507-q4_K_M，即 2507 instruct 别名）；**qwen3:4b 平凡
+  tag 的 digest 与 4b-thinking 相同**——现在 pull qwen3:4b 拿到的就是
+  thinking 变体，GPT 的改名建议由"好建议"升级为"必需"；qwen3.5 已上
+  Ollama（0.8b~122b 多模态 256K）真。核验通道备注：registry API 不开
+  放 tags/list（404 探针失效不作数），web_reader 直抓 library 三页定案
+- **对账要点三笔**：context 返回 RagPrompt{system, user,
+  used_materials} 引用账本（GUI [n]→chunk 映射、console Sources 打印
+  免解析 prompt——vector_content_hash 同款防漂移思想）；③½ 生成 A/B
+  两模型同材料对比（M3"拿自己数据拍"的移植）；GUI worker 升格硬门槛
+  （不开 worker 不接生成，4B CPU 一答几十秒 UI 线程必死）
+- **AI-A 两微调（A 已准）**：③½ 不写新工具（生成五指标人眼判，手工
+  跑 + 纪要留痕，M5 要数据化再补）；system 模板英文纯 ASCII 冻结 +
+  增"用提问语言作答"条款（writeup 英文为主、查询中文为主）
+- **施工单 v2**：⓪ 双模型运行性冒烟（不拍板）→ ① generator.h/.cpp
+  + Fake 测试 → ② context.h/.cpp（账本版）→ ③ console Stage 4 →
+  ③½ 生成 A/B 冻结 GENERATION_MODEL → ④ Qt chat 页 + worker（硬
+  门槛）→ ⑤ llama.cpp provider → ⑥ 注入金弹 + 生成评测并入 M5
+- **A 两问两答**：D 盘新增大文件 = pagefile.sys 21GB 系统扩页（非 AI
+  下载——本会话网络动作仅网页抓取核验零落盘；embedding 双模型
+  10-05 起就在 C 盘 .ollama）；生成模型需本机 pull（README 会写下载
+  方式给复现者，但替代不了演示机本地——⓪/③/③½/周三全要跑），C 盘
+  余 37G 无压力，分步 1.7b → 4b-instruct 或一次拉齐由 A 定
+- **⓪ 冒烟追加验证点**：qwen3:1.7b 无 instruct 变体（hybrid thinking，
+  默认吐推理 token）→ generator.cpp 冻结 think:false；qwen3:4b-instruct
+  （2507）本身无思考模式；两模型对该参数的接受行为 ⓪ 实测钉死
+- 开工顺序：①② 契约 + 实现 + Fake 测试离线先行（不依赖模型到位），
+  ⓪ 随 A pull 并行
+
+## [2026-10-12 00:28] AI-A
+
+（接上条）M4 ①②③ 一口气竣工，全离线可验证，模型到位前零阻塞。
+AI-A 执笔 A 审（23:56 授权），commit 待 A 批。
+
+- **① generator 第十四契约落地**：include/generator.h + src/
+  generator.cpp。ChatRole/ChatMessage/GeneratorConfig/LLMProvider{chat,
+  model_id} + make_ollama_chat_provider。七条款镜像 embedder 加生成
+  特化：消息**逐字透传** provider 零塑形（与 embedder 条款 1 相反
+  方向、同一理由——冻结策略唯一属主，这里属主是 context.h）；空
+  messages throw 且零网络；返回串只含最终答案（think:false 在
+  provider 内部压制，qwen3 hybrid 推理痕迹不外泄，⓪ 冒烟实测两
+  模型行为）；失败人话 throw 无部分结果、**截断不算失败**；参数从
+  GeneratorConfig 来（Ollama num_predict / llama.cpp max_tokens 各自
+  翻译）；factory 零网络首呼健康检查；无状态（history 属 caller）
+  + 分层红线
+- **② context 第十五契约落地**：include/context.h + src/context.cpp。
+  RagMaterial/RagPrompt/build_rag_prompt——**引用账本**
+  used_materials[0]==[1]（GUI 点击 [n] 跳 chunk、console Sources 打印
+  免解析 prompt）；预算按**字节**整材进出绝不腰斩，首材保底（非空
+  输入永不产空上下文）；system 模板英文纯 ASCII 冻结在 .cpp（不可信
+  数据主句 + [n] 引用 + 按提问语言作答）；材料 <<<BEGIN/END
+  MATERIAL>>> 围栏；空材料合法不 throw；纯函数确定性
+- **测试 33 条转正**：test_generator 11（拒连 throw 三连 / 空
+  messages / 构造零网络 + model_id 透传 / 空 model_id 拒 / 零 token
+  拒 / Fake 多态四连）+ test_context 22（账本序号一致 / 预算 0 首材
+  保底 / 溢出即停不跳小 / **字节诚实双胞胎**——同字符数 500 ASCII
+  fit vs 500 汉字 1500B 溢出，字符计数预算必挂此测 / system 三保证
+  钉死 / 空材料 / 确定性）。套件 184 → **217 全绿**
+- **登记**：run_tests.bat 第 12/13 单元；vcxproj/filters 注册四文件；
+  PARAMS v1.6（GEN_TIMEOUT_SECONDS=300 / GEN_TEMPERATURE=0.2 /
+  GEN_MAX_OUTPUT_TOKENS=512 / CONTEXT_BYTE_BUDGET=16384 四参数 +
+  生成模型坑位备注）；README 状态块（M4 施工中 + 217 + 十五契约）
+  + M4 里程碑行 + **模型下载节**（三条 pull 命令含"不是 qwen3:4b"
+  警示 + 降级行为说明）
+- **验证**：run_tests 217/217；msbuild **Rebuild** Debug|x64 /W4 零
+  警告（generator.cpp/context.cpp 首次入工程编译零告警）；六新文件
+  无 BOM 零非 ASCII（test_context 汉字全 \uXXXX 转义 + /utf-8，仓规）
+- **工具坑两笔记档**：git-bash 调 cmd 内层引号会被转义吃掉
+  （msbuild/vcvars 一律 .bat 包装——run_tests.bat 同款；vcvars64
+  在此环境还额外报路径错，绕行 msbuild 全路径）；会话 CWD 不跨
+  命令持久，脚本走绝对路径或自定位
+- 待 A：⓪ 冒烟（pull qwen3:1.7b → 跑两条 chat 验 think:false 行为
+  与延迟，A 或 AI-A 皆可执）；下一步 ③ console Stage 4 接线（离线
+  可写，联调冒烟等模型）
+
+## [2026-10-12 00:52] AI-A
+
+（接上条）A 三令"ok 那D盘没你事了 / 那就pull / 继续推进"执行完毕：
+**M4 ③ console Stage 4 接线竣工 + ⓪ 双模型冒烟钉死 + 双模型拉取
+完成**（AI-A 执笔 A 审，23:56 授权延续）。commit 待 A 批。
+
+- **模型弹药**：qwen3:1.7b（1.4GB）+ qwen3:4b-instruct（2.5GB，
+  digest 0edcdef34593 = 4b-instruct-2507 确认，tag 陷阱避开）先后
+  拉取完成，C 盘共 ~4GB
+- **③ 接线**（main.cpp 四处）：include context/generator 两契约；
+  GENERATION_MODEL 常量（暂定 qwen3:1.7b，③½ 冻结后改，注释含
+  "不要 qwen3:4b"警示）；provider 上电（factory 零网络，首呼健康
+  检查）；查询环重构——双分支打印统一为 ranked 列表（fused /
+  BM25-only 同一 TOP_K 截断），生成段喂 ranked top-10 →
+  build_rag_prompt(16384B) → chat → 打印 answer（含模型名 + 秒数）
+  + sources 账本行（[n] path (chunk id)）；**生成失败 = 警告 + 本
+  会话降级仅出检索列表**（dense→BM25 同款哲学：生成是增强不是
+  依赖）
+- 【实弹抓获 + 修复】generator.cpp 请求漏发 `"stream": false`——
+  Ollama /api/chat 默认 NDJSON 流式（一行一个 JSON 对象），整包
+  parse 必炸 invalid JSON；/api/embed 默认非流式所以 embedder 从未
+  踩过。首跑即抓获（顺便真实验证了降级路径），修复后双答全绿，
+  坑注写进代码注释
+- **⓪ 冒烟两模型全部钉死**（23:56 待验点关闭）：qwen3:1.7b 走
+  产品真实链路——console 两查询（金丝雀中文 + ret2libc 英文），
+  think:false 零泄漏（全文无 <think>/thinking 字样），单答 4.0s/
+  4.0s（CPU 快于预期一个量级）；qwen3:4b-instruct 走同款 wire
+  格式直打——HTTP 200 参数接受、响应无 thinking 字段、
+  done_reason=stop、冷加载首答 13.5s（含模型加载）
+- **⓪ 观察三枚（③½ 判分输入，不拍板）**：① 1.7b 对中文查询用
+  英文作答——"按提问语言作答"条款模型侧未跟随（材料全英文，模型
+  被带跑）；② 1.7b ret2libc 答案含编造地址算术（heap 与 libc 同址
+  0x7f1c...、one-gadget=+0x1000 纯虚构）——幻觉实锤样本；③ 同一
+  答案引用的 flag 经 grep 有据（notepad.md，账本 [7]）——有据与
+  幻觉同卷并存，1.7b 忠实度画像
+- **验证**：msbuild Debug|x64 /W4 零警告（stream 修复后复编）；
+  run_tests **217/217 全绿**；generator.cpp（4352B）/ main.cpp
+  （22272B）无 BOM 零非 ASCII
+- 文档：PARAMS 运行时节（GENERATION_MODEL 暂定 + ⓪ 观察入册）；
+  README 状态块 + M4 里程碑行（①②③ 竣工）
+- 下一步 ③½：8-10 题同材料对比——同一查询集两模型各跑一遍
+  console（context.h 纯函数条款保证两轮材料逐字节相同），五指标
+  （Groundedness / 引用正确性 / Coverage / Hallucination / Latency）
+  人眼判 + 纪要留痕 → 冻结 GENERATION_MODEL → 双前端同步常量

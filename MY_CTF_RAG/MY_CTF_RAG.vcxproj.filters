@@ -51,6 +51,12 @@
     <ClInclude Include="include\vector_persist.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\generator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\context.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\loader.cpp">
@@ -87,6 +93,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\vector_persist.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\generator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\context.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -47,7 +47,7 @@
 | M1 | 纯英文检索：接口设计(.h) → main → 实现(.cpp) → 优化 | ✅ 2026-09-28 四轮全部竣工 |
 | M2 | 中文 bigram + 持久化 + 增量/删除 + Qt 管理界面 | ✅ 2026-09-29 全线收官（F5 验收 + push） |
 | M3 | 向量检索（Ollama embedding + Flat 基线 + 自研 HNSW 双后端）+ RRF 混合 | 施工中：步骤⓪-⑤ 竣工（A/B 拍板 + 混合链 + vector.bin 持久化，10-11）；剩⑥ T7 HNSW（Go/No-Go 可滑） |
-| M4 | 本地 LLM 后端（Ollama 原型 → llama.cpp 交付）| 待开始 |
+| M4 | 本地 LLM 后端（Ollama 原型 → llama.cpp 交付）| 施工中：①②③ 竣工 + ⓪ 冒烟过（10-12：双契约 + console 生成链端到端，qwen3:1.7b 暂定 4s/答）；③½ 生成 A/B → ④ Qt chat 页 |
 | M5 | 对比实验（BM25/Dense/Hybrid 三组）+ 报告答辩 | 待开始 |
 
 M1 内部进度（施工顺序见 PRINCIPLES.md §2）：
@@ -91,7 +91,7 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 └── MY_CTF_RAG/              ← 代码区（VS 解决方案）
     ├── MY_CTF_RAG.sln
     ├── MY_CTF_RAG.vcxproj
-    ├── include/             ← 头文件：模块对外的"契约"（十三份：M1 五 + M2 三 + M3 五）
+    ├── include/             ← 头文件：模块对外的"契约"（十五份：M1 五 + M2 三 + M3 五 + M4 二）
     │   ├── type.h           ← 基础数据结构（Document/Chunk/SearchResult）
     │   ├── loader.h         ← 搬进来：data 目录 → vector<Document>
     │   ├── corpus_diff.h    ← 对账本：两代语料的 added/removed/edited + 墓碑继承（M2③ 新增）
@@ -102,7 +102,7 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
     │   └── persist.h        ← 索引快照：save/validate/load（M2② 新增）
     ├── src/                 ← 实现：对契约的"履约"（十二份已实现 + main.cpp 总装，M3 混合查询链 + vector.bin 已接线）
     ├── data/                ← 语料，按 category 分目录（58 篇：npusec 24 + ctf-wiki 34，含 mobile 类目）
-    ├── tests/               ← 回归测试（184 条全绿）+ run_tests.bat 一键跑
+    ├── tests/               ← 回归测试（217 条全绿）+ run_tests.bat 一键跑
     └── gui/                 ← Qt GUI 源码三件（MY_CTF_RAG_GUI 工程编译，F5 直达）
 ```
 
@@ -118,8 +118,11 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 
 ## 4. 快速开始
 
-**当前状态**：**M3 施工中（10-11 步骤⑤ vector.bin 竣工，六步只剩⑥ 可滑）**。
-十三份契约 + 184 条回归测试全绿（/W4），console + Qt GUI 双前端均已接入
+**当前状态**：**M3 主体竣工（六步只剩⑥ T7 HNSW 可滑）+ M4 施工中
+（10-12 ①②③ 竣工：generator/context 双契约 + console Stage 4
+生成链端到端冒烟过——检索列表后直接出带 [n] 引用与 sources 账本的
+模型答案，qwen3:1.7b 暂定 4s/答，生成失败自动降级仅出检索列表）**。
+十五份契约 + 217 条回归测试全绿（/W4），console + Qt GUI 双前端均已接入
 **BM25 + 语义向量 + RRF 混合查询链**（qwen3-embedding:0.6b @ 本地
 Ollama，A/B 实测拍板 10-11，服务不可达自动降级 BM25-only）；
 **向量持久化 vector.bin（T9）落地**：per-doc path+content_hash
@@ -145,6 +148,19 @@ fresh build + save；**语料变动（CORPUS_CHANGED）时收获旧快照：
 - **源码注释纪律：纯 ASCII 英文**（破折号用 `--`，禁用 `—`、弯引号、
   省略号；VS 默认按系统代码页 GBK 存盘，非 ASCII 字符会埋雷）
 - 可调参数一律 `constexpr` 集中放模块 .h，并登记 `docs/PARAMS.md`
+
+**模型下载（本地推理，全程离线）**——先装 [Ollama](https://ollama.com/download)
+（默认服务 `localhost:11434`），再拉：
+
+```
+ollama pull qwen3-embedding:0.6b   # 检索向量模型（639MB，M3 A/B 拍板）
+ollama pull qwen3:1.7b             # 生成候选 A（1.4GB，M4 ③½）
+ollama pull qwen3:4b-instruct      # 生成候选 B（2.5GB）——不是 qwen3:4b！
+                                   # 该 tag 现指向 thinking 变体（见 PARAMS.md）
+```
+
+检索/生成服务不可达时自动降级（dense→BM25-only；生成→仅出检索列表），
+模型不装程序照常跑，只是少了对应能力。
 
 会议纪要查询：
 

@@ -27,6 +27,8 @@
 #include "vector_index.h"
 #include "vector_persist.h"
 #include "rrf.h"
+#include "context.h"
+#include "generator.h"
 
 // Caller-side wiring constants for the hybrid query chain (M3 step 4),
 // registered in docs/PARAMS.md.
@@ -36,6 +38,12 @@ constexpr int EMBED_SLICE = 32;     // corpus embedding batch size
 // qwen3-embedding:0.6b beat bge-m3 on every metric (hit@10 96% vs 83%,
 // MRR 0.777 vs 0.697, faster embedding); see docs/PARAMS.md.
 constexpr const char* DENSE_MODEL = "qwen3-embedding:0.6b";
+
+// Generation model: provisional qwen3:1.7b until the generation A/B
+// (step 3.5) freezes the winner between qwen3:1.7b and
+// qwen3:4b-instruct; see docs/PARAMS.md. Never "qwen3:4b" -- that
+// plain tag currently points at the thinking variant.
+constexpr const char* GENERATION_MODEL = "qwen3:1.7b";
 
 // Human-readable name for a snapshot validation failure. The console
 // app only prints it; the caller action is always the same (rebuild).
@@ -305,6 +313,14 @@ int main() {
         }
     }
 
+    // M4 step 3: generation provider. The factory performs no network
+    // I/O (generator.h clause 6); the first chat call is the health
+    // check. Generation is an enhancement, not a dependency: when it
+    // fails, the session keeps answering with the retrieval list alone.
+    std::unique_ptr<LLMProvider> generator =
+        make_ollama_chat_provider(GeneratorConfig{"", GENERATION_MODEL, 0});
+    bool generation_ready = true;
+
     std::cout << "commands: list, del <id>  (anything else is a query)\n";
 
     // Stage 2: query loop. "list" and "del <id>" are reserved words;
@@ -400,19 +416,29 @@ int main() {
             }
         }
 
-        if (!dense.empty()) {
-            const std::unordered_map<int, float> bm25_score = score_map(bm25);
-            const std::unordered_map<int, float> dense_score = score_map(dense);
-            const std::vector<SearchResult> fused = rrf_fuse({bm25, dense});
+        // Rank for this query: RRF-fused when the dense route
+        // contributed, plain BM25 order otherwise (with its own raw
+        // scores). Both modes print the same top TOP_K list, then feed
+        // it to the generator.
+        const bool fused_mode = !dense.empty();
+        std::vector<SearchResult> ranked;
+        if (fused_mode)
+            ranked = rrf_fuse({bm25, dense});
+        else
+            ranked = bm25;
+        if (ranked.empty()) {
+            std::cout << "(no results)\n";
+            continue;
+        }
+        const std::size_t shown =
+            std::min(ranked.size(), static_cast<std::size_t>(TOP_K));
 
-            if (fused.empty()) {
-                std::cout << "(no results)\n";
-                continue;
-            }
-            const std::size_t shown =
-                std::min(fused.size(), static_cast<std::size_t>(TOP_K));
+        if (fused_mode) {
+            const std::unordered_map<int, float> bm25_score = score_map(bm25);
+            const std::unordered_map<int, float> dense_score =
+                score_map(dense);
             for (std::size_t i = 0; i < shown; ++i) {
-                const SearchResult& r = fused[i];
+                const SearchResult& r = ranked[i];
                 const Chunk& c = chunks[r.chunk_id];
                 const Document& d = docs[c.document_id];
 
@@ -426,14 +452,8 @@ int main() {
                     << "    " << c.text << "\n";
             }
         } else {
-            if (bm25.empty()) {
-                std::cout << "(no results)\n";
-                continue;
-            }
-            const std::size_t shown =
-                std::min(bm25.size(), static_cast<std::size_t>(TOP_K));
             for (std::size_t i = 0; i < shown; ++i) {
-                const SearchResult& r = bm25[i];
+                const SearchResult& r = ranked[i];
                 const Chunk& c = chunks[r.chunk_id];
                 const Document& d = docs[c.document_id];
 
@@ -441,6 +461,50 @@ int main() {
                     << "score=" << r.score << "  "
                     << "doc=" << d.path << "\n"
                     << "    " << c.text << "\n";
+            }
+        }
+
+        // Stage 4 (M4 step 3): ground an answer in the retrieval
+        // results. The prompt and its citation ledger come from
+        // context.h -- the single template owner; the provider only
+        // transports messages verbatim. A generation failure disables
+        // generation for the rest of the session and leaves the
+        // retrieval list as the answer, mirroring the dense -> BM25
+        // degradation policy.
+        if (generation_ready) {
+            std::vector<RagMaterial> materials;
+            materials.reserve(shown);
+            for (std::size_t i = 0; i < shown; ++i) {
+                const Chunk& c = chunks[ranked[i].chunk_id];
+                materials.push_back(RagMaterial{ranked[i].chunk_id,
+                    docs[c.document_id].path, c.text});
+            }
+            const RagPrompt prompt =
+                build_rag_prompt(query, materials, CONTEXT_BYTE_BUDGET);
+            try {
+                const auto t0 = std::chrono::steady_clock::now();
+                const std::string answer = generator->chat(
+                    {{ChatRole::SYSTEM, prompt.system_message},
+                     {ChatRole::USER, prompt.user_message}});
+                const double secs = std::chrono::duration<double>(
+                    std::chrono::steady_clock::now() - t0).count();
+                std::cout << "\n--- answer (" << GENERATION_MODEL << ", "
+                    << secs << "s) ---\n" << answer << "\n";
+                if (!prompt.used_materials.empty()) {
+                    std::cout << "--- sources ---\n";
+                    for (std::size_t i = 0;
+                         i < prompt.used_materials.size(); ++i)
+                        std::cout << "[" << (i + 1) << "] "
+                            << prompt.used_materials[i].source
+                            << " (chunk "
+                            << prompt.used_materials[i].chunk_id
+                            << ")\n";
+                }
+            } catch (const std::exception& e) {
+                generation_ready = false;
+                std::cerr << "Warning: generation unavailable ("
+                    << e.what() << "); retrieval-only answers for the "
+                    "rest of this session.\n";
             }
         }
     }
