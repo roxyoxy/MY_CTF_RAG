@@ -91,7 +91,8 @@ std::string OllamaChatProvider::chat(
         {"stream", false},
         {"options", {
             {"temperature", temperature_},
-            {"num_predict", max_output_tokens_}
+            {"num_predict", max_output_tokens_},
+            {"num_ctx", GENERATOR_NUM_CTX}
         }}
     };
 

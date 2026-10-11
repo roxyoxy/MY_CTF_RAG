@@ -47,7 +47,7 @@
 | M1 | 纯英文检索：接口设计(.h) → main → 实现(.cpp) → 优化 | ✅ 2026-09-28 四轮全部竣工 |
 | M2 | 中文 bigram + 持久化 + 增量/删除 + Qt 管理界面 | ✅ 2026-09-29 全线收官（F5 验收 + push） |
 | M3 | 向量检索（Ollama embedding + Flat 基线 + 自研 HNSW 双后端）+ RRF 混合 | 施工中：步骤⓪-⑤ 竣工（A/B 拍板 + 混合链 + vector.bin 持久化，10-11）；剩⑥ T7 HNSW（Go/No-Go 可滑） |
-| M4 | 本地 LLM 后端（Ollama 原型 → llama.cpp 交付）| 施工中：①②③ 竣工 + ⓪ 冒烟过（10-12：双契约 + console 生成链端到端，qwen3:1.7b 暂定 4s/答）；③½ 生成 A/B → ④ Qt chat 页 |
+| M4 | 本地 LLM 后端（Ollama 原型 → llama.cpp 交付）| 施工中：①②③ + ③½ 竣工（10-12：双契约 + console 生成链端到端；生成模型 A/B 冻结 qwen3:4b-instruct，稳态 8.4s/答）；→ ④ Qt chat 页 + worker |
 | M5 | 对比实验（BM25/Dense/Hybrid 三组）+ 报告答辩 | 待开始 |
 
 M1 内部进度（施工顺序见 PRINCIPLES.md §2）：
@@ -119,9 +119,10 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 ## 4. 快速开始
 
 **当前状态**：**M3 主体竣工（六步只剩⑥ T7 HNSW 可滑）+ M4 施工中
-（10-12 ①②③ 竣工：generator/context 双契约 + console Stage 4
-生成链端到端冒烟过——检索列表后直接出带 [n] 引用与 sources 账本的
-模型答案，qwen3:1.7b 暂定 4s/答，生成失败自动降级仅出检索列表）**。
+（10-12 ①②③ + ③½ 竣工：generator/context 双契约 + console Stage 4
+生成链端到端——检索列表后直接出带 [n] 引用与 sources 账本的模型答案；
+生成模型经 A/B 冻结 qwen3:4b-instruct（8.4s/答，实验档
+docs/m4-generation-ab.md），生成失败自动降级仅出检索列表）**。
 十五份契约 + 217 条回归测试全绿（/W4），console + Qt GUI 双前端均已接入
 **BM25 + 语义向量 + RRF 混合查询链**（qwen3-embedding:0.6b @ 本地
 Ollama，A/B 实测拍板 10-11，服务不可达自动降级 BM25-only）；
@@ -154,9 +155,10 @@ fresh build + save；**语料变动（CORPUS_CHANGED）时收获旧快照：
 
 ```
 ollama pull qwen3-embedding:0.6b   # 检索向量模型（639MB，M3 A/B 拍板）
-ollama pull qwen3:1.7b             # 生成候选 A（1.4GB，M4 ③½）
-ollama pull qwen3:4b-instruct      # 生成候选 B（2.5GB）——不是 qwen3:4b！
-                                   # 该 tag 现指向 thinking 变体（见 PARAMS.md）
+ollama pull qwen3:4b-instruct      # 生成模型（2.5GB，M4 ③½ A/B 冻结）
+                                   # ——不是 qwen3:4b！该 tag 现指向
+                                   # thinking 变体（见 PARAMS.md）
+ollama pull qwen3:1.7b             # 可选：fast mode 候选（1.4GB，A/B 落选方）
 ```
 
 检索/生成服务不可达时自动降级（dense→BM25-only；生成→仅出检索列表），

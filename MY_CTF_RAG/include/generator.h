@@ -22,6 +22,15 @@
 constexpr const char* GENERATOR_DEFAULT_ENDPOINT = "http://localhost:11434";
 constexpr int GENERATOR_DEFAULT_TIMEOUT_SECONDS = 300;
 
+// Ollama context window for chat requests (tokens). Many models ship a
+// 4096 default (4b-instruct-2507 does), while CONTEXT_BYTE_BUDGET =
+// 16384 bytes of materials alone tokenizes to ~5K tokens -> HTTP 400
+// exceeds_context_size_error (caught live in the step-3.5 A/B, first
+// query). Transport capacity, not generation behavior: one value for
+// every model keeps requests identical across A/Bs. Revisit when M5
+// scans CONTEXT_BYTE_BUDGET upward. Registered in docs/PARAMS.md.
+constexpr int GENERATOR_NUM_CTX = 8192;
+
 enum class ChatRole { SYSTEM, USER, ASSISTANT };
 
 struct ChatMessage {
@@ -29,10 +38,11 @@ struct ChatMessage {
     std::string text;
 };
 
-// Runtime configuration. model_id is deliberately NOT a compile-time
-// constant: the generation A/B (qwen3:1.7b vs qwen3:4b-instruct) has
-// not been decided yet; the winner's name becomes GENERATION_MODEL in
-// PARAMS.md once decided (the same pattern EmbedderConfig used in M3).
+// Runtime configuration. model_id stays a runtime field even after the
+// generation A/B froze qwen3:4b-instruct (2026-10-12,
+// docs/m4-generation-ab.md): the M4 step-5 llama.cpp provider and a
+// possible future fast mode swap it without recompiling (the same
+// pattern EmbedderConfig used in M3).
 struct GeneratorConfig {
     std::string endpoint;       // empty -> GENERATOR_DEFAULT_ENDPOINT
     std::string model_id;       // required, e.g. "qwen3:4b-instruct"

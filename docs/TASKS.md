@@ -336,11 +336,28 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       评审点**：算法核心 + M5 实验对象，可顺延不阻塞）
 - [ ] M4：本地 LLM 后端（Ollama 原型 → llama.cpp 交付；M3 的
       embedding 通道提前复用此边界，provider 可替换）
+      （施工单 v2 = 纪要 10-11 23:56。**⓪①②③ + ③½ 竣工 2026-10-12**：
+      双模型冒烟 + generator/context 双契约（十四/十五，套件
+      184 → 217）+ console Stage 4 端到端（生成失败降级检索列表）
+      + **③½ 生成 A/B 冻结 GENERATION_MODEL = qwen3:4b-instruct**
+      （9 题同材料五指标：引用 27 vs 0 / 语言全对 / 零幻觉样本，
+      稳态 8.4s vs 4.1s；实验档 = docs/m4-generation-ab.md，含
+      num_ctx 封口补跑——外部评审两刀全采纳）；实弹两坑入册：
+      /api/chat 默认流式（stream:false 必发）+ 4b 默认窗口 4096
+      触发 HTTP 400（GENERATOR_NUM_CTX=8192 入 generator.h +
+      PARAMS v1.7）。剩 ④ Qt chat 页 + worker（硬门槛：不开
+      worker 不接生成；citation sanity check 并入此步——外部评审
+      2026-10-12 裁定）→ ⑤ llama.cpp provider → ⑥ 注入金弹并入 M5）
 - [ ] M5：对比实验（BM25 / Dense-Flat / Dense-HNSW / Hybrid
       四路；recall/nDCG/latency/memory 裁生产默认）+ 调参
       （PARAMS.md 是总账）+ HNSW 与真增量缓议复议（语料×1000
       触发）；兑现 search 优化提案（partial_sort / scores
       稠密向量化，09-28 优化遍历成册，待真数据验证）
+      （**两层评测框架 2026-10-12 定档**——外部评审建议 A 采纳：
+      A 检索层 recall/MRR/nDCG/latency/memory + B 生成端到端五指标
+      （Groundedness/引用/幻觉/语言/延迟），不混总分——答错时能
+      区分"检索没召回" vs "召回对但 LLM 胡编"；生成层题集 = ③½
+      9 题扩充）
 
 ### M3 批 1 任务卡（2026-10-07 下发；卡体在 src/*.cpp 注释块，M1 同款）
 

@@ -2380,3 +2380,52 @@ AI-A 执笔 A 审（23:56 授权），commit 待 A 批。
   console（context.h 纯函数条款保证两轮材料逐字节相同），五指标
   （Groundedness / 引用正确性 / Coverage / Hallucination / Latency）
   人眼判 + 纪要留痕 → 冻结 GENERATION_MODEL → 双前端同步常量
+
+## [2026-10-12 01:39] AI-A
+
+【决策转记 + 竣工】A 三令"1.冻 2.push 3.go"——**③½ 生成 A/B 正式
+封口，GENERATION_MODEL 冻结 qwen3:4b-instruct**（AI-A 推荐 + 外部
+评审背书，A 人眼判拍板）；e73be0e push 放行已落地
+（8af4d66..e73be0e 上 origin/main）；M5 两层评测挂账。**M4 console
+版就此竣工**，下一步 ④ Qt chat 页 + worker。
+
+- **外部评审回流对账**（A 转入 Downloads\M4阶段评审与后续路线.md，
+  其依据为 A 提供的 123.txt 进度记录）：全文引用逐条核对**零幻觉**
+  ——217/217、used_materials 账本、</think> 泄漏、Q1 分水岭、4b
+  稳态 8-9s、e73be0e 未 push 全部属实；第 17 节自我边界声明（未编译
+  未复跑，设计评审非 code review）诚实，与本机验收互补。评审"两刀"
+  全采纳：① 1.7b 补跑封口（当场执行，见下）② GENERATOR_NUM_CTX
+  搬家 generator.h + PARAMS 登记（原住 .cpp 违"参数住 .h"自家规矩，
+  认账）。其余裁定：Step B-F 路线（GUI worker → 点引用回源 →
+  llama.cpp → HNSW → M5）与施工单一致照准；"不做清单"（streaming /
+  真多轮 / agent / rerank / 生成模型横评）全部同意；**citation
+  sanity check（答案 [n] 越界标 invalid）并入 ④ GUI**，不单独开件
+- **封口补跑（第一刀执行）**：首轮 1.7b 系 num_ctx=8192 修复**之前**
+  跑的（请求少一个字段 = 实验纪律口子，评审 §3.1 指出），用最终完全
+  一致 options（stream=false / think=false / num_ctx=8192 / 同温度
+  同上限）补跑 1.7b 全 9 题，四点确认：引用仍 0 次；语言跟随仍差
+  （Q4 汉字占比 12/1441、Q8 全英文）；Q1/Q4/Q8 失败模式全部复现
+  （Q1 多题缝合 + 事实错误"无需泄 libc 基址"——泄露基址恰是
+  ret2libc 命门 / Q4 英文答 + UAF 缝合 / Q8 全英文 + 编造地址）；
+  延迟 4.1s 不变。唯一未复现 = </think> 标签（间歇性，如实记档）。
+  对照 4b 同条件 27 次引用（7/9 题）、语言全对、零泄漏——**两轮请求
+  完全一致，4b 胜出公平成立，冻结无悬念**
+- **冻结落地**：main.cpp 常量注释换判词（常量本就 4b）；
+  GENERATOR_NUM_CTX 8192 从 generator.cpp 搬入 generator.h +
+  PARAMS v1.7 参数行；generator.h 两处过期注释同轮更新（常量注册
+  注 + GeneratorConfig"A/B 未决"注改为冻结后仍留运行时字段的理由
+  ——⑤ llama.cpp 与未来 fast mode 免重编）；**docs/
+  m4-generation-ab.md 实验档落位**（实验条件含材料逐字节相同证明 /
+  封口补跑 / 五指标表 / 三代表案例（Q1 RAG 分水岭留作答辩素材）/
+  判决 / 两坑）；README 三处（状态块 / 路线表 / 模型下载节——4b
+  转正默认，1.7b 转可选 fast mode）；TASKS M4 进度注 + **M5 两层
+  评测框架挂账**（检索层 recall/MRR/nDCG/latency/memory + 生成端到端
+  五指标，不混总分——答错可区分"没召回" vs "召回对但胡编"）
+- 验证：run_tests **217/217**（13 单元）；msbuild Debug|x64 /W4 零
+  警告；冒烟冻结版 4b 单查询正常出答案（12.1s）+ sources；
+  generator.h / generator.cpp / main.cpp 无 BOM 零非 ASCII；A/B
+  scratch 六件（查询集 + 三轮日志 + _dbg2 两件）清理，证据全部
+  转入实验档
+- commit 随本条请批，push 随批放行。④ 开工要点：QueryWorker 包全链
+  （embed_query HTTP 与 chat HTTP 都阻塞 UI，不只 generator——评审
+  §7 论点），单轮不做多轮，[n] 点击回源为特色功能

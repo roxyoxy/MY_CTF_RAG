@@ -25,6 +25,7 @@
 | GEN_TEMPERATURE | 0.2 | generator.h（GeneratorConfig 默认值） | 生成温度（忠实汇总取向，不是诗歌创作） | M5 可扫 0~1：faithfulness vs 多样性 |
 | GEN_MAX_OUTPUT_TOKENS | 512 | generator.h（GeneratorConfig 默认值） | 单答输出 token 上限（截断不算失败，按原样返回） | M5 可扫 256~1024 |
 | CONTEXT_BYTE_BUDGET | 16384 | context.h | 生成上下文材料块**字节**预算（UTF-8 按字节非字符；整材进出绝不腰斩 chunk，首材保底） | M5 扫 8K/16K/32K |
+| GENERATOR_NUM_CTX | 8192 tokens | generator.h | 生成请求上下文窗口（运输层容量参数非生成行为；4b-instruct 默认 4096，16KB 材料 ~5.2K tokens 实弹触发 HTTP 400，③½ 首查抓获；全模型同值保持 A/B 请求一致） | M5 扫 CONTEXT_BYTE_BUDGET 时同步检查模型窗口 |
 
 ## 运行时配置默认值（不占参数行）
 
@@ -35,16 +36,17 @@
   **已转正 `scripts/`**（dump_chunks.cpp + ab_eval.py，随 T9 commit
   入仓 10-11），23 题集内嵌 ab_eval.py 为 M5 复用资产）。查询侧自动挂
   qwen3-instruct-v1 前缀（embedder.h 成对冻结策略）
-- 生成模型 `model_id` = **待 ③½ A/B 冻结**（qwen3:1.7b vs
-  qwen3:4b-instruct，8-10 题同材料五指标：Groundedness / 引用正确性 /
-  Coverage / Hallucination / Latency，人眼判 + 纪要留痕）。console ③
-  已接线（main.cpp `GENERATION_MODEL`，2026-10-12），**暂定
-  qwen3:1.7b**（⓪ 冒烟：think:false 无泄漏、单答 4.0s；观察点：中文
-  查询被英文作答——语言跟随弱，③½ 判分项）。坑位备注
-  （2026-10-11 官方库 tags 页核验）：**不要用 `qwen3:4b`**——该平凡
-  tag 的 digest 与 `4b-thinking` 相同（现指向 thinking 变体，CPU 白烧
-  推理 token）；必须 `qwen3:4b-instruct`（= 4b-instruct-2507-q4_K_M
-  别名）。qwen3:1.7b 无 instruct 变体，provider 层统一冻结 think:false
+- 生成模型 `model_id` = **`qwen3:4b-instruct`（③½ A/B 冻结，2026-10-12）**：
+  9 题同材料五指标（Groundedness / 引用 / 语言跟随 / Hallucination /
+  Latency）——4b 引用 27 次 vs 0、中文题全中文作答、零幻觉样本，
+  代价稳态 8.4s vs 4.1s（质量差距远大于 4 秒）；1.7b 落选，保留为
+  未来 fast mode 候选。实验档 = docs/m4-generation-ab.md（含最终
+  options 封口补跑：两轮 stream=false / think=false / num_ctx=8192 /
+  同温度同上限，检索材料逐字节相同）。坑位备注（2026-10-11 官方库
+  tags 页核验）：**不要用 `qwen3:4b`**——该平凡 tag 的 digest 与
+  `4b-thinking` 相同（现指向 thinking 变体，CPU 白烧推理 token）；
+  必须 `qwen3:4b-instruct`（= 4b-instruct-2507-q4_K_M 别名）。
+  qwen3:1.7b 无 instruct 变体，provider 层统一冻结 think:false
   （generator.h 条款 3）
 - 向量快照 `vector.bin`（T9，2026-10-11）：身份四件套
   model_id/embedding_policy/dimension/VECTOR_PIPELINE_VERSION +
@@ -60,6 +62,10 @@
 
 ## 版本
 
+- v1.7 · 2026-10-12 · **M4 ③½ A/B 冻结**：GENERATION_MODEL =
+  qwen3:4b-instruct 入册（实验档 docs/m4-generation-ab.md）；
+  GENERATOR_NUM_CTX 8192 从 generator.cpp 搬入 generator.h 正式登记
+  （③½ 实弹抓获的默认窗口 4096 → HTTP 400 坑）
 - v1.6 · 2026-10-12 · **M4 ①② 竣工**：生成链四参数入账（GEN_TIMEOUT /
   GEN_TEMPERATURE / GEN_MAX_OUTPUT_TOKENS / CONTEXT_BYTE_BUDGET）；
   GENERATION_MODEL 待 ③½ A/B，含 qwen3:4b tag 坑位备注

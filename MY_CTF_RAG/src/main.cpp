@@ -39,11 +39,14 @@ constexpr int EMBED_SLICE = 32;     // corpus embedding batch size
 // MRR 0.777 vs 0.697, faster embedding); see docs/PARAMS.md.
 constexpr const char* DENSE_MODEL = "qwen3-embedding:0.6b";
 
-// Generation model: provisional qwen3:1.7b until the generation A/B
-// (step 3.5) freezes the winner between qwen3:1.7b and
-// qwen3:4b-instruct; see docs/PARAMS.md. Never "qwen3:4b" -- that
-// plain tag currently points at the thinking variant.
-constexpr const char* GENERATION_MODEL = "qwen3:1.7b";
+// Generation model frozen by the step-3.5 A/B (2026-10-12):
+// qwen3:4b-instruct beat qwen3:1.7b on groundedness, citations
+// (27 [n] marks vs 0) and language following, with zero
+// hallucination samples, at 8.4s vs 4.1s steady CPU latency; see
+// docs/m4-generation-ab.md. Never "qwen3:4b" -- that plain tag
+// currently points at the thinking variant. 1.7b remains a future
+// fast-mode candidate.
+constexpr const char* GENERATION_MODEL = "qwen3:4b-instruct";
 
 // Human-readable name for a snapshot validation failure. The console
 // app only prints it; the caller action is always the same (rebuild).
