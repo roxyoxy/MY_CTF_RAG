@@ -31,9 +31,14 @@ constexpr int HNSW_EF_SEARCH = 100;        // beam width while querying (the rec
 struct HnswIndex {
     int dimension = 0;
     std::vector<std::vector<float>> vectors;
-    // Layered adjacency (graph[level][node] = neighbor ids), entry
-    // point and max level: fields and comments added by the implementer
-    // on the task card; adding them is layout, not a signature change.
+    // Layered adjacency: graph[level][node] = neighbor ids at that
+    // layer. A node lives in layers 0..its level; per-node levels are a
+    // build-time local, not stored here (the graph layers are the
+    // authoritative structure). Fields added on the task card -- layout,
+    // not a signature change.
+    std::vector<std::vector<std::vector<int>>> graph;
+    int entry_point = -1;  // id of the top-layer entry node; -1 if empty
+    int max_level = -1;    // highest layer present; -1 if empty
 };
 
 // Build the layered graph.

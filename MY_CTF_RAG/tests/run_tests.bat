@@ -36,6 +36,10 @@ cl %CLFLAGS% tests\test_generator.cpp src\generator.cpp /Fe:tests\test_generator
 if errorlevel 1 goto failgen
 cl %CLFLAGS% tests\test_context.cpp src\context.cpp /Fe:tests\test_context.exe 1>tests\_b_ctx.txt 2>&1
 if errorlevel 1 goto failctx
+cl %CLFLAGS% tests\test_hnsw.cpp src\hnsw.cpp src\vector_index.cpp /Fe:tests\test_hnsw.exe 1>tests\_b_hnsw.txt 2>&1
+if errorlevel 1 goto failhnsw
+cl %CLFLAGS% tests\test_llama_cpp.cpp src\embedder.cpp src\generator.cpp /Fe:tests\test_llama_cpp.exe 1>tests\_b_lcpp.txt 2>&1
+if errorlevel 1 goto faillcpp
 
 tests\test_atom_scan.exe   || exit /b 1
 tests\test_tokenizer.exe || exit /b 1
@@ -50,6 +54,8 @@ tests\test_vector_index.exe || exit /b 1
 tests\test_vector_persist.exe || exit /b 1
 tests\test_generator.exe || exit /b 1
 tests\test_context.exe || exit /b 1
+tests\test_hnsw.exe || exit /b 1
+tests\test_llama_cpp.exe || exit /b 1
 echo ALL_TESTS_GREEN
 del tests\_b_*.txt 1>nul 2>nul
 exit /b 0
@@ -92,4 +98,10 @@ type tests\_b_gen.txt
 exit /b 1
 :failctx
 type tests\_b_ctx.txt
+exit /b 1
+:failhnsw
+type tests\_b_hnsw.txt
+exit /b 1
+:faillcpp
+type tests\_b_lcpp.txt
 exit /b 1

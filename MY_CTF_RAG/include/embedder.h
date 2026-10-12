@@ -83,3 +83,10 @@ public:
 //    interface.
 std::unique_ptr<EmbedProvider>
 make_ollama_provider(const EmbedderConfig& cfg);
+
+// The llama.cpp server implementation: POST /v1/embeddings, the
+// OpenAI-compatible endpoint of llama-server. Same contract clauses as
+// make_ollama_provider; only the wire shape differs (data[].embedding
+// instead of embeddings[]).
+std::unique_ptr<EmbedProvider>
+make_llama_cpp_provider(const EmbedderConfig& cfg);

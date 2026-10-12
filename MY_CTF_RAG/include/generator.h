@@ -103,3 +103,11 @@ public:
 //    subclassing LLMProvider are first-class citizens.
 std::unique_ptr<LLMProvider>
 make_ollama_chat_provider(const GeneratorConfig& cfg);
+
+// The llama.cpp server implementation: POST /v1/chat/completions, the
+// OpenAI-compatible endpoint of llama-server. Same contract clauses as
+// make_ollama_chat_provider; only the wire shape differs (temperature /
+// max_tokens, choices[].message.content, no "think" field, and context
+// is set by llama-server's -c flag at launch, not per request).
+std::unique_ptr<LLMProvider>
+make_llama_cpp_chat_provider(const GeneratorConfig& cfg);

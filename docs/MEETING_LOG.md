@@ -2505,3 +2505,27 @@ llama.cpp provider**（⑥ 注入金弹已定并入 M5）。
   无，Go/No-Go A 裁）与 M5 两层实验细案（指标工具/标签口径/题集
   扩充/注入金弹场景）为后续设计件。动线建议：今夜 ⑤ → 周二
   （10-13）A 复习 + 演示视频 → 周三（10-14）汇报
+
+## [2026-10-12 09:49] A（AI-A 代录）
+
+【决策】A 令 M3⑥ HNSW 开工（"做吧"）+ M4⑤ llama.cpp 代码顺手做（真机 smoke 挂账待 binary/GGUF）+ 配置入口砍掉（"没必要不做了"）。AI-A 全量执笔，未 push。
+
+- 进度盘点（A 问"进展到百分之多少"）：产品能力约 88-90%、全项目（含 M5 实验与答辩）约 72-75%；M0-M2 收官、M3 5/6、M4 ④/⑥（⑥并入 M5）、M5 未开。剩余三件 = M3⑥ HNSW、M4⑤ llama.cpp、M5 对比实验+报告。
+- **M3⑥ HNSW 竣工**：src/hnsw.cpp 标准 Malkov-Yashunin（几何分层 p=1/M、逐点插入、顶层贪心下降 + 第0层 ef=100 束搜、点积距离）；契约十二全钉；hnsw.h 补 graph/entry_point/max_level 三字段（契约明示 implementer 加字段 = layout 非签名变更）。test_hnsw 11 例全绿，Recall@10 对 Flat 实测 1.000000（聚簇合成 200 向量 16 维，阈值 0.85）。注册 console vcxproj + filters + run_tests 第十四单元；不接产品管线（Flat 留默认，切换留 M5 flag）。一处微解释留痕：search 条款 3"never throws"按"良构查询不抛"理解，维度不匹配仍 fail-fast（同 Flat 条款 2，越界读比抛更糟）。套件 217→228。
+- **M4⑤ llama.cpp 代码竣工（真机 smoke 挂账）**：embedder.h/generator.h 各加一工厂 make_llama_cpp_provider / make_llama_cpp_chat_provider（OpenAI 兼容端点 /v1/embeddings、/v1/chat/completions）；embedder.cpp 抽共享归一化 parse_vectors（Ollama embeddings[] 与 llama.cpp data[].embedding 两形状合流）；chat 请求去 think 字段 + max_tokens 替 options.num_predict + 无 per-request num_ctx（llama-server -c 启动定）。test_llama_cpp 15 例全绿（本地 httplib::Server 离线验证 OpenAI 形状：路径/请求体/data[].embedding 解析归一 0.6/0.8、choices[0].message.content、无 think）。真机 smoke 待 A 下 llama-server binary + GGUF（Ollama blob 不可直用）。套件 228→243。
+- 验证：run_tests 243/243（15 单元）全绿；msbuild Debug + Release|x64 /W4 零警告；8 份 .h/.cpp 纯 ASCII 无 BOM；vcxproj/filters CRLF+BOM 经 Python 字节级保真。
+- 未接 main.cpp 产品管线：配置入口已砍，HNSW 与 llama.cpp 两件切换均留 M5 flag。
+
+## [2026-10-12 17:10] A（AI-A 代录）
+
+【决策】M4⑤ llama.cpp 真机 smoke 9/9 PASS，**M4 全部子项收官，项目进入 M5**；scratch 资产放仓库外 `Desktop\llama.cpp\`。
+
+- A 授权"测试 debug 然后下载 可以"，AI-A 全程执行：run_tests 243/243 复绿 → 三件套下载（GitHub llama.cpp b11564 win-cpu-x64 18MB + HF 直连 VPN：Qwen 官方 `Qwen3-Embedding-0.6B-Q8_0.gguf` 609MB + bartowski `Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf` 2381MB，断点续传脚本 dl.py）。
+- **真机 smoke（smoke_llama.cpp 链接产品真实 src/embedder.cpp + src/generator.cpp，工厂函数直打活服务）9/9 PASS**：
+  - embedding server（`--embedding --pooling last`，port 8101）：/v1/embeddings 经 `make_llama_cpp_provider`，dim=1024、单位归一化、批量一致、qwen3 前缀识别（embedding_policy=qwen3-instruct-v1）、0.15s/查；
+  - chat server（`-c 8192` 对齐 GENERATOR_NUM_CTX，port 8102）：/v1/chat/completions 经 `make_llama_cpp_chat_provider`，接地答案 + [1] 引用齐全，3.5-4.2s/答——同机同量化档（两侧均 Q4_K_M）对比 Ollama 8.4s，**llama.cpp 快约 2 倍**，M5"原型→交付"叙事新增实测延迟论据。
+- 下载插曲两条入册：(1) HF 官方 Qwen 4B 仓库 gated，改用 bartowski ungated 源（同源量化）；(2) VPN 开启后本会话 bash 环境 PATH 异常（unix 工具时有时无），全部操作改走 Python 绝对路径驱动，不影响仓库。
+- scratch 资产（仓库外 `Desktop\llama.cpp\`，不进 git）：`bin\` 51 个二进制（llama-server 等）、两个 GGUF、`dl.py`（断点续传下载器）、`smoke_llama.cpp` + `build_smoke.bat`（真机 smoke 靶件，可重复复验）。重启命令：8101 embedding 带 `--embedding --pooling last`，8102 chat 带 `-c 8192`。
+- 产品管线未动：Ollama 仍是产品默认 runtime；llama.cpp 切换同 HNSW 一样留 M5 实验对比（README 已记起服命令）。
+- 文档同步：TASKS v4.5（M4 checkbox 勾掉 + ⑤ 改"竣工（含真机 smoke）"）、README（M4 行 ✅ 收官 / §4 状态块重写 / 模型下载段补 llama.cpp 运行时小节 / tests 243）。
+- 待 A：commit + push 批准（本批 = M3⑥ HNSW + M4⑤ llama.cpp 代码 + smoke 后文档同步，11 改 + 3 新增）。

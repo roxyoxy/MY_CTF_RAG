@@ -141,6 +141,7 @@
     <ClInclude Include="include\corpus_diff.h" />
     <ClInclude Include="include\embedder.h" />
     <ClInclude Include="include\generator.h" />
+    <ClInclude Include="include\hnsw.h" />
     <ClInclude Include="include\indexer.h" />
     <ClInclude Include="include\loader.h" />
     <ClInclude Include="include\persist.h" />
@@ -157,6 +158,7 @@
     <ClCompile Include="src\corpus_diff.cpp" />
     <ClCompile Include="src\embedder.cpp" />
     <ClCompile Include="src\generator.cpp" />
+    <ClCompile Include="src\hnsw.cpp" />
     <ClCompile Include="src\indexer.cpp" />
     <ClCompile Include="src\loader.cpp" />
     <ClCompile Include="src\main.cpp" />

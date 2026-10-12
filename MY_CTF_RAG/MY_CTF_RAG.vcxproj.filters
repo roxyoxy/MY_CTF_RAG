@@ -54,6 +54,9 @@
     <ClInclude Include="include\generator.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\hnsw.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="include\context.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -96,6 +99,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\generator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hnsw.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\context.cpp">

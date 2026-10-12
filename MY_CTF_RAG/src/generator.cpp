@@ -138,3 +138,104 @@ std::unique_ptr<LLMProvider>
 make_ollama_chat_provider(const GeneratorConfig& cfg) {
     return std::make_unique<OllamaChatProvider>(cfg);
 }
+
+class LlamaCppChatProvider final : public LLMProvider {
+public:
+    explicit LlamaCppChatProvider(const GeneratorConfig& cfg)
+        : endpoint_(cfg.endpoint.empty()
+              ? GENERATOR_DEFAULT_ENDPOINT
+              : cfg.endpoint),
+          timeout_s_(cfg.timeout_seconds <= 0
+              ? GENERATOR_DEFAULT_TIMEOUT_SECONDS
+              : cfg.timeout_seconds),
+          model_id_(cfg.model_id),
+          temperature_(cfg.temperature),
+          max_output_tokens_(cfg.max_output_tokens) {
+        if (model_id_.empty())
+            throw std::runtime_error(
+                "generation model_id must not be empty");
+        if (max_output_tokens_ <= 0)
+            throw std::runtime_error(
+                "generation max_output_tokens must be positive");
+    }
+
+    std::string chat(const std::vector<ChatMessage>& messages) override;
+
+    std::string model_id() const override {
+        return model_id_;
+    }
+
+private:
+    std::string endpoint_;
+    int timeout_s_;
+    std::string model_id_;
+    double temperature_;
+    int max_output_tokens_;
+};
+
+std::string LlamaCppChatProvider::chat(
+    const std::vector<ChatMessage>& messages) {
+    if (messages.empty())
+        throw std::runtime_error(
+            "chat requires at least one message");
+
+    nlohmann::json wire_messages = nlohmann::json::array();
+    for (const ChatMessage& m : messages)
+        wire_messages.push_back(nlohmann::json{
+            {"role", role_name(m.role)},
+            {"content", m.text}});
+
+    // OpenAI-compatible request. No "think" field (llama.cpp has no such
+    // knob; non-thinking GGUF models simply do not emit reasoning), and
+    // no per-request context size (llama-server sets it once at launch
+    // via -c). "stream": false keeps the body a single JSON object.
+    const nlohmann::json request = {
+        {"model", model_id_},
+        {"messages", wire_messages},
+        {"temperature", temperature_},
+        {"max_tokens", max_output_tokens_},
+        {"stream", false}
+    };
+
+    httplib::Client client(endpoint_);
+    client.set_connection_timeout(timeout_s_, 0);
+    client.set_read_timeout(timeout_s_, 0);
+    const auto response = client.Post(
+        "/v1/chat/completions", request.dump(), "application/json");
+
+    if (!response)
+        throw std::runtime_error(
+            "chat service unreachable at " + endpoint_);
+    if (response->status != 200)
+        throw std::runtime_error(
+            "chat service returned HTTP " +
+            std::to_string(response->status) + ": " +
+            response->body.substr(0, 200));
+
+    nlohmann::json body;
+    try {
+        body = nlohmann::json::parse(response->body);
+    } catch (const nlohmann::json::exception&) {
+        throw std::runtime_error(
+            "malformed response from chat service: invalid JSON");
+    }
+
+    // OpenAI shape: choices[] = [{message: {content}, ...}].
+    if (!body.is_object() || !body.contains("choices") ||
+        !body["choices"].is_array() || body["choices"].empty() ||
+        !body["choices"][0].is_object() ||
+        !body["choices"][0].contains("message") ||
+        !body["choices"][0]["message"].is_object() ||
+        !body["choices"][0]["message"].contains("content") ||
+        !body["choices"][0]["message"]["content"].is_string())
+        throw std::runtime_error(
+            "malformed response from chat service: "
+            "missing message content");
+
+    return body["choices"][0]["message"]["content"].get<std::string>();
+}
+
+std::unique_ptr<LLMProvider>
+make_llama_cpp_chat_provider(const GeneratorConfig& cfg) {
+    return std::make_unique<LlamaCppChatProvider>(cfg);
+}

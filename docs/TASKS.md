@@ -332,10 +332,16 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       Ollama 缺席 + 快照有效 = dense 照常上电（查询侧才降级）。
       隐藏福利入册；同日 GUI F5 人工验收通过——A 亲测两启全复用
       0.0 秒秒上、手动重建向量缓存零触碰，纪要 11:52 代录）
-      ⑥ hnsw.h 第十二契约 + 自研 HNSW（B·T7；**Go/No-Go
-      评审点**：算法核心 + M5 实验对象，可顺延不阻塞）
-- [ ] M4：本地 LLM 后端（Ollama 原型 → llama.cpp 交付；M3 的
+      ⑥ hnsw.h 第十二契约 + 自研 HNSW——**2026-10-12 竣工**（A 令"做吧"，
+      AI-A 执笔）：src/hnsw.cpp 标准 Malkov-Yashunin（几何分层
+      p=1/M、逐点插入、顶层贪心下降 + 第0层 ef=100 束搜、点积距离）；
+      hnsw.h 补 graph/entry_point/max_level 三字段；test_hnsw 11 例
+      全绿，Recall@10 对 Flat 实测 1.000000；不接产品管线（Flat 留
+      默认，切换留 M5 flag）；一处微解释：search"never throws"按
+      良构查询理解，维度不匹配仍 fail-fast。套件 217→228）
+- [x] M4：本地 LLM 后端（Ollama 原型 → llama.cpp 交付；M3 的
       embedding 通道提前复用此边界，provider 可替换）
+      （**2026-10-12 17:10 收官**）
       （施工单 v2 = 纪要 10-11 23:56。**⓪①②③ + ③½ + ④ 竣工 2026-10-12**：
       双模型冒烟 + generator/context 双契约（十四/十五，套件
       184 → 217）+ console Stage 4 端到端（生成失败降级检索列表）
@@ -357,7 +363,20 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
       generator/query_worker 六件；无头假 main 实弹全链验证
       （金丝雀中文题 6 引用全有效 9.8s 出答，与 A/B Q4 同型）；
       HYBRID_ROUTE_K 随链搬家 gui/query_worker.cpp（PARAMS v1.8）。
-      剩 ⑤ llama.cpp provider → ⑥ 注入金弹并入 M5）
+      ⑤ llama.cpp provider **竣工 2026-10-12（含 17:10 真机 smoke）**：
+      embedder/generator 各加一工厂（/v1/embeddings、
+      /v1/chat/completions OpenAI 形状）；embedder.cpp 抽共享归一化
+      parse_vectors（两形状合流）；chat 去 think + max_tokens +
+      无 per-request num_ctx；test_llama_cpp 15 例全绿（本地
+      httplib::Server 离线验证 OpenAI 形状）；真机 smoke 9/9 PASS
+      （llama.cpp b11564 win-cpu-x64 + Q8_0 embedding 609MB +
+      bartowski Q4_K_M 4B 2381MB，VPN 下 HF/GitHub 直连，资产在
+      仓库外 Desktop\llama.cpp\；smoke_llama.cpp 链接产品真实
+      src/embedder.cpp + generator.cpp 直打活服务：embedding
+      dim=1024 归一化对齐 0.15s/查，chat 接地答案 [1] 引用
+      3.5-4.2s/答 = 同机同模型较 Ollama 8.4s 快约 2 倍，M5"原型
+      →交付"叙事新增实测论据）。套件 228→243。剩 ⑥ 注入金弹
+      并入 M5）
 - [ ] M5：对比实验（BM25 / Dense-Flat / Dense-HNSW / Hybrid
       四路；recall/nDCG/latency/memory 裁生产默认）+ 调参
       （PARAMS.md 是总账）+ HNSW 与真增量缓议复议（语料×1000
@@ -416,6 +435,18 @@ M2 持久化、M3 RRF 混合全都吃这个格式。**内部怎么建账自由�
   HNSW 三旋钮）
 
 ## 6. 版本
+- v4.5 · 2026-10-12 · **M4⑤ 真机 smoke 通过，M4 收官**：llama.cpp
+      b11564 CPU x64 server + 双 GGUF（HF 直连，仓库外
+      Desktop\llama.cpp\）；smoke_llama.cpp 链产品真实工厂 9/9 PASS
+      （embedding dim=1024/归一化/qwen3 前缀；chat 接地引用
+      3.5-4.2s，较 Ollama 同模型快约 2 倍）；产品默认 runtime 仍
+      Ollama，切换对比留 M5。M0-M4 全收官，下一步 M5
+- v4.4 · 2026-10-12 · **M3⑥ HNSW + M4⑤ llama.cpp 代码竣工**：
+      hnsw.cpp（契约十二，Recall@10 对 Flat 1.0，test 11 例）+
+      llama.cpp 双工厂（OpenAI 形状，test_llama_cpp 15 例本地 server
+      离线验证）；两件均不接产品管线（Flat 留默认，切换留 M5 flag）；
+      配置入口砍掉（A 裁）；套件 217→243，msbuild /W4 零警告。
+      llama.cpp 真机 smoke 挂账待 binary/GGUF
 - v4.3 · 2026-10-12 · **M4 ④ Qt chat 页 + worker 竣工（待 A F5 验收）**：
       gui/query_worker 全链纯 C++（无 Qt 类型，一 QThread 一查）+
       chat 面板（[n] 点击回源高亮 / sources 账本表 / 越界引用标红 =

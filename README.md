@@ -39,16 +39,16 @@
 
 ## 2. 当前状态与迭代路线
 
-**现在是 M3 阶段（向量检索 + RRF 混合）**，M0-M2 已全部收官。整体路线：
+**现在是 M5 阶段（对比实验 + 报告答辩）**，M0-M4 已全部收官。整体路线：
 
 | 阶段 | 内容 | 状态 |
 |---|---|---|
 | M0 | 文档体系 + 会议纪要 + 查询脚本 | ✅ 2026-09-22 |
 | M1 | 纯英文检索：接口设计(.h) → main → 实现(.cpp) → 优化 | ✅ 2026-09-28 四轮全部竣工 |
 | M2 | 中文 bigram + 持久化 + 增量/删除 + Qt 管理界面 | ✅ 2026-09-29 全线收官（F5 验收 + push） |
-| M3 | 向量检索（Ollama embedding + Flat 基线 + 自研 HNSW 双后端）+ RRF 混合 | 施工中：步骤⓪-⑤ 竣工（A/B 拍板 + 混合链 + vector.bin 持久化，10-11）；剩⑥ T7 HNSW（Go/No-Go 可滑） |
-| M4 | 本地 LLM 后端（Ollama 原型 → llama.cpp 交付）| ①②③ + ③½ 竣工（10-12）；④ Qt chat 页 + worker 竣工待 F5 验收（10-12：QueryWorker 全链后台线程 + [n] 点击回源 + 越界引用标红）→ ⑤ llama.cpp provider → ⑥ 注入金弹并入 M5 |
-| M5 | 对比实验（BM25/Dense/Hybrid 三组）+ 报告答辩 | 待开始 |
+| M3 | 向量检索（Ollama embedding + Flat 基线 + 自研 HNSW 双后端）+ RRF 混合 | ✅ 六步全竣工（10-12：⑥ HNSW 自研竣工，Recall@10 对 Flat 1.0；Flat 留产品默认，HNSW 为 M5 实验对象） |
+| M4 | 本地 LLM 后端（Ollama 原型 → llama.cpp 交付）| ✅ 2026-10-12 收官：⓪-④ 竣工 + ⑤ llama.cpp 真机 smoke 9/9 PASS（embedding dim=1024 归一化对齐；chat 接地引用 3.5-4.2s，同机同模型较 Ollama 快约 2 倍）；⑥ 注入金弹并入 M5 |
+| M5 | 对比实验（BM25/Dense-Flat/Dense-HNSW/Hybrid 四路，两层评测框架）+ 报告答辩 | 待开始 |
 
 M1 内部进度（施工顺序见 PRINCIPLES.md §2）：
 
@@ -100,9 +100,9 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
     │   ├── indexer.h        ← 账房+查账台：倒排索引 + BM25
     │   ├── atom_scan.h      ← 词法单一事实源：Atom 扫描（M2① 新增）
     │   └── persist.h        ← 索引快照：save/validate/load（M2② 新增）
-    ├── src/                 ← 实现：对契约的"履约"（十二份已实现 + main.cpp 总装，M3 混合查询链 + vector.bin 已接线）
+    ├── src/                 ← 实现：对契约的"履约"（十四份已实现 + main.cpp 总装，M3 混合查询链 + vector.bin 已接线；hnsw 与 llama.cpp 工厂待 M5 flag 接线）
     ├── data/                ← 语料，按 category 分目录（58 篇：npusec 24 + ctf-wiki 34，含 mobile 类目）
-    ├── tests/               ← 回归测试（217 条全绿）+ run_tests.bat 一键跑
+    ├── tests/               ← 回归测试（243 条全绿，15 单元）+ run_tests.bat 一键跑
     └── gui/                 ← Qt GUI 源码四件（MY_CTF_RAG_GUI 工程编译，F5 直达；含 M4 查询 worker）
 ```
 
@@ -118,15 +118,17 @@ MY_RAG/                      ← 仓库根 = 文档区（人和 AI 先读这里�
 
 ## 4. 快速开始
 
-**当前状态**：**M3 主体竣工（六步只剩⑥ T7 HNSW 可滑）+ M4 施工中
-（10-12 ①②③ + ③½ + ④ 竣工：generator/context 双契约 + console Stage 4
-生成链端到端——检索列表后直接出带 [n] 引用与 sources 账本的模型答案；
-生成模型经 A/B 冻结 qwen3:4b-instruct（8.4s/答，实验档
-docs/m4-generation-ab.md），生成失败自动降级仅出检索列表；
-④ GUI chat 页 + worker——QueryWorker 包全链后台线程（embed_query 与
-chat 两段 HTTP 均不碰 UI 线程），单轮问答、[n] 点击跳源高亮、
-越界引用标红计数（citation sanity check）、生成失败降级检索列表）**。
-十五份契约 + 217 条回归测试全绿（/W4），console + Qt GUI 双前端均已接入
+**当前状态**：**M0-M4 全收官（10-12），现在是 M5 阶段**。
+M3 六步全竣工（⑥ HNSW 自研 10-12，Recall@10 对 Flat 1.0）；
+M4 全竣工（⓪-③½ + ④ Qt chat 页 + worker——QueryWorker 包全链
+后台线程（embed_query 与 chat 两段 HTTP 均不碰 UI 线程），单轮问答、
+[n] 点击跳源高亮、越界引用标红计数（citation sanity check）、生成失败
+降级检索列表；⑤ llama.cpp 交付运行时 10-12 真机 smoke 9/9 PASS：
+embedding dim=1024 归一化对齐 0.15s/查，chat 接地引用 3.5-4.2s/答，
+同机同模型较 Ollama（8.4s，实验档 docs/m4-generation-ab.md）快约
+2 倍——"Ollama 原型 → llama.cpp 交付"闭环；产品默认 runtime 仍
+Ollama，切换对比留 M5）。
+十五份契约 + 243 条回归测试全绿（/W4），console + Qt GUI 双前端均已接入
 **BM25 + 语义向量 + RRF 混合查询链**（qwen3-embedding:0.6b @ 本地
 Ollama，A/B 实测拍板 10-11，服务不可达自动降级 BM25-only）；
 **向量持久化 vector.bin（T9）落地**：per-doc path+content_hash
@@ -166,6 +168,20 @@ ollama pull qwen3:1.7b             # 可选：fast mode 候选（1.4GB，A/B 落
 
 检索/生成服务不可达时自动降级（dense→BM25-only；生成→仅出检索列表），
 模型不装程序照常跑，只是少了对应能力。
+
+**llama.cpp 交付运行时（M4⑤ 真机验证过）**——资产在仓库外
+`Desktop\llama.cpp\`（binary = GitHub llama.cpp b11564 win-cpu-x64；
+GGUF = HF `Qwen/Qwen3-Embedding-0.6B-Q8_0` 609MB +
+`bartowski/Qwen_Qwen3-4B-Instruct-2507-Q4_K_M` 2381MB）。起服务：
+
+```
+cd Desktop\llama.cpp
+bin\llama-server.exe -m Qwen3-Embedding-0.6B-Q8_0.gguf --port 8101 --embedding --pooling last
+bin\llama-server.exe -m Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf --port 8102 -c 8192
+```
+
+`smoke_llama.exe`（同目录，build_smoke.bat 可重建）链接产品真实
+embedder/generator 源文件打活服务，9 项检查一键复验。
 
 会议纪要查询：
 
