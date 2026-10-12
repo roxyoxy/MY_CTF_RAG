@@ -6,7 +6,7 @@
 
 > 中文完整版 README：[`docs/README.zh.md`](./docs/README.zh.md)
 
-[![CI](https://github.com/roxyoxy/MY_CTF_RAG/actions/workflows/ci.yml/badge.svg)](https://github.com/roxyoxy/MY_CTF_RAG/actions/workflows/ci.yml)
+[![CI](https://github.com/roxyoxy/TraceRAG/actions/workflows/ci.yml/badge.svg)](https://github.com/roxyoxy/TraceRAG/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![tests](https://img.shields.io/badge/tests-243%20passing-brightgreen)](./MY_CTF_RAG/tests)
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue)](./MY_CTF_RAG/MY_CTF_RAG.sln)
@@ -104,7 +104,7 @@ Prerequisites: **VS2022** (Desktop C++), **Qt 6** (GUI only), **Ollama**
 (optional — graceful degradation without it).
 
 ```bat
-git clone https://github.com/roxyoxy/MY_CTF_RAG.git
+git clone https://github.com/roxyoxy/TraceRAG.git
 :: build: open MY_CTF_RAG\MY_CTF_RAG.sln, build x64 (Debug or Release)
 :: or from a developer prompt:
 cd MY_CTF_RAG && msbuild MY_CTF_RAG.sln /p:Configuration=Release /p:Platform=x64
