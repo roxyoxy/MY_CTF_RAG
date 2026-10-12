@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Locate vcvars64
+        id: vcvars
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $install = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          $vcvars = Join-Path $install "VC\Auxiliary\Build\vcvars64.bat"
+          if (-not (Test-Path $vcvars)) { throw "vcvars64.bat not found" }
+          "path=$vcvars" >> $env:GITHUB_OUTPUT
+
+      - name: Build console project (Release x64)
+        shell: cmd
+        run: |
+          call "${{ steps.vcvars.outputs.path }}"
+          cd MY_CTF_RAG
+          msbuild MY_CTF_RAG.vcxproj /m /nologo /verbosity:minimal /p:Configuration=Release /p:Platform=x64
+
+      - name: Regression tests (243 cases)
+        shell: cmd
+        run: |
+          call "${{ steps.vcvars.outputs.path }}"
+          cd MY_CTF_RAG
+          tests\run_tests.bat
+
+      - name: Build console project (Debug x64)
+        shell: cmd
+        run: |
+          call "${{ steps.vcvars.outputs.path }}"
+          cd MY_CTF_RAG
+          msbuild MY_CTF_RAG.vcxproj /m /nologo /verbosity:minimal /p:Configuration=Debug /p:Platform=x64

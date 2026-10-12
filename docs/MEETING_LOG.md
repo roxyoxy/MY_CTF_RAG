@@ -2529,3 +2529,15 @@ llama.cpp provider**（⑥ 注入金弹已定并入 M5）。
 - 产品管线未动：Ollama 仍是产品默认 runtime；llama.cpp 切换同 HNSW 一样留 M5 实验对比（README 已记起服命令）。
 - 文档同步：TASKS v4.5（M4 checkbox 勾掉 + ⑤ 改"竣工（含真机 smoke）"）、README（M4 行 ✅ 收官 / §4 状态块重写 / 模型下载段补 llama.cpp 运行时小节 / tests 243）。
 - 待 A：commit + push 批准（本批 = M3⑥ HNSW + M4⑤ llama.cpp 代码 + smoke 后文档同步，11 改 + 3 新增）。
+
+## [2026-10-12 17:36] A（AI-A 代录）
+
+【决策】仓库开源专业化整理（A 目标"像专业 GitHub 项目，开源赚 star"），四项裁定：MIT 许可证 / README 中英双语 / 内部协作文档全部公开（AI 协作宪法是差异化卖点）/ data/ 58 篇语料全部保留。未 commit（待 A 批）。
+
+- 背景：M0-M4 工程收官后 A 发起整理。AI-A 勘察（138 tracked 文件 2.9MB，零构建产物入库，third_party 双 MIT 齐全）+ 四问四答定方案，A 批准计划后执行。
+- **data/ PII 扫描结果：干净**。58 篇全扫（邮箱/手机/学号/身份证/token/内网 IP/微信 QQ），18 处 "password/token" 命中全是题目本身的解谜要素（writeup 正文内容，非真实凭据）。A 质疑"为什么要移除"后改为全部保留（ISCC 已结束、赛后题解公开是 CTF 惯例、语料是开箱即跑卖点）。README 语料描述过期项修正：实为 npusec 22 + ISCC 2026 赛后题解 36（非旧文所写 ctf-wiki 34）。
+- 新增六件：LICENSE（MIT, Roxyoxy）/ CONTRIBUTING.md（环境+回归门+纯 ASCII 纪律）/ .github/workflows/ci.yml（windows-latest：vswhere 定位 vcvars → 构建 console Release+Debug x64 → run_tests 243 回归；GUI 需 Qt 首版不进 CI）/ docs/README.md（文档索引阅读地图，外人入口）/ docs/README.zh.md（中文完整版迁移+树更新+语料修正）/ docs/assets/（演示素材占位，明天录视频时补 demo.gif + GUI 截图）。
+- README.md 重写为英文主文档：badges（CI/MIT/243 tests/C++17/Windows）+ pitch + 架构管道图 + 自研 vs 依赖边界表 + 实测亮点（HNSW Recall@10=1.0、金丝雀混合检索案例、vector.bin 0.01s 热启、llama.cpp 2x）+ Quick Start + 语料说明 + AI 协作可审计流程卖点引 docs。
+- .gitignore 增补：.claude/ 与 tests/_b_*.txt。代码区（MY_CTF_RAG/ 内部）零改动——VS 工程路径不破坏。
+- 验证：run_tests 243/243 ALL_TESTS_GREEN（文档改动零代码影响兜底）；8 个新/改文件 UTF-8 无 BOM 全 LF；git status 干净（.gitignore+README 改，6 新增路径）。
+- 待 A：(1) commit + push 批准（push 后 CI 首跑需盯梢，红则当场修）；(2) GitHub 门面手动项——repo description + topics（rag/ctf/bm25/hnsw/cpp/qt/llm/ollama/offline）+ social preview 图；(3) 明天录演示视频时补 docs/assets/ 素材。
