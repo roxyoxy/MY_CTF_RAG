@@ -1,4 +1,6 @@
-# MY_RAG — Offline CTF RAG with Self-Built Retrieval Algorithms
+# TraceRAG — Offline CTF RAG with Self-Built Retrieval Algorithms
+
+> **溯源 · TraceRAG** — 离线 CTF 知识溯源与生成系统。
 
 **An offline Retrieval-Augmented Generation system for CTF players: feed it your writeups, ask it about a challenge, get a grounded answer with clickable citations — no cloud, no telemetry, everything runs on your machine.**
 
