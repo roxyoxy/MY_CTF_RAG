@@ -2541,3 +2541,124 @@ llama.cpp provider**（⑥ 注入金弹已定并入 M5）。
 - .gitignore 增补：.claude/ 与 tests/_b_*.txt。代码区（MY_CTF_RAG/ 内部）零改动——VS 工程路径不破坏。
 - 验证：run_tests 243/243 ALL_TESTS_GREEN（文档改动零代码影响兜底）；8 个新/改文件 UTF-8 无 BOM 全 LF；git status 干净（.gitignore+README 改，6 新增路径）。
 - 待 A：(1) commit + push 批准（push 后 CI 首跑需盯梢，红则当场修）；(2) GitHub 门面手动项——repo description + topics（rag/ctf/bm25/hnsw/cpp/qt/llm/ollama/offline）+ social preview 图；(3) 明天录演示视频时补 docs/assets/ 素材。
+
+## [2026-10-15 00:30] AI-C
+
+【发现 + 决策 + 计划】GUI 启动卡死根因定位；修复方案与 engine 抽取
+计划一并入册。本条由 AI-C 执笔，决策为 C 拍板。
+
+一、【发现】GUI 启动后界面立即无响应。根因：mainwindow.cpp 的
+embedChunks() 全程跑在 GUI 线程上（源码注释自认 "still runs on
+the GUI thread (a worker thread is an M4 hardening item)"），而
+vector.bin 缺席时需冷嵌 145 块（约 20s+，首批还含 Ollama 模型
+装载），QTimer::singleShot(0) 让窗口先显示、随即被同步嵌入堵死，
+故表现为"界面出来即卡死"。附带隐患：embedChunks 三个调用点
+（启动 :454 / 重建 :624 / 删除 :953）仅以 chatBusy_ 为守卫，而该
+守卫属查询 worker；嵌套路内的 QApplication::processEvents() (:554)
+会派发点击，用户"卡死时乱点"可重入 embedChunks——不触发死锁，
+但重复嵌入与状态错乱。规避：先跑 console 生成 vector.bin，GUI 即
+快照命中、瞬启（两前端共享同一 vector.bin，工作目录同为代码区）。
+
+二、【决策】修复走"显式进度"而非"工作线程"：启动时先做快速判定
+（validate index.bin + 预扫 vector.bin 复用率，均毫秒级）；确需重建
+时弹出模态进度框，期间禁止用户操作。实现取 Qt 标准姿势
+QProgressDialog + setMinimumDuration（快操作不闪窗，setValue 自带
+事件处理），模态天然消灭重入隐患。引擎保持同步、不引入线程——
+并发正确性收敛到调度层一处。另：引擎内部不加锁（C 拍板同意），
+契约中明写"not thread-safe，同一时刻只允许一个线程访问"。
+
+三、【授权】已完成的算法与契约冻结不动，
+新增内容与整体调整可自由实施，改动记纪要不走全组讨论；代码可由
+AI 执笔（仅"代码卡"仍由 C 手写）。
+
+四、【计划】engine 抽取——消除 console / GUI / 网页三处复制的编排
+策略（快照缓存决策 / 混合查询链 / 降级 / 向量复用）。五步，每步
+可独立验证：① include/engine.h 契约（方法清单 + 结构化返回 + 三条
+纪律：不打印 / 不读输入 / 不开线程）② engine.cpp 实现（搬迁
+main.cpp 编排）③ main.cpp 变薄壳（console 行为回归须逐字一致）
+④ GUI 切 engine + 进度弹窗（卡死问题在此闭环）⑤ 网页服务层。
+动机非审美：同一套编排逻辑已复制两份，其中 GUI 那份带线程 bug，
+而第三份（网页前端）在即。
+
+## [2026-10-15 01:15] AI-C
+
+【竣工】engine 抽取第 1-3 步落地：契约十六 + 实现 + console 变薄壳
+（AI 执笔，授权见本日授权条）。
+
+一、新增 include/engine.h（第十六契约）+ src/engine.cpp。职责 = 持有
+流水线状态与"调用方策略"（快照信任决策 / 语料对账与墓碑继承 / 混合
+查询链 / 向量复用 / 降级规则）。三条纪律写进契约：不打印、不读输入、
+不开线程；并明写 NOT thread-safe——并发正确性收敛到调度层一处，不加锁
+（C 拍板）。
+
+二、迁入的编排（原 main.cpp 175 行 helper + 各 Stage 内联块）：
+harvest_tombstones -> Impl::harvest；build_doc_vectors -> Impl::build_dense；
+Stage 1 缓存分支 -> open + build_bm25；Stage 3/4 -> retrieve + generate；
+list / del -> documents / remove_document。main.cpp 由 515 行降为 303 行，
+只剩命令解析与打印（各前端自留状态码->措辞的映射表）。
+
+三、四条路径与改造前二进制（10-15 00:08 版）逐字对比通过：启动横幅
+一致；查询检索块 1050 行逐字一致（含三列分数格式）；list + del 69 行
+逐字一致（usage / 越界 / 删除 / 重复删除四分支）；生成段格式与引用
+账本一致（答案文本因温度 0.2 不可比）。
+
+四、**逐字验证抓到一个会直接上线的体验回归**：把检索与生成合并进单次
+query() 调用后，检索结果要等生成结束（8~125s）才打印；旧版是"先出
+结果、再慢慢生成"。修复：契约拆为两相——retrieve()（快，返回 hits）
++ generate()（慢，填 answer/citations），并在条款写明拆相理由（两个
+前端都要"先展示命中、后出答案"）。若无逐字对比，此回归会静默上线：
+最终输出正确，只是晚了百秒，测试全绿。
+
+五、附带修正两处：分数打印由 std::to_string（"12.869300"）改回
+ostringstream（"12.8693"，复刻 << 默认格式）；删除回调中的路径取值
+错误。
+
+六、登记：四个工程文件（console + GUI 的 vcxproj/filters）加 engine.h
+与 engine.cpp 的 ClInclude/ClCompile，BOM 与 CRLF 字节保真，XML 良构，
+/W4 零警告零错误。
+
+待办：第 ④ 步 GUI 切 engine + 启动进度弹窗（卡住问题在此闭环，需消除
+mainwindow.cpp:384/470/602/905 与 query_worker.cpp:18 这最后一份副本）；
+第 ⑤ 步网页服务层。
+
+## [2026-10-15 01:41] AI-C
+
+【竣工】engine 抽取第 ④ 步：GUI 切引擎 + 启动进度弹窗（卡死问题闭环）。
+
+一、gui/query_worker.{h,cpp} 由 94 行缩到 35 行——整条链已在引擎内，它只剩
+两相驱动（retrieve -> 通知 UI -> generate）。gui/mainwindow.{h,cpp} 清空
+全部流水线状态（docs/chunks/index/provider/denseIndex/generator/快照路径），
+窗口只持有控件 + 一份 UI 侧的文档列表副本；embedChunks() 那 130 行跑在
+UI 线程上的嵌入副本删除。
+
+二、启动流程按 C 指定的三步：引擎在动手之前先回调一个廉价的 "plan" 阶段
+（EnginePlan：两份快照的判定，不 chunk 语料——数块会把 15ms 暖启动拖成
+几百毫秒，而 README 招牌写着 0.01s）-> 窗口弹【更新】【退出】说明框 ->
+确认后进入模态进度框（引擎的 "index"/"vectors" 回调驱动文案与百分比，
+带取消）。退出=回调返 false，open() 什么都没做即返回、关窗；取消=BM25
+已在手、会话继续（契约 open 条款 5）。
+
+三、修法取"显式进度"而非工作线程：活仍在 UI 线程，但模态框让等待诚实，
+且**顺带消灭重入**——旧实现 processEvents() 在嵌入循环内派发点击，用户
+在卡死时点"重建"会嵌套第二次嵌入。setMinimumDuration(400) 使亚秒重建
+不闪窗。另补两处 setChatBusy 遗漏：文档树与"显示已删除"复选框一并禁用
+（showDocument 会读引擎的文档正文，查询期间引擎被 worker 占用，须守
+"同一时刻一个线程"契约）。
+
+四、编译器抓到一处真错：加 avg_chunk_length 字段时把 CorpusChange
+corpus_change 成员顶掉了（C2039），已恢复。
+
+五、**console 在引擎改动后重验**（引擎在首次逐字对比之后又改过：EnginePlan、
+avg_chunk_length、corpus_change）——启动横幅一致；list+del 69 行一致；
+查询检索块前 1101 行逐字一致（唯一差异是旧捕获被 25s 定时腰斩在行中，
+非行为差异）。GUI 冒烟：启动后 24 秒 Process.Responding 恒为 True。
+
+六、【设计复盘】两个"流程问题"同源：API 粒度切在了"代码段落边界"，而非
+"调用方需要动作的时刻"——console 要在检索与生成之间打印，GUI 要在动手前
+询问，这两个"之间"在旧单体代码里天然存在，包成方法调用后被挤没了。
+判据已定：**一个步骤，若有调用方需要在此处做点什么（打印/询问/展示/放弃），
+它就是 API 上的一个边界。** 按此判据，网页前端（第 ⑤ 步）所需的两个钩子
+（plan 回调、retrieve/generate 两相）均已就位。已知边界一条：generate()
+不可中断（console/GUI 不介意，网页端需决定"超时后弃结果"还是给引擎加取消）。
+
+待办：第 ⑤ 步网页服务层。

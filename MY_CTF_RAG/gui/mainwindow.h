@@ -1,19 +1,13 @@
 #pragma once
 
-#include <memory>
 #include <string>
-#include <unordered_set>
 #include <vector>
 
 #include <QMainWindow>
 #include <QString>
 
-#include "embedder.h"
-#include "generator.h"
-#include "indexer.h"
+#include "engine.h"
 #include "query_worker.h"
-#include "type.h"
-#include "vector_index.h"
 
 class QCheckBox;
 class QLabel;
@@ -27,11 +21,19 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class QUrl;
 
+// The Qt front end.
+//
+// All retrieval, generation and cache policy now lives in RagEngine
+// (engine.h) -- this window owns no pipeline state of its own, only the
+// widgets and one UI-side copy of the document list. The contract's
+// "one thread at a time" rule is upheld by the busy flag: a query
+// worker runs while the window refuses corpus mutations, and the
+// startup path blocks input behind a modal progress dialog.
 class MainWindow final : public QMainWindow {
 public:
     explicit MainWindow(QWidget* parent = nullptr);
-    // Waits for an in-flight query worker: run() borrows docs_/chunks_/
-    // index_ owned by this window, so the members must outlive it.
+    // Waits for an in-flight query worker: the worker calls into
+    // engine_, which this window owns and must therefore outlive it.
     ~MainWindow() override;
 
 private:
@@ -39,24 +41,24 @@ private:
     void connectUi();
 
     void chooseDataDirectory();
-    void loadCorpusAndIndex(const QString& dataDir);
-    void embedChunks(const QString& reason);
+    // Load the corpus and bring all three sides up. Runs on the UI
+    // thread behind a modal progress dialog, which is what stops the
+    // freeze the old synchronous embedChunks() caused -- and, being
+    // modal, also removes the re-entrancy the old code allowed.
+    void startup();
     void rebuildIndex();
     void deleteSelectedDocument();
     void showSelectedDocument(QTreeWidgetItem* item, int column);
     void openSearchResult(int row, int column);
     void updateDeletedVisibility(bool showDeleted);
 
-    // M4 step 4: every query (retrieval-only or full RAG ask) runs the
-    // whole chain off the UI thread (run_query_chain inside a
-    // QThread); these handlers only launch and render.
+    // Every query (retrieval-only or full RAG ask) runs the engine's
+    // two phases inside a QueryThread; these handlers only launch and
+    // render.
     void startRetrieval();
     void startChatQuery();
     void launchWorker(const QString& query, bool withGeneration);
-    void fillResultsTable(const std::vector<SearchResult>& results,
-                          bool hybrid,
-                          const std::unordered_set<int>& bm25Ids,
-                          const std::unordered_set<int>& denseIds);
+    void fillResultsTable(const QueryOutcome& outcome);
     void setChatBusy(bool busy);
     void onWorkerGenerationStarted();
     void onWorkerFinished(QueryResultPtr result);
@@ -66,8 +68,13 @@ private:
     void refreshDocumentTree();
     void refreshStatusBar();
     void showDocument(int documentId);
-    void highlightChunk(int chunkId);
+    void highlightChunk(const ChunkLocation& location);
     void appendLog(const QString& text);
+
+    // Startup and mutation reporting, reconstructed from the engine's
+    // status enums. The engine returns data; wording is ours.
+    void appendStartupReport(const EngineStatus& status);
+    void appendDenseReport(const EngineStatus& status, const QString& when);
 
     QLineEdit* dataDirEdit_ = nullptr;
     QPushButton* browseButton_ = nullptr;
@@ -97,28 +104,18 @@ private:
     QLabel* versionsLabel_ = nullptr;
     QLabel* avgdlLabel_ = nullptr;
 
-    std::vector<Document> docs_;
-    std::vector<Chunk> chunks_;
-    InvertedIndex index_;
+    RagEngine engine_;
+    EngineStatus status_;
+    bool engineReady_ = false;
 
-    // M3 steps 4 + 5: dense route (semantic search) with vector.bin
-    // caching (path + content hash reuse, T9).
-    std::unique_ptr<EmbedProvider> provider_;
-    FlatIndex denseIndex_;
-    bool denseReady_ = false;
-    QString denseStateText_ = QStringLiteral("dense: off");
+    // UI-side snapshot of the document list, refreshed by
+    // refreshDocumentTree() whenever the corpus changes. The engine is
+    // the source of truth; this exists so the tree, the result filter
+    // and the deleted-visibility toggle have something to read.
+    std::vector<DocInfo> docs_;
 
-    std::string snapshotPath_ = "index.bin";
-    std::string vectorSnapshotPath_ = "vector.bin";
-    QString snapshotStateText_ = QStringLiteral("not loaded");
     int previewDocumentId_ = -1;
-    bool corpusLoaded_ = false;
 
-    // M4 step 4: generation provider (factory is zero-network; the
-    // first chat call is the health check) plus the in-flight worker
-    // bookkeeping. lastResult_ backs the citation clicks ([n] ->
-    // used_materials[n-1] -> chunk highlight).
-    std::unique_ptr<LLMProvider> generator_;
     QThread* busyThread_ = nullptr;
     QueryResultPtr lastResult_;
     QString lastQuestion_;

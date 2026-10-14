@@ -103,6 +103,7 @@
     <ClCompile Include="..\src\persist.cpp" />
     <ClCompile Include="..\src\corpus_diff.cpp" />
     <ClCompile Include="..\src\embedder.cpp" />
+    <ClCompile Include="..\src\engine.cpp" />
     <ClCompile Include="..\src\rrf.cpp" />
     <ClCompile Include="..\src\vector_index.cpp" />
     <ClCompile Include="..\src\vector_persist.cpp" />
@@ -117,6 +118,7 @@
     <ClInclude Include="..\include\context.h" />
     <ClInclude Include="..\include\corpus_diff.h" />
     <ClInclude Include="..\include\embedder.h" />
+    <ClInclude Include="..\include\engine.h" />
     <ClInclude Include="..\include\generator.h" />
     <ClInclude Include="..\include\indexer.h" />
     <ClInclude Include="..\include\loader.h" />
