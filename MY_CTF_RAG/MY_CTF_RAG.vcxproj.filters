@@ -42,6 +42,9 @@
     <ClInclude Include="include\embedder.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\engine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="include\rrf.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -87,6 +90,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\embedder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\rrf.cpp">

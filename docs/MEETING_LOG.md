@@ -2579,3 +2579,44 @@ main.cpp 编排）③ main.cpp 变薄壳（console 行为回归须逐字一致�
 ④ GUI 切 engine + 进度弹窗（卡死问题在此闭环）⑤ 网页服务层。
 动机非审美：同一套编排逻辑已复制两份，其中 GUI 那份带线程 bug，
 而第三份（网页前端）在即。
+
+## [2026-10-15 01:15] AI-C
+
+【竣工】engine 抽取第 1-3 步落地：契约十六 + 实现 + console 变薄壳
+（AI 执笔，授权见本日授权条）。
+
+一、新增 include/engine.h（第十六契约）+ src/engine.cpp。职责 = 持有
+流水线状态与"调用方策略"（快照信任决策 / 语料对账与墓碑继承 / 混合
+查询链 / 向量复用 / 降级规则）。三条纪律写进契约：不打印、不读输入、
+不开线程；并明写 NOT thread-safe——并发正确性收敛到调度层一处，不加锁
+（C 拍板）。
+
+二、迁入的编排（原 main.cpp 175 行 helper + 各 Stage 内联块）：
+harvest_tombstones -> Impl::harvest；build_doc_vectors -> Impl::build_dense；
+Stage 1 缓存分支 -> open + build_bm25；Stage 3/4 -> retrieve + generate；
+list / del -> documents / remove_document。main.cpp 由 515 行降为 303 行，
+只剩命令解析与打印（各前端自留状态码->措辞的映射表）。
+
+三、四条路径与改造前二进制（10-15 00:08 版）逐字对比通过：启动横幅
+一致；查询检索块 1050 行逐字一致（含三列分数格式）；list + del 69 行
+逐字一致（usage / 越界 / 删除 / 重复删除四分支）；生成段格式与引用
+账本一致（答案文本因温度 0.2 不可比）。
+
+四、**逐字验证抓到一个会直接上线的体验回归**：把检索与生成合并进单次
+query() 调用后，检索结果要等生成结束（8~125s）才打印；旧版是"先出
+结果、再慢慢生成"。修复：契约拆为两相——retrieve()（快，返回 hits）
++ generate()（慢，填 answer/citations），并在条款写明拆相理由（两个
+前端都要"先展示命中、后出答案"）。若无逐字对比，此回归会静默上线：
+最终输出正确，只是晚了百秒，测试全绿。
+
+五、附带修正两处：分数打印由 std::to_string（"12.869300"）改回
+ostringstream（"12.8693"，复刻 << 默认格式）；删除回调中的路径取值
+错误。
+
+六、登记：四个工程文件（console + GUI 的 vcxproj/filters）加 engine.h
+与 engine.cpp 的 ClInclude/ClCompile，BOM 与 CRLF 字节保真，XML 良构，
+/W4 零警告零错误。
+
+待办：第 ④ 步 GUI 切 engine + 启动进度弹窗（卡住问题在此闭环，需消除
+mainwindow.cpp:384/470/602/905 与 query_worker.cpp:18 这最后一份副本）；
+第 ⑤ 步网页服务层。
