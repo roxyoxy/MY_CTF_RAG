@@ -2620,3 +2620,45 @@ ostringstream（"12.8693"，复刻 << 默认格式）；删除回调中的路径
 待办：第 ④ 步 GUI 切 engine + 启动进度弹窗（卡住问题在此闭环，需消除
 mainwindow.cpp:384/470/602/905 与 query_worker.cpp:18 这最后一份副本）；
 第 ⑤ 步网页服务层。
+
+## [2026-10-15 01:41] AI-C
+
+【竣工】engine 抽取第 ④ 步：GUI 切引擎 + 启动进度弹窗（卡死问题闭环）。
+
+一、gui/query_worker.{h,cpp} 由 94 行缩到 35 行——整条链已在引擎内，它只剩
+两相驱动（retrieve -> 通知 UI -> generate）。gui/mainwindow.{h,cpp} 清空
+全部流水线状态（docs/chunks/index/provider/denseIndex/generator/快照路径），
+窗口只持有控件 + 一份 UI 侧的文档列表副本；embedChunks() 那 130 行跑在
+UI 线程上的嵌入副本删除。
+
+二、启动流程按 C 指定的三步：引擎在动手之前先回调一个廉价的 "plan" 阶段
+（EnginePlan：两份快照的判定，不 chunk 语料——数块会把 15ms 暖启动拖成
+几百毫秒，而 README 招牌写着 0.01s）-> 窗口弹【更新】【退出】说明框 ->
+确认后进入模态进度框（引擎的 "index"/"vectors" 回调驱动文案与百分比，
+带取消）。退出=回调返 false，open() 什么都没做即返回、关窗；取消=BM25
+已在手、会话继续（契约 open 条款 5）。
+
+三、修法取"显式进度"而非工作线程：活仍在 UI 线程，但模态框让等待诚实，
+且**顺带消灭重入**——旧实现 processEvents() 在嵌入循环内派发点击，用户
+在卡死时点"重建"会嵌套第二次嵌入。setMinimumDuration(400) 使亚秒重建
+不闪窗。另补两处 setChatBusy 遗漏：文档树与"显示已删除"复选框一并禁用
+（showDocument 会读引擎的文档正文，查询期间引擎被 worker 占用，须守
+"同一时刻一个线程"契约）。
+
+四、编译器抓到一处真错：加 avg_chunk_length 字段时把 CorpusChange
+corpus_change 成员顶掉了（C2039），已恢复。
+
+五、**console 在引擎改动后重验**（引擎在首次逐字对比之后又改过：EnginePlan、
+avg_chunk_length、corpus_change）——启动横幅一致；list+del 69 行一致；
+查询检索块前 1101 行逐字一致（唯一差异是旧捕获被 25s 定时腰斩在行中，
+非行为差异）。GUI 冒烟：启动后 24 秒 Process.Responding 恒为 True。
+
+六、【设计复盘】两个"流程问题"同源：API 粒度切在了"代码段落边界"，而非
+"调用方需要动作的时刻"——console 要在检索与生成之间打印，GUI 要在动手前
+询问，这两个"之间"在旧单体代码里天然存在，包成方法调用后被挤没了。
+判据已定：**一个步骤，若有调用方需要在此处做点什么（打印/询问/展示/放弃），
+它就是 API 上的一个边界。** 按此判据，网页前端（第 ⑤ 步）所需的两个钩子
+（plan 回调、retrieve/generate 两相）均已就位。已知边界一条：generate()
+不可中断（console/GUI 不介意，网页端需决定"超时后弃结果"还是给引擎加取消）。
+
+待办：第 ⑤ 步网页服务层。

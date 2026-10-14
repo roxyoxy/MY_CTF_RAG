@@ -74,10 +74,30 @@ struct CorpusChange {
     std::size_t tombstones_inherited = 0;
 };
 
+// What open() WOULD have to do, known before any of it is done. Cheap:
+// two snapshot checks and no chunking, no embedding, no network.
+//
+// Exact chunk counts are deliberately NOT computed here. Counting them
+// would mean chunking the whole corpus on every startup, which is the
+// 15ms fast path this project advertises; a frontend only needs to know
+// WHETHER there is work, not how much, in order to ask the user. The
+// real counts arrive later through EngineProgress.
+struct EnginePlan {
+    std::size_t documents = 0;
+    SnapshotStatus index_state = SnapshotStatus::NOT_FOUND;
+    VectorSnapshotStatus vector_state = VectorSnapshotStatus::NOT_FOUND;
+    bool index_needs_rebuild = false;   // the BM25 snapshot does not restore
+    bool vector_needs_work = false;     // some or all vectors must be embedded
+    bool needs_work() const {
+        return index_needs_rebuild || vector_needs_work;
+    }
+};
+
 // Outcome of open() / rebuild(): everything a frontend needs to render
 // a startup report, including WHY each side is in the state it is in.
 struct EngineStatus {
     bool loaded = false;              // open() has completed at least once
+    EnginePlan plan;                  // filled before any work starts
     int documents = 0;
     int chunks = 0;
 
@@ -85,6 +105,7 @@ struct EngineStatus {
     SnapshotStatus index_state = SnapshotStatus::NOT_FOUND;
     bool index_restored = false;      // true = snapshot hit, no rebuild
     bool index_saved = true;          // false = save failed; a lost cache only
+    double avg_chunk_length = 0.0;    // from the live index (status bar)
     CorpusChange corpus_change;
 
     // Dense side
@@ -203,9 +224,14 @@ public:
     //    (restored or rebuilt), so a frontend can render its startup
     //    report in order without polling, and once per embedding
     //    batch during the vector stage.
-    // 2. Slow path: the vector stage embeds the chunks that are missing
+    // 2. The callback fires a "plan" stage FIRST, before any work,
+    //    carrying status().plan. A false return there stops the call
+    //    having done nothing -- that is how a frontend asks the user
+    //    "this will re-embed the corpus, continue?" before spending
+    //    the time.
+    // 3. Slow path: the vector stage embeds the chunks that are missing
     //    from the snapshot, in batches, reporting progress per batch.
-    //    The callback's return value is honoured between batches.
+    //    The callback's return value is honoured between batches too.
     // 3. Every side degrades independently: a BM25 failure throws
     //    (there is no usable retrieval without it); a dense or
     //    generation failure is recorded in the status and leaves the

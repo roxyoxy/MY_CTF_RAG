@@ -80,6 +80,34 @@ struct RagEngine::Impl {
         return on_progress(EngineProgress{stage, done, total, reused});
     }
 
+    // The cheap pre-flight behind EnginePlan. Never chunks -- see the
+    // comment on the struct for why that matters.
+    EnginePlan analyze() {
+        EnginePlan plan;
+        plan.documents = docs.size();
+        plan.index_state = validate(config.index_snapshot, docs);
+        plan.index_needs_rebuild =
+            plan.index_state != SnapshotStatus::OK;
+        if (config.enable_dense) {
+            // Judging the vector snapshot needs the identity, and the
+            // provider that answers it costs no network to build.
+            provider = make_ollama_provider(
+                EmbedderConfig{std::string(), config.dense_model, 0});
+            std::vector<DocVectors> ignore;
+            plan.vector_state = load_vector_snapshot(
+                config.vector_snapshot,
+                VectorIdentity{provider->model_id(),
+                               provider->embedding_policy(), 0},
+                ignore);
+            // Missing, unusable, or built by another model: every
+            // vector is new. A changed corpus: some of them are.
+            plan.vector_needs_work =
+                plan.vector_state != VectorSnapshotStatus::OK ||
+                plan.index_state == SnapshotStatus::CORPUS_CHANGED;
+        }
+        return plan;
+    }
+
     // Carry tombstones across a corpus change. An unreadable old
     // snapshot yields no inheritance -- a plain rebuild, the same
     // choice the corrupt-snapshot path makes.
@@ -127,6 +155,7 @@ struct RagEngine::Impl {
         status.loaded = true;
         status.documents = static_cast<int>(docs.size());
         status.chunks = static_cast<int>(chunks.size());
+        status.avg_chunk_length = index.avg_chunk_length;
         // Fires once the stage has RESOLVED, so a frontend can render
         // the startup report at exactly the moment it becomes true.
         report(on_progress, "index", 0, 0, 0);
@@ -277,6 +306,16 @@ EngineStatus RagEngine::open(const EngineConfig& config,
     // is the stage that must finish (and save) before anything slower
     // starts, which is what makes cancelling the vector stage safe.
     impl_->docs = load_documents(config.data_dir);
+    impl_->status.documents = static_cast<int>(impl_->docs.size());
+
+    // Plan before work: the frontend gets to ask the user first, and a
+    // false from the callback stops here having done nothing.
+    impl_->status.plan = impl_->analyze();
+    if (!Impl::report(on_progress, "plan", 0, 0, 0)) {
+        impl_->status.cancelled = true;
+        return impl_->status;
+    }
+
     impl_->build_bm25(config.index_snapshot, false, on_progress);
 
     // Dense stage: the slow one, and the only one that reports real
@@ -284,8 +323,7 @@ EngineStatus RagEngine::open(const EngineConfig& config,
     // fail it.
     if (config.enable_dense && !impl_->chunks.empty()) {
         try {
-            impl_->provider = make_ollama_provider(
-                EmbedderConfig{std::string(), config.dense_model, 0});
+            // analyze() already built the provider (zero network).
             try {
                 if (!impl_->build_dense(on_progress)) {
                     impl_->status.cancelled = true;
