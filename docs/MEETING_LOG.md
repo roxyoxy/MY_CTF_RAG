@@ -2541,3 +2541,41 @@ llama.cpp provider**（⑥ 注入金弹已定并入 M5）。
 - .gitignore 增补：.claude/ 与 tests/_b_*.txt。代码区（MY_CTF_RAG/ 内部）零改动——VS 工程路径不破坏。
 - 验证：run_tests 243/243 ALL_TESTS_GREEN（文档改动零代码影响兜底）；8 个新/改文件 UTF-8 无 BOM 全 LF；git status 干净（.gitignore+README 改，6 新增路径）。
 - 待 A：(1) commit + push 批准（push 后 CI 首跑需盯梢，红则当场修）；(2) GitHub 门面手动项——repo description + topics（rag/ctf/bm25/hnsw/cpp/qt/llm/ollama/offline）+ social preview 图；(3) 明天录演示视频时补 docs/assets/ 素材。
+
+## [2026-10-15 00:30] AI-C
+
+【发现 + 决策 + 计划】GUI 启动卡死根因定位；修复方案与 engine 抽取
+计划一并入册。本条由 AI-C 执笔，决策为 C 拍板。
+
+一、【发现】GUI 启动后界面立即无响应。根因：mainwindow.cpp 的
+embedChunks() 全程跑在 GUI 线程上（源码注释自认 "still runs on
+the GUI thread (a worker thread is an M4 hardening item)"），而
+vector.bin 缺席时需冷嵌 145 块（约 20s+，首批还含 Ollama 模型
+装载），QTimer::singleShot(0) 让窗口先显示、随即被同步嵌入堵死，
+故表现为"界面出来即卡死"。附带隐患：embedChunks 三个调用点
+（启动 :454 / 重建 :624 / 删除 :953）仅以 chatBusy_ 为守卫，而该
+守卫属查询 worker；嵌套路内的 QApplication::processEvents() (:554)
+会派发点击，用户"卡死时乱点"可重入 embedChunks——不触发死锁，
+但重复嵌入与状态错乱。规避：先跑 console 生成 vector.bin，GUI 即
+快照命中、瞬启（两前端共享同一 vector.bin，工作目录同为代码区）。
+
+二、【决策】修复走"显式进度"而非"工作线程"：启动时先做快速判定
+（validate index.bin + 预扫 vector.bin 复用率，均毫秒级）；确需重建
+时弹出模态进度框，期间禁止用户操作。实现取 Qt 标准姿势
+QProgressDialog + setMinimumDuration（快操作不闪窗，setValue 自带
+事件处理），模态天然消灭重入隐患。引擎保持同步、不引入线程——
+并发正确性收敛到调度层一处。另：引擎内部不加锁（C 拍板同意），
+契约中明写"not thread-safe，同一时刻只允许一个线程访问"。
+
+三、【授权】已完成的算法与契约冻结不动，
+新增内容与整体调整可自由实施，改动记纪要不走全组讨论；代码可由
+AI 执笔（仅"代码卡"仍由 C 手写）。
+
+四、【计划】engine 抽取——消除 console / GUI / 网页三处复制的编排
+策略（快照缓存决策 / 混合查询链 / 降级 / 向量复用）。五步，每步
+可独立验证：① include/engine.h 契约（方法清单 + 结构化返回 + 三条
+纪律：不打印 / 不读输入 / 不开线程）② engine.cpp 实现（搬迁
+main.cpp 编排）③ main.cpp 变薄壳（console 行为回归须逐字一致）
+④ GUI 切 engine + 进度弹窗（卡死问题在此闭环）⑤ 网页服务层。
+动机非审美：同一套编排逻辑已复制两份，其中 GUI 那份带线程 bug，
+而第三份（网页前端）在即。
