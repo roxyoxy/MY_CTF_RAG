@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TraceRAG · 全本地 CTF 检索问答</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="orbs" aria-hidden="true">
+  <span class="orb a"></span><span class="orb b"></span><span class="orb c"></span>
+</div>
+
+<header class="topbar glass">
+  <div class="brand">
+    <span class="logo">Trace<span>RAG</span></span>
+    <span class="tagline">让每一次提问，都有出处可查</span>
+  </div>
+  <div class="status">
+    <span id="mode-badge" class="badge">连接中…</span>
+    <span id="corpus-info" class="corpus"></span>
+  </div>
+</header>
+
+<main>
+  <section class="search-card glass">
+    <div class="search-row">
+      <input id="query" type="text" autocomplete="off" autofocus
+             placeholder="试试：金丝雀保护与跳转地址覆盖　/　ret2libc with NX enabled">
+      <button id="btn-search" class="btn primary">检索</button>
+      <button id="btn-ask" class="btn ghost">生成答案</button>
+    </div>
+    <div class="search-meta">
+      <span id="search-time"></span>
+      <span class="note">BM25 + 语义向量 · RRF 融合 · 全本地</span>
+    </div>
+  </section>
+
+  <section id="answer-panel" class="answer glass hidden">
+    <div class="answer-head">
+      <h2>回答</h2>
+      <span id="gen-meta"></span>
+    </div>
+    <div id="answer-body" class="answer-body"></div>
+    <div id="sources" class="sources"></div>
+  </section>
+
+  <section id="results" class="results"></section>
+
+  <div id="empty-state" class="empty glass">
+    <p class="empty-big">输入一个问题，开始检索</p>
+    <p class="empty-sub">词法（BM25）与语义（向量）双路并行 · 融合排名 · 答案带 [n] 出处</p>
+  </div>
+</main>
+
+<footer>TraceRAG · C++17 全本地引擎 · 检索亚毫秒</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

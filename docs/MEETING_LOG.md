@@ -2662,3 +2662,52 @@ avg_chunk_length、corpus_change）——启动横幅一致；list+del 69 行一
 不可中断（console/GUI 不介意，网页端需决定"超时后弃结果"还是给引擎加取消）。
 
 待办：第 ⑤ 步网页服务层。
+
+## [2026-10-15 02:21] AI-C
+
+【竣工】engine 抽取第 ⑤ 步：网页前端（服务层 + 页面三件）落地。
+
+零、归属说明：A 于 10-14 发出的《前端交接包》抬头写的是给 B；C 确认
+网页前端由其负责，据此推进。交接包（仓外文件夹）仅作设计参考，文件
+未搬入仓库，按 C 的要求在仓内重新实现。
+
+一、交付五件（c-web 分支，从 c-engine 开）：
+  src/web_ui.cpp     HTTP 服务
+  web/index.html     结构：顶栏 / 搜索卡 / 答案面板 / 结果列表 / 空态
+  web/style.css      全部颜色集中在 :root，换肤只改那十行
+  web/app.js         三端点通信 + 渲染 + 交互，纯 vanilla 无构建
+  build_web.bat / run_web.bat   构建与启动
+
+二、服务层建立在 RagEngine（契约十六）之上，因此**没有第三份编排逻辑**：
+对比 A 的参考实现（402 行），本实现删掉了 build_doc_vectors、启动序列、
+run_query、以及 /api/ask 里的 materials+prompt+citations 组装——这些
+引擎已内置。真正属于本文件的逻辑仅约 30 行，其余是 JSON 序列化。
+
+三、两个设计决定：
+ ① **单线程任务队列**：server.new_task_queue = []{ return new
+    httplib::ThreadPool(1); }。引擎契约明写 NOT thread-safe（同一时刻
+    一个线程），于是就给服务端**一个**工作线程——请求自然串行、全程
+    零锁，把契约从"口号"变成"字面事实"。（A 的参考实现里有一把
+    chat_mutex，说明它已撞上并发问题。）
+ ② **前端两相调用**："生成答案"先打 /api/search（约 0.3s 出结果卡）再打
+    /api/ask（约 10s 出答案），用户不必盯着转圈等全套。这正是两相契约
+    被设计出来要支持的用法。
+
+四、踩坑两处（都已修）：
+ ① windows.h 会拉进老 winsock.h，与 httplib.h 需要的 winsock2.h 冲突
+    （C2011 类型重定义数十条）→ 加 WIN32_LEAN_AND_MEAN。注意这是
+    **产品代码首次同时依赖 windows.h 与 httplib**（console/Qt 都只用
+    其中一个）。
+ ② 漏写 using json = nlohmann::json; → 编译器直接指出，已补。
+
+五、验证：cl /std:c++17 /W4 /utf-8 编译**零错误零警告**；服务启动、
+监听 127.0.0.1:18080；GET /api/status 返回 58 docs / 145 chunks / hybrid /
+双模型就位；GET / 正常返回静态页；POST /api/search 返回 10 条带
+rrf/bm25/vec 三列分数的结果；空 query 与坏 JSON 均正确回 400 + JSON 错误体。
+（首次查询 4.9s 含 embedding 模型装载，属预期。）
+
+六、附带修正 A 参考实现的一个可移植性缺陷：两个 .bat 里写死了 A 机器
+上的绝对路径（C 盘用户目录下的 Desktop 路径），在别人机器上必然失败；
+本实现用 %~dp0 相对本文件定位，任何机器可用。
+
+待办：/api/ask 完整生成路径的端到端验证（后台跑）；随后记 c-web 提交。
