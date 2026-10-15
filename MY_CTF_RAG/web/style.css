@@ -427,19 +427,34 @@ body {
 .chip b { color: var(--text); font-weight: 600; }
 .chip.miss { opacity: .55; }
 
+/* Two elements, two jobs, and they must not be merged.
+ *
+ * The rule this replaced put the padding and the clipping on the same
+ * box, and that is why a sliver of a third line always showed through
+ * however the height was computed. `overflow: hidden` clips at the
+ * PADDING box, not the content box, so the bottom padding is not empty
+ * space below the text -- it is extra visible area, and the next line
+ * renders into it. 12px of padding meant 12px of the third line, 22px
+ * meant 22px of it, which is exactly the "the more room I ask for the
+ * more it leaks" behaviour. It also cost the ellipsis: with padding on
+ * the clamped box the second line ended in a hard cut instead of "…".
+ * Measured in Chromium: 2.60 visible lines with 12px of padding, 3.10
+ * with 22px, and a clean 2.00 with the padding moved out here.
+ *
+ * So the outer box only pads, and the inner box only clips. The clip
+ * edge is then the inner box's own edge, at exactly 40px = 2 lines. */
 .hit-snippet {
   padding: 0 18px 12px 42px;   /* about two thirds of a line below */
   color: var(--text-dim); font-size: 13px;
+}
+.hit-snippet .snippet-clamp {
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
   overflow: hidden;
-  /* Exactly two lines, ellipsis on the second. A fixed height, not a
-     max: max-height kept letting a sliver of a third line through
-     however it was computed, and a fixed height also makes every row
-     the same height whether the summary is long or short. content-box
-     keeps the padding outside it; 20 x 2 = 40. */
-  box-sizing: content-box;
   line-height: 20px;
-  height: 40px;
+  /* min-height rather than height: the clamp already caps a long summary
+     at two lines, and this makes a short one occupy the same two lines,
+     so every row is the same height. */
+  min-height: 40px;
 }
 .hit.open .hit-snippet { display: none; }
 

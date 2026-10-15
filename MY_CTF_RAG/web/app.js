@@ -712,7 +712,7 @@ function renderResults(data, mode) {
         <span class="spacer"></span>
         <button class="target-btn" title="定位到命中片段">${TARGET_SVG}</button>
       </div>
-      <div class="hit-snippet">${escapeHtml(hit.text)}</div>
+      <div class="hit-snippet"><span class="snippet-clamp">${escapeHtml(hit.text)}</span></div>
       <div class="hit-full md-scope hidden"></div>`;
     box.appendChild(row);
   });
