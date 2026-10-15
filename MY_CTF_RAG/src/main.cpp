@@ -1,56 +1,37 @@
 // main.cpp
-// Assembly line: load, chunk, index, then answer queries in a loop.
+// Console front end.
+//
+// All retrieval and generation orchestration now lives in RagEngine
+// (engine.h). What is left here is what only a console owns: reading
+// the command line, choosing what to print, and naming the snapshot
+// states in English. The engine's three disciplines -- no printing, no
+// input, no threads -- are exactly why this is a shell now instead of
+// the assembly line it used to be.
+//
+// The output is deliberately byte-identical to the pre-refactor
+// console: that is what proves the move changed structure and not
+// behavior. Everything printed below that the engine no longer prints
+// itself is reconstructed from EngineStatus / QueryOutcome.
 
-#include <algorithm>
-#include <chrono>
 #include <cstddef>
 #include <exception>
 #include <iostream>
-#include <memory>
 #include <sstream>
 #include <string>
-#include <unordered_map>
-#include <utility>
+#include <vector>
 
 #ifdef _WIN32
 #define NOMINMAX  // keep windows.h min/max macros out of std::min
 #include <windows.h>
 #endif
 
-#include "type.h"
-#include "loader.h"
-#include "corpus_diff.h"
-#include "chunker.h"
-#include "indexer.h"
-#include "persist.h"
-#include "embedder.h"
-#include "vector_index.h"
-#include "vector_persist.h"
-#include "rrf.h"
-#include "context.h"
-#include "generator.h"
+#include "engine.h"
 
-// Caller-side wiring constants for the hybrid query chain (M3 step 4),
-// registered in docs/PARAMS.md.
-constexpr int HYBRID_ROUTE_K = 20;  // candidates each route feeds RRF
-constexpr int EMBED_SLICE = 32;     // corpus embedding batch size
-// Dense model decided by the A/B experiment (M3 step 2, 2026-10-11):
-// qwen3-embedding:0.6b beat bge-m3 on every metric (hit@10 96% vs 83%,
-// MRR 0.777 vs 0.697, faster embedding); see docs/PARAMS.md.
-constexpr const char* DENSE_MODEL = "qwen3-embedding:0.6b";
+namespace {
 
-// Generation model frozen by the step-3.5 A/B (2026-10-12):
-// qwen3:4b-instruct beat qwen3:1.7b on groundedness, citations
-// (27 [n] marks vs 0) and language following, with zero
-// hallucination samples, at 8.4s vs 4.1s steady CPU latency; see
-// docs/m4-generation-ab.md. Never "qwen3:4b" -- that plain tag
-// currently points at the thinking variant. 1.7b remains a future
-// fast-mode candidate.
-constexpr const char* GENERATION_MODEL = "qwen3:4b-instruct";
-
-// Human-readable name for a snapshot validation failure. The console
-// app only prints it; the caller action is always the same (rebuild).
-static const char* status_name(SnapshotStatus st) {
+// Console wording for a snapshot state. The engine returns the enum;
+// choosing words is presentation, so each frontend keeps its own table.
+const char* status_name(SnapshotStatus st) {
     switch (st) {
     case SnapshotStatus::OK:             return "ok";
     case SnapshotStatus::NOT_FOUND:      return "not found (first run)";
@@ -64,167 +45,57 @@ static const char* status_name(SnapshotStatus st) {
     return "unknown";
 }
 
-// M2-3: when the corpus changed, the old snapshot still remembers
-// which documents were deleted. Load it, inherit the tombstones into
-// the probe corpus, and report what changed. A snapshot that fails
-// to load yields no inheritance -- plain rebuild.
-static void harvest_tombstones(const std::string& snapshot,
-                               std::vector<Document>& docs) {
-    std::vector<Document> old_docs;
-    std::vector<Chunk>    old_chunks;
-    InvertedIndex         old_index;
-    if (!load(snapshot, old_docs, old_chunks, old_index))
-        return;
-
-    const CorpusDiff diff = diff_corpora(old_docs, docs);
-    const int inherited = inherit_tombstones(old_docs, docs);
-    std::cout << "corpus changed: " << diff.added.size() << " added, "
-        << diff.removed.size() << " removed, " << diff.edited.size()
-        << " edited";
-    if (inherited > 0)
-        std::cout << ", " << inherited << " tombstone(s) inherited";
-    std::cout << "\n";
-}
-
-// Human-readable name for a vector snapshot status. The console only
-// prints it; the caller action is always the same (fall back to
-// embedding through the provider).
-static const char* vstatus_name(VectorSnapshotStatus st) {
-    switch (st) {
-    case VectorSnapshotStatus::OK:         return "ok";
-    case VectorSnapshotStatus::NOT_FOUND:  return "not found (first run)";
-    case VectorSnapshotStatus::IO_ERROR:   return "io error";
-    case VectorSnapshotStatus::BAD_MAGIC:  return "bad magic";
-    case VectorSnapshotStatus::BAD_FORMAT: return "corrupt";
-    case VectorSnapshotStatus::BAD_MODEL:  return "built by a different model";
-    }
-    return "unknown";
-}
-
-// Chunk-order vector table assembled from the per-document records
-// (chunker emits chunks in document order, so concatenation restores
-// chunk ids 0..n-1).
-static std::vector<std::vector<float>>
-flatten_doc_vectors(const std::vector<DocVectors>& docs) {
-    std::vector<std::vector<float>> all;
-    for (const DocVectors& dv : docs)
-        all.insert(all.end(), dv.vectors.begin(), dv.vectors.end());
-    return all;
-}
-
-// M3 step 5 (T9): per-document vector table with snapshot reuse.
-// A document's vectors are reused when path + content hash + chunk
-// count all match the snapshot -- the chunker is deterministic, so an
-// unchanged document always re-cuts into the same chunks. Everything
-// else re-embeds through the provider, sliced for progress
-// (EMBED_SLICE). Reuse policy lives here in the caller, per the
-// vector_persist contract (facts vs policy, the corpus_diff rule).
-static std::vector<DocVectors>
-build_doc_vectors(EmbedProvider& provider,
-                  const std::vector<Document>& docs,
-                  const std::vector<Chunk>& chunks,
-                  const std::string& snapshot,
-                  const char* when) {
-    std::vector<DocVectors> cached;
-    const VectorIdentity expected{provider.model_id(),
-                                  provider.embedding_policy(), 0};
-    const VectorSnapshotStatus st =
-        load_vector_snapshot(snapshot, expected, cached);
-    if (st == VectorSnapshotStatus::BAD_MODEL)
-        std::cout << "vector snapshot " << vstatus_name(st)
-                  << ", re-embedding everything.\n";
-    else if (st != VectorSnapshotStatus::OK &&
-             st != VectorSnapshotStatus::NOT_FOUND)
-        std::cout << "vector snapshot unusable ("
-                  << vstatus_name(st) << "), re-embedding.\n";
-
-    std::unordered_map<std::string, const DocVectors*> old;
-    for (const DocVectors& d : cached)
-        old.emplace(d.path, &d);
-
-    // chunk indices grouped per document
-    std::vector<std::vector<std::size_t>> per_doc(docs.size());
-    for (std::size_t i = 0; i < chunks.size(); ++i)
-        per_doc[static_cast<std::size_t>(
-            chunks[i].document_id)].push_back(i);
-
-    std::vector<DocVectors> out;
-    out.reserve(docs.size());
-    std::vector<std::string> to_embed;  // texts in chunk order
-    std::vector<std::pair<std::size_t, std::size_t>> pending;  // (out, n)
-    std::size_t reused = 0;
-    for (const Document& doc : docs) {
-        if (doc.deleted)
-            continue;  // tombstones never reach the vector side
-        DocVectors rec;
-        rec.path = doc.path;
-        rec.content_hash = vector_content_hash(doc.content);
-        const std::size_t n =
-            per_doc[static_cast<std::size_t>(doc.id)].size();
-        const auto it = old.find(doc.path);
-        if (it != old.end() &&
-            it->second->content_hash == rec.content_hash &&
-            it->second->vectors.size() == n) {
-            rec.vectors = it->second->vectors;
-            reused += n;
-        } else {
-            for (std::size_t ci : per_doc[static_cast<std::size_t>(doc.id)])
-                to_embed.push_back(chunks[ci].text);
-            pending.emplace_back(out.size(), n);
-        }
-        out.push_back(std::move(rec));
-    }
-
-    if (!to_embed.empty()) {
-        std::cout << "embedding " << to_embed.size() << " chunk(s) ("
-                  << when << ", " << provider.model_id()
-                  << " via local Ollama)...\n";
-        std::vector<std::vector<float>> embeds;
-        embeds.reserve(to_embed.size());
-        const std::size_t total = to_embed.size();
-        for (std::size_t begin = 0; begin < total; begin += EMBED_SLICE) {
-            const std::size_t end = std::min(begin + EMBED_SLICE, total);
-            const std::vector<std::string> slice(
-                to_embed.begin() + static_cast<std::ptrdiff_t>(begin),
-                to_embed.begin() + static_cast<std::ptrdiff_t>(end));
-            const std::vector<std::vector<float>> part =
-                provider.embed_documents(slice);
-            embeds.insert(embeds.end(), part.begin(), part.end());
-            std::cout << "  embedding chunks " << end << "/" << total
-                      << std::flush << "\r";
-        }
-        std::cout << "\n";
-        std::size_t k = 0;
-        for (const auto& p : pending) {
-            DocVectors& rec = out[p.first];
-            for (std::size_t j = 0; j < p.second; ++j)
-                rec.vectors.push_back(embeds[k++]);
-        }
-    }
-    std::cout << "dense vectors: " << reused << " reused from snapshot, "
-              << to_embed.size() << " embedded (" << when << ")\n";
-    return out;
-}
-
-static std::unordered_map<int, float>
-score_map(const std::vector<SearchResult>& results) {
-    std::unordered_map<int, float> out;
-    for (const SearchResult& r : results)
-        out[r.chunk_id] = r.score;
-    return out;
-}
-
-// "-" for a route that did not recall the chunk: the fused printout
-// then shows at a glance which route contributed what.
-static std::string score_or_dash(const std::unordered_map<int, float>& m,
-                                 int chunk_id) {
-    const auto it = m.find(chunk_id);
-    if (it == m.end())
+// A route score as the console prints it: the ostream default float
+// formatting ("8.82"), and "-" for a route that never saw the chunk.
+std::string score_or_dash(const RouteScore& s) {
+    if (!s.present)
         return "-";
     std::ostringstream os;
-    os << it->second;
+    os << s.score;
     return os.str();
 }
+
+// The startup report. It is printed in reaction to the engine's
+// "index" tick rather than after open() returns, because the embedding
+// progress lines have to come after it -- the same interleaving the old
+// inline Stage 1 produced.
+void print_startup_report(const EngineStatus& s,
+                          const std::string& snapshot) {
+    if (s.index_restored) {
+        std::cout << "Index restored from snapshot " << snapshot << ".\n";
+    } else if (s.index_state == SnapshotStatus::OK) {
+        std::cout << "Snapshot load failed, rebuilding.\n";
+    } else {
+        std::cout << "Snapshot unusable ("
+            << status_name(s.index_state) << "), rebuilding.\n";
+        if (s.corpus_change.detected) {
+            std::cout << "corpus changed: " << s.corpus_change.added
+                << " added, " << s.corpus_change.removed << " removed, "
+                << s.corpus_change.edited << " edited";
+            if (s.corpus_change.tombstones_inherited > 0)
+                std::cout << ", " << s.corpus_change.tombstones_inherited
+                << " tombstone(s) inherited";
+            std::cout << "\n";
+        }
+    }
+    std::cout << "Indexed " << s.documents << " documents, "
+        << s.chunks << " chunks.\n";
+}
+
+// One embedding progress line, shared by startup and a delete rebuild.
+void print_embed_progress(const EngineProgress& p,
+                          const std::string& model,
+                          const char* when) {
+    if (p.done == 0) {
+        std::cout << "embedding " << p.total << " chunk(s) (" << when
+            << ", " << model << " via local Ollama)...\n";
+    } else {
+        std::cout << "  embedding chunks " << p.done << "/" << p.total
+            << std::flush << "\r";
+    }
+}
+
+}  // namespace
 
 int main() {
 #ifdef _WIN32
@@ -233,101 +104,58 @@ int main() {
     SetConsoleCP(CP_UTF8);
 #endif
 
-    std::vector<Document> docs;
-    std::vector<Chunk>    chunks;
-    InvertedIndex         index;
-    const std::string snapshot = "index.bin";
+    RagEngine engine;
+    const EngineConfig config;   // data/, index.bin, vector.bin, both models
 
-    // Stage 1: build the index once. The snapshot is a cache: restore
-    // it when valid, otherwise rebuild and overwrite it (persist.h
-    // keeps the trust policy here, in the caller).
+    // Stage 1 + dense + generation, all inside open(). The callback
+    // reproduces the old output order exactly: the startup report when
+    // the index stage resolves, then one line per embedding batch.
+    EngineStatus status;
+    bool progress_line_open = false;
     try {
-        docs = load_documents("data");
-
-        const SnapshotStatus st = validate(snapshot, docs);
-        bool restored = false;
-        if (st == SnapshotStatus::OK)
-            restored = load(snapshot, docs, chunks, index);
-
-        if (restored) {
-            std::cout << "Index restored from snapshot " << snapshot << ".\n";
-        } else {
-            if (st == SnapshotStatus::OK)
-                std::cout << "Snapshot load failed, rebuilding.\n";
-            else {
-                std::cout << "Snapshot unusable ("
-                    << status_name(st) << "), rebuilding.\n";
-                if (st == SnapshotStatus::CORPUS_CHANGED)
-                    harvest_tombstones(snapshot, docs);
-            }
-            chunks = chunk_documents(docs);
-            index = build_index(chunks);
-            if (!save(snapshot, docs, chunks, index))
-                std::cerr << "Warning: snapshot save failed; "
-                    "the in-memory index is still usable.\n";
-        }
-    }
-    catch (const std::exception& e) {
+        status = engine.open(config,
+            [&engine, &progress_line_open](const EngineProgress& p) {
+                if (p.stage == "index") {
+                    print_startup_report(engine.status(),
+                        engine.config().index_snapshot);
+                } else if (p.stage == "vectors") {
+                    print_embed_progress(p, engine.config().dense_model,
+                        "startup");
+                    progress_line_open = (p.done != 0);
+                }
+                return true;
+            });
+    } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << "\n";
         return 1;
     }
 
-    std::cout << "Indexed " << docs.size()
-        << " documents, " << chunks.size()
-        << " chunks.\n";
-
-    // M3 steps 4 + 5 (T9): dense route with vector.bin caching.
-    // An unchanged corpus comes up with zero network (the snapshot
-    // loads before any provider call); changed documents re-embed; a
-    // snapshot from a different model reports BAD_MODEL and the whole
-    // corpus re-embeds. Provider construction performs no network I/O
-    // (embedder.h clause 6); the first real embed call is the health
-    // check. Failure degrades this session to BM25-only.
-    std::unique_ptr<EmbedProvider> provider =
-        make_ollama_provider(EmbedderConfig{"", DENSE_MODEL, 0});
-    FlatIndex dense_index;
-    bool dense_ready = false;
-    const std::string vector_snapshot = "vector.bin";
-    if (!chunks.empty()) {
-        const auto t0 = std::chrono::steady_clock::now();
-        try {
-            const std::vector<DocVectors> doc_vectors =
-                build_doc_vectors(*provider, docs, chunks,
-                                  vector_snapshot, "startup");
-            dense_index = build_flat_index(flatten_doc_vectors(doc_vectors));
-            if (!vector_save(vector_snapshot,
-                    VectorIdentity{provider->model_id(),
-                                   provider->embedding_policy(),
-                                   dense_index.dimension},
-                    doc_vectors))
-                std::cerr << "Warning: vector snapshot save failed.\n";
-            const double secs = std::chrono::duration<double>(
-                std::chrono::steady_clock::now() - t0).count();
-            dense_ready = true;
-            std::cout << "dense route ready: "
-                      << dense_index.vectors.size() << " vectors, dim "
-                      << dense_index.dimension << " (" << secs << "s)\n";
-        } catch (const std::exception& e) {
-            dense_index = FlatIndex{};
-            dense_ready = false;
-            std::cerr << "Warning: dense route unavailable ("
-                      << e.what()
-                      << "); queries run BM25-only this session.\n";
-        }
+    if (progress_line_open)
+        std::cout << "\n";   // close the "\r" progress line
+    if (status.dense_ready) {
+        std::cout << "dense vectors: " << status.vectors_reused
+            << " reused from snapshot, " << status.vectors_embedded
+            << " embedded (startup)\n";
+        std::cout << "dense route ready: " << status.vectors_total
+            << " vectors, dim " << status.dimension
+            << " (" << status.dense_seconds << "s)\n";
+    } else if (status.cancelled) {
+        std::cout << "dense route cancelled; queries run BM25-only "
+            "this session.\n";
+    } else if (!status.dense_error.empty()) {
+        std::cerr << "Warning: dense route unavailable ("
+            << status.dense_error
+            << "); queries run BM25-only this session.\n";
     }
-
-    // M4 step 3: generation provider. The factory performs no network
-    // I/O (generator.h clause 6); the first chat call is the health
-    // check. Generation is an enhancement, not a dependency: when it
-    // fails, the session keeps answering with the retrieval list alone.
-    std::unique_ptr<LLMProvider> generator =
-        make_ollama_chat_provider(GeneratorConfig{"", GENERATION_MODEL, 0});
-    bool generation_ready = true;
 
     std::cout << "commands: list, del <id>  (anything else is a query)\n";
 
-    // Stage 2: query loop. "list" and "del <id>" are reserved words;
-    // every other line is a search query.
+    // Session policy, not engine state: once generation fails it stays
+    // off until restart, so a dead service cannot cost every query its
+    // timeout. Keeping the rule in the caller is the point of the
+    // degradation contract.
+    bool generation_enabled = true;
+
     std::string query;
     while (true) {
         std::cout << "query> ";
@@ -335,11 +163,11 @@ int main() {
         if (query.empty()) continue;
 
         if (query == "list") {
-            for (size_t i = 0; i < docs.size(); ++i) {
-                std::cout << docs[i].id
-                    << (docs[i].deleted ? "  [deleted]  " : "  ")
-                    << docs[i].content.size() << " bytes  "
-                    << docs[i].path << "\n";
+            for (const DocInfo& d : engine.documents()) {
+                std::cout << d.id
+                    << (d.deleted ? "  [deleted]  " : "  ")
+                    << d.bytes << " bytes  "
+                    << d.path << "\n";
             }
             continue;
         }
@@ -347,168 +175,127 @@ int main() {
         if (query.rfind("del ", 0) == 0) {
             const std::string arg = query.substr(4);
             bool digits = !arg.empty();
-            for (size_t k = 0; k < arg.size(); ++k)
+            for (std::size_t k = 0; k < arg.size(); ++k)
                 if (arg[k] < '0' || arg[k] > '9') digits = false;
             if (!digits) {
                 std::cout << "usage: del <doc id>\n";
                 continue;
             }
             int id = 0;
-            for (size_t k = 0; k < arg.size(); ++k)
+            for (std::size_t k = 0; k < arg.size(); ++k)
                 id = id * 10 + (arg[k] - '0');
-            if (id >= static_cast<int>(docs.size())) {
-                std::cout << "no document with id " << id << "\n";
+
+            // Cheap pre-check purely so the report lands at the right
+            // moment; the engine performs the authoritative check and
+            // rebuilds after it.
+            std::string path;
+            {
+                const std::vector<DocInfo> docs = engine.documents();
+                if (id < 0 || static_cast<std::size_t>(id) >= docs.size()) {
+                    std::cout << "no document with id " << id << "\n";
+                    continue;
+                }
+                if (docs[static_cast<std::size_t>(id)].deleted) {
+                    std::cout << docs[static_cast<std::size_t>(id)].path
+                        << " is already deleted\n";
+                    continue;
+                }
+                path = docs[static_cast<std::size_t>(id)].path;
+            }
+
+            bool deleted_line_done = false;
+            bool delete_progress_open = false;
+            const MutationOutcome mutation = engine.remove_document(id,
+                [&engine, &path, &deleted_line_done, &delete_progress_open](
+                    const EngineProgress& p) {
+                    if (p.stage == "index" && !deleted_line_done) {
+                        // BM25 is rebuilt and saved; the dense side starts
+                        // next. The old inline handler printed its report
+                        // at exactly this point.
+                        std::cout << "deleted " << path << " ("
+                            << engine.status().chunks
+                            << " chunks remain)\n";
+                        deleted_line_done = true;
+                    } else if (p.stage == "vectors") {
+                        print_embed_progress(p, engine.config().dense_model,
+                            "after delete");
+                        delete_progress_open = (p.done != 0);
+                    }
+                    return true;
+                });
+
+            if (delete_progress_open)
+                std::cout << "\n";
+            if (mutation.status != MutationStatus::OK) {
+                std::cout << "delete failed\n";   // the pre-check missed it
                 continue;
             }
-            if (docs[id].deleted) {
-                std::cout << docs[id].path << " is already deleted\n";
-                continue;
-            }
-            // Delete = tombstone + immediate rebuild + save, so the
-            // snapshot and the running state never disagree.
-            docs[id].deleted = true;
-            chunks = chunk_documents(docs);
-            index = build_index(chunks);
-            if (!save(snapshot, docs, chunks, index))
-                std::cerr << "Warning: snapshot save failed; "
-                    "the in-memory index is still updated.\n";
-            std::cout << "deleted " << docs[id].path
-                << " (" << chunks.size() << " chunks remain)\n";
-            // Re-chunking shifts chunk ids, so the dense side must be
-            // rebuilt too -- but the surviving documents hit the
-            // snapshot (path + hash match), so a delete normally
-            // costs zero re-embedding.
-            try {
-                const std::vector<DocVectors> doc_vectors =
-                    build_doc_vectors(*provider, docs, chunks,
-                                      vector_snapshot, "after delete");
-                dense_index =
-                    build_flat_index(flatten_doc_vectors(doc_vectors));
-                if (!vector_save(vector_snapshot,
-                        VectorIdentity{provider->model_id(),
-                                       provider->embedding_policy(),
-                                       dense_index.dimension},
-                        doc_vectors))
-                    std::cerr << "Warning: vector snapshot save failed.\n";
-                dense_ready = true;
-                std::cout << "dense route rebuilt: "
-                          << dense_index.vectors.size() << " vectors\n";
-            } catch (const std::exception& e) {
-                dense_index = FlatIndex{};
-                dense_ready = false;
+            const EngineStatus& s = engine.status();
+            if (s.dense_ready) {
+                std::cout << "dense vectors: " << s.vectors_reused
+                    << " reused from snapshot, " << s.vectors_embedded
+                    << " embedded (after delete)\n";
+                std::cout << "dense route rebuilt: " << s.vectors_total
+                    << " vectors\n";
+            } else if (!s.dense_error.empty()) {
                 std::cerr << "Warning: dense route unavailable ("
-                          << e.what() << ").\n";
+                    << s.dense_error << ").\n";
             }
             continue;
         }
 
-        // Stage 3: search and print. Two routes while the dense side is
-        // alive -- BM25 (lexical) + vector (semantic) -- fused by RRF;
-        // BM25 alone otherwise, printed with its own raw scores.
-        std::vector<SearchResult> bm25 =
-            search(index, query, HYBRID_ROUTE_K);
-        std::vector<SearchResult> dense;
-        if (dense_ready) {
-            try {
-                dense = search_flat(dense_index,
-                                    provider->embed_query(query),
-                                    HYBRID_ROUTE_K);
-            } catch (const std::exception& e) {
-                std::cerr << "Warning: dense route failed ("
-                          << e.what() << "); BM25-only for this query.\n";
-            }
-        }
+        // Stage 3: retrieval. Fast, and printed BEFORE generation so
+        // the user reads results while the model is still thinking.
+        QueryOutcome outcome = engine.retrieve(query);
 
-        // Rank for this query: RRF-fused when the dense route
-        // contributed, plain BM25 order otherwise (with its own raw
-        // scores). Both modes print the same top TOP_K list, then feed
-        // it to the generator.
-        const bool fused_mode = !dense.empty();
-        std::vector<SearchResult> ranked;
-        if (fused_mode)
-            ranked = rrf_fuse({bm25, dense});
-        else
-            ranked = bm25;
-        if (ranked.empty()) {
+        if (!outcome.dense_error.empty()) {
+            std::cerr << "Warning: dense route failed ("
+                << outcome.dense_error << "); BM25-only for this query.\n";
+        }
+        if (outcome.hits.empty()) {
             std::cout << "(no results)\n";
             continue;
         }
-        const std::size_t shown =
-            std::min(ranked.size(), static_cast<std::size_t>(TOP_K));
 
-        if (fused_mode) {
-            const std::unordered_map<int, float> bm25_score = score_map(bm25);
-            const std::unordered_map<int, float> dense_score =
-                score_map(dense);
-            for (std::size_t i = 0; i < shown; ++i) {
-                const SearchResult& r = ranked[i];
-                const Chunk& c = chunks[r.chunk_id];
-                const Document& d = docs[c.document_id];
-
-                std::cout << "[" << (i + 1) << "] "
-                    << "rrf=" << r.score << "  "
-                    << "bm25=" << score_or_dash(bm25_score, r.chunk_id)
-                    << "  "
-                    << "vec=" << score_or_dash(dense_score, r.chunk_id)
-                    << "  "
-                    << "doc=" << d.path << "\n"
-                    << "    " << c.text << "\n";
+        if (outcome.hybrid) {
+            for (const QueryHit& h : outcome.hits) {
+                std::cout << "[" << h.rank << "] "
+                    << "rrf=" << h.rrf << "  "
+                    << "bm25=" << score_or_dash(h.bm25) << "  "
+                    << "vec=" << score_or_dash(h.dense) << "  "
+                    << "doc=" << h.doc_path << "\n"
+                    << "    " << h.text << "\n";
             }
         } else {
-            for (std::size_t i = 0; i < shown; ++i) {
-                const SearchResult& r = ranked[i];
-                const Chunk& c = chunks[r.chunk_id];
-                const Document& d = docs[c.document_id];
-
-                std::cout << "[" << (i + 1) << "] "
-                    << "score=" << r.score << "  "
-                    << "doc=" << d.path << "\n"
-                    << "    " << c.text << "\n";
+            for (const QueryHit& h : outcome.hits) {
+                std::cout << "[" << h.rank << "] "
+                    << "score=" << h.rrf << "  "
+                    << "doc=" << h.doc_path << "\n"
+                    << "    " << h.text << "\n";
             }
         }
 
-        // Stage 4 (M4 step 3): ground an answer in the retrieval
-        // results. The prompt and its citation ledger come from
-        // context.h -- the single template owner; the provider only
-        // transports messages verbatim. A generation failure disables
-        // generation for the rest of the session and leaves the
-        // retrieval list as the answer, mirroring the dense -> BM25
-        // degradation policy.
-        if (generation_ready) {
-            std::vector<RagMaterial> materials;
-            materials.reserve(shown);
-            for (std::size_t i = 0; i < shown; ++i) {
-                const Chunk& c = chunks[ranked[i].chunk_id];
-                materials.push_back(RagMaterial{ranked[i].chunk_id,
-                    docs[c.document_id].path, c.text});
-            }
-            const RagPrompt prompt =
-                build_rag_prompt(query, materials, CONTEXT_BYTE_BUDGET);
-            try {
-                const auto t0 = std::chrono::steady_clock::now();
-                const std::string answer = generator->chat(
-                    {{ChatRole::SYSTEM, prompt.system_message},
-                     {ChatRole::USER, prompt.user_message}});
-                const double secs = std::chrono::duration<double>(
-                    std::chrono::steady_clock::now() - t0).count();
-                std::cout << "\n--- answer (" << GENERATION_MODEL << ", "
-                    << secs << "s) ---\n" << answer << "\n";
-                if (!prompt.used_materials.empty()) {
-                    std::cout << "--- sources ---\n";
-                    for (std::size_t i = 0;
-                         i < prompt.used_materials.size(); ++i)
-                        std::cout << "[" << (i + 1) << "] "
-                            << prompt.used_materials[i].source
-                            << " (chunk "
-                            << prompt.used_materials[i].chunk_id
-                            << ")\n";
-                }
-            } catch (const std::exception& e) {
-                generation_ready = false;
-                std::cerr << "Warning: generation unavailable ("
-                    << e.what() << "); retrieval-only answers for the "
-                    "rest of this session.\n";
-            }
+        // Stage 4: the grounded answer. Slow, so it comes last.
+        if (generation_enabled)
+            engine.generate(query, outcome);
+        if (!outcome.generation_attempted)
+            continue;
+        if (!outcome.generation_ok) {
+            generation_enabled = false;   // session disable, as before
+            std::cerr << "Warning: generation unavailable ("
+                << outcome.generation_error
+                << "); retrieval-only answers for the rest of this "
+                "session.\n";
+            continue;
+        }
+        std::cout << "\n--- answer (" << outcome.generation_model << ", "
+            << outcome.generation_seconds << "s) ---\n"
+            << outcome.answer << "\n";
+        if (!outcome.citations.empty()) {
+            std::cout << "--- sources ---\n";
+            for (const Citation& c : outcome.citations)
+                std::cout << "[" << c.n << "] " << c.doc_path
+                << " (chunk " << c.chunk_id << ")\n";
         }
     }
 

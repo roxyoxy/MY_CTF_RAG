@@ -5,7 +5,37 @@ rem Exit code 0 = all binaries built and all cases green.
 rem cl prints errors to stdout, so each compile logs to a file that is
 rem only shown when the build fails.
 
-call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" 1>nul 2>nul
+rem Locate Visual Studio the way ci.yml and build_web.bat do. This line
+rem used to name a single install path, and because it also sent its output
+rem to nul, a machine whose VS lives anywhere else failed silently and then
+rem reported only "'cl' is not recognized" -- an error about the wrong
+rem thing entirely. vswhere ships with the VS installer and knows where VS
+rem actually is; the usual locations are kept as a fallback.
+set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
+set "VSROOT="
+if exist "%VSWHERE%" (
+  for /f "usebackq tokens=*" %%I in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "VSROOT=%%I"
+)
+
+set "VCVARS="
+if defined VSROOT if exist "%VSROOT%\VC\Auxiliary\Build\vcvars64.bat" set "VCVARS=%VSROOT%\VC\Auxiliary\Build\vcvars64.bat"
+
+if not defined VCVARS (
+  for %%P in (
+    "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+    "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\Build\vcvars64.bat"
+    "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  ) do if not defined VCVARS if exist %%P set "VCVARS=%%~P"
+)
+
+if not defined VCVARS (
+  echo [FAIL] vcvars64.bat not found.
+  echo        Install the VS2022 "Desktop development with C++" workload.
+  exit /b 1
+)
+
+echo [info] Visual Studio found at %VCVARS%
+call "%VCVARS%" >nul 2>&1
 cd /d "%~dp0.."
 
 set CLFLAGS=/nologo /std:c++17 /W4 /utf-8 /EHsc /I include /I tests /Fo:tests\

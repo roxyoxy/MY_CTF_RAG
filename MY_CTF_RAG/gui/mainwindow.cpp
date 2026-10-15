@@ -1,12 +1,10 @@
 #include "mainwindow.h"
 
 #include <algorithm>
-#include <chrono>
 #include <exception>
 #include <functional>
 #include <limits>
-#include <unordered_map>
-#include <unordered_set>
+#include <string>
 #include <utility>
 
 #include <QAbstractItemView>
@@ -24,10 +22,12 @@
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPlainTextEdit>
+#include <QProgressDialog>
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QSplitter>
 #include <QStatusBar>
+#include <QStringList>
 #include <QTableWidget>
 #include <QTextBrowser>
 #include <QTextCursor>
@@ -39,35 +39,15 @@
 #include <QVariant>
 #include <QWidget>
 
-#include "chunker.h"
-#include "corpus_diff.h"
-#include "embedder.h"
-#include "loader.h"
 #include "persist.h"
-#include "rrf.h"
-#include "vector_index.h"
-#include "vector_persist.h"
 
 namespace {
 constexpr int kRoleItemKind = Qt::UserRole;
 constexpr int kRoleDocumentId = Qt::UserRole + 1;
 constexpr int kRoleChunkId = Qt::UserRole + 2;
-constexpr int kCategoryItem = 0;
-constexpr int kDocumentItem = 1;
+const int kCategoryItem = 0;
+const int kDocumentItem = 1;
 constexpr int kSnippetChars = 180;
-// Caller-side wiring constant for corpus embedding (M3 step 4),
-// registered in docs/PARAMS.md; mirrored in src/main.cpp. The query
-// chain's own policy constants moved to query_worker.cpp with the
-// chain itself (M4 step 4).
-constexpr int kEmbedSlice = 32;
-// Dense model decided by the A/B experiment (M3 step 2, 2026-10-11):
-// qwen3-embedding:0.6b beat bge-m3 on every metric; see docs/PARAMS.md.
-constexpr const char* kDenseModel = "qwen3-embedding:0.6b";
-// Generation model frozen by the step-3.5 A/B (2026-10-12):
-// qwen3:4b-instruct beat qwen3:1.7b on groundedness, citations and
-// language following; see docs/m4-generation-ab.md. Never "qwen3:4b"
-// -- that plain tag currently points at the thinking variant.
-constexpr const char* kGenerationModel = "qwen3:4b-instruct";
 
 QString fromUtf8(const std::string& text) {
     return QString::fromUtf8(text.data(), static_cast<qsizetype>(text.size()));
@@ -78,26 +58,33 @@ std::string toUtf8(const QString& text) {
     return std::string(bytes.constData(), static_cast<size_t>(bytes.size()));
 }
 
+// Wording for the engine's status enums. The engine returns codes; the
+// console says English, the GUI says Chinese, and neither belongs in
+// the engine.
 QString snapshotStatusName(SnapshotStatus status) {
     switch (status) {
-    case SnapshotStatus::OK:
-        return QStringLiteral("ok");
-    case SnapshotStatus::NOT_FOUND:
-        return QStringLiteral("not found (first run)");
-    case SnapshotStatus::IO_ERROR:
-        return QStringLiteral("io error");
-    case SnapshotStatus::BAD_MAGIC:
-        return QStringLiteral("bad magic");
-    case SnapshotStatus::BAD_FORMAT:
-        return QStringLiteral("corrupt");
-    case SnapshotStatus::BAD_PIPELINE:
-        return QStringLiteral("pipeline version mismatch");
-    case SnapshotStatus::BAD_PARAMS:
-        return QStringLiteral("chunk params mismatch");
-    case SnapshotStatus::CORPUS_CHANGED:
-        return QStringLiteral("corpus changed");
+    case SnapshotStatus::OK:             return QStringLiteral("正常");
+    case SnapshotStatus::NOT_FOUND:      return QStringLiteral("不存在（首次运行）");
+    case SnapshotStatus::IO_ERROR:       return QStringLiteral("无法读取");
+    case SnapshotStatus::BAD_MAGIC:      return QStringLiteral("不是本程序的快照");
+    case SnapshotStatus::BAD_FORMAT:     return QStringLiteral("已损坏");
+    case SnapshotStatus::BAD_PIPELINE:   return QStringLiteral("分词口径已变");
+    case SnapshotStatus::BAD_PARAMS:     return QStringLiteral("切块参数不匹配");
+    case SnapshotStatus::CORPUS_CHANGED: return QStringLiteral("语料已变动");
     }
-    return QStringLiteral("unknown");
+    return QStringLiteral("未知");
+}
+
+QString vectorStatusName(VectorSnapshotStatus status) {
+    switch (status) {
+    case VectorSnapshotStatus::OK:         return QStringLiteral("正常");
+    case VectorSnapshotStatus::NOT_FOUND:  return QStringLiteral("不存在（首次运行）");
+    case VectorSnapshotStatus::IO_ERROR:   return QStringLiteral("无法读取");
+    case VectorSnapshotStatus::BAD_MAGIC:  return QStringLiteral("不是本程序的快照");
+    case VectorSnapshotStatus::BAD_FORMAT: return QStringLiteral("已损坏");
+    case VectorSnapshotStatus::BAD_MODEL:  return QStringLiteral("由别的模型建立");
+    }
+    return QStringLiteral("未知");
 }
 
 QString categoryForPath(const std::string& path) {
@@ -108,17 +95,115 @@ QString categoryForPath(const std::string& path) {
     return QString::fromUtf8(path.data(), static_cast<qsizetype>(slash));
 }
 
-QString snippetForChunk(const Chunk& chunk) {
-    QString text = fromUtf8(chunk.text);
-    text.replace(QChar('\r'), QChar(' '));
-    text.replace(QChar('\n'), QChar(' '));
-    text.replace(QChar('\t'), QChar(' '));
-    text = text.simplified();
-    if (text.size() > kSnippetChars) {
-        text = text.left(kSnippetChars - 3) + QStringLiteral("...");
+QString snippetForText(const std::string& text) {
+    QString flattened = fromUtf8(text);
+    flattened.replace(QChar('\r'), QChar(' '));
+    flattened.replace(QChar('\n'), QChar(' '));
+    flattened.replace(QChar('\t'), QChar(' '));
+    flattened = flattened.simplified();
+    if (flattened.size() > kSnippetChars) {
+        flattened = flattened.left(kSnippetChars - 3) + QStringLiteral("...");
     }
-    return text;
+    return flattened;
 }
+
+// The citation ledger carries the position, not the text; the snippet
+// comes from the hit with the same chunk id (used_materials is always a
+// subset of hits -- the context builder only drops from the tail).
+QString snippetForChunkId(const QueryOutcome& outcome, int chunkId) {
+    for (const QueryHit& hit : outcome.hits) {
+        if (hit.chunk_id == chunkId) {
+            return snippetForText(hit.text);
+        }
+    }
+    return QString();
+}
+
+QString outcomeDenseState(const EngineStatus& status) {
+    if (status.dense_ready) {
+        return QStringLiteral("语义路 %1 (%2x%3)")
+            .arg(fromUtf8(status.dense_model_id))
+            .arg(static_cast<qulonglong>(status.vectors_total))
+            .arg(status.dimension);
+    }
+    return QStringLiteral("语义路未启用");
+}
+
+// The "you are about to spend real time" gate. Returns false when the
+// user chose to quit instead of updating.
+bool confirmUpdate(QWidget* parent, const EnginePlan& plan) {
+    QMessageBox box(parent);
+    box.setIcon(QMessageBox::Question);
+    box.setWindowTitle(QStringLiteral("需要更新索引"));
+    box.setText(QStringLiteral("语料或索引快照与当前状态不一致，需要建立索引。"));
+
+    const QStringList details = {
+        QStringLiteral("· 词法索引：%1%2")
+            .arg(snapshotStatusName(plan.index_state),
+                 plan.index_needs_rebuild ? QStringLiteral(" → 将重建")
+                                          : QStringLiteral(" → 可复用")),
+        QStringLiteral("· 向量索引：%1%2")
+            .arg(vectorStatusName(plan.vector_state),
+                 plan.vector_needs_work ? QStringLiteral(" → 需嵌入")
+                                        : QStringLiteral(" → 可复用")),
+    };
+    box.setInformativeText(QStringLiteral(
+        "本地模型推理可能耗时数十秒，期间界面不可操作。\n\n%1")
+        .arg(details.join(QStringLiteral("\n"))));
+
+    QPushButton* update = box.addButton(QStringLiteral("更新"), QMessageBox::AcceptRole);
+    box.addButton(QStringLiteral("退出"), QMessageBox::RejectRole);
+    box.exec();
+    return box.clickedButton() == update;
+}
+
+// A modal progress dialog driven by the engine's progress callback.
+// The engine reports on its calling thread -- the UI thread here -- so
+// this is a plain adapter with no cross-thread plumbing.
+// setMinimumDuration keeps a fast rebuild from flashing a dialog; the
+// modality is what removes the re-entrancy the old code allowed (its
+// processEvents() let the user click "rebuild" mid-embed).
+class ProgressRelay {
+public:
+    ProgressRelay(QWidget* parent, QString model)
+        : dialog_(QStringLiteral("准备中…"), QString(), 0, 100, parent),
+          model_(std::move(model)) {
+        dialog_.setWindowTitle(QStringLiteral("建立索引"));
+        dialog_.setWindowModality(Qt::ApplicationModal);
+        dialog_.setMinimumDuration(400);
+        dialog_.setAutoClose(false);
+        dialog_.setAutoReset(false);
+        dialog_.setMinimumWidth(460);
+    }
+
+    // Every stage except "plan" (which the caller turns into a
+    // question, not a progress bar).
+    bool operator()(const EngineProgress& progress) {
+        if (progress.stage == "index") {
+            dialog_.setLabelText(QStringLiteral("正在重建词法索引…"));
+            dialog_.setValue(0);
+        } else if (progress.stage == "vectors") {
+            dialog_.setLabelText(QStringLiteral(
+                "正在嵌入向量（%1）\n第 %2 / %3 块")
+                .arg(model_)
+                .arg(static_cast<qulonglong>(progress.done))
+                .arg(static_cast<qulonglong>(progress.total)));
+            if (progress.total > 0) {
+                dialog_.setValue(static_cast<int>(
+                    progress.done * 100 / progress.total));
+            }
+        }
+        return !dialog_.wasCanceled();
+    }
+
+    void show() { dialog_.show(); }
+    void hide() { dialog_.hide(); }
+    bool wasCanceled() const { return dialog_.wasCanceled(); }
+
+private:
+    QProgressDialog dialog_;
+    QString model_;
+};
 
 // One QThread per query. Deliberately NOT a QObject with Q_OBJECT --
 // this GUI avoids moc by design (gui/README.md); the two UI-thread
@@ -161,7 +246,7 @@ private:
     StartedCallback onStarted_;
     FinishedCallback onFinished_;
 };
-}
+}  // namespace
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent) {
@@ -170,14 +255,14 @@ MainWindow::MainWindow(QWidget* parent)
     refreshStatusBar();
 
     QTimer::singleShot(0, this, [this]() {
-        loadCorpusAndIndex(dataDirEdit_->text());
+        startup();
     });
 }
 
 MainWindow::~MainWindow() {
-    // QueryThread::run borrows this window's members, and its HTTP
-    // calls are not interruptible: the only safe shutdown is to wait.
-    // This blocks only when the window is closed mid-generation.
+    // QueryThread::run calls into engine_, which this window owns, and
+    // its HTTP calls are not interruptible: the only safe shutdown is
+    // to wait. This blocks only when the window is closed mid-answer.
     if (chatBusy_ && busyThread_ != nullptr) {
         busyThread_->wait();
     }
@@ -351,9 +436,7 @@ void MainWindow::buildUi() {
 
 void MainWindow::connectUi() {
     connect(browseButton_, &QPushButton::clicked, this, &MainWindow::chooseDataDirectory);
-    connect(reloadButton_, &QPushButton::clicked, this, [this]() {
-        loadCorpusAndIndex(dataDirEdit_->text());
-    });
+    connect(reloadButton_, &QPushButton::clicked, this, [this]() { startup(); });
     connect(rebuildButton_, &QPushButton::clicked, this, &MainWindow::rebuildIndex);
     connect(deleteButton_, &QPushButton::clicked, this, &MainWindow::deleteSelectedDocument);
     connect(searchButton_, &QPushButton::clicked, this, &MainWindow::startRetrieval);
@@ -378,225 +461,120 @@ void MainWindow::chooseDataDirectory() {
     }
 
     dataDirEdit_->setText(selected);
-    loadCorpusAndIndex(selected);
+    startup();
 }
 
-void MainWindow::loadCorpusAndIndex(const QString& dataDir) {
+// Load the corpus and bring all three sides up (contract clause 5: the
+// BM25 stage lands before the vector stage, so cancelling the vector
+// stage still leaves a working lexical engine).
+//
+// The whole thing runs on the UI thread behind a modal progress dialog.
+// That is deliberate: the work is not interruptible anyway, the dialog
+// is honest about it, and modality removes the re-entrancy the previous
+// implementation allowed -- embedChunks() called processEvents() inside
+// its loop, so a user clicking "rebuild" during the 20-second cold
+// embed could nest a second embedding on top of the first.
+void MainWindow::startup() {
     if (chatBusy_) {
         appendLog(QStringLiteral("加载: 问答仍在进行，请等本轮结束后再切换语料。"));
         return;
     }
+
+    EngineConfig config;
+    config.data_dir = toUtf8(dataDirEdit_->text());
+
+    ProgressRelay relay(this, fromUtf8(config.dense_model));
+    bool quitRequested = false;
+
+    const EngineProgressFn onProgress = [&](const EngineProgress& progress) {
+        if (progress.stage == "plan") {
+            const EnginePlan& plan = engine_.status().plan;
+            if (!plan.needs_work()) {
+                return true;   // nothing to ask about; every side restores
+            }
+            if (!confirmUpdate(this, plan)) {
+                quitRequested = true;
+                return false;  // stop before doing any work
+            }
+            relay.show();
+            return true;
+        }
+        return relay(progress);
+    };
+
     try {
-        std::vector<Document> newDocs = load_documents(toUtf8(dataDir));
-        std::vector<Chunk> newChunks;
-        InvertedIndex newIndex;
-
-        const SnapshotStatus status = validate(snapshotPath_, newDocs);
-        bool restored = false;
-        if (status == SnapshotStatus::OK) {
-            restored = load(snapshotPath_, newDocs, newChunks, newIndex);
-        }
-
-        QString branchLog;
-        QString newSnapshotState;
-        if (restored) {
-            branchLog = QStringLiteral("启动: 快照命中，已恢复 index.bin。");
-            newSnapshotState = QStringLiteral("ok (restored)");
-        } else {
-            if (status == SnapshotStatus::OK) {
-                branchLog = QStringLiteral("启动: 快照校验通过但 load 失败，已重建。");
-            } else {
-                branchLog = QStringLiteral("启动: 快照未命中 (%1)，已重建。")
-                    .arg(snapshotStatusName(status));
-            }
-
-            if (status == SnapshotStatus::CORPUS_CHANGED) {
-                std::vector<Document> oldDocs;
-                std::vector<Chunk> oldChunks;
-                InvertedIndex oldIndex;
-                if (load(snapshotPath_, oldDocs, oldChunks, oldIndex)) {
-                    const CorpusDiff diff = diff_corpora(oldDocs, newDocs);
-                    const int inherited = inherit_tombstones(oldDocs, newDocs);
-                    branchLog += QStringLiteral(" 语料变更: %1 新增, %2 移除, %3 编辑")
-                        .arg(static_cast<qulonglong>(diff.added.size()))
-                        .arg(static_cast<qulonglong>(diff.removed.size()))
-                        .arg(static_cast<qulonglong>(diff.edited.size()));
-                    if (inherited > 0) {
-                        branchLog += QStringLiteral(", %1 个墓碑已继承")
-                            .arg(inherited);
-                    }
-                    branchLog += QStringLiteral("。");
-                }
-            }
-
-            newChunks = chunk_documents(newDocs);
-            newIndex = build_index(newChunks);
-            if (save(snapshotPath_, newDocs, newChunks, newIndex)) {
-                newSnapshotState = QStringLiteral("ok (rebuilt)");
-            } else {
-                newSnapshotState = QStringLiteral("save failed (memory only)");
-                branchLog += QStringLiteral(" 快照保存失败，当前内存索引仍可用。");
-            }
-        }
-
-        docs_ = std::move(newDocs);
-        chunks_ = std::move(newChunks);
-        index_ = std::move(newIndex);
-        snapshotStateText_ = newSnapshotState;
-        previewDocumentId_ = -1;
-        corpusLoaded_ = true;
-
-        refreshDocumentTree();
-        resultsTable_->setRowCount(0);
-        previewEdit_->clear();
-        refreshStatusBar();
-        appendLog(branchLog);
-        embedChunks(QStringLiteral("启动"));
+        status_ = engine_.open(config, onProgress);
     } catch (const std::exception& e) {
-        snapshotStateText_ = QStringLiteral("load error");
+        relay.hide();
+        engineReady_ = false;
         refreshStatusBar();
         appendLog(QStringLiteral("加载失败: %1").arg(QString::fromUtf8(e.what())));
-        QMessageBox::critical(this, QStringLiteral("加载失败"), QString::fromUtf8(e.what()));
+        QMessageBox::critical(this, QStringLiteral("加载失败"),
+            QString::fromUtf8(e.what()));
+        return;
     }
-}
+    relay.hide();
 
-// M3 steps 4 + 5 (T9): build the dense side through the local Ollama
-// provider with vector.bin caching. A document whose path + content
-// hash + chunk count all match the snapshot reuses its vectors, so an
-// unchanged corpus needs zero network and comes up instantly; a
-// snapshot from a different model re-embeds everything. The embed
-// still runs on the GUI thread (a worker thread is an M4 hardening
-// item). Any failure degrades to BM25-only, never blocks.
-void MainWindow::embedChunks(const QString& reason) {
-    denseIndex_ = FlatIndex{};
-    denseReady_ = false;
-
-    if (chunks_.empty()) {
-        denseStateText_ = QStringLiteral("dense: idle");
-        refreshStatusBar();
+    if (quitRequested) {
+        appendLog(QStringLiteral("启动: 用户选择退出。"));
+        close();
         return;
     }
 
-    if (!provider_)
-        provider_ = make_ollama_provider(
-            EmbedderConfig{std::string(), std::string(kDenseModel), 0});
+    engineReady_ = status_.loaded;
+    previewDocumentId_ = -1;
+    refreshDocumentTree();
+    resultsTable_->setRowCount(0);
+    previewEdit_->clear();
+    refreshStatusBar();
+    appendStartupReport(status_);
+    appendDenseReport(status_, QStringLiteral("启动"));
+}
 
-    const auto t0 = std::chrono::steady_clock::now();
-    try {
-        std::vector<DocVectors> cached;
-        const VectorIdentity expected{provider_->model_id(),
-                                      provider_->embedding_policy(), 0};
-        const VectorSnapshotStatus st = load_vector_snapshot(
-            vectorSnapshotPath_, expected, cached);
-        if (st == VectorSnapshotStatus::BAD_MODEL) {
-            appendLog(QStringLiteral("%1: 向量快照是别的模型建的，全量重嵌。")
-                .arg(reason));
-        } else if (st != VectorSnapshotStatus::OK &&
-                   st != VectorSnapshotStatus::NOT_FOUND) {
-            appendLog(QStringLiteral("%1: 向量快照不可用，全量重嵌。")
-                .arg(reason));
-        }
-
-        std::unordered_map<std::string, const DocVectors*> old;
-        for (const DocVectors& d : cached)
-            old.emplace(d.path, &d);
-
-        std::vector<std::vector<size_t>> perDoc(docs_.size());
-        for (size_t i = 0; i < chunks_.size(); ++i)
-            perDoc[static_cast<size_t>(
-                chunks_[i].document_id)].push_back(i);
-
-        std::vector<DocVectors> records;
-        records.reserve(docs_.size());
-        std::vector<std::string> toEmbed;
-        std::vector<std::pair<size_t, size_t>> pending;
-        size_t reused = 0;
-        for (const Document& doc : docs_) {
-            if (doc.deleted)
-                continue;
-            DocVectors rec;
-            rec.path = doc.path;
-            rec.content_hash = vector_content_hash(doc.content);
-            const size_t n = perDoc[static_cast<size_t>(doc.id)].size();
-            const auto it = old.find(doc.path);
-            if (it != old.end() &&
-                it->second->content_hash == rec.content_hash &&
-                it->second->vectors.size() == n) {
-                rec.vectors = it->second->vectors;
-                reused += n;
-            } else {
-                for (size_t ci : perDoc[static_cast<size_t>(doc.id)])
-                    toEmbed.push_back(chunks_[ci].text);
-                pending.emplace_back(records.size(), n);
+void MainWindow::appendStartupReport(const EngineStatus& status) {
+    if (status.index_restored) {
+        appendLog(QStringLiteral("启动: 快照命中，已恢复 index.bin。"));
+    } else if (status.index_state == SnapshotStatus::OK) {
+        appendLog(QStringLiteral("启动: 快照校验通过但 load 失败，已重建。"));
+    } else {
+        QString line = QStringLiteral("启动: 快照未命中 (%1)，已重建。")
+            .arg(snapshotStatusName(status.index_state));
+        if (status.corpus_change.detected) {
+            line += QStringLiteral(" 语料变更: %1 新增, %2 移除, %3 编辑")
+                .arg(static_cast<qulonglong>(status.corpus_change.added))
+                .arg(static_cast<qulonglong>(status.corpus_change.removed))
+                .arg(static_cast<qulonglong>(status.corpus_change.edited));
+            if (status.corpus_change.tombstones_inherited > 0) {
+                line += QStringLiteral(", %1 个墓碑已继承")
+                    .arg(static_cast<qulonglong>(
+                        status.corpus_change.tombstones_inherited));
             }
-            records.push_back(std::move(rec));
+            line += QStringLiteral("。");
         }
-
-        if (!toEmbed.empty()) {
-            appendLog(QStringLiteral("%1: 正在嵌入 %2 个块（%3，本地 Ollama）...")
-                .arg(reason)
-                .arg(static_cast<qulonglong>(toEmbed.size()))
-                .arg(QString::fromUtf8(kDenseModel)));
-            QApplication::processEvents();
-
-            std::vector<std::vector<float>> embeds;
-            embeds.reserve(toEmbed.size());
-            const size_t total = toEmbed.size();
-            for (size_t begin = 0; begin < total; begin += kEmbedSlice) {
-                const size_t end = std::min(begin + kEmbedSlice, total);
-                std::vector<std::string> texts;
-                texts.reserve(end - begin);
-                for (size_t i = begin; i < end; ++i)
-                    texts.push_back(toEmbed[i]);
-                const std::vector<std::vector<float>> part =
-                    provider_->embed_documents(texts);
-                embeds.insert(embeds.end(), part.begin(), part.end());
-                QApplication::processEvents();
-            }
-            size_t k = 0;
-            for (const auto& p : pending) {
-                DocVectors& rec = records[p.first];
-                for (size_t j = 0; j < p.second; ++j)
-                    rec.vectors.push_back(embeds[k++]);
-            }
+        if (!status.index_saved) {
+            line += QStringLiteral(" 快照保存失败，当前内存索引仍可用。");
         }
+        appendLog(line);
+    }
+}
 
-        std::vector<std::vector<float>> all;
-        for (const DocVectors& dv : records)
-            all.insert(all.end(), dv.vectors.begin(), dv.vectors.end());
-        denseIndex_ = build_flat_index(all);
-        if (!vector_save(vectorSnapshotPath_,
-                VectorIdentity{provider_->model_id(),
-                               provider_->embedding_policy(),
-                               denseIndex_.dimension},
-                records)) {
-            appendLog(QStringLiteral("%1: 向量快照保存失败（内存向量仍可用）。")
-                .arg(reason));
-        }
-        denseReady_ = true;
-        const double secs = std::chrono::duration<double>(
-            std::chrono::steady_clock::now() - t0).count();
-        denseStateText_ = QStringLiteral("dense: %1 (%2x%3, %4s)")
-            .arg(QString::fromUtf8(kDenseModel))
-            .arg(static_cast<qulonglong>(denseIndex_.vectors.size()))
-            .arg(denseIndex_.dimension)
-            .arg(secs, 0, 'f', 1);
+void MainWindow::appendDenseReport(const EngineStatus& status, const QString& when) {
+    if (status.dense_ready) {
         appendLog(QStringLiteral(
             "%1: 语义路就绪 -- %2 复用 / %3 新嵌，共 %4 向量（%5 秒）。")
-            .arg(reason)
-            .arg(static_cast<qulonglong>(reused))
-            .arg(static_cast<qulonglong>(toEmbed.size()))
-            .arg(static_cast<qulonglong>(denseIndex_.vectors.size()))
-            .arg(secs, 0, 'f', 1));
-    } catch (const std::exception& e) {
-        denseIndex_ = FlatIndex{};
-        denseReady_ = false;
-        denseStateText_ = QStringLiteral("dense: off");
+            .arg(when)
+            .arg(static_cast<qulonglong>(status.vectors_reused))
+            .arg(static_cast<qulonglong>(status.vectors_embedded))
+            .arg(static_cast<qulonglong>(status.vectors_total))
+            .arg(status.dense_seconds, 0, 'f', 1));
+    } else if (status.cancelled) {
+        appendLog(QStringLiteral(
+            "%1: 已取消，语义路未启用；检索退回仅 BM25。").arg(when));
+    } else if (!status.dense_error.empty()) {
         appendLog(QStringLiteral("%1: 语义路不可用（%2），检索退回仅 BM25。")
-            .arg(reason)
-            .arg(QString::fromUtf8(e.what())));
+            .arg(when)
+            .arg(fromUtf8(status.dense_error)));
     }
-    refreshStatusBar();
 }
 
 void MainWindow::rebuildIndex() {
@@ -604,24 +582,25 @@ void MainWindow::rebuildIndex() {
         appendLog(QStringLiteral("重建: 问答仍在进行，请等本轮结束后再操作。"));
         return;
     }
-    if (!corpusLoaded_) {
+    if (!engineReady_) {
         appendLog(QStringLiteral("重建: 当前没有已加载语料。"));
         return;
     }
 
-    chunks_ = chunk_documents(docs_);
-    index_ = build_index(chunks_);
-    const bool saved = save(snapshotPath_, docs_, chunks_, index_);
-    snapshotStateText_ = saved
-        ? QStringLiteral("ok (rebuilt)")
-        : QStringLiteral("save failed (memory only)");
+    ProgressRelay relay(this, fromUtf8(engine_.config().dense_model));
+    status_ = engine_.rebuild([&relay](const EngineProgress& progress) {
+        return relay(progress);
+    });
+    relay.hide();
 
+    engineReady_ = status_.loaded;
+    refreshDocumentTree();
     resultsTable_->setRowCount(0);
     refreshStatusBar();
-    appendLog(saved
+    appendLog(status_.index_saved
         ? QStringLiteral("重建: chunk + build_index + save 完成。")
         : QStringLiteral("重建: 内存索引已更新，但快照保存失败。"));
-    embedChunks(QStringLiteral("重建"));
+    appendDenseReport(status_, QStringLiteral("重建"));
 }
 
 void MainWindow::startRetrieval() {
@@ -633,7 +612,7 @@ void MainWindow::startRetrieval() {
 }
 
 void MainWindow::startChatQuery() {
-    if (!corpusLoaded_) {
+    if (!engineReady_) {
         appendLog(QStringLiteral("问答: 当前没有已加载语料。"));
         return;
     }
@@ -641,20 +620,14 @@ void MainWindow::startChatQuery() {
     if (query.isEmpty()) {
         return;
     }
-    if (!generator_) {
-        // Zero-network factory (generator.h clause 6); the first chat
-        // call inside the worker doubles as the health check.
-        generator_ = make_ollama_chat_provider(
-            GeneratorConfig{std::string(), std::string(kGenerationModel), 0});
-    }
     launchWorker(query, true);
 }
 
-// M4 step 4 hard gate: no query work on the UI thread. Both the
-// retrieval-only search and the full RAG ask run the whole chain
-// (BM25 + embed_query HTTP + dense + RRF + prompt + chat) inside a
-// QueryThread; this window only launches, renders and refuses corpus
-// mutations while the worker is busy.
+// No query work on the UI thread. Both the retrieval-only search and
+// the full RAG ask run the engine's two phases inside a QueryThread;
+// this window only launches, renders and refuses corpus mutations while
+// the worker is busy -- which is also what upholds the engine's "one
+// thread at a time" contract.
 void MainWindow::launchWorker(const QString& query, bool withGeneration) {
     if (chatBusy_) {
         return;
@@ -670,14 +643,9 @@ void MainWindow::launchWorker(const QString& query, bool withGeneration) {
     }
 
     QueryRequest request;
+    request.engine = &engine_;
     request.query = toUtf8(query);
-    request.index = &index_;
-    request.denseIndex = &denseIndex_;
-    request.docs = &docs_;
-    request.chunks = &chunks_;
-    request.embedProvider = provider_.get();
-    request.generator = withGeneration ? generator_.get() : nullptr;
-    request.denseReady = denseReady_;
+    request.withGeneration = withGeneration;
 
     auto* thread = new QueryThread(
         std::move(request), this,
@@ -689,55 +657,42 @@ void MainWindow::launchWorker(const QString& query, bool withGeneration) {
     thread->start();
 }
 
-void MainWindow::fillResultsTable(const std::vector<SearchResult>& results,
-                                  bool hybrid,
-                                  const std::unordered_set<int>& bm25Ids,
-                                  const std::unordered_set<int>& denseIds) {
+void MainWindow::fillResultsTable(const QueryOutcome& outcome) {
     resultsTable_->setRowCount(0);
 
-    const size_t shown =
-        std::min(results.size(), static_cast<size_t>(TOP_K));
-    int visibleRank = 0;
-
-    for (size_t i = 0; i < shown; ++i) {
-        const SearchResult& result = results[i];
-        if (result.chunk_id < 0 || static_cast<size_t>(result.chunk_id) >= chunks_.size()) {
-            continue;
-        }
-
-        const Chunk& chunk = chunks_[static_cast<size_t>(result.chunk_id)];
-        if (chunk.document_id < 0 || static_cast<size_t>(chunk.document_id) >= docs_.size()) {
-            continue;
-        }
-
-        const Document& doc = docs_[static_cast<size_t>(chunk.document_id)];
-        if (doc.deleted && !showDeletedCheck_->isChecked()) {
+    for (const QueryHit& hit : outcome.hits) {
+        // The chunker never emits chunks for a tombstone, so a deleted
+        // document cannot appear here; this filter is double-insurance
+        // for the "show deleted" toggle.
+        if (hit.location.document_id >= 0 &&
+            static_cast<size_t>(hit.location.document_id) < docs_.size() &&
+            docs_[static_cast<size_t>(hit.location.document_id)].deleted &&
+            !showDeletedCheck_->isChecked()) {
             continue;
         }
 
         QString routes;
-        if (hybrid) {
-            const bool inBm25 = bm25Ids.count(result.chunk_id) != 0;
-            const bool inDense = denseIds.count(result.chunk_id) != 0;
-            routes = inBm25 && inDense ? QStringLiteral("bm25+vec")
-                  : inBm25 ? QStringLiteral("bm25")
-                  : QStringLiteral("vec");
+        if (outcome.hybrid) {
+            routes = hit.bm25.present && hit.dense.present
+                ? QStringLiteral("bm25+vec")
+                : hit.bm25.present ? QStringLiteral("bm25")
+                                   : QStringLiteral("vec");
         } else {
             routes = QStringLiteral("bm25");
         }
 
         const int row = resultsTable_->rowCount();
         resultsTable_->insertRow(row);
-        ++visibleRank;
 
-        auto* rankItem = new QTableWidgetItem(QString::number(visibleRank));
-        rankItem->setData(kRoleChunkId, result.chunk_id);
+        auto* rankItem = new QTableWidgetItem(QString::number(hit.rank));
+        rankItem->setData(kRoleChunkId, hit.chunk_id);
         resultsTable_->setItem(row, 0, rankItem);
-        resultsTable_->setItem(row, 1, new QTableWidgetItem(QString::number(result.score, 'g', 8)));
+        resultsTable_->setItem(row, 1, new QTableWidgetItem(
+            QString::number(hit.rrf, 'g', 8)));
         resultsTable_->setItem(row, 2, new QTableWidgetItem(routes));
-        resultsTable_->setItem(row, 3, new QTableWidgetItem(fromUtf8(doc.path)));
-        resultsTable_->setItem(row, 4, new QTableWidgetItem(QString::number(result.chunk_id)));
-        resultsTable_->setItem(row, 5, new QTableWidgetItem(snippetForChunk(chunk)));
+        resultsTable_->setItem(row, 3, new QTableWidgetItem(fromUtf8(hit.doc_path)));
+        resultsTable_->setItem(row, 4, new QTableWidgetItem(QString::number(hit.chunk_id)));
+        resultsTable_->setItem(row, 5, new QTableWidgetItem(snippetForText(hit.text)));
     }
 }
 
@@ -748,11 +703,16 @@ void MainWindow::setChatBusy(bool busy) {
     reloadButton_->setEnabled(!busy);
     rebuildButton_->setEnabled(!busy);
     deleteButton_->setEnabled(!busy);
+    showDeletedCheck_->setEnabled(!busy);
+    // The tree reaches into the engine for a document's text, and the
+    // engine is busy: keep the UI off it until the worker is done.
+    documentTree_->setEnabled(!busy);
 }
 
 void MainWindow::onWorkerGenerationStarted() {
-    chatStageLabel_->setText(QStringLiteral("生成中…（本地模型 %1，约 10 秒，UI 不阻塞）")
-        .arg(QString::fromUtf8(kGenerationModel)));
+    chatStageLabel_->setText(QStringLiteral(
+        "生成中…（本地模型 %1，UI 不阻塞）")
+        .arg(fromUtf8(engine_.config().generation_model)));
 }
 
 void MainWindow::onWorkerFinished(QueryResultPtr result) {
@@ -761,50 +721,43 @@ void MainWindow::onWorkerFinished(QueryResultPtr result) {
     setChatBusy(false);
     lastResult_ = result;
 
-    if (!result->denseError.empty()) {
+    const QueryOutcome& outcome = result->outcome;
+
+    if (!outcome.dense_error.empty()) {
         appendLog(QStringLiteral("查询: 语义路失败（%1），本次退回 BM25。")
-            .arg(QString::fromUtf8(result->denseError)));
+            .arg(fromUtf8(outcome.dense_error)));
     }
 
-    std::unordered_set<int> bm25Ids;
-    std::unordered_set<int> denseIds;
-    for (const SearchResult& r : result->bm25)
-        bm25Ids.insert(r.chunk_id);
-    for (const SearchResult& r : result->dense)
-        denseIds.insert(r.chunk_id);
-    fillResultsTable(result->ranked, result->hybrid, bm25Ids, denseIds);
+    fillResultsTable(outcome);
 
     // The sources ledger: exactly the materials the model actually saw
     // (context.h), one row per [n].
-    const auto& materials = result->prompt.used_materials;
-    sourcesTable_->setRowCount(static_cast<int>(materials.size()));
-    for (int i = 0; i < static_cast<int>(materials.size()); ++i) {
-        const RagMaterial& material = materials[static_cast<size_t>(i)];
-        auto* numberItem = new QTableWidgetItem(QStringLiteral("[%1]").arg(i + 1));
-        numberItem->setData(kRoleChunkId, material.chunk_id);
+    const int sourceCount = static_cast<int>(outcome.citations.size());
+    sourcesTable_->setRowCount(sourceCount);
+    for (int i = 0; i < sourceCount; ++i) {
+        const Citation& citation = outcome.citations[static_cast<size_t>(i)];
+        auto* numberItem = new QTableWidgetItem(
+            QStringLiteral("[%1]").arg(citation.n));
+        numberItem->setData(kRoleChunkId, citation.chunk_id);
         sourcesTable_->setItem(i, 0, numberItem);
-        sourcesTable_->setItem(i, 1, new QTableWidgetItem(fromUtf8(material.source)));
-        sourcesTable_->setItem(i, 2, new QTableWidgetItem(QString::number(material.chunk_id)));
-        QString snippet;
-        if (material.chunk_id >= 0 &&
-            static_cast<size_t>(material.chunk_id) < chunks_.size()) {
-            snippet = snippetForChunk(chunks_[static_cast<size_t>(material.chunk_id)]);
-        }
-        sourcesTable_->setItem(i, 3, new QTableWidgetItem(snippet));
+        sourcesTable_->setItem(i, 1, new QTableWidgetItem(fromUtf8(citation.doc_path)));
+        sourcesTable_->setItem(i, 2, new QTableWidgetItem(QString::number(citation.chunk_id)));
+        sourcesTable_->setItem(i, 3, new QTableWidgetItem(
+            snippetForChunkId(outcome, citation.chunk_id)));
     }
 
     appendLog(QStringLiteral("查询: \"%1\" -> %2 条结果（%3，检索 %4 秒）。")
         .arg(lastQuestion_)
         .arg(resultsTable_->rowCount())
-        .arg(result->hybrid ? QStringLiteral("BM25+语义 RRF 混合")
+        .arg(outcome.hybrid ? QStringLiteral("BM25+语义 RRF 混合")
                             : QStringLiteral("仅 BM25"))
-        .arg(result->retrievalSeconds, 0, 'f', 2));
+        .arg(outcome.retrieval_seconds, 0, 'f', 2));
 
-    if (!result->chat.attempted) {
+    if (!outcome.generation_attempted) {
         return;
     }
 
-    if (!result->chat.ok) {
+    if (!outcome.generation_ok) {
         chatStageLabel_->setText(QStringLiteral("生成失败，本轮降级为仅检索"));
         answerBrowser_->setHtml(QStringLiteral(
             "<p><b>%1</b> %2</p><hr>"
@@ -813,18 +766,18 @@ void MainWindow::onWorkerFinished(QueryResultPtr result) {
             .arg(QStringLiteral("问:"),
                  lastQuestion_.toHtmlEscaped(),
                  QStringLiteral("生成失败: %1")
-                     .arg(QString::fromUtf8(result->chat.error).toHtmlEscaped()),
+                     .arg(fromUtf8(outcome.generation_error).toHtmlEscaped()),
                  QStringLiteral("已降级为仅检索：上方结果列表与来源账本仍然有效。")));
         appendLog(QStringLiteral("问答: 生成失败（%1），本轮降级为仅检索。")
-            .arg(QString::fromUtf8(result->chat.error)));
+            .arg(fromUtf8(outcome.generation_error)));
         return;
     }
 
-    // Citation rendering + sanity check: [n] inside 1..used.size()
+    // Citation rendering + sanity check: [n] inside 1..ledger size
     // becomes a clickable link to the ledger row and the highlighted
     // source chunk; anything else is flagged red and counted -- the
     // model's citation honesty stays visible instead of hiding it.
-    const QString escaped = fromUtf8(result->chat.answer).toHtmlEscaped();
+    const QString escaped = fromUtf8(outcome.answer).toHtmlEscaped();
     static const QRegularExpression citationRx(
         QStringLiteral("\\[(\\d{1,5})\\]"));
 
@@ -837,7 +790,7 @@ void MainWindow::onWorkerFinished(QueryResultPtr result) {
         const QRegularExpressionMatch match = matches.next();
         body += escaped.mid(cursor, match.capturedStart() - cursor);
         const int number = match.captured(1).toInt();
-        if (number >= 1 && number <= static_cast<int>(materials.size())) {
+        if (number >= 1 && number <= sourceCount) {
             ++validCitations;
             body += QStringLiteral("<a href=\"cite:%1\">[%1]</a>").arg(number);
         } else {
@@ -856,17 +809,17 @@ void MainWindow::onWorkerFinished(QueryResultPtr result) {
         .arg(QStringLiteral("问:"),
              lastQuestion_.toHtmlEscaped(),
              body,
-             fromUtf8(result->chat.modelId),
-             QString::number(result->chat.seconds, 'f', 1))
+             fromUtf8(outcome.generation_model),
+             QString::number(outcome.generation_seconds, 'f', 1))
         .arg(validCitations)
         .arg(invalidCitations));
 
     chatStageLabel_->setText(QStringLiteral("完成: 生成 %1 秒 · 引用 %2 有效 / %3 越界")
-        .arg(result->chat.seconds, 0, 'f', 1)
+        .arg(outcome.generation_seconds, 0, 'f', 1)
         .arg(validCitations)
         .arg(invalidCitations));
     appendLog(QStringLiteral("问答: %1 秒出答，引用 %2 有效 / %3 越界。")
-        .arg(result->chat.seconds, 0, 'f', 1)
+        .arg(outcome.generation_seconds, 0, 'f', 1)
         .arg(validCitations)
         .arg(invalidCitations));
 }
@@ -881,25 +834,31 @@ void MainWindow::onAnswerAnchorClicked(const QUrl& url) {
     if (!parsed || !lastResult_) {
         return;
     }
-    const auto& materials = lastResult_->prompt.used_materials;
-    if (number < 1 || number > static_cast<int>(materials.size())) {
+    const auto& citations = lastResult_->outcome.citations;
+    if (number < 1 || number > static_cast<int>(citations.size())) {
         return;
     }
-    const RagMaterial& material = materials[static_cast<size_t>(number - 1)];
+    const Citation& citation = citations[static_cast<size_t>(number - 1)];
     sourcesTable_->selectRow(number - 1);
-    highlightChunk(material.chunk_id);
+    highlightChunk(citation.location);
     appendLog(QStringLiteral("引用: [%1] -> chunk %2。")
         .arg(number)
-        .arg(material.chunk_id));
+        .arg(citation.chunk_id));
 }
 
 void MainWindow::onSourceRowClicked(int row, int column) {
     Q_UNUSED(column);
     const QTableWidgetItem* numberItem = sourcesTable_->item(row, 0);
-    if (numberItem == nullptr) {
+    if (numberItem == nullptr || !lastResult_) {
         return;
     }
-    highlightChunk(numberItem->data(kRoleChunkId).toInt());
+    const int chunkId = numberItem->data(kRoleChunkId).toInt();
+    for (const Citation& citation : lastResult_->outcome.citations) {
+        if (citation.chunk_id == chunkId) {
+            highlightChunk(citation.location);
+            return;
+        }
+    }
 }
 
 void MainWindow::deleteSelectedDocument() {
@@ -918,39 +877,43 @@ void MainWindow::deleteSelectedDocument() {
         appendLog(QStringLiteral("删除失败: 文档 ID 越界。"));
         return;
     }
-
-    Document& doc = docs_[static_cast<size_t>(documentId)];
-    if (doc.deleted) {
-        appendLog(QStringLiteral("删除: %1 已经是墓碑状态。").arg(fromUtf8(doc.path)));
+    const QString path = fromUtf8(docs_[static_cast<size_t>(documentId)].path);
+    if (docs_[static_cast<size_t>(documentId)].deleted) {
+        appendLog(QStringLiteral("删除: %1 已经是墓碑状态。").arg(path));
         return;
     }
 
     const QMessageBox::StandardButton answer = QMessageBox::question(
         this,
         QStringLiteral("确认软删除"),
-        QStringLiteral("将文档标记为已删除并立即重建索引：\n%1").arg(fromUtf8(doc.path)),
+        QStringLiteral("将文档标记为已删除并立即重建索引：\n%1").arg(path),
         QMessageBox::Yes | QMessageBox::No,
         QMessageBox::No);
     if (answer != QMessageBox::Yes) {
         return;
     }
 
-    doc.deleted = true;
-    chunks_ = chunk_documents(docs_);
-    index_ = build_index(chunks_);
-    const bool saved = save(snapshotPath_, docs_, chunks_, index_);
-    snapshotStateText_ = saved
-        ? QStringLiteral("ok (deleted + rebuilt)")
-        : QStringLiteral("save failed (memory only)");
+    ProgressRelay relay(this, fromUtf8(engine_.config().dense_model));
+    const MutationOutcome mutation = engine_.remove_document(documentId,
+        [&relay](const EngineProgress& progress) { return relay(progress); });
+    relay.hide();
 
+    if (mutation.status != MutationStatus::OK) {
+        appendLog(QStringLiteral("删除: 引擎拒绝了这次操作（状态 %1）。")
+            .arg(static_cast<int>(mutation.status)));
+        return;
+    }
+
+    status_ = engine_.status();
+    engineReady_ = status_.loaded;
     refreshDocumentTree();
     resultsTable_->setRowCount(0);
     refreshStatusBar();
 
-    appendLog(saved
-        ? QStringLiteral("删除: %1 -> 墓碑 + 重建 + 保存完成。").arg(fromUtf8(doc.path))
-        : QStringLiteral("删除: %1 -> 内存已更新，但快照保存失败。").arg(fromUtf8(doc.path)));
-    embedChunks(QStringLiteral("删除重建"));
+    appendLog(status_.index_saved
+        ? QStringLiteral("删除: %1 -> 墓碑 + 重建 + 保存完成。").arg(path)
+        : QStringLiteral("删除: %1 -> 内存已更新，但快照保存失败。").arg(path));
+    appendDenseReport(status_, QStringLiteral("删除重建"));
 }
 
 void MainWindow::showSelectedDocument(QTreeWidgetItem* item, int column) {
@@ -964,10 +927,16 @@ void MainWindow::showSelectedDocument(QTreeWidgetItem* item, int column) {
 void MainWindow::openSearchResult(int row, int column) {
     Q_UNUSED(column);
     QTableWidgetItem* rankItem = resultsTable_->item(row, 0);
-    if (rankItem == nullptr) {
+    if (rankItem == nullptr || !lastResult_) {
         return;
     }
-    highlightChunk(rankItem->data(kRoleChunkId).toInt());
+    const int chunkId = rankItem->data(kRoleChunkId).toInt();
+    for (const QueryHit& hit : lastResult_->outcome.hits) {
+        if (hit.chunk_id == chunkId) {
+            highlightChunk(hit.location);
+            return;
+        }
+    }
 }
 
 void MainWindow::updateDeletedVisibility(bool showDeleted) {
@@ -977,8 +946,10 @@ void MainWindow::updateDeletedVisibility(bool showDeleted) {
         for (int j = 0; j < category->childCount(); ++j) {
             QTreeWidgetItem* item = category->child(j);
             const int documentId = item->data(0, kRoleDocumentId).toInt();
-            const bool validId = documentId >= 0 && static_cast<size_t>(documentId) < docs_.size();
-            const bool hide = validId && docs_[static_cast<size_t>(documentId)].deleted && !showDeleted;
+            const bool validId = documentId >= 0 &&
+                static_cast<size_t>(documentId) < docs_.size();
+            const bool hide = validId &&
+                docs_[static_cast<size_t>(documentId)].deleted && !showDeleted;
             item->setHidden(hide);
             if (!hide) {
                 ++visibleChildren;
@@ -993,10 +964,11 @@ void MainWindow::updateDeletedVisibility(bool showDeleted) {
 }
 
 void MainWindow::refreshDocumentTree() {
+    docs_ = engine_.documents();
     documentTree_->clear();
 
     QHash<QString, QTreeWidgetItem*> categories;
-    for (const Document& doc : docs_) {
+    for (const DocInfo& doc : docs_) {
         const QString categoryName = categoryForPath(doc.path);
         QTreeWidgetItem* category = categories.value(categoryName, nullptr);
         if (category == nullptr) {
@@ -1011,7 +983,7 @@ void MainWindow::refreshDocumentTree() {
 
         auto* item = new QTreeWidgetItem(category);
         item->setText(0, fromUtf8(doc.path));
-        item->setText(1, QString::number(static_cast<qulonglong>(doc.content.size())));
+        item->setText(1, QString::number(static_cast<qulonglong>(doc.bytes)));
         item->setText(2, doc.deleted ? QStringLiteral("已删除") : QStringLiteral("有效"));
         item->setData(0, kRoleItemKind, kDocumentItem);
         item->setData(0, kRoleDocumentId, doc.id);
@@ -1032,54 +1004,60 @@ void MainWindow::refreshDocumentTree() {
 }
 
 void MainWindow::refreshStatusBar() {
-    docsLabel_->setText(QStringLiteral("docs: %1").arg(static_cast<qulonglong>(docs_.size())));
-    chunksLabel_->setText(QStringLiteral("chunks: %1").arg(static_cast<qulonglong>(chunks_.size())));
-    denseLabel_->setText(denseStateText_);
-    snapshotLabel_->setText(QStringLiteral("snapshot: %1").arg(snapshotStateText_));
+    docsLabel_->setText(QStringLiteral("docs: %1")
+        .arg(static_cast<qulonglong>(status_.documents)));
+    chunksLabel_->setText(QStringLiteral("chunks: %1")
+        .arg(static_cast<qulonglong>(status_.chunks)));
+    denseLabel_->setText(outcomeDenseState(status_));
+    snapshotLabel_->setText(QStringLiteral("snapshot: %1").arg(
+        status_.index_restored
+            ? QStringLiteral("ok (restored)")
+            : QStringLiteral("%1%2").arg(snapshotStatusName(status_.index_state),
+                status_.index_saved ? QString() : QStringLiteral(" / save failed"))));
     versionsLabel_->setText(QStringLiteral("format/pipeline: %1/%2")
         .arg(FORMAT_VERSION)
         .arg(PIPELINE_VERSION));
-    avgdlLabel_->setText(QStringLiteral("avgdl: %1").arg(index_.avg_chunk_length, 0, 'f', 2));
+    avgdlLabel_->setText(QStringLiteral("avgdl: %1")
+        .arg(status_.avg_chunk_length, 0, 'f', 2));
 }
 
 void MainWindow::showDocument(int documentId) {
-    if (documentId < 0 || static_cast<size_t>(documentId) >= docs_.size()) {
+    std::string content;
+    if (!engine_.document_text(documentId, content)) {
         return;
     }
 
-    const Document& doc = docs_[static_cast<size_t>(documentId)];
-    previewEdit_->setPlainText(fromUtf8(doc.content));
+    previewEdit_->setPlainText(fromUtf8(content));
     previewDocumentId_ = documentId;
     previewEdit_->moveCursor(QTextCursor::Start);
-    statusBar()->showMessage(fromUtf8(doc.path), 4000);
+
+    for (const DocInfo& doc : docs_) {
+        if (doc.id == documentId) {
+            statusBar()->showMessage(fromUtf8(doc.path), 4000);
+            break;
+        }
+    }
 }
 
-void MainWindow::highlightChunk(int chunkId) {
-    if (chunkId < 0 || chunkId >= static_cast<int>(chunks_.size())) {
+void MainWindow::highlightChunk(const ChunkLocation& location) {
+    std::string content;
+    if (!engine_.document_text(location.document_id, content)) {
         return;
     }
-
-    const Chunk& chunk = chunks_[static_cast<size_t>(chunkId)];
-    if (chunk.document_id < 0 || static_cast<size_t>(chunk.document_id) >= docs_.size()) {
-        return;
-    }
-
-    const Document& doc = docs_[static_cast<size_t>(chunk.document_id)];
-    if (chunk.begin > chunk.end || chunk.end > doc.content.size()) {
+    if (location.begin > location.end || location.end > content.size()) {
         appendLog(QStringLiteral("定位失败: chunk 字节区间无效。"));
         return;
     }
 
-    if (previewDocumentId_ != chunk.document_id) {
-        showDocument(chunk.document_id);
+    if (previewDocumentId_ != location.document_id) {
+        showDocument(location.document_id);
     }
 
     const QString prefix = QString::fromUtf8(
-        doc.content.data(),
-        static_cast<qsizetype>(chunk.begin));
+        content.data(), static_cast<qsizetype>(location.begin));
     const QString selected = QString::fromUtf8(
-        doc.content.data() + chunk.begin,
-        static_cast<qsizetype>(chunk.end - chunk.begin));
+        content.data() + location.begin,
+        static_cast<qsizetype>(location.end - location.begin));
 
     if (prefix.size() > static_cast<qsizetype>(std::numeric_limits<int>::max()) ||
         selected.size() > static_cast<qsizetype>(std::numeric_limits<int>::max()) - prefix.size()) {
@@ -1100,4 +1078,3 @@ void MainWindow::highlightChunk(int chunkId) {
 void MainWindow::appendLog(const QString& text) {
     logEdit_->appendPlainText(text);
 }
-

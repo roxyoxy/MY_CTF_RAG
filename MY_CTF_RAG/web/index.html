@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TraceRAG · 全本地 CTF 检索问答</title>
+<!-- Inline so there is no favicon.ico request to 404. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0f14'/%3E%3Ctext x='16' y='23' font-size='19' text-anchor='middle' fill='%234cc9f0' font-family='monospace' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+<script>
+  /* Runs before the body paints, so a stored non-system theme does not
+     flash the system one first. */
+  try {
+    var storedTheme = localStorage.getItem("traceRAG.theme");
+    if (storedTheme && storedTheme !== "system")
+      document.documentElement.setAttribute("data-theme", storedTheme);
+  } catch (e) { /* private mode: fall through to the system preference */ }
+</script>
+</head>
+<body>
+
+<!-- Blurred colour wash behind everything. Purely decorative, never
+     interactive; the panels above it are translucent so it shows
+     through. -->
+<div class="orbs" aria-hidden="true">
+  <span class="orb a"></span><span class="orb b"></span><span class="orb c"></span>
+</div>
+
+<!-- Full-bleed top bar: the mark sits in the page's top-left corner. -->
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">Trace<span>RAG</span></span>
+    <span class="tagline">让每一次提问，都有出处可查</span>
+  </div>
+  <div class="status">
+    <span id="mode-badge" class="badge">连接中…</span>
+    <span id="corpus-info" class="corpus"></span>
+    <div class="settings-wrap">
+      <button id="btn-settings" class="icon-btn small" title="设置" aria-label="设置">
+        <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M2 4.6h12M2 11.4h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="5.6" cy="4.6" r="2" fill="var(--bg-panel)" stroke="currentColor" stroke-width="1.4"/><circle cx="10.4" cy="11.4" r="2" fill="var(--bg-panel)" stroke="currentColor" stroke-width="1.4"/></svg>
+      </button>
+      <div id="settings-menu" class="settings-menu hidden">
+        <div class="setting-row">
+          <span class="setting-label">主题</span>
+          <div id="theme-seg" class="seg">
+            <button data-theme="system">跟随系统</button>
+            <button data-theme="dark">深色</button>
+            <button data-theme="light">浅色</button>
+          </div>
+        </div>
+        <!-- min/max/value are the single source of truth for the range:
+             app.js reads them off the element rather than repeating them,
+             so the two cannot drift apart. 10 is the engine's registered
+             TOP_K, which is what the page used before this existed. -->
+        <div class="setting-block">
+          <div class="setting-row">
+            <span class="setting-label">检索返回条数</span>
+            <span id="topk-value" class="setting-value">10</span>
+          </div>
+          <input id="topk" class="slider" type="range" min="5" max="20" step="1"
+                 value="10" aria-label="检索返回条数">
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+
+  <!-- Left: collapsible panel holding the search history. Its toggle
+       lives inside the composer, at the input box's bottom-left. -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-head">
+      <span>检索记录</span>
+      <button id="btn-clear-history" class="icon-btn" title="清空记录">清空</button>
+    </div>
+    <ul id="history" class="history"></ul>
+    <p id="history-empty" class="history-empty">还没有检索记录</p>
+  </aside>
+
+  <main class="main">
+
+    <div id="workspace" class="workspace">
+
+      <section id="pane-main" class="pane-main">
+
+        <div id="empty-state" class="empty">
+          <p class="empty-big">输入一个问题，开始检索</p>
+          <p class="empty-sub">词法（BM25）与语义（向量）双路并行 · 融合排名 · 答案带 [n] 出处</p>
+        </div>
+
+        <section id="answer-panel" class="answer hidden">
+          <div class="answer-head">
+            <h2>回答</h2>
+            <span id="gen-meta"></span>
+          </div>
+          <div id="answer-body" class="answer-body md-scope"></div>
+          <div id="sources" class="sources"></div>
+        </section>
+
+        <section id="results" class="results"></section>
+
+      </section>
+
+      <!-- Right half: the detail pane. Opened by a click in generate
+           mode -- the result rows do not expand in place there. -->
+      <section id="pane-detail" class="pane-detail hidden">
+        <div class="detail-head">
+          <button id="btn-detail-close" class="icon-btn" title="关闭">×</button>
+          <div class="detail-title">
+            <span id="detail-path" class="path"></span>
+            <span id="detail-id" class="id"></span>
+            <span id="detail-score" class="score"></span>
+          </div>
+          <button id="btn-jump" class="target-btn" title="定位到命中片段">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="8" cy="8" r="4.6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.4v2.6M8 12v2.6M1.4 8h2.6M12 8h2.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div id="detail-body" class="detail-body md-scope"></div>
+      </section>
+
+    </div>
+
+    <!-- Composer, anchored at the bottom: history toggle bottom-left
+         inside the box, send button bottom-right opening the two
+         actions. -->
+    <div class="composer">
+      <div class="search-meta">
+        <span id="search-time"></span>
+        <span class="note">BM25 + 语义向量 · RRF 融合 · 全本地</span>
+      </div>
+
+      <div class="composer-box">
+        <input id="query" type="text" autocomplete="off" autofocus
+               placeholder="试试：金丝雀保护与跳转地址覆盖　/　ret2libc with NX enabled">
+        <div class="composer-bar">
+          <button id="btn-sidebar" class="icon-btn small" title="检索记录" aria-label="检索记录">
+            <span class="hist-icon" aria-hidden="true"></span>
+          </button>
+          <div class="send-wrap">
+            <div class="send-btn">
+              <button id="btn-act" class="send-act">检索</button>
+              <button id="btn-menu" class="send-caret" title="选择动作">
+                <span class="caret-down" aria-hidden="true"></span>
+              </button>
+            </div>
+            <div id="send-menu" class="send-menu hidden">
+              <button data-act="search">检索<span>只看命中片段</span></button>
+              <button data-act="ask">生成<span>检索 + 本地模型作答</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer>TraceRAG · C++17 全本地引擎 · 检索亚毫秒</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

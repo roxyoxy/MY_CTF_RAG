@@ -2541,3 +2541,576 @@ llama.cpp provider**（⑥ 注入金弹已定并入 M5）。
 - .gitignore 增补：.claude/ 与 tests/_b_*.txt。代码区（MY_CTF_RAG/ 内部）零改动——VS 工程路径不破坏。
 - 验证：run_tests 243/243 ALL_TESTS_GREEN（文档改动零代码影响兜底）；8 个新/改文件 UTF-8 无 BOM 全 LF；git status 干净（.gitignore+README 改，6 新增路径）。
 - 待 A：(1) commit + push 批准（push 后 CI 首跑需盯梢，红则当场修）；(2) GitHub 门面手动项——repo description + topics（rag/ctf/bm25/hnsw/cpp/qt/llm/ollama/offline）+ social preview 图；(3) 明天录演示视频时补 docs/assets/ 素材。
+
+## [2026-10-15 00:30] AI-C
+
+【发现 + 决策 + 计划】GUI 启动卡死根因定位；修复方案与 engine 抽取
+计划一并入册。本条由 AI-C 执笔，决策为 C 拍板。
+
+一、【发现】GUI 启动后界面立即无响应。根因：mainwindow.cpp 的
+embedChunks() 全程跑在 GUI 线程上（源码注释自认 "still runs on
+the GUI thread (a worker thread is an M4 hardening item)"），而
+vector.bin 缺席时需冷嵌 145 块（约 20s+，首批还含 Ollama 模型
+装载），QTimer::singleShot(0) 让窗口先显示、随即被同步嵌入堵死，
+故表现为"界面出来即卡死"。附带隐患：embedChunks 三个调用点
+（启动 :454 / 重建 :624 / 删除 :953）仅以 chatBusy_ 为守卫，而该
+守卫属查询 worker；嵌套路内的 QApplication::processEvents() (:554)
+会派发点击，用户"卡死时乱点"可重入 embedChunks——不触发死锁，
+但重复嵌入与状态错乱。规避：先跑 console 生成 vector.bin，GUI 即
+快照命中、瞬启（两前端共享同一 vector.bin，工作目录同为代码区）。
+
+二、【决策】修复走"显式进度"而非"工作线程"：启动时先做快速判定
+（validate index.bin + 预扫 vector.bin 复用率，均毫秒级）；确需重建
+时弹出模态进度框，期间禁止用户操作。实现取 Qt 标准姿势
+QProgressDialog + setMinimumDuration（快操作不闪窗，setValue 自带
+事件处理），模态天然消灭重入隐患。引擎保持同步、不引入线程——
+并发正确性收敛到调度层一处。另：引擎内部不加锁（C 拍板同意），
+契约中明写"not thread-safe，同一时刻只允许一个线程访问"。
+
+三、【授权】已完成的算法与契约冻结不动，
+新增内容与整体调整可自由实施，改动记纪要不走全组讨论；代码可由
+AI 执笔（仅"代码卡"仍由 C 手写）。
+
+四、【计划】engine 抽取——消除 console / GUI / 网页三处复制的编排
+策略（快照缓存决策 / 混合查询链 / 降级 / 向量复用）。五步，每步
+可独立验证：① include/engine.h 契约（方法清单 + 结构化返回 + 三条
+纪律：不打印 / 不读输入 / 不开线程）② engine.cpp 实现（搬迁
+main.cpp 编排）③ main.cpp 变薄壳（console 行为回归须逐字一致）
+④ GUI 切 engine + 进度弹窗（卡死问题在此闭环）⑤ 网页服务层。
+动机非审美：同一套编排逻辑已复制两份，其中 GUI 那份带线程 bug，
+而第三份（网页前端）在即。
+
+## [2026-10-15 01:15] AI-C
+
+【竣工】engine 抽取第 1-3 步落地：契约十六 + 实现 + console 变薄壳
+（AI 执笔，授权见本日授权条）。
+
+一、新增 include/engine.h（第十六契约）+ src/engine.cpp。职责 = 持有
+流水线状态与"调用方策略"（快照信任决策 / 语料对账与墓碑继承 / 混合
+查询链 / 向量复用 / 降级规则）。三条纪律写进契约：不打印、不读输入、
+不开线程；并明写 NOT thread-safe——并发正确性收敛到调度层一处，不加锁
+（C 拍板）。
+
+二、迁入的编排（原 main.cpp 175 行 helper + 各 Stage 内联块）：
+harvest_tombstones -> Impl::harvest；build_doc_vectors -> Impl::build_dense；
+Stage 1 缓存分支 -> open + build_bm25；Stage 3/4 -> retrieve + generate；
+list / del -> documents / remove_document。main.cpp 由 515 行降为 303 行，
+只剩命令解析与打印（各前端自留状态码->措辞的映射表）。
+
+三、四条路径与改造前二进制（10-15 00:08 版）逐字对比通过：启动横幅
+一致；查询检索块 1050 行逐字一致（含三列分数格式）；list + del 69 行
+逐字一致（usage / 越界 / 删除 / 重复删除四分支）；生成段格式与引用
+账本一致（答案文本因温度 0.2 不可比）。
+
+四、**逐字验证抓到一个会直接上线的体验回归**：把检索与生成合并进单次
+query() 调用后，检索结果要等生成结束（8~125s）才打印；旧版是"先出
+结果、再慢慢生成"。修复：契约拆为两相——retrieve()（快，返回 hits）
++ generate()（慢，填 answer/citations），并在条款写明拆相理由（两个
+前端都要"先展示命中、后出答案"）。若无逐字对比，此回归会静默上线：
+最终输出正确，只是晚了百秒，测试全绿。
+
+五、附带修正两处：分数打印由 std::to_string（"12.869300"）改回
+ostringstream（"12.8693"，复刻 << 默认格式）；删除回调中的路径取值
+错误。
+
+六、登记：四个工程文件（console + GUI 的 vcxproj/filters）加 engine.h
+与 engine.cpp 的 ClInclude/ClCompile，BOM 与 CRLF 字节保真，XML 良构，
+/W4 零警告零错误。
+
+待办：第 ④ 步 GUI 切 engine + 启动进度弹窗（卡住问题在此闭环，需消除
+mainwindow.cpp:384/470/602/905 与 query_worker.cpp:18 这最后一份副本）；
+第 ⑤ 步网页服务层。
+
+## [2026-10-15 01:41] AI-C
+
+【竣工】engine 抽取第 ④ 步：GUI 切引擎 + 启动进度弹窗（卡死问题闭环）。
+
+一、gui/query_worker.{h,cpp} 由 94 行缩到 35 行——整条链已在引擎内，它只剩
+两相驱动（retrieve -> 通知 UI -> generate）。gui/mainwindow.{h,cpp} 清空
+全部流水线状态（docs/chunks/index/provider/denseIndex/generator/快照路径），
+窗口只持有控件 + 一份 UI 侧的文档列表副本；embedChunks() 那 130 行跑在
+UI 线程上的嵌入副本删除。
+
+二、启动流程按 C 指定的三步：引擎在动手之前先回调一个廉价的 "plan" 阶段
+（EnginePlan：两份快照的判定，不 chunk 语料——数块会把 15ms 暖启动拖成
+几百毫秒，而 README 招牌写着 0.01s）-> 窗口弹【更新】【退出】说明框 ->
+确认后进入模态进度框（引擎的 "index"/"vectors" 回调驱动文案与百分比，
+带取消）。退出=回调返 false，open() 什么都没做即返回、关窗；取消=BM25
+已在手、会话继续（契约 open 条款 5）。
+
+三、修法取"显式进度"而非工作线程：活仍在 UI 线程，但模态框让等待诚实，
+且**顺带消灭重入**——旧实现 processEvents() 在嵌入循环内派发点击，用户
+在卡死时点"重建"会嵌套第二次嵌入。setMinimumDuration(400) 使亚秒重建
+不闪窗。另补两处 setChatBusy 遗漏：文档树与"显示已删除"复选框一并禁用
+（showDocument 会读引擎的文档正文，查询期间引擎被 worker 占用，须守
+"同一时刻一个线程"契约）。
+
+四、编译器抓到一处真错：加 avg_chunk_length 字段时把 CorpusChange
+corpus_change 成员顶掉了（C2039），已恢复。
+
+五、**console 在引擎改动后重验**（引擎在首次逐字对比之后又改过：EnginePlan、
+avg_chunk_length、corpus_change）——启动横幅一致；list+del 69 行一致；
+查询检索块前 1101 行逐字一致（唯一差异是旧捕获被 25s 定时腰斩在行中，
+非行为差异）。GUI 冒烟：启动后 24 秒 Process.Responding 恒为 True。
+
+六、【设计复盘】两个"流程问题"同源：API 粒度切在了"代码段落边界"，而非
+"调用方需要动作的时刻"——console 要在检索与生成之间打印，GUI 要在动手前
+询问，这两个"之间"在旧单体代码里天然存在，包成方法调用后被挤没了。
+判据已定：**一个步骤，若有调用方需要在此处做点什么（打印/询问/展示/放弃），
+它就是 API 上的一个边界。** 按此判据，网页前端（第 ⑤ 步）所需的两个钩子
+（plan 回调、retrieve/generate 两相）均已就位。已知边界一条：generate()
+不可中断（console/GUI 不介意，网页端需决定"超时后弃结果"还是给引擎加取消）。
+
+待办：第 ⑤ 步网页服务层。
+
+## [2026-10-15 02:21] AI-C
+
+【竣工】engine 抽取第 ⑤ 步：网页前端（服务层 + 页面三件）落地。
+
+零、归属说明：A 于 10-14 发出的《前端交接包》抬头写的是给 B；C 确认
+网页前端由其负责，据此推进。交接包（仓外文件夹）仅作设计参考，文件
+未搬入仓库，按 C 的要求在仓内重新实现。
+
+一、交付五件（c-web 分支，从 c-engine 开）：
+  src/web_ui.cpp     HTTP 服务
+  web/index.html     结构：顶栏 / 搜索卡 / 答案面板 / 结果列表 / 空态
+  web/style.css      全部颜色集中在 :root，换肤只改那十行
+  web/app.js         三端点通信 + 渲染 + 交互，纯 vanilla 无构建
+  build_web.bat / run_web.bat   构建与启动
+
+二、服务层建立在 RagEngine（契约十六）之上，因此**没有第三份编排逻辑**：
+对比 A 的参考实现（402 行），本实现删掉了 build_doc_vectors、启动序列、
+run_query、以及 /api/ask 里的 materials+prompt+citations 组装——这些
+引擎已内置。真正属于本文件的逻辑仅约 30 行，其余是 JSON 序列化。
+
+三、两个设计决定：
+ ① **单线程任务队列**：server.new_task_queue = []{ return new
+    httplib::ThreadPool(1); }。引擎契约明写 NOT thread-safe（同一时刻
+    一个线程），于是就给服务端**一个**工作线程——请求自然串行、全程
+    零锁，把契约从"口号"变成"字面事实"。（A 的参考实现里有一把
+    chat_mutex，说明它已撞上并发问题。）
+ ② **前端两相调用**："生成答案"先打 /api/search（约 0.3s 出结果卡）再打
+    /api/ask（约 10s 出答案），用户不必盯着转圈等全套。这正是两相契约
+    被设计出来要支持的用法。
+
+四、踩坑两处（都已修）：
+ ① windows.h 会拉进老 winsock.h，与 httplib.h 需要的 winsock2.h 冲突
+    （C2011 类型重定义数十条）→ 加 WIN32_LEAN_AND_MEAN。注意这是
+    **产品代码首次同时依赖 windows.h 与 httplib**（console/Qt 都只用
+    其中一个）。
+ ② 漏写 using json = nlohmann::json; → 编译器直接指出，已补。
+
+五、验证：cl /std:c++17 /W4 /utf-8 编译**零错误零警告**；服务启动、
+监听 127.0.0.1:18080；GET /api/status 返回 58 docs / 145 chunks / hybrid /
+双模型就位；GET / 正常返回静态页；POST /api/search 返回 10 条带
+rrf/bm25/vec 三列分数的结果；空 query 与坏 JSON 均正确回 400 + JSON 错误体。
+（首次查询 4.9s 含 embedding 模型装载，属预期。）
+
+六、附带修正 A 参考实现的一个可移植性缺陷：两个 .bat 里写死了 A 机器
+上的绝对路径（C 盘用户目录下的 Desktop 路径），在别人机器上必然失败；
+本实现用 %~dp0 相对本文件定位，任何机器可用。
+
+待办：/api/ask 完整生成路径的端到端验证（后台跑）；随后记 c-web 提交。
+
+## [2026-10-15 11:02] AI-C
+
+【竣工 + 发现】网页服务启动体验重构（第 ⑤ 步收尾）；附一条对答辩
+有直接影响的环境发现。
+
+一、【竣工】服务不再在 listen() 之前阻塞。原先 engine.open() 先跑完
+才 listen()：首启无 vector.bin 时要冷嵌语料（分钟级），浏览器在这期间
+拿到的是连接被拒，且黑窗口最小化、用户看不到任何进度。现改为：服务
+立即 listen()，引擎启动搬到后台线程，进度经回调写入一组 atomic；
+/api/status 在启动期间返回 {"starting":true, "stage", "done", "total"}
+（200，问进度永远是合法问题），/api/search、/api/ask、/api/doc 返回 503
++ {"error":"starting"}。前端据此显示「嵌入向量 64/145」，并按启动中 2s、
+就绪后 10s 自适应轮询。
+实测（挪走 vector.bin 模拟首启）：启动后 3.0 秒 /api/status 已返回
+{"done":0,"stage":"vectors","starting":true,"total":145}，/api/doc 正确
+回 503，静态页 200 正常打开。
+线程安全：引擎仍守"同一时刻一个线程"——启动线程在 ready 发布前独占，
+之后只有 search/ask 两个 handler 经 mutex 访问，两者不重叠。
+
+二、【发现】Ollama 空闲约 5 分钟即卸载模型，下次首个调用要重新装载。
+连测三次 /api/embed（qwen3-embedding:0.6b）：
+  第 1 次 1 条  86.84 s   ← 含模型装载
+  第 2 次 3 条   0.10 s
+  第 3 次 32 条  3.45 s   （0.11 s/条，正常）
+这解释了两件此前未解释的现象：① 演示中"生成 82.8 秒"——**大半是 4B
+模型装载而非推理**；② 首启冷嵌长时间停在 0/145——第一批（32 块）里
+含着 87 秒装载。
+
+缓解（均不改代码）：① 给 Ollama 服务设环境变量 OLLAMA_KEEP_ALIVE=-1
+（或 30m），模型常驻；② 演示前先跑一次检索 + 一次生成预热。
+**注意**：不要往请求体里加 keep_alive——embedder.h / generator.h 契约
+冻结，未登记该字段；它是部署侧配置，不是产品参数。
+另记一次异常：诊断期间 llama-server 曾卡死（连接 ESTABLISHED、CPU 不再
+增长），重启 Ollama 后恢复；原因未查明，属运行时偶发。
+
+三、附带实证：为模拟首启把 vector.bin 挪走后，引擎冷嵌重建，产出文件
+596973 字节，SHA-256 前 16 位 8bfb3cccaf202f1e，与原文件**逐字节一致**
+——persist 契约"确定性序列化"（同样逻辑状态产出同样字节）得到现场验证。
+
+## [2026-10-15 14:42] AI-C
+
+【竣工 + 修复】网页前端文档/回答按 markdown 渲染（待办 #12）；附
+build_web.bat 的 D8003 修复——该 bat 自引入起从未成功编译过。
+
+一、【竣工】前端自写 markdown 渲染器（web/app.js，约 370 行）。
+动因：详情面板与展开全文此前用 <pre> 直出原文，回答区只做转义，
+语料里 569 个标题、75 张表格、610 处围栏的语法字符全部裸露。
+**禁用 CDN 是本条硬约束**——项目卖点即全离线，CDN 版 marked.js 在
+断网演示时直接 404，正是这个项目要解决的场景，所以必须自写。
+
+覆盖面按语料普查定，不按 RFC 定。对 58 个语料文件做围栏感知统计
+（排除代码块内部），实际出现：标题 569、表格 75 张共 483 行、
+"- " 列表项 319、引用块 206、粗体 652、行内代码 824、链接 565、
+图片 31；而 "* " 列表项与有序列表**均为 0**（两者仍实现，成本几行，
+万一出现不能渲染成散文）。
+值得记一笔：未排除围栏时 "|" 行统计为 8244，排除后仅 483——语料里
+的竖线绝大多数是 C 代码里的按位或与 shell 管道，不是表格。统计口径
+不先对齐，渲染器的优先级就会排反。
+
+高亮精度经用户拍板**精确保留到字符**，与改动前一致。为此渲染器全程
+携带源字符偏移（emitText / mdInline / mdFlow / mdCells 均带 offset
+参数），并在**每行**裁剪 <mark>，而非按块裁剪。行级裁剪有两个必要：
+① chunk 的 begin/end 切在原子边界（chunker.cpp:43-44），可能落在一行
+中间，而那一行可能是标题、表格单元格或代码行，行级裁剪保证 <mark>
+必定在同一元素内闭合；② 标签永远配平。
+字节→字符换算：引擎讲 UTF-8 字节偏移，DOM 讲 UTF-16 下标，由
+charIndexAtByte 一次换算。**语料是 CRLF，且 loader.cpp:74 以二进制
+读取、不做任何规范化**——所以行切分必须把 \r 计入偏移，否则每处高亮
+会按行数累积漂移，且在第 3 行之前都看不出来。
+
+安全：语料是第三方 writeup、回答来自本地模型，均不可信。源文本一律
+先转义再落标签；href 走 scheme 白名单（仅 http/https/mailto/相对路径），
+javascript:、data:text/html、协议相对 // 全部拒绝。
+回答区的 [n] 引用改为**先出 HTML 再套 chip**——原先是先转义再 replace，
+顺序反了，会把渲染器刚生成的标签二次转义成 &lt;span&gt;。改动后 chip
+只在文本节点里生成，代码块与行内代码里的 [n] 不再误伤。
+
+二、【竣工中修掉一个真 bug】表格高亮曾完全失效，且不只是失效——
+是**乱染**。mdCells 返回的是行内相对偏移，却被拿去和文档绝对偏移的
+mark 比较，两侧基准不同：命中落在文档开头时（如第 0 行标题，字节区间
+[0,23]）会与每个单元格的小偏移区间相交，把**全文每张表的每个单元格
+一起染色**。对照测量：旧写法 962 处 mark，修正后 226 处，掉下来的
+736 处全是假高亮。
+发现方式值得记：渲染真实文件肉眼过一遍。测试台当时只验标签配平，
+而配平检查对这类 bug 完全无感——表格照样渲染得漂漂亮亮，只是染色
+位置全错。**断言通过不等于输出正确。**
+
+三、验证。渲染器是前端最复杂的一块，而浏览器无法自动化，故把它从
+app.js 中切出、在 node 里跑，**535 项全过**：
+  · CRLF 偏移：单独测第 0/1/5/11 行（漂移按行数累积，第 11 行最易暴露）
+  · 每种块型里的 mark（上条 bug 的回归测试）
+  · 喷 mark 检测：mark 逐行裁剪，则被标记文本总长不得超过该行长度
+  · 转义：<script> / onerror= / javascript: / data: / 协议相对 全部挡住，
+    并做标签白名单 + 栈配平
+  · 全语料 58 文件 316 KiB：无异常、标签配平、正文无残留语法
+  · 冒烟：真起 web_ui.exe，/、/app.js、/style.css、/api/status、
+    /api/search、/api/doc 全通；10 条命中上 end-begin == bytes(text)
+    严格成立，印证字节偏移契约可靠。
+用户已肉眼验收通过。
+
+四、【修复】build_web.bat 报 D8003（缺少源文件名）。
+根因：第 31 行 /Fo:"%TEMP%\traceRAG_web_obj\" —— 路径末尾的反斜杠紧贴
+收尾引号，按 Windows 命令行规则 \" 是被转义的引号，引号不再终止参数，
+于是从 /Fo: 起后面 15 个源文件名全被吞进同一参数，cl 收到零个源文件。
+三种写法实测：
+  /Fo:"...\"   → D8003，errorlevel=2
+  /Fo:"..."    → 编译"成功"，但目标目录是空的，.obj 被丢进当前目录
+                 （15 个目标文件会散落到仓库根）——直觉改法反而更糟
+  /Fo:"...\\"  → errorlevel=0，.obj 正确落在目标目录   ← 采用
+已在 bat 内加注释，声明双反斜杠是承重的、勿"顺手清理"成一个。
+**git log -p 显示该行自 09bfaf2（引入该文件的 commit）起从未被改动，
+即此 bat 从诞生起就没成功编译过**，现存 web_ui.exe 是手工或其它途径
+产出的，不是它编的。
+修复后重编：15 个 TU 全过、/W4 零警告、%TEMP%\traceRAG_web_obj 下
+15 个 .obj、仓库根无散落、新 exe 冒烟四条路由全 200。
+
+五、两点认知纠正（均由实测推翻先前判断，记以免再犯）：
+① nlohmann::json 的 dump() 中 ensure_ascii **默认是 false**，不是 true。
+线上是原生 UTF-8 + charset=utf-8，正确且省体积。此前误判为服务端 bug，
+实为本地 Python 在中文 Windows 上按 GBK 解 stdin 造成的假象。
+② 我自己写的"非法转义序列"检测脚本有假阳性——它会把 \\ 的第二根反斜杠
+当成转义引导符重复检查。**工具本身也要验证，不能只信它报的错。**
+
+六、遗留。/favicon.ico 仍 404（页面已内联 data: URI 图标，浏览器仍会
+请求），归待办 #9。缩略条按用户决定保持原样，故结果列表那一行仍显示
+**Platform** 之类的语法字符；改为行内轻渲染是小改动，随时可加。
+
+## [2026-10-15 14:52] AI-C
+
+【补记】网页前端的界面与交互（09:41–11:42 的四次提交）。
+
+零、为什么是补记：02:21 那条只记了服务层（web_ui.cpp 与三个文件的初版），
+此后页面被整体改写，d47c8d7 / 69478e6 / 77c81b9 / 82bae42 四条提交的内容
+一直没入账。本条按主题归并补齐，不按提交顺序。时间上早于上一条（14:42
+的 markdown 渲染），按只追加纪律记在此处。
+
+一、页面框架整体改写（d47c8d7）。02:21 版是"顶栏 / 搜索卡 / 答案面板 /
+结果列表"的竖向堆叠，改为三区框架：
+  · 满出血顶栏，品牌标识落在页面左上角
+  · 左侧可折叠的检索记录栏，历史开关放在输入框内左下角
+  · 右侧主体；生成模式下再分出半屏详情面板
+检索结果改为**原位折叠栏**：点行展开该篇全文、再点收起，各行独立开合，
+可并排比对多篇。生成模式则不同——点行不再原位展开，而是打开右侧详情
+面板，理由是答案、排名与原文要同屏可见。**两种模式的行点击语义由此分叉**，
+这是有意的：检索时想快速扫多篇，生成时想三者对照。
+
+二、只读路由不再触碰引擎（69478e6）。原先 /api/doc 要现问引擎，而生成
+一次持有引擎数十秒，单工作线程下每个请求都排在生成之后——实测打开详情
+要等约 80 秒。改法三条：
+  · 服务是只读的，故语料事实在启动时一次性快照（文档列表 / 每篇全文 /
+    status），此后只读路由只读快照，永不进引擎
+  · 任务队列由 1 个线程改为 4 个
+  · mutex 只保护真正进引擎的 /api/search 与 /api/ask
+实测生成期间 /api/doc 2–76 ms、/api/status 31 ms。
+需要澄清 02:21 那版的一句话：当时把"单线程任务队列"说成契约的字面体现，
+更准确的说法是——契约要求的是**同一时刻只有一个线程访问引擎**，不是
+"整个服务只能有一个线程"。把只读数据搬出临界区之后，这两件事可以同时
+成立，且都对。
+
+三、视觉与交互（77c81b9、82bae42）：
+  · 主题：跟随系统 + 手动切换。全部颜色仍集中在 :root；显式选择写
+    data-theme，system 则移除该属性交给媒体查询，故手动选择总能胜出。
+  · 命中高亮由填充色块改为**下划线**——填充块读起来像荧光笔涂抹，下划线
+    读起来像正文的一部分。这个改动在 markdown 渲染后依然沿用。
+  · 空态居中放大（"输入一个问题，开始检索"）。
+  · 检索/生成做成分体按钮：框留着，按钮在输入框内垂直居中；左半是当前
+    动作（文字随动作切"检索"/"生成"），右半小箭头展开两项。
+  · 内联 SVG favicon，消除 /favicon.ico 请求 404。
+  · 背景光斑（模糊色晕）——但**浅色模式下不绘制**。同一组颜色在浅色底上
+    无论调到多淡都显脏（0.13 不透明度实测仍脏），所以是关掉，不是调淡。
+
+四、Review 查出两个真 bug（都已修）：
+ ① 设置下拉点不动。顶栏与 .shell 都是 z-index 1，等值时 DOM 靠后的 .shell
+    覆盖顶栏；且菜单自身的 z-index 被困在顶栏的层叠上下文里，无法自救。
+    → 顶栏提到 z-index 10。
+ ② 缩略条总漏出第三行的半行。max-height 试了三种写法（3em；calc(3em +
+    padding)；content-box 下的 3em）**全部漏**。→ 改为固定 height：行高
+    20px × 2 = 40px，配 content-box 把内边距留在外面。附带好处是每行等高，
+    长短摘要不再让行高参差。
+
+五、一条设计经验，建议带回答辩：**API 粒度必须切在"调用者需要行动的时刻"，
+不是代码段落边界。** 引擎原本只有合并的 query()，一次把检索与生成做完，
+于是控制台要多等 8–125 秒才打印任何命中；拆成 retrieve() + generate() 之后，
+前端才能"先出结果卡、再出答案"。这个问题的发现方式同样值得记：靠**改动
+前后二进制输出的逐字节比对**，否则它会静默上线。
+
+## [2026-10-15 15:20] AI-C
+
+【竣工】web 服务器开关可控：前台运行 + Ctrl+C 优雅停止；附两个顺带
+挖出的真 bug，以及降级提示的补齐。
+
+一、问题。此前 run_web.bat 用 start /min 把服务器从终端上摘了出去，
+后果有二：① 结尾那句 pause 毫无意义——按任意键关掉窗口，服务照跑；
+② 进程脱离终端后没有任何入口，只能去任务管理器找。用户诉求：手动起
+服务 → 终端提示访问地址 → 终端不退出 → Ctrl+C 停服。
+
+二、改动两处。
+  · run_web.bat：去掉 start /min、timeout、自动开浏览器、pause，改为
+    前台直接运行 exe。终端被服务占住，Ctrl+C 天然可达。
+  · src/web_ui.cpp：
+    - bind 提到最前，bind_to_port() + listen_after_bind() 取代 listen()
+    - SetConsoleCtrlHandler 接管 CTRL_C / CTRL_BREAK / CTRL_CLOSE /
+      CTRL_LOGOFF / CTRL_SHUTDOWN，回调里调 server.stop()，listen 返回
+      后正常 exit 0。一个 handler 覆盖 Ctrl+C、Ctrl+Break、关窗口三种
+    - banner 在 bind 成功后才打印（失败先报错，不能先说"打开这个网址"）
+    - 收尾打印 "server stopped." 作为回执
+
+三、bind 提前的附带收益：端口被占是最可能撞上的失败，而检测极便宜。
+提前之后撞端口立即报错退出，不必先花时间加载快照。
+
+四、验证。Ctrl+C 无法指向单个进程组（CTRL_C_EVENT 会打到共享控制台的
+所有进程，包括工具链），故写了个 C++ 探针发 Ctrl+Break——它与 Ctrl+C
+落在同一个 switch 分支。实测：
+  banner（确实排在引擎进度之前）→ corpus/engine ready → server stopped.
+  → after the event: exited, exit code 0 → 无残留进程
+链路成立：handler → stop() → listen 返回 → 正常退出。
+Ctrl+C 本身仍待人工确认（同一分支，但广播 CTRL_C_EVENT 会波及工具链）。
+
+五、顺带挖出并修掉两个真 bug，都属于"代码看起来对、在 Windows 上不成立"：
+ ① **端口冲突检测在 Windows 上是死代码。** httplib 的
+    default_socket_options 在 Windows 上先设 SO_REUSEADDR 再设
+    SO_EXCLUSIVEADDRUSE，实测后者不起作用：先起实例 1，再起实例 2，
+    实例 2 **也绑定成功并打出了 banner**（早先那次测试里它 exit=124，
+    那是超时打死的，不是"绑定失败"，差点被误读成检测有效）。即两个
+    服务同时绑住 18080，端口归属不确定，而 "is another instance still
+    running?" 从未有机会打印。→ set_socket_options 只设
+    SO_EXCLUSIVEADDRUSE。修后实例 2 立即 exit=1 且提示正确，实例 1
+    不受影响。
+    附带：用的是泛型 lambda [](auto sock) 而非命名 socket_t——httplib
+    不把它放进公开命名空间，这一点是编译报 C2039 才知道的。
+ ② **run_web.bat 里裸写 web_ui.exe。** 这依赖 cmd 的"搜索当前目录"，
+    而该行为在设置 NoDefaultCurrentDirectoryInExePath 时被关闭（Git
+    Bash / mintty 会设，本机实测值为 1）。C 的 VSCode 终端没设它，
+    所以此前一直能跑——但这是隐性的环境依赖，且失败现象看起来像
+    "没编译过"。→ 改为 "%~dp0web_ui.exe"。
+
+六、附带竣工：【降级可视化】补上。此前只有徽章 hybrid / BM25-only 与
+语料行省略模型名，状态是如实的，但不够自解释——BM25-only 是引擎行话，
+且"换个说法问同一件事会召回变差"这一后果无法从术语本身推出来。现给
+徽章加 title 说明，并在语料行尾追加橙色「语义检索未启用」（.degraded）；
+starting 与错误分支里清 title，避免残留上一条提示。
+**此条未经自动验证**：它只在 dense 不可用时出现，触发需挪走 vector.bin
+或改代码。留待人工在降级会话中确认。
+
+七、一条认知记以备查：**"进程能正常退出"这件事本身也会被平台差异吃掉。**
+本条两个 bug 都只有实测才现形——一个靠对照启动两次，一个靠换一个 shell
+环境跑同一个 bat。凡是"启动/停止/端口"这类与平台强耦合的行为，测一遍
+再下结论。
+
+## [2026-10-15 16:00] AI-C
+
+【竣工】折叠栏缩略条：终于让"下方留白"与"不露第三行"同时成立。
+
+一、根因（也是此前多轮尝试全部失败的原因）。
+`overflow: hidden` 裁剪的是 **padding box，不是 content box**。所以
+`padding-bottom` 根本不是"文字下方的留白"，它是**多出来的可见区域**，
+下一行会直接渲染进去：
+
+    y=0   ┌──────────────┐
+          │ 第一行        │  0-20
+    y=20  │ 第二行        │ 20-40
+    y=40  ├──────────────┤  ← 内容盒到此为止
+          │ 第三行的上沿  │ 40-52  ← 这 12px 就是 padding-bottom
+    y=52  └──────────────┘
+
+于是留白 12px 就露出第三行的 12px，留白 22px 就露出 22px —— **加留白等于
+给第三行开门**。这正是"留白"与"行数"看起来是死结的原因，不是没调对。
+附带后果：padding 与被裁盒子同处一个元素时，第二行末尾是**硬切**，没有
+省略号 —— 所以那一版连"两行后面跟 ..."这个诉求也没满足。
+
+二、修法：两个元素，各管一件事。
+    .hit-snippet（外层）          只管 padding（留白）
+    .hit-snippet .snippet-clamp   只管 line-clamp + overflow + line-height
+                                  + min-height:40px（裁切）
+内层没有 padding，裁剪边界就是它自己的 40px = 正好两行；留白在外层，
+物理上不可能进入裁剪区。用 min-height 而非 height：长摘要由 clamp 封顶
+两行，短摘要由 min-height 撑到两行，因此行高仍然一致。
+app.js 相应对缩略条文字包一层 span.snippet-clamp。
+
+三、一条必须记下的教训：我用错了判定公式，还把错误结论说了两轮。
+上一轮我用 (clientHeight − padding) / lineHeight 算出 2.00 就宣布 PASS。
+但裁剪边界是 padding box，正确公式是 clientHeight / lineHeight =
+52 / 20 = **2.60** —— 正是用户看到的"两行半"。**我读了数字却没看画面**，
+于是一个自证的公式把错误结论撑了两轮，还倒过来怀疑用户的浏览器。
+此后改为：先用真实浏览器截图看，再用数字解释现象。本轮后半段按此做法，
+一次定位。工具能算，但算错了不会有任何提示。
+
+四、验证（用真实的 style.css，不是复刻）。临时在 web/ 放一个诊断页，
+链接真实样式表、用真实行结构，headless Chrome 实测三行：
+    行高 101.3px · snippet 52.0px · clamp 40.0px · 可见 2.00 行 （三行全同）
+截图确认：超长摘要＝两行＋末尾省略号＋下方留白＋无第三行；中等与极短
+摘要框高同为 52px，不塌陷。诊断页验证后已删除，git status 只剩
+web/app.js 与 web/style.css 两个文件。
+
+五、顺带产出两个可复用的调试页（%TEMP%，并入待办 #11 一起清）：
+  clamp_leak.html       用 20px 条纹背景把"泄漏"画出来，一眼可见第三行
+  clamp_ellipsis.html   对照 line-clamp 是否生效、是否给出省略号
+以后遇到"裁剪/留白/多行截断"类问题可直接改这两个页面来定位。
+
+## [2026-10-15 16:19] AI-C
+
+【竣工 + 检查】网页前端三处小改与两项检查；附 build_web.bat 改用 vswhere
+定位 Visual Studio。
+
+一、【改动】发送菜单改为"只选择，不发送"。
+原 #send-menu 的处理器在 setAction() 之后直接调用 doSearch()/doAsk()，
+即"选即发送"，选完没有反悔余地。现改为只 setAction(act)：菜单只负责切换
+发送按钮的标签并收起，真正的发送发生在按下该按钮时（或输入框回车）。
+顺带确认了这条路径成立：doSearch/doAsk 是在发送那一刻才读输入框并清空，
+所以选动作不会清掉已输入的内容，"打字 → 选动作 → 再改字 → 发送"可行。
+
+二、【改动】设置面板新增"检索返回条数"滑动条（5–20，默认 10）。
+关键结论：**后端一个字节都不用改**。top_k 自路由写成起就是 /api/search
+与 /api/ask 的可选参数（web_ui.cpp:109 `body.value("top_k", 0)`，>0 用它，
+否则退回引擎注册的 TOP_K=10），只是前端三处调用此前都只发 {query}，从未
+用过它。所以这是纯前端改动：加控件 + 存 localStorage + 三处带上 top_k。
+范围与默认值写在 input 元素上作为唯一真源，app.js 从元素读，避免两处
+数字漂移。生效时机为"下一次动作"，拖动过程不发请求。
+生成模式的两相调用共用同一个值（doAsk 里先取一次再传两次），否则两相
+之间滑块若被拖动，账本会引用排名阶段没见过的来源。
+实测 /api/search：不带 top_k→10，5→5，10→10，20→20，1→1，100→26
+（26 是引擎实际候选上限，与滑块无关）。
+
+三、【bug】Number(null) 是 0 不是 NaN，滑条默认值被夹到最小值。
+localStorage 无该键时 getItem 返回 null，Number(null)=0 且
+Number.isFinite(0) 为真，于是被当成"用户存的 0"，再被 max(5,…) 夹到 5 ——
+滑条永远从 5 起步而非 10。主题那段没踩到，是因为它写作
+getItem(...) || "system"，|| 顺手兜住了 null。修法：先判 null/空串再转数字。
+**这个 bug 只有跑真实页面看 DOM 才会现形**，光读代码它是"对的"。定位方式：
+headless Chrome 加载真实页面后 dump DOM，比对 #topk-value 的实际值。
+
+四、【检查】前端路径审计：全部相对，无机器相关引用。
+index.html 用 href="style.css" / src="app.js"（相对），favicon 是内联
+data: URI（不发请求）；style.css 无 url() 外链（字体全用系统字体）；
+app.js 的请求是 /api/... **根相对** —— 相对的是"页面由哪个 origin 服务"，
+不是磁盘路径，因此只要页面由本服务器提供就正确，A/B 跑 run_web.bat 亦然。
+web/ 里没有任何盘符、file://、localhost、127.0.0.1。
+因此该页面不能用 file:// 直接双击打开 —— 这是 HTTP 应用的正常形态，
+不是缺陷，但值得写下来，免得下次有人误判。
+
+五、【检查】.gitignore 审计：正确，无需改动。
+11 个被忽略条目全部是真产物：VS 构建目录与中间文件（x64/ x86/ Debug/
+Release/ .vs/ *.obj *.pdb *.ilk）、逐用户设置（*.user/*.suo，命中 2 个
+.vcxproj.user）、构建产物（*.exe，含 web_ui.exe）、派生缓存
+（index.bin/vector.bin 及 .tmp，data/ 才是真源）、__pycache__/、
+Qt VS Tools 生成的 QtMsBuild/、测试编译日志 tests/_b_*.txt、.claude/。
+反向也验了：`git status --untracked-files=all` **零未跟踪文件**（没有该
+忽略而漏掉的）；关键文件全部被跟踪 —— third_party 的 httplib.h 与
+json.hpp、两个 .bat、web/ 三件、data/ 58、gui/ 6、src/ 17、include/ 16、
+tests/ 17、scripts/ 3、docs/ 14。
+git 折叠出的 3 个目录逐一摊开确认过：x64/Debug（18 个 .obj + .tlog +
+.pdb/.ilk）、Qt 的 qmake 中间目录（.qmake.stash、qtvars.pro/.vcxproj）、
+include/output/（一个孤立 exe）——**没有任何源码被误伤**。
+顺带一处观察（非 gitignore 问题）：include/output/ 里躺着一个孤立的
+atom_scan.exe，这个目录名出现在 include/ 下有点怪，可能原本另有所图。
+
+六、【改进】build_web.bat 改用 vswhere.exe 定位 Visual Studio。
+原先是一份硬编码的 4 条候选路径（Program Files 下三版 + C:\VS\2022），
+A/B 若把 VS 装在别处就得手改脚本。现改为先用 vswhere（VS 安装器自带，
+位置固定）询问"最新且带 x64 C++ 工具的安装路径"，找不到再退回原候选。
+实测：本机 VS 恰在非标准的 C:\VS\2022，vswhere 正确返回该路径，脚本打印
+`[info] Visual Studio found at C:\VS\2022\VC\Auxiliary\Build\vcvars64.bat`
+并编译成功。
+cmd 陷阱记一笔：%ProgramFiles(x86)% 的变量名里带 ")"，**不能写在
+if(...) 这类括号块内**，否则那个 ")" 会提前闭合块；本脚本因此在块外先把它
+展开进 VSWHERE 再使用。
+综上，A/B 拉下仓库后：(1) 路径层面无任何机器相关引用；(2) 前置条件
+VS2022 与两个 Ollama 模型，README 第 103 与 113-117 行已写明（含 tag 陷阱：
+是 qwen3:4b-instruct，不是 qwen3:4b）；(3) web_ui.exe 与 index.bin/
+vector.bin 不进仓库是刻意为之 —— 先 build，首启由引擎重建快照（#7）。
+
+## [2026-10-15 16:44] AI-C
+
+【修复】run_tests.bat 在本机跑不起来：vcvars 路径写死 + 失败静默。
+
+tests/run_tests.bat:8 原本写死一行
+  call "...\2022\Community\VC\Auxiliary\Build\vcvars64.bat" 1>nul 2>nul
+两个问题叠加：① 只认一个安装位置；② 1>nul 2>nul 把 call 自己的报错也
+扔进了 nul。后果是**报错指向了错误的东西**——脚本继续往下跑，cl 不在
+PATH 里，于是第一条编译报 "'cl' 不是内部或外部命令"，看起来像编译器没
+装，真因却是上一行没找到 vcvars。静默失败加上误导性报错，是这次排查
+绕了弯路的原因。
+
+C 的 VS 装在 C:\VS\2022，因此**这个 243 例的回归闸门在本机从未成功跑过**
+—— 而 CONTRIBUTING.md 明写"提交前跑 run_tests.bat 并保持全绿"。A/B 的
+VS 若在默认位置则不受影响，所以这个缺陷一直是隐性的。
+
+全仓库扫描确认它是唯一的例外：.github/workflows/ci.yml:19-23 早就用
+vswhere 定位（CI 的做法本来就是对的），build_web.bat 本轮也改成 vswhere，
+只有 run_tests.bat 写死。改法与两者一致：vswhere 定位 + 常见位置兜底 +
+找不到就明确报错退出。注意 %ProgramFiles(x86)% 名里带 ")"，必须在括号块
+外先展开，同 build_web.bat。
+
+验证：vswhere 正确定位非标准安装位置，脚本打印
+  [info] Visual Studio found at C:\VS\2022\VC\Auxiliary\Build\vcvars64.bat
+闸门首次在本机跑通：exit=0，PASS 243 / FAIL 0，ALL_TESTS_GREEN。
+
+顺带记一个流程教训：本 PR（c-web）此前几个提交都没能跑回归闸门，当时
+的判断是"改动不涉及测试套件覆盖的文件，所以不需要跑"。这个判断就结论
+而言没错（web_ui.cpp 不在解决方案内、也不在 run_tests.bat 的编译清单里；
+web/ 无测试目标），但**当时无法验证这个判断**——闸门本身是坏的。如今
+闸门可用，该判断才真正可检验。
