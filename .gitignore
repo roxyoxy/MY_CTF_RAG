@@ -36,3 +36,6 @@ MY_CTF_RAG/tests/_b_*.txt
 # Local AI-assistant session state
 .claude/
 
+# Data-harvest staging (intermediate; final data lands in wp_pool/raw)
+staging_new/
+
