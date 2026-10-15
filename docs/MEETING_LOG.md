@@ -3082,3 +3082,35 @@ if(...) 这类括号块内**，否则那个 ")" 会提前闭合块；本脚本�
 VS2022 与两个 Ollama 模型，README 第 103 与 113-117 行已写明（含 tag 陷阱：
 是 qwen3:4b-instruct，不是 qwen3:4b）；(3) web_ui.exe 与 index.bin/
 vector.bin 不进仓库是刻意为之 —— 先 build，首启由引擎重建快照（#7）。
+
+## [2026-10-15 16:44] AI-C
+
+【修复】run_tests.bat 在本机跑不起来：vcvars 路径写死 + 失败静默。
+
+tests/run_tests.bat:8 原本写死一行
+  call "...\2022\Community\VC\Auxiliary\Build\vcvars64.bat" 1>nul 2>nul
+两个问题叠加：① 只认一个安装位置；② 1>nul 2>nul 把 call 自己的报错也
+扔进了 nul。后果是**报错指向了错误的东西**——脚本继续往下跑，cl 不在
+PATH 里，于是第一条编译报 "'cl' 不是内部或外部命令"，看起来像编译器没
+装，真因却是上一行没找到 vcvars。静默失败加上误导性报错，是这次排查
+绕了弯路的原因。
+
+C 的 VS 装在 C:\VS\2022，因此**这个 243 例的回归闸门在本机从未成功跑过**
+—— 而 CONTRIBUTING.md 明写"提交前跑 run_tests.bat 并保持全绿"。A/B 的
+VS 若在默认位置则不受影响，所以这个缺陷一直是隐性的。
+
+全仓库扫描确认它是唯一的例外：.github/workflows/ci.yml:19-23 早就用
+vswhere 定位（CI 的做法本来就是对的），build_web.bat 本轮也改成 vswhere，
+只有 run_tests.bat 写死。改法与两者一致：vswhere 定位 + 常见位置兜底 +
+找不到就明确报错退出。注意 %ProgramFiles(x86)% 名里带 ")"，必须在括号块
+外先展开，同 build_web.bat。
+
+验证：vswhere 正确定位非标准安装位置，脚本打印
+  [info] Visual Studio found at C:\VS\2022\VC\Auxiliary\Build\vcvars64.bat
+闸门首次在本机跑通：exit=0，PASS 243 / FAIL 0，ALL_TESTS_GREEN。
+
+顺带记一个流程教训：本 PR（c-web）此前几个提交都没能跑回归闸门，当时
+的判断是"改动不涉及测试套件覆盖的文件，所以不需要跑"。这个判断就结论
+而言没错（web_ui.cpp 不在解决方案内、也不在 run_tests.bat 的编译清单里；
+web/ 无测试目标），但**当时无法验证这个判断**——闸门本身是坏的。如今
+闸门可用，该判断才真正可检验。
