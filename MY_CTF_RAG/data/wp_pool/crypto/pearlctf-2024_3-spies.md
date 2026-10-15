@@ -1,4 +1,4 @@
-# pearlctf-2024_3-spies
+# pearlctf 2024 3 spies
 
 # Writeup - Crypto / 3 spies
 

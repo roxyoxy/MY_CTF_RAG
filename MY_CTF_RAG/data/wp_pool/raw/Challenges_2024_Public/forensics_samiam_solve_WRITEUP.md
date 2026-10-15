@@ -1,4 +1,4 @@
-# forensics_samiam_solve_WRITEUP
+# forensics samiam solve WRITEUP
 
 SAM I AM
 ============

@@ -1,4 +1,4 @@
-# misc_land_down_under_solve_solve
+# misc land down under solve solve
 
 Run the code here: https://aussieplusplus.vercel.app
 

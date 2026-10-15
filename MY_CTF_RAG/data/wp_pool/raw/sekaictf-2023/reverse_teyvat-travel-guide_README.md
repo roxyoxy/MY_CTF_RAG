@@ -1,4 +1,4 @@
-# reverse_teyvat-travel-guide_README
+# reverse teyvat travel guide README
 
 ## Teyvat Travel Guide
 

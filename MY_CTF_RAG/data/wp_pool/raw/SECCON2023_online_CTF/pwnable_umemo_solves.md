@@ -1,4 +1,4 @@
-# pwnable_umemo_solves
+# pwnable umemo solves
 
 # umemo - Solves
 | Solved Rank | Team name |

@@ -1,4 +1,4 @@
-# web_frog-waf_solution_README
+# web frog waf solution README
 
 ## Sekai Frog-Waf Writeup
 

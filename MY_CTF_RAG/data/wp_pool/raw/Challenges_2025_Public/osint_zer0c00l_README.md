@@ -1,4 +1,4 @@
-# osint_zer0c00l_README
+# osint zer0c00l README
 
 Zer0C00l
 ======================

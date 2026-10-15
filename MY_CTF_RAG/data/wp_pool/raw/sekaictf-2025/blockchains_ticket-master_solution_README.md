@@ -1,4 +1,4 @@
-# blockchains_ticket-master_solution_README
+# blockchains ticket master solution README
 
 # Ticket Master Writeup
 

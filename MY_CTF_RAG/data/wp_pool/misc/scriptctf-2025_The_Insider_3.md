@@ -1,4 +1,4 @@
-# scriptctf-2025_The Insider 3
+# scriptctf 2025 The Insider 3
 
 # The Insider 3 | NoobMaster
 - Description: It's a tradition at this point. Continue where you left off...

@@ -1,4 +1,4 @@
-# tbtl-na_days_of_yore__README
+# tbtl na days of yore README
 
 # Days of Yore &mdash; solution
 

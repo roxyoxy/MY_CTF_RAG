@@ -1,4 +1,4 @@
-# crypto_good_game_spawn_point_README
+# crypto good game spawn point README
 
 good game spawn point
 ======================

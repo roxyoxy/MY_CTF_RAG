@@ -1,4 +1,4 @@
-# reverse_what-in-ternation_solution_README
+# reverse what in ternation solution README
 
 # Author Writeup
 

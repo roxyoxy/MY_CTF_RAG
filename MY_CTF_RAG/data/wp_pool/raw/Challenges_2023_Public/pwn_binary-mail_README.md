@@ -1,4 +1,4 @@
-# pwn_binary-mail_README
+# pwn binary mail README
 
 binary mail
 ============

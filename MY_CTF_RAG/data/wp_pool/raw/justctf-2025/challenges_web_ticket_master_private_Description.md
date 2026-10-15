@@ -1,4 +1,4 @@
-# challenges_web_ticket_master_private_Description
+# challenges web ticket master private Description
 
 Yet another simple and secure event ticketing platform. No databases, just digitally signed images.
 

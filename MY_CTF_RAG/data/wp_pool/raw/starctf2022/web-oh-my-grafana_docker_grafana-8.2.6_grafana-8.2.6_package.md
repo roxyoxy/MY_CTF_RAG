@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_packages_grafana-toolkit_CHANGELOG
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 packages grafana toolkit CHANGELOG
 
 # 7.3.0-beta1 (2020-10-15)
 

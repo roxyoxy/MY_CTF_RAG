@@ -1,4 +1,4 @@
-# osint_eyespy_WRITEUP
+# osint eyespy WRITEUP
 
 # eyespy
 

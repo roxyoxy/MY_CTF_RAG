@@ -1,4 +1,4 @@
-# infrastructure_ctfmate_README
+# infrastructure ctfmate README
 
 # CTFmate
 

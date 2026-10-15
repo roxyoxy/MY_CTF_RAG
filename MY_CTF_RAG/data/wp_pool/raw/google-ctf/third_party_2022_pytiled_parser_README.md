@@ -1,4 +1,4 @@
-# third_party_2022_pytiled_parser_README
+# third party 2022 pytiled parser README
 
 # PyTiled Parser
 

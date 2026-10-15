@@ -1,4 +1,4 @@
-# justctf-2023_private
+# justctf 2023 private
 
 ## Baby Otter
 

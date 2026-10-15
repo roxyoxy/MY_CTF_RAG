@@ -1,4 +1,4 @@
-# misc_smart-calculator_README
+# misc smart calculator README
 
 Smart Calculator
 ============

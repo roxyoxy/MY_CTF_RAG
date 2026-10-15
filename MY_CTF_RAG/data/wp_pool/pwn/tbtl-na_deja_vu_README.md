@@ -1,4 +1,4 @@
-# tbtl-na_deja_vu__README
+# tbtl na deja vu README
 
 # Déjà vu &mdash; Solution
 The provided binary is a statically compiled C++ program that uses a decorator to print a name with a prefix. When run, the program crashes with the `free(): invalid pointer` message due to a common memory management bug -- `delete[]` is used to deallocate a non-array heap object.

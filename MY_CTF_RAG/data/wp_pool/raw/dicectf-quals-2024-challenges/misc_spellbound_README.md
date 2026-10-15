@@ -1,4 +1,4 @@
-# misc_spellbound_README
+# misc spellbound README
 
 # spellbound (dicectf2024)
 

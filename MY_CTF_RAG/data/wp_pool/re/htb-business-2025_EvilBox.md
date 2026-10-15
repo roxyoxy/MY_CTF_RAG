@@ -1,4 +1,4 @@
-# htb-business-2025_EvilBox
+# htb business 2025 EvilBox
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

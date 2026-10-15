@@ -1,4 +1,4 @@
-# htb-business-2025_GhostPath
+# htb business 2025 GhostPath
 
 ![](../../assets/banner.png)
 

@@ -1,4 +1,4 @@
-# tbtl-na_guessy__README
+# tbtl na guessy README
 
 # Guessy &mdash; solution
 

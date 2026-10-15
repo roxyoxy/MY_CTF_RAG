@@ -1,4 +1,4 @@
-# seccon-2021_s_script_gi
+# seccon 2021 s script gi
 
 # misc: s/<script>//gi
 ## Question

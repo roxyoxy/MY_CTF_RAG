@@ -1,4 +1,4 @@
-# tbtl-na_mexico_city_tour__README
+# tbtl na mexico city tour README
 
 # Mexico City Tour &mdash; Solution
 

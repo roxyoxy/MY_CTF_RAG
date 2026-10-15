@@ -1,4 +1,4 @@
-# pearlctf-2024_pcap-busterz-2
+# pearlctf 2024 pcap busterz 2
 
 # pcap-busters-2 
 

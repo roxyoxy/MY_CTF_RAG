@@ -1,4 +1,4 @@
-# challenges_rev_too-fancy_SOLVE
+# challenges rev too fancy SOLVE
 
 This is a compiled tcl program into bytecode.
 

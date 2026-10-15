@@ -1,4 +1,4 @@
-# cry_easy_calc_README
+# cry easy calc README
 
 ---
 title: Easy calc

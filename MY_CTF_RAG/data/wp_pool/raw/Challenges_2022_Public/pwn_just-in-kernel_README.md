@@ -1,4 +1,4 @@
-# pwn_just-in-kernel_README
+# pwn just in kernel README
 
 just-in-kernel
 ============

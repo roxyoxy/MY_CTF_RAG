@@ -1,4 +1,4 @@
-# web_obligatory-calc_README
+# web obligatory calc README
 
 # Obligatory Calc
 

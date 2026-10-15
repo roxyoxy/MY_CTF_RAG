@@ -1,4 +1,4 @@
-# 2022_quals_rev-mixed_README
+# 2022 quals rev mixed README
 
 # Mixed
 

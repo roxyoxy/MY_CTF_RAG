@@ -1,4 +1,4 @@
-# uctf-2021_tedious__SOLUTION
+# uctf 2021 tedious SOLUTION
 
 # Tedious Solution
 

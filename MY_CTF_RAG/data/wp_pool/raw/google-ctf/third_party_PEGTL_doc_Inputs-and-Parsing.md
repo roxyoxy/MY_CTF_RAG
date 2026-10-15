@@ -1,4 +1,4 @@
-# third_party_PEGTL_doc_Inputs-and-Parsing
+# third party PEGTL doc Inputs and Parsing
 
 # Inputs and Parsing
 

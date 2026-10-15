@@ -1,4 +1,4 @@
-# uctf-2021_yana__README
+# uctf 2021 yana README
 
 # Solution - yana
 

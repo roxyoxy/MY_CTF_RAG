@@ -1,4 +1,4 @@
-# starctf-2022_packages
+# starctf 2022 packages
 
 # Grafana frontend packages
 

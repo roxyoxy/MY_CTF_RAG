@@ -1,4 +1,4 @@
-# 2023_quals_misc-symatrix_README
+# 2023 quals misc symatrix README
 
 # Symatrix
 

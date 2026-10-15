@@ -1,4 +1,4 @@
-# pwn_SU_msg_cfgd_readme_EN
+# pwn SU msg cfgd readme EN
 
 # Challenge Design Description
 

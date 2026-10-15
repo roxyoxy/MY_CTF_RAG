@@ -1,4 +1,4 @@
-# htb-university-2024_[Very Easy] MulTLock
+# htb university 2024 [Very Easy] MulTLock
 
 ![img](../../assets/banner.png)
 

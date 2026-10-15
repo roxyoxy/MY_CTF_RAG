@@ -1,4 +1,4 @@
-# pearlctf-2024_admin
+# pearlctf 2024 admin
 
 # Flask App Blueprint: the fast way to start your MVP
 [![CircleCI](https://circleci.com/gh/jelmerdejong/flask-app-blueprint.svg?style=shield)](https://circleci.com/gh/jelmerdejong/flask-app-blueprint)

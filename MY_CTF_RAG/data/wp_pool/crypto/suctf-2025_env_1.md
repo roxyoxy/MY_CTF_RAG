@@ -1,4 +1,4 @@
-# suctf-2025_env~1
+# suctf 2025 env~1
 
 # crypto-sagemath_9.6
 

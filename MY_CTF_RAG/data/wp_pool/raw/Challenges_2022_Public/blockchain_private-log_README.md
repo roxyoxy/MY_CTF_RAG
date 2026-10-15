@@ -1,4 +1,4 @@
-# blockchain_private-log_README
+# blockchain private log README
 
 Secret and Ephemeral
 ============

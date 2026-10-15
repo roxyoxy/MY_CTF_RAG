@@ -1,4 +1,4 @@
-# tbtl-na_kung_fu_cipher
+# tbtl na kung fu cipher
 
 # Kung-Fu Cipher
 

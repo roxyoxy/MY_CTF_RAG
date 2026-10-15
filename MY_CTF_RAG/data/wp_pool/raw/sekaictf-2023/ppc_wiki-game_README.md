@@ -1,4 +1,4 @@
-# ppc_wiki-game_README
+# ppc wiki game README
 
 ## Wiki Game
 

@@ -1,4 +1,4 @@
-# seccon-na_self-ssrf__solves
+# seccon na self ssrf solves
 
 # self-ssrf - Solves
 | Solved Rank | Team name |

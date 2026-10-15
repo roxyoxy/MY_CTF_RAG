@@ -1,3 +1,3 @@
-# challenges_osint_explorer-3_SOLVE
+# challenges osint explorer 3 SOLVE
 
 Googling “the restaurant of joy in west loop chicago” gives one Italian restauraunt (namely Gioia). Checking the google restaurant reviews of this, you see Jonah Explorer has posted a new review on Yelp of the restauruant. emphasized. Then you go to twitter and find the flag there.  flag: https://twitter.com/jonahexplorer/status/1669718020116082689?s=61&t=rAC2-aKRZZQAoTA-TM1lqw

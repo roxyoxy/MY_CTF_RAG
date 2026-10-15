@@ -1,4 +1,4 @@
-# 2018_quals_web-cat-chat_README
+# 2018 quals web cat chat README
 
 # name:Cat Chat
 description: You discover this cat enthusiast chat app, but the annoying thing about it is that you're always banned when you start talking about dogs. Maybe if you would somehow get to know the admin's password, you could fix that.

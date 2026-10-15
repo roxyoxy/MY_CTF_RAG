@@ -1,4 +1,4 @@
-# justctf-2023_~3
+# justctf 2023 ~3
 
 ### eXtra Safe Security layers
 I have a new security system, it's so safe that I don't even need to hide the source code.

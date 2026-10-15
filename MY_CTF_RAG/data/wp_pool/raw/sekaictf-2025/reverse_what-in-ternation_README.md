@@ -1,4 +1,4 @@
-# reverse_what-in-ternation_README
+# reverse what in ternation README
 
 ## What in Ternation
 

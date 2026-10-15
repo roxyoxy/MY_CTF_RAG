@@ -1,4 +1,4 @@
-# 2025_quals_misc-hwsim_challenge_README
+# 2025 quals misc hwsim challenge README
 
 The bug is in formal verification - consider what happens if we have an
 inconsistent circuit, e.g. a = b nand a -> which is okay when b is False

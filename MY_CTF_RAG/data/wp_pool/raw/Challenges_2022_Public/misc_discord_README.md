@@ -1,4 +1,4 @@
-# misc_discord_README
+# misc discord README
 
 discord
 ============

@@ -1,4 +1,4 @@
-# 2017_quals_2017-web-b2p_README
+# 2017 quals 2017 web b2p README
 
 {
 

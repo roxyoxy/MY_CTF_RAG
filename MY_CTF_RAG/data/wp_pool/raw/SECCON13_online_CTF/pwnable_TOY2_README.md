@@ -1,4 +1,4 @@
-# pwnable_TOY2_README
+# pwnable TOY2 README
 
 # TOY2
 ## Question

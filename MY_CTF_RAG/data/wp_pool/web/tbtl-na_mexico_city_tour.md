@@ -1,4 +1,4 @@
-# tbtl-na_mexico_city_tour
+# tbtl na mexico city tour
 
 # Mexico City Tour
 

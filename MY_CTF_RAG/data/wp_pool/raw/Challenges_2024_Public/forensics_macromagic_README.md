@@ -1,4 +1,4 @@
-# forensics_macromagic_README
+# forensics macromagic README
 
 Macro Magic
 ======================

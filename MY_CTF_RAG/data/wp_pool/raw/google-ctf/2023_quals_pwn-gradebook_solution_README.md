@@ -1,4 +1,4 @@
-# 2023_quals_pwn-gradebook_solution_README
+# 2023 quals pwn gradebook solution README
 
 # Google CTF 2023 - pwn: gradebook writeup
 

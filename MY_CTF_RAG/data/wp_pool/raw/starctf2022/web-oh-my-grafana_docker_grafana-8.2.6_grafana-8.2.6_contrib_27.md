@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_contribute_triage-issues
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 contribute triage issues
 
 # Triage issues
 

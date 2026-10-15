@@ -1,4 +1,4 @@
-# htb-business-2025_NeonCGI
+# htb business 2025 NeonCGI
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

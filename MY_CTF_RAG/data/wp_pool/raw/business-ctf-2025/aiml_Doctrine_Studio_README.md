@@ -1,4 +1,4 @@
-# aiml_Doctrine_Studio_README
+# aiml Doctrine Studio README
 
 ![img](../../assets/banner.png)
 

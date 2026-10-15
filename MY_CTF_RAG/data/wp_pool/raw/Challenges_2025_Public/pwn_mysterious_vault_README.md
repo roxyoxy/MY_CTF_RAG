@@ -1,4 +1,4 @@
-# pwn_mysterious_vault_README
+# pwn mysterious vault README
 
 Mysterious Vault
 ======================

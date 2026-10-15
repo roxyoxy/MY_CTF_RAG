@@ -1,4 +1,4 @@
-# uctf-2022_bro-key-n__sol
+# uctf 2022 bro key n sol
 
 By noting the size of the key, it is clear that the original unredacted key is a 4096 bit RSA key. Comparing the redacted key to a newly generated key of this size, we can see what parts of the key we have and what are redacted to get the following:
 

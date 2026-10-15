@@ -1,4 +1,4 @@
-# 2024_Intro_sanity_py_solution_README
+# 2024 Intro sanity py solution README
 
 # Sanity.py &mdash; Solution
 

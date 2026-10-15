@@ -1,4 +1,4 @@
-# seccon-2023_Sickle__solves
+# seccon 2023 Sickle solves
 
 # Sickle - Solves
 | Solved Rank | Team name |

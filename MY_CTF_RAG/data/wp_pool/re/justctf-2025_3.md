@@ -1,4 +1,4 @@
-# justctf-2025_~3
+# justctf 2025 ~3
 
 ### Satellite
 We've recovered weird device. It's not operational, but our forensic team got some intel. Can you help us?

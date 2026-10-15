@@ -1,4 +1,4 @@
-# hardware_the-door_README
+# hardware the door README
 
 The Door
 ======================

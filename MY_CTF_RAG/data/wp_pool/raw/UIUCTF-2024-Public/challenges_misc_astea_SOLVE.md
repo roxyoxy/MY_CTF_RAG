@@ -1,4 +1,4 @@
-# challenges_misc_astea_SOLVE
+# challenges misc astea SOLVE
 
 # Chal Source
 

@@ -1,4 +1,4 @@
-# seccon-2023_readme 2023__solves
+# seccon 2023 readme 2023 solves
 
 # readme 2023 - Solves
 | Solved Rank | Team name |

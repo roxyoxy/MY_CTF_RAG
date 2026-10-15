@@ -1,4 +1,4 @@
-# osint_LoveGranniE_solve_WRITEUP
+# osint LoveGranniE solve WRITEUP
 
 Love GranniE
 ============

@@ -1,4 +1,4 @@
-# 2023_quals_web-noteninja_solution_README
+# 2023 quals web noteninja solution README
 
 # Note Ninja 
 

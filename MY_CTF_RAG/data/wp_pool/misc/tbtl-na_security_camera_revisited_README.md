@@ -1,4 +1,4 @@
-# tbtl-na_security_camera_revisited__README
+# tbtl na security camera revisited README
 
 # Security Camera Revisited &mdash; Solution
 

@@ -1,4 +1,4 @@
-# tbtl-na_university_paper
+# tbtl na university paper
 
 # University Paper
 

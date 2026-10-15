@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_variables_advanced-variable-format-options
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources variables advanced variable format options
 
 +++
 title = "Advanced variable format options"

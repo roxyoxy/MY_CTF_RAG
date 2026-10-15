@@ -1,4 +1,4 @@
-# sunshinectf-2024_jungle-adventure__writeup
+# sunshinectf 2024 jungle adventure writeup
 
 # Write-Up: Welcome to the Jungle!
 

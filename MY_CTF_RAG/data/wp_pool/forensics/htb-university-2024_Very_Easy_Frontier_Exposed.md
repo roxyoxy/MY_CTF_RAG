@@ -1,4 +1,4 @@
-# htb-university-2024_[Very Easy] Frontier Exposed
+# htb university 2024 [Very Easy] Frontier Exposed
 
 ![](../../assets/banner.png)
 

@@ -1,4 +1,4 @@
-# 2021_quals_crypto-tonality_README
+# 2021 quals crypto tonality README
 
 # ECDSA with related keys crypto challenge
 

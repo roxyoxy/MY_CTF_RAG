@@ -1,4 +1,4 @@
-# web_SU_cmsAgain_sourcecode_code_Public_ckeditor_plugins_wsc_LICENSE
+# web SU cmsAgain sourcecode code Public ckeditor plugins wsc LICENSE
 
 Software License Agreement
 ==========================

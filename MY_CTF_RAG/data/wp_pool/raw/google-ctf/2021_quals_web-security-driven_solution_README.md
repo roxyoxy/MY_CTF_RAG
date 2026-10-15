@@ -1,4 +1,4 @@
-# 2021_quals_web-security-driven_solution_README
+# 2021 quals web security driven solution README
 
 # Solver
 

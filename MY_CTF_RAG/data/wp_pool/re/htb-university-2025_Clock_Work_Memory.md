@@ -1,4 +1,4 @@
-# htb-university-2025_Clock Work Memory
+# htb university 2025 Clock Work Memory
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

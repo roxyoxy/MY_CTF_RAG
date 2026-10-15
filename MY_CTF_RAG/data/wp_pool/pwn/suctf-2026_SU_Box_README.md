@@ -1,4 +1,4 @@
-# suctf-2026_SU_Box__README
+# suctf 2026 SU Box README
 
 # 题目分析
 

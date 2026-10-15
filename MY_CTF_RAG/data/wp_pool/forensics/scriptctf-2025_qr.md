@@ -1,4 +1,4 @@
-# scriptctf-2025_qr
+# scriptctf 2025 qr
 
 # Off-By-One | Connor Chang
 

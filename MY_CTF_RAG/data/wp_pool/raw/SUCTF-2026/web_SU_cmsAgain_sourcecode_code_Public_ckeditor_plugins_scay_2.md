@@ -1,4 +1,4 @@
-# web_SU_cmsAgain_sourcecode_code_Public_ckeditor_plugins_scayt_LICENSE
+# web SU cmsAgain sourcecode code Public ckeditor plugins scayt LICENSE
 
 Software License Agreement
 ==========================

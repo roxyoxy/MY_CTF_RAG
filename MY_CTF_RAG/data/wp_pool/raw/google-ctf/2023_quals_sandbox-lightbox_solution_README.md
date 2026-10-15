@@ -1,4 +1,4 @@
-# 2023_quals_sandbox-lightbox_solution_README
+# 2023 quals sandbox lightbox solution README
 
 # Writeup for lightbox
 

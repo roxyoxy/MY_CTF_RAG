@@ -1,4 +1,4 @@
-# csctf-2024_encrypt-and-decrypt
+# csctf 2024 encrypt and decrypt
 
 # Encrypt and Decrypt
 

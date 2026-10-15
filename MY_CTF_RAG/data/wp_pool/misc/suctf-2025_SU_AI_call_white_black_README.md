@@ -1,4 +1,4 @@
-# suctf-2025_SU_AI_call_white_black__README
+# suctf 2025 SU AI call white black README
 
 # WP
 

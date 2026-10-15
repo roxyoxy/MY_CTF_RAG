@@ -1,4 +1,4 @@
-# web_safelist_solution_README
+# web safelist solution README
 
 # Writeup
 

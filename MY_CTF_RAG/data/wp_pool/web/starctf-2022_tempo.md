@@ -1,4 +1,4 @@
-# starctf-2022_tempo
+# starctf 2022 tempo
 
 Right now Tempo is before stable release so this uses :latest tag which means there can be changes depending on when
 you pull the image.

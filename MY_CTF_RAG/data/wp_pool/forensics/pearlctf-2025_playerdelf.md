@@ -1,4 +1,4 @@
-# pearlctf-2025_playerdelf
+# pearlctf 2025 playerdelf
 
 ## CTF Write-Up: PlayerDelF
 

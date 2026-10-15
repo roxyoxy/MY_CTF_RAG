@@ -1,4 +1,4 @@
-# wanictf-2024_promise
+# wanictf 2024 promise
 
 ---
 title: promise

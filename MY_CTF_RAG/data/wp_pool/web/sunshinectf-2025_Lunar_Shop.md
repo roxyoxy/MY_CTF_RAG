@@ -1,4 +1,4 @@
-# sunshinectf-2025_Lunar_Shop
+# sunshinectf 2025 Lunar Shop
 
 ### NOTE:
 

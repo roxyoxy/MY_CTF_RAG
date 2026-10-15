@@ -1,4 +1,4 @@
-# 2023_quals_misc-mine-the-gap_solution_README
+# 2023 quals misc mine the gap solution README
 
 # Mine the gap writeup
 

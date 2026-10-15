@@ -1,4 +1,4 @@
-# challenges_misc_casino_private_Description
+# challenges misc casino private Description
 
 [The house lost so much money last year.](https://ctftime.org/writeup/39207) We have fixed the bug, hopefully we can make our money back now!
 

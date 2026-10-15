@@ -1,4 +1,4 @@
-# rev_ternary-brained_solve_WRITEUP
+# rev ternary brained solve WRITEUP
 
 Players are provided with a binary file called `message.bin`.
 

@@ -1,4 +1,4 @@
-# uctf-2022_frame
+# uctf 2022 frame
 
 # Quickstart guide to writing a challenge
 

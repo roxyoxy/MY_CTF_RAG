@@ -1,4 +1,4 @@
-# reverse_matrix-lab-2_solution_README
+# reverse matrix lab 2 solution README
 
 # Writeup
 

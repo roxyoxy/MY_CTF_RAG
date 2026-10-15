@@ -1,4 +1,4 @@
-# justctf-2025_~2
+# justctf 2025 ~2
 
 ### Casino
 [The house lost so much money last year.](https://ctftime.org/writeup/39207) We have fixed the bug, hopefully we can make our money back now!

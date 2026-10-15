@@ -1,4 +1,4 @@
-# osint_sharing_is_caring_writeup
+# osint sharing is caring writeup
 
 # Sharing is Caring
 

@@ -1,4 +1,4 @@
-# misc_dualzip_solve_WRITEUP
+# misc dualzip solve WRITEUP
 
 zipit
 ============

@@ -1,4 +1,4 @@
-# susctf-2024_ez_befunge
+# susctf 2024 ez befunge
 
 # ez_befunge
 

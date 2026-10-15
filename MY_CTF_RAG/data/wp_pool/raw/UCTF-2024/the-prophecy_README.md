@@ -1,4 +1,4 @@
-# the-prophecy_README
+# the prophecy README
 
 # The Prophecy
 

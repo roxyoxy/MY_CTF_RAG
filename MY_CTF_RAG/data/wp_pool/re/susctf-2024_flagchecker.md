@@ -1,4 +1,4 @@
-# susctf-2024_flagchecker
+# susctf 2024 flagchecker
 
 # 归零者密码系统
 

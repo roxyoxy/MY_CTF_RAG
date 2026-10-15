@@ -1,4 +1,4 @@
-# mis_cheat-code_README
+# mis cheat code README
 
 ---
 title: "Cheat Code"

@@ -1,4 +1,4 @@
-# misc_mkductfiso_solve_WRITEUP
+# misc mkductfiso solve WRITEUP
 
 # WRITEUP!
 

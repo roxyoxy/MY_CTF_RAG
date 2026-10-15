@@ -1,4 +1,4 @@
-# pearlctf-2024_dfa
+# pearlctf 2024 dfa
 
 # Machine Trouble
 

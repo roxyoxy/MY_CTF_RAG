@@ -1,4 +1,4 @@
-# htb-business-2025_TinyPlatformer
+# htb business 2025 TinyPlatformer
 
 ![](../../assets/banner.png)
 

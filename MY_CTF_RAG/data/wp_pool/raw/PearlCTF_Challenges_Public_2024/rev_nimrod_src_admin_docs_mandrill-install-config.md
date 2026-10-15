@@ -1,4 +1,4 @@
-# rev_nimrod_src_admin_docs_mandrill-install-config
+# rev nimrod src admin docs mandrill install config
 
 # Mandrill installation and configuration
 For the emails being send to, amongst others, confirm users email addresses on registration, we are using Mandrill, the transactional email tool provided by the creators of MailChimp.

@@ -1,4 +1,4 @@
-# htb-university-2024_[Medium] EncoDecept
+# htb university 2024 [Medium] EncoDecept
 
 ![img](../../assets/banner.png)
 

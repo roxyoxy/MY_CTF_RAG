@@ -1,4 +1,4 @@
-# 2022_quals_pwn-d8_solution_solution
+# 2022 quals pwn d8 solution solution
 
 Solution for d8
 ====================================

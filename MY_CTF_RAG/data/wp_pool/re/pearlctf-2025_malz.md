@@ -1,4 +1,4 @@
-# pearlctf-2025_malz
+# pearlctf 2025 malz
 
 # Analysis of Malz
 

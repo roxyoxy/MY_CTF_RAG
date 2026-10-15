@@ -1,4 +1,4 @@
-# starctf-2022___WriteUp
+# starctf 2022 WriteUp
 
 # 题目解析(wp)
 本题是混合整数最小二乘问题，物理背景来自于卫星定位中的整周模糊度问题，详细可参阅《Integer Parameter Estimation in Linear Models with Applications to GPS》。问题可视为$\min \|y-Ax-Bz\|_2$，其中$x$为连续向量，$z$为整数向量。题目产生的系数矩阵很明显是两个子矩阵的SVD形式构成。矩阵的拼接对于奇异值影响不大，因此可以通过直接SVD分解$\begin{bmatrix}B & A\end{bmatrix}$来计算出flag长度$n$。

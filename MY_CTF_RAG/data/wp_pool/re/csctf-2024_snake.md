@@ -1,4 +1,4 @@
-# csctf-2024_snake
+# csctf 2024 snake
 
 # snake
 

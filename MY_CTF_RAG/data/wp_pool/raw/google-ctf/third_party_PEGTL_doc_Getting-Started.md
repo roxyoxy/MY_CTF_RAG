@@ -1,4 +1,4 @@
-# third_party_PEGTL_doc_Getting-Started
+# third party PEGTL doc Getting Started
 
 # Getting Started
 

@@ -1,4 +1,4 @@
-# htb-university-2025_Starshard Core
+# htb university 2025 Starshard Core
 
 ![](../../assets/banner.png)
 

@@ -1,4 +1,4 @@
-# beginner_philtered_solve_WRITEUP
+# beginner philtered solve WRITEUP
 
 Philtered
 ============

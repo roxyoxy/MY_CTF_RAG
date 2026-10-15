@@ -1,4 +1,4 @@
-# suctf-2025_SU_photogallery__README
+# suctf 2025 SU photogallery README
 
 # SU_photogallery Wp
 

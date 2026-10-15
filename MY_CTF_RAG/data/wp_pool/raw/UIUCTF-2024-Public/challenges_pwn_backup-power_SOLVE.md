@@ -1,4 +1,4 @@
-# challenges_pwn_backup-power_SOLVE
+# challenges pwn backup power SOLVE
 
 This solve script goes alongside the `solve.py` file provided.
 

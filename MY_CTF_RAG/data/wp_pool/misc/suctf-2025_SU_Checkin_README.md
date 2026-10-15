@@ -1,4 +1,4 @@
-# suctf-2025_SU_Checkin__README
+# suctf 2025 SU Checkin README
 
 # 题目描述
 

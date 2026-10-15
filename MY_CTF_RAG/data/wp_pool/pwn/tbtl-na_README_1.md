@@ -1,4 +1,4 @@
-# tbtl-na___README~1
+# tbtl na README~1
 
 # Reverse Polish Pwn &mdash; Solution
 The target program is a simple command line stack-based calculator written in C.

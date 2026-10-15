@@ -1,4 +1,4 @@
-# web_funny-lfr_README
+# web funny lfr README
 
 ## Funny lfr
 

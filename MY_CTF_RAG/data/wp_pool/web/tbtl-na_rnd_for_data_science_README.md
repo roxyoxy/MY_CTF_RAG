@@ -1,4 +1,4 @@
-# tbtl-na_rnd_for_data_science__README
+# tbtl na rnd for data science README
 
 # Rnd For Data Science &mdash; Solution
 

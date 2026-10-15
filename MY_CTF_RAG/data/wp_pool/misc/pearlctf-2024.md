@@ -1,4 +1,4 @@
-# pearlctf-2024_
+# pearlctf 2024
 
 # j4il_time
 

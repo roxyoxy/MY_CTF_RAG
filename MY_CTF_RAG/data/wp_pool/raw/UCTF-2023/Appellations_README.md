@@ -1,4 +1,4 @@
-# Appellations_README
+# Appellations README
 
 # 🌊 Appellations
 

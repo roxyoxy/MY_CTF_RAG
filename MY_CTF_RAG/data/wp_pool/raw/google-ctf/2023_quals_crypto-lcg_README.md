@@ -1,4 +1,4 @@
-# 2023_quals_crypto-lcg_README
+# 2023 quals crypto lcg README
 
 # Least Common Genominator?
 

@@ -1,4 +1,4 @@
-# sunshinectf-2025_Rocommunications
+# sunshinectf 2025 Rocommunications
 
 # Rocommunications
 

@@ -1,4 +1,4 @@
-# beginner_stonks_README
+# beginner stonks README
 
 stonks
 ======================

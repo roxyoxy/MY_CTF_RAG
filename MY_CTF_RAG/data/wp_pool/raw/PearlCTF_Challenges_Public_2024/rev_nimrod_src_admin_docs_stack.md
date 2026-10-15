@@ -1,4 +1,4 @@
-# rev_nimrod_src_admin_docs_stack
+# rev nimrod src admin docs stack
 
 # Technology Stack
 * Language: [Python](https://www.python.org/)

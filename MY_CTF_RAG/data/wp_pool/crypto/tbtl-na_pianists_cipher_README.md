@@ -1,4 +1,4 @@
-# tbtl-na_pianists_cipher__README
+# tbtl na pianists cipher README
 
 # Pianist's Cipher &mdash; Solution
 

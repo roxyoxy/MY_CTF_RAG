@@ -1,4 +1,4 @@
-# htb-university-2025_silentsnow
+# htb university 2025 silentsnow
 
 ![img](../../assets/banner.png)
 

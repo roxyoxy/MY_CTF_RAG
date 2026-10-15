@@ -1,4 +1,4 @@
-# 2022_beginners_episode5_bonus_third_party_ubasic_README
+# 2022 beginners episode5 bonus third party ubasic README
 
 uBASIC: a really simple BASIC interpreter
 =========================================

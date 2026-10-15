@@ -1,4 +1,4 @@
-# seccon-2023_CIGISICGICGICG__solves
+# seccon 2023 CIGISICGICGICG solves
 
 # CIGISICGICGICG - Solves
 | Solved Rank | Team name |

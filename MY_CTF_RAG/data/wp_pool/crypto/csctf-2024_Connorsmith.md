@@ -1,4 +1,4 @@
-# csctf-2024_Connorsmith
+# csctf 2024 Connorsmith
 
 # Connorsmith
 

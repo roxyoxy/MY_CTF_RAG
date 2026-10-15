@@ -1,4 +1,4 @@
-# 2019_quals_misc-doomed_INSTALL
+# 2019 quals misc doomed INSTALL
 
 # License of this file
 

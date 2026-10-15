@@ -1,4 +1,4 @@
-# unlock-challenge-ctf_README
+# unlock challenge ctf README
 
 # Challenge Title
 Welcome to the Unlock challenge, an intriguing journey into the realm of Solidity smart contracts where the quest for knowledge leads to a concealed flag. As you embark on this cryptic adventure, you'll navigate through the intricacies of the Unlock contract, carefully unraveling its secrets to reveal the hidden key to success.

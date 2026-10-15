@@ -1,4 +1,4 @@
-# starctf-2022_templates
+# starctf 2022 templates
 
 # Templates
 

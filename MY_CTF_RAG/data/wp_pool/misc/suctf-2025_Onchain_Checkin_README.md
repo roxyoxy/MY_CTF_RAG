@@ -1,4 +1,4 @@
-# suctf-2025_Onchain_Checkin__README
+# suctf 2025 Onchain Checkin README
 
 # Onchain Checkin
 

@@ -1,4 +1,4 @@
-# misc_WAFthrough_writeup
+# misc WAFthrough writeup
 
 # Author’s Writeup
 

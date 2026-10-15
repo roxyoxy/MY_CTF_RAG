@@ -1,4 +1,4 @@
-# starctf-2022_graph
+# starctf 2022 graph
 
 # Graph Panel
 

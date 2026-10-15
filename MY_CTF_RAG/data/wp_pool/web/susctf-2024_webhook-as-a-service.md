@@ -1,4 +1,4 @@
-# susctf-2024_webhook-as-a-service
+# susctf 2024 webhook as a service
 
 # webhook as a service
 

@@ -1,4 +1,4 @@
-# web_sekai-game-start_solution_README
+# web sekai game start solution README
 
 # Writeup
 

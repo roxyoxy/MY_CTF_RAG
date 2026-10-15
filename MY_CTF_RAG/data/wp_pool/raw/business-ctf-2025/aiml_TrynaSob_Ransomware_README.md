@@ -1,4 +1,4 @@
-# aiml_TrynaSob_Ransomware_README
+# aiml TrynaSob Ransomware README
 
 ![img](../../assets/banner.png)
 

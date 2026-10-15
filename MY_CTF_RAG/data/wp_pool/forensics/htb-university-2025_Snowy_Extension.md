@@ -1,4 +1,4 @@
-# htb-university-2025_Snowy Extension
+# htb university 2025 Snowy Extension
 
 ![img](../../assets/banner.png)
 

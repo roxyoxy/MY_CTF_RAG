@@ -1,4 +1,4 @@
-# rev_flag-checker_README
+# rev flag checker README
 
 # flag checker
 

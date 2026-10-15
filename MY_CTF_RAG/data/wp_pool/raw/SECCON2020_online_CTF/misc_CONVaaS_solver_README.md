@@ -1,4 +1,4 @@
-# misc_CONVaaS_solver_README
+# misc CONVaaS solver README
 
 # CONVaaS の解答検証手順
 

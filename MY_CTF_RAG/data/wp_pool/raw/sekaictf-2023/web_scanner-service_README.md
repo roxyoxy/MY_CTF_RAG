@@ -1,4 +1,4 @@
-# web_scanner-service_README
+# web scanner service README
 
 ## Scanner Service
 

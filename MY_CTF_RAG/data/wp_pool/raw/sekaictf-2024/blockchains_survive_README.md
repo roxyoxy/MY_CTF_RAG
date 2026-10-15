@@ -1,4 +1,4 @@
-# blockchains_survive_README
+# blockchains survive README
 
 ## SURVIVE
 

@@ -1,4 +1,4 @@
-# crypto_v-for-vieta_README
+# crypto v for vieta README
 
 V for Vieta
 ======================

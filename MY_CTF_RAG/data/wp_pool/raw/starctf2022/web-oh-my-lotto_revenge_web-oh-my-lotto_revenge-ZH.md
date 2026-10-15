@@ -1,4 +1,4 @@
-# web-oh-my-lotto_revenge_web-oh-my-lotto_revenge-ZH
+# web oh my lotto revenge web oh my lotto revenge ZH
 
 # web-oh-my-lotto&revenge-ZH
 

@@ -1,4 +1,4 @@
-# i95_Daytona_README
+# i95 Daytona README
 
 # Daytona
 

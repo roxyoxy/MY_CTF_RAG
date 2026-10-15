@@ -1,4 +1,4 @@
-# Logic_diagram_wp
+# Logic diagram wp
 
 # Logic_diagram_wp
 ---

@@ -1,4 +1,4 @@
-# beginner_secure_email_attachments_solve_WRITEUP
+# beginner secure email attachments solve WRITEUP
 
 secure email attachments
 ============

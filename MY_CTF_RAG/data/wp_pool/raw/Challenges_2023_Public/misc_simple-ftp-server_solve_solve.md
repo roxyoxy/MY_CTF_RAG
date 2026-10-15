@@ -1,4 +1,4 @@
-# misc_simple-ftp-server_solve_solve
+# misc simple ftp server solve solve
 
 # SimpleFTPServer
 ## Background

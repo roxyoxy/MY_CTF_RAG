@@ -1,4 +1,4 @@
-# web_mutant_solve_WRITEUP
+# web mutant solve WRITEUP
 
 Mutant
 ============

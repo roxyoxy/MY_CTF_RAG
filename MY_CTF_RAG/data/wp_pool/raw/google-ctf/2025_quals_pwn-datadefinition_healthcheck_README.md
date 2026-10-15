@@ -1,4 +1,4 @@
-# 2025_quals_pwn-datadefinition_healthcheck_README
+# 2025 quals pwn datadefinition healthcheck README
 
 # Healthcheck
 

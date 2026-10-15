@@ -1,4 +1,4 @@
-# 2020_quals_hardware-registers_src_README
+# 2020 quals hardware registers src README
 
 # Protocol
 

@@ -1,4 +1,4 @@
-# csctf-2024_shelltesterv2
+# csctf 2024 shelltesterv2
 
 # Shelltester v2
 

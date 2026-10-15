@@ -1,4 +1,4 @@
-# web_strapi-in_publish_strapi-in_README
+# web strapi in publish strapi in README
 
 # 🚀 Getting started with Strapi
 

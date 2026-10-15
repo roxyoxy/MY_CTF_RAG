@@ -1,4 +1,4 @@
-# uctf-2021_speakeasy__SOLUTION
+# uctf 2021 speakeasy SOLUTION
 
 # Solution to speakeasy
 1. Throw binary in reverse engineering tool of choice

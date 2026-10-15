@@ -1,4 +1,4 @@
-# seccon-2023_Bad JWT
+# seccon 2023 Bad JWT
 
 # Bad JWT
 ## Question

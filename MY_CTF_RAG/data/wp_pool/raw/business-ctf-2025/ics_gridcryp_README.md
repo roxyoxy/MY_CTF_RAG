@@ -1,4 +1,4 @@
-# ics_gridcryp_README
+# ics gridcryp README
 
 ![img](../../assets/banner.png)
 

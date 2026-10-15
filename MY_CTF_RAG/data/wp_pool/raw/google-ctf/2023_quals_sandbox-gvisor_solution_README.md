@@ -1,4 +1,4 @@
-# 2023_quals_sandbox-gvisor_solution_README
+# 2023 quals sandbox gvisor solution README
 
 # Writeup for gVisor
 

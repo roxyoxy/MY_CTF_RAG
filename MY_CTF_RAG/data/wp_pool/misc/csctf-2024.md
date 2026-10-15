@@ -1,4 +1,4 @@
-# csctf-2024_
+# csctf 2024
 
 ## Jail (Sandbox Escape)
 

@@ -1,4 +1,4 @@
-# seccon-na_double-parser__solves
+# seccon na double parser solves
 
 # double-parser - Solves
 | Solved Rank | Team name |

@@ -1,4 +1,4 @@
-# htb-university-2025_FrostFleet
+# htb university 2025 FrostFleet
 
 **Challenge Name:** FrostFleet OS - RiverWatch Edition
 **Creator:** Joaquin Iglesias (Joey)

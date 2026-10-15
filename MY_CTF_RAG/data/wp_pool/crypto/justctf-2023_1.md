@@ -1,4 +1,4 @@
-# justctf-2023_~1
+# justctf 2023 ~1
 
 ### Vaulted
 This secure multisignature application will keep our flag safe. Mind holding on to one of the backup keys?

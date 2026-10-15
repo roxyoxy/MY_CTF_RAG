@@ -1,4 +1,4 @@
-# hardware_ductf_solve_WRITEUP
+# hardware ductf solve WRITEUP
 
 # DUCTF
 

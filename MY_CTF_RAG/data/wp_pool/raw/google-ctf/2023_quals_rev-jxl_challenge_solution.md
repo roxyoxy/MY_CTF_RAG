@@ -1,4 +1,4 @@
-# 2023_quals_rev-jxl_challenge_solution
+# 2023 quals rev jxl challenge solution
 
 # Solution
 

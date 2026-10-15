@@ -1,4 +1,4 @@
-# 2022_quals_crypto-electric-mayhem-cls_README
+# 2022 quals crypto electric mayhem cls README
 
 # Remote power analysis challenge - Classical Crypto edition
 

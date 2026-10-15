@@ -1,4 +1,4 @@
-# sunshinectf-2024_Puzzling
+# sunshinectf 2024 Puzzling
 
 # Puzzling
 

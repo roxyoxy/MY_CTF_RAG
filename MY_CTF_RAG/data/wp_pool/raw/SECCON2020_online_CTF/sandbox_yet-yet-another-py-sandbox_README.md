@@ -1,4 +1,4 @@
-# sandbox_yet-yet-another-py-sandbox_README
+# sandbox yet yet another py sandbox README
 
 # Yet^2 Another PySandbox
 

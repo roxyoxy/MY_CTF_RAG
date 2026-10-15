@@ -1,4 +1,4 @@
-# dfir_shop-oi-get-me-out-of-there_README
+# dfir shop oi get me out of there README
 
 Shop-Oi! Get out of there!
 ============

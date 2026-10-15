@@ -1,4 +1,4 @@
-# pwnable_free-free_free_solves
+# pwnable free free free solves
 
 # free-free free - Solves
 | Solved Rank | Team name |

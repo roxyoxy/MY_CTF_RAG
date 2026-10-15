@@ -1,4 +1,4 @@
-# susctf-2025_ezjail
+# susctf 2025 ezjail
 
 
 # easyjail

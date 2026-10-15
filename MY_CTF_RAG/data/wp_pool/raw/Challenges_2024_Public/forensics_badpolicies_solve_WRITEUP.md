@@ -1,4 +1,4 @@
-# forensics_badpolicies_solve_WRITEUP
+# forensics badpolicies solve WRITEUP
 
 Bad Policies
 ============

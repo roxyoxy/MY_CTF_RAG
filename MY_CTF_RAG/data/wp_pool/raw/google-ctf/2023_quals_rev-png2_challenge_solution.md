@@ -1,4 +1,4 @@
-# 2023_quals_rev-png2_challenge_solution
+# 2023 quals rev png2 challenge solution
 
 # Solution
 

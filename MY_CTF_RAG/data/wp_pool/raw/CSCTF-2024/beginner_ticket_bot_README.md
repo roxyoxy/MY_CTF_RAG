@@ -1,4 +1,4 @@
-# beginner_ticket_bot_README
+# beginner ticket bot README
 
 # Ticket-Bot
 

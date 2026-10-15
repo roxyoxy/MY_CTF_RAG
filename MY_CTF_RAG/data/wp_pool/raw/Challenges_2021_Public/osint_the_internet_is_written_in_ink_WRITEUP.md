@@ -1,4 +1,4 @@
-# osint_the_internet_is_written_in_ink_WRITEUP
+# osint the internet is written in ink WRITEUP
 
 # The Internet is Written In Ink
 

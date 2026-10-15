@@ -1,4 +1,4 @@
-# 2019_beginners_crypto-caulingo_README
+# 2019 beginners crypto caulingo README
 
 # name: "Crypto Caulingo"
 

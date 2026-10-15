@@ -1,4 +1,4 @@
-# sunshinectf-2025_SpaceRace
+# sunshinectf 2025 SpaceRace
 
 # Space Race
 

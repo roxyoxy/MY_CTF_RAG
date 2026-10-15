@@ -1,4 +1,4 @@
-# suctf-2025_mapmap2__README
+# suctf 2025 mapmap2 README
 
 
 程序拖入 ida ，很容易看出是一个 strip 的 C++ 静态编译程序，并且没开优化， main 逻辑很少，很容易逆完：

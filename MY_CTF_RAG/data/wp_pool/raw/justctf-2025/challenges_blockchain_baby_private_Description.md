@@ -1,4 +1,4 @@
-# challenges_blockchain_baby_private_Description
+# challenges blockchain baby private Description
 
 Stranded on the frozen wastelands of Cryon-7, the Otternaut awakens in a half-buried, decades-old emergency capsule. Life support is failing, communications are dead, and the orbiting relay has gone silent.
 The only hope lies in restoring the capsule's core systems. But the capsule was never meant to launch solo — it was built to be assembled piece by piece in a controlled lab, not reconstructed by paw in the wreckage of a crash site.

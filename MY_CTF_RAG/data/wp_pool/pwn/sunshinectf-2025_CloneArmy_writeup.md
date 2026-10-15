@@ -1,4 +1,4 @@
-# sunshinectf-2025_CloneArmy__writeup
+# sunshinectf 2025 CloneArmy writeup
 
 1. Set up master copy to have height = 0.0, weight = (bitwise cast to float)N, accuracy = 0.0.
 2. Allocate 0x403A50 (address of `clone_army`) bytes worth of Clones.

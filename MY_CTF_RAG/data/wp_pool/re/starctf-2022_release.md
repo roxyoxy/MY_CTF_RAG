@@ -1,4 +1,4 @@
-# starctf-2022_release
+# starctf 2022 release
 
 # proto-re
 

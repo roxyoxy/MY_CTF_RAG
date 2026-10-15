@@ -1,4 +1,4 @@
-# misc_twitter_solve_WRITEUP
+# misc twitter solve WRITEUP
 
 twitter
 ---

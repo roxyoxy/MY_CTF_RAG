@@ -1,4 +1,4 @@
-# biocomputing_dist-testing_README
+# biocomputing dist testing README
 
 # BCU-8 Control Interface
 

@@ -1,4 +1,4 @@
-# seccon-na_Trillion Ether
+# seccon na Trillion Ether
 
 # Trillion Ether
 ## Question

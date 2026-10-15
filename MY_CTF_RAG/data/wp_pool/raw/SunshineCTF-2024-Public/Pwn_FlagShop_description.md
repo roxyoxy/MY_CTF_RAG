@@ -1,4 +1,4 @@
-# Pwn_FlagShop_description
+# Pwn FlagShop description
 
 Welcome to the SECURE shop, where your goal is to explore the platform and
 uncover the secrets hidden within. After creating a user account, you'll

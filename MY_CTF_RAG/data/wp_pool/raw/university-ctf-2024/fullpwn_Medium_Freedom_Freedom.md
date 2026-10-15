@@ -1,4 +1,4 @@
-# fullpwn_Medium_Freedom_Freedom
+# fullpwn Medium Freedom Freedom
 
 ![](../../assets/banner.png)
 

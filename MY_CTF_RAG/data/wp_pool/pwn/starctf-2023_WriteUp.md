@@ -1,4 +1,4 @@
-# starctf-2023___WriteUp
+# starctf 2023 WriteUp
 
 # Drop
 

@@ -1,4 +1,4 @@
-# seccon-2021_x-note
+# seccon 2021 x note
 
 # web: x-note
 

@@ -1,4 +1,4 @@
-# pwnable_selfcet_README
+# pwnable selfcet README
 
 # selfcet
 ## Question

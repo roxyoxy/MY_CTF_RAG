@@ -1,4 +1,4 @@
-# beginner_trusted_solve_WRITEUP
+# beginner trusted solve WRITEUP
 
 # Pix's Writeup
 

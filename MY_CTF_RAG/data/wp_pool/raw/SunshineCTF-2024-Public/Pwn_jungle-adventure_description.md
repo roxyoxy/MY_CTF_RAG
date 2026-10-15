@@ -1,4 +1,4 @@
-# Pwn_jungle-adventure_description
+# Pwn jungle adventure description
 
 # Welcome to the Jungle
 

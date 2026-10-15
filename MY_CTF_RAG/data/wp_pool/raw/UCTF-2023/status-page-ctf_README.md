@@ -1,4 +1,4 @@
-# status-page-ctf_README
+# status page ctf README
 
 # Status Page
 

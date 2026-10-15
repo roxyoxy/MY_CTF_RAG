@@ -1,4 +1,4 @@
-# suctf-2026_SU_minivfs__writeup
+# suctf 2026 SU minivfs writeup
 
 漏洞位于write功能中，存在off by null漏洞。
 

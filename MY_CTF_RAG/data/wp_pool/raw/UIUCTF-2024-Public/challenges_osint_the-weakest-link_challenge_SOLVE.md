@@ -1,4 +1,4 @@
-# challenges_osint_the-weakest-link_challenge_SOLVE
+# challenges osint the weakest link challenge SOLVE
 
 # Solution
 

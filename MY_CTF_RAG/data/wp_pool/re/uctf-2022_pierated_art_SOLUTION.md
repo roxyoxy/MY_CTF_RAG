@@ -1,4 +1,4 @@
-# uctf-2022_pierated_art__SOLUTION
+# uctf 2022 pierated art SOLUTION
 
 # Pierated art solution
 

@@ -1,4 +1,4 @@
-# htb-business-2025_TripleKnock
+# htb business 2025 TripleKnock
 
 ![](../../assets/banner.png)
 

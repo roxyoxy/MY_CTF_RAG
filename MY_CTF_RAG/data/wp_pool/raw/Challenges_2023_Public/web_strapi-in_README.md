@@ -1,4 +1,4 @@
-# web_strapi-in_README
+# web strapi in README
 
 strapi in
 ============

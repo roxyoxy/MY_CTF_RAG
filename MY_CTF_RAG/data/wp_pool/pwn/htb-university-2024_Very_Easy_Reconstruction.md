@@ -1,4 +1,4 @@
-# htb-university-2024_[Very Easy] Reconstruction
+# htb university 2024 [Very Easy] Reconstruction
 
 ![](../../assets/banner.png)
 

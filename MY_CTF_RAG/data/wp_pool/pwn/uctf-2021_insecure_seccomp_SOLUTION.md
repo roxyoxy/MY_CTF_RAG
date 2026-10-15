@@ -1,4 +1,4 @@
-# uctf-2021_insecure_seccomp__SOLUTION
+# uctf 2021 insecure seccomp SOLUTION
 
 If you read the patch or the description of the chal you see seccomp doesn't
 NO_NEW_PRIVS anymore, which means you can make arbitrary syscalls in a more

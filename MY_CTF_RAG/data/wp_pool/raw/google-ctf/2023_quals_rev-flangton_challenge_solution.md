@@ -1,4 +1,4 @@
-# 2023_quals_rev-flangton_challenge_solution
+# 2023 quals rev flangton challenge solution
 
 # Solution
 

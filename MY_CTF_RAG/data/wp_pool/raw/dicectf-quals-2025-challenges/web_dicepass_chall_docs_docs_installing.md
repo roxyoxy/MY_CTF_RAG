@@ -1,4 +1,4 @@
-# web_dicepass_chall_docs_docs_installing
+# web dicepass chall docs docs installing
 
 ---
 sidebar_position: 2

@@ -1,4 +1,4 @@
-# tbtl-na_frontend-party
+# tbtl na frontend party
 
 # Frontend Party
 

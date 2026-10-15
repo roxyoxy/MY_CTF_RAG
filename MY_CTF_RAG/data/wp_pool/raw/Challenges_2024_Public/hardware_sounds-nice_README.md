@@ -1,4 +1,4 @@
-# hardware_sounds-nice_README
+# hardware sounds nice README
 
 Sounds Nice
 ======================

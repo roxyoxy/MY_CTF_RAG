@@ -1,4 +1,4 @@
-# deleted-message-ctf_README
+# deleted message ctf README
 
 # Deleted Message
 Cyber Police have seized a computer containing illegal content, but the data stored is secured with a password.

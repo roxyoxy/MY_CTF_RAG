@@ -1,4 +1,4 @@
-# seccon-na_reiwa_rot13
+# seccon na reiwa rot13
 
 # reiwa_rot13
 ## Question

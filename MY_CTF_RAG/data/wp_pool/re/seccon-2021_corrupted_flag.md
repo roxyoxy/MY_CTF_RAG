@@ -1,4 +1,4 @@
-# seccon-2021_corrupted_flag
+# seccon 2021 corrupted flag
 
 # reversing: corrupted flag
 ## Question

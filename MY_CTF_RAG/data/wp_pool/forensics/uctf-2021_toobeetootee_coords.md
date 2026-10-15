@@ -1,4 +1,4 @@
-# uctf-2021_toobeetootee__coords
+# uctf 2021 toobeetootee coords
 
 -402	14	-190	
 -402	13	-190	

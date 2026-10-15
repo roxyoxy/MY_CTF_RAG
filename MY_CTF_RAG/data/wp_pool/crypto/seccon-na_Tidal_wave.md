@@ -1,4 +1,4 @@
-# seccon-na_Tidal wave
+# seccon na Tidal wave
 
 # Tidal wave
 ## Question

@@ -1,4 +1,4 @@
-# beginner_helpless_HINTS
+# beginner helpless HINTS
 
 If they have no idea what to do:
 

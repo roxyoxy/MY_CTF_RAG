@@ -1,4 +1,4 @@
-# challenges_misc_pyplugins_private_Description
+# challenges misc pyplugins private Description
 
 _Digital dreams crossing over the sea,_
 _Welcome to a world where hackers decree._ 

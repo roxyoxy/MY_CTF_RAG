@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_getting-started_getting-started-sql
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources getting started getting started sql
 
 +++
 description = "Guide for getting started with Grafana and MS SQL Server"

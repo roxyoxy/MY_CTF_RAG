@@ -1,4 +1,4 @@
-# uctf-2021_SUPER__SOLUTION
+# uctf 2021 SUPER SOLUTION
 
 # SUPERHOT Solution
 

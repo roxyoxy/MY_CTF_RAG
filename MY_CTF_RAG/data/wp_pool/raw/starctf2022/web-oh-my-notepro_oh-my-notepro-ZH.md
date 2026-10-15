@@ -1,4 +1,4 @@
-# web-oh-my-notepro_oh-my-notepro-ZH
+# web oh my notepro oh my notepro ZH
 
 # oh-my-notepro-ZH
 

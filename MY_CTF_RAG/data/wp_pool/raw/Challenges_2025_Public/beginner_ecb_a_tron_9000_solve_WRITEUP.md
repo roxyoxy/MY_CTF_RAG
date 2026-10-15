@@ -1,4 +1,4 @@
-# beginner_ecb_a_tron_9000_solve_WRITEUP
+# beginner ecb a tron 9000 solve WRITEUP
 
 # Writeup
 

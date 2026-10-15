@@ -1,4 +1,4 @@
-# susctf-2024_no42radio
+# susctf 2024 no42radio
 
 # 42号电台
 

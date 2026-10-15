@@ -1,4 +1,4 @@
-# challenges_crypto_groups_modmail
+# challenges crypto groups modmail
 
 
 Hi, thanks for doing modmail for Groups

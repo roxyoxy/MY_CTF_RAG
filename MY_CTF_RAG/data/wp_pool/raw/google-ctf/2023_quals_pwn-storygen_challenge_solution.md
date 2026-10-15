@@ -1,4 +1,4 @@
-# 2023_quals_pwn-storygen_challenge_solution
+# 2023 quals pwn storygen challenge solution
 
 # Solution
 

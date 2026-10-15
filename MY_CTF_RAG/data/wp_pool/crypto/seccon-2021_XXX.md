@@ -1,4 +1,4 @@
-# seccon-2021_XXX
+# seccon 2021 XXX
 
 # crypto: XXX
 ## Question

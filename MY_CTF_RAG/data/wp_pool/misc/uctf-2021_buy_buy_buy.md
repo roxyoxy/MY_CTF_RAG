@@ -1,4 +1,4 @@
-# uctf-2021_buy_buy_buy
+# uctf 2021 buy buy buy
 
 # auction-bot
 

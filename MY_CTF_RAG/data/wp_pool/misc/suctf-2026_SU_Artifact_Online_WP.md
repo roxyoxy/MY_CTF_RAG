@@ -1,4 +1,4 @@
-# suctf-2026_SU_Artifact_Online__WP
+# suctf 2026 SU Artifact Online WP
 
 # SUCTF2026 - SU_Artifact_Online - WriteUp
 ---

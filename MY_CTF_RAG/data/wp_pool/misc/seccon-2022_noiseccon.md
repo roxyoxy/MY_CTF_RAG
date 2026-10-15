@@ -1,4 +1,4 @@
-# seccon-2022_noiseccon
+# seccon 2022 noiseccon
 
 # misc: noiseccon
 ## Question

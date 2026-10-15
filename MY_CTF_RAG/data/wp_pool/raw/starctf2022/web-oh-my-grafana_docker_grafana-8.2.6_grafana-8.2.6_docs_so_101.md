@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_datasources_jaeger
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources datasources jaeger
 
 +++
 title = "Jaeger"

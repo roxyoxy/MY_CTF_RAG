@@ -1,4 +1,4 @@
-# 2021_quals_crypto-tiramisu_README
+# 2021 quals crypto tiramisu README
 
 # Invalid curve point variant crypto challenge
 

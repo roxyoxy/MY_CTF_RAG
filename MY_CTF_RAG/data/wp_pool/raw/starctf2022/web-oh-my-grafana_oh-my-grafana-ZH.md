@@ -1,4 +1,4 @@
-# web-oh-my-grafana_oh-my-grafana-ZH
+# web oh my grafana oh my grafana ZH
 
 # oh-my-grafana-ZH
 

@@ -1,4 +1,4 @@
-# wanictf-2024_pow
+# wanictf 2024 pow
 
 ---
 title: pow

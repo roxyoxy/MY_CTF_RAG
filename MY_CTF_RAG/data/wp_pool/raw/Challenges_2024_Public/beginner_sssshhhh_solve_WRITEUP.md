@@ -1,4 +1,4 @@
-# beginner_sssshhhh_solve_WRITEUP
+# beginner sssshhhh solve WRITEUP
 
 Pix's Writeup
 ============

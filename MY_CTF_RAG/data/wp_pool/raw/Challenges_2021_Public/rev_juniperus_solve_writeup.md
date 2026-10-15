@@ -1,4 +1,4 @@
-# rev_juniperus_solve_writeup
+# rev juniperus solve writeup
 
 The challenge name makes reference to the infamous Juniper Networks supply-chain attack, in which a specific version of software had [embedded a root password disguised as a logging string](https://www.rapid7.com/blog/post/2015/12/20/cve-2015-7755-juniper-screenos-authentication-backdoor/) to evade detection.
 

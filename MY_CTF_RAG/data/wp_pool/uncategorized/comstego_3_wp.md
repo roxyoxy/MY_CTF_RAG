@@ -1,4 +1,4 @@
-# comstego_3_wp
+# comstego 3 wp
 
 # comstego_3_wp
 ---

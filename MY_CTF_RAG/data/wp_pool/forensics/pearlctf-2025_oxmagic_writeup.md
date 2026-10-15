@@ -1,4 +1,4 @@
-# pearlctf-2025_oxmagic__writeup
+# pearlctf 2025 oxmagic writeup
 
 # Pearl CTF 2025 - oxmagic
 

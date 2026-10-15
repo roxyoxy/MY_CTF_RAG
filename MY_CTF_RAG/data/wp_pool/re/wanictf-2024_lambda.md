@@ -1,4 +1,4 @@
-# wanictf-2024_lambda
+# wanictf 2024 lambda
 
 ---
 title: "lambda"

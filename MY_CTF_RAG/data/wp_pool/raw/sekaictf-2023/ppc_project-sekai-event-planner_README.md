@@ -1,4 +1,4 @@
-# ppc_project-sekai-event-planner_README
+# ppc project sekai event planner README
 
 ## Project Sekai Event Planner
 

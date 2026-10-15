@@ -1,4 +1,4 @@
-# sunshinectf-2025_Lunar_Auth__writeup
+# sunshinectf 2025 Lunar Auth writeup
 
 # Lunar Code Invasion 2025
 

@@ -1,4 +1,4 @@
-# pwn_text-sender_README
+# pwn text sender README
 
 ## Text Sender
 

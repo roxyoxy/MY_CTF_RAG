@@ -1,4 +1,4 @@
-# uctf-2021_pwnyide__README
+# uctf 2021 pwnyide README
 
 # Outline
 - bug 1: FTP server reads commands every time it receives a data chunk (tcp segment) instead of splitting on CRLF, allowing us to send multiple FTP commands without needing CRLFs

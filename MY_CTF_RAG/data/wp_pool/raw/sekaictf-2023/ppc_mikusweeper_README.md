@@ -1,4 +1,4 @@
-# ppc_mikusweeper_README
+# ppc mikusweeper README
 
 ## Mikusweeper
 

@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_developers_plugins_backend_grafana-plugin-sdk-for-go
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources developers plugins backend grafana plugin sdk for go
 
 +++
 title = "Grafana Plugin SDK for Go"

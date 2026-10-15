@@ -1,4 +1,4 @@
-# tbtl-na_poke_and_peek__README
+# tbtl na poke and peek README
 
 # Poke and Peek -- Solution
 

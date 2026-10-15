@@ -1,4 +1,4 @@
-# suctf-2026_SU_Note~1
+# suctf 2026 SU Note~1
 
 ## 标题
 SU-Note-rev

@@ -1,4 +1,4 @@
-# 2021_quals_pwn-compression_challenge_FORMAT
+# 2021 quals pwn compression challenge FORMAT
 
 # Compression format
 

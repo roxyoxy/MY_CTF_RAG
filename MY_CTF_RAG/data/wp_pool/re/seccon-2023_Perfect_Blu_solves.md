@@ -1,4 +1,4 @@
-# seccon-2023_Perfect Blu__solves
+# seccon 2023 Perfect Blu solves
 
 # Perfect Blu - Solves
 | Solved Rank | Team name |

@@ -1,4 +1,4 @@
-# sunshinectf-2025_HAL9000__writeup
+# sunshinectf 2025 HAL9000 writeup
 
 1. RE movfuscated binary and find the "admin key" (split across 2 int values since 32-bit)
 2. Overflow 32-byte input buffer and append the "admin key" in reverse order (2nd half first)

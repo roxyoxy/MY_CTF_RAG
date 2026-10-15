@@ -1,4 +1,4 @@
-# tbtl-na_university_paper__README
+# tbtl na university paper README
 
 # University Paper &mdash; Solution
 

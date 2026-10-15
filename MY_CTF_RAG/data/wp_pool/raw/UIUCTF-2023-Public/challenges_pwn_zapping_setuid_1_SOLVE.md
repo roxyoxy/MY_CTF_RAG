@@ -1,4 +1,4 @@
-# challenges_pwn_zapping_setuid_1_SOLVE
+# challenges pwn zapping setuid 1 SOLVE
 
 # Zapping a Setuid 1 & 2
 

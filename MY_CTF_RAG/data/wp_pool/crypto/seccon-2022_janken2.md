@@ -1,4 +1,4 @@
-# seccon-2022_janken2
+# seccon 2022 janken2
 
 # crypto: janken vs kurenaif
 ## Question

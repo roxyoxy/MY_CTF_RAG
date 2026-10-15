@@ -1,4 +1,4 @@
-# third_party_libtommath_README
+# third party libtommath README
 
 # libtommath
 

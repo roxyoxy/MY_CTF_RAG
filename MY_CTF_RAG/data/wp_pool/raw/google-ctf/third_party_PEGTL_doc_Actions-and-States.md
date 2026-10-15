@@ -1,4 +1,4 @@
-# third_party_PEGTL_doc_Actions-and-States
+# third party PEGTL doc Actions and States
 
 # Actions and States
 

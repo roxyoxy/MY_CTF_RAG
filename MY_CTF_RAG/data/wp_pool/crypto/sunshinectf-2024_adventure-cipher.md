@@ -1,4 +1,4 @@
-# sunshinectf-2024_adventure-cipher
+# sunshinectf 2024 adventure cipher
 
 # Adventure Cipher
 

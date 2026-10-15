@@ -1,4 +1,4 @@
-# starctf-2022_grafana-plugin-ci-e2e
+# starctf 2022 grafana plugin ci e2e
 
 # Using this docker image
 

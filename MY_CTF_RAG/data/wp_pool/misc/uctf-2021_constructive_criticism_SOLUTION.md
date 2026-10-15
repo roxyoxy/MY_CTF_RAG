@@ -1,4 +1,4 @@
-# uctf-2021_constructive_criticism__SOLUTION
+# uctf 2021 constructive criticism SOLUTION
 
 # Basic Solution
 

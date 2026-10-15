@@ -1,4 +1,4 @@
-# challenges_misc_oj_build_app_static_task
+# challenges misc oj build app static task
 
 # 俄罗斯套娃信封问题
 给你一个二维整数数组 `envelopes` ，其中 `envelopes[i] = [wi, hi]` ，表示第 `i` 个信封的宽度和高度。

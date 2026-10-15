@@ -1,4 +1,4 @@
-# suctf-2025_env
+# suctf 2025 env
 
 # web-lamp-php80
 

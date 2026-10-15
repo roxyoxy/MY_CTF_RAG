@@ -1,4 +1,4 @@
-# htb-university-2024_[Easy] Recruitment
+# htb university 2024 [Easy] Recruitment
 
 ![](../../assets/banner.png)
 

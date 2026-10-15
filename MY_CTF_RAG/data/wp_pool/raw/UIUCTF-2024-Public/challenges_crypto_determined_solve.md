@@ -1,4 +1,4 @@
-# challenges_crypto_determined_solve
+# challenges crypto determined solve
 
 Solution code can be found in `sol.py`.
 

@@ -1,4 +1,4 @@
-# picoify_scoreboard_bot_README
+# picoify scoreboard bot README
 
 # Picoify scoreboard bot
 

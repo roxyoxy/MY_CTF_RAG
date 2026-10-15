@@ -1,4 +1,4 @@
-# starctf-2022_ha-test-unified-alerting
+# starctf 2022 ha test unified alerting
 
 # Grafana Unified Alerting High Availability (HA) test setup
 

@@ -1,4 +1,4 @@
-# 2023_quals_crypto-cursved_solution_README
+# 2023 quals crypto cursved solution README
 
 # Google CTF 2023 - crypto: Cursved writeup
 

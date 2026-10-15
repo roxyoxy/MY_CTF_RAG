@@ -1,4 +1,4 @@
-# sandbox_crabox_solves
+# sandbox crabox solves
 
 # crabox - Solves
 | Solved Rank | Team name |

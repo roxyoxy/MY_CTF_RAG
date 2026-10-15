@@ -1,4 +1,4 @@
-# osint_bridget-lives_README
+# osint bridget lives README
 
 Bridget Lives
 ======================

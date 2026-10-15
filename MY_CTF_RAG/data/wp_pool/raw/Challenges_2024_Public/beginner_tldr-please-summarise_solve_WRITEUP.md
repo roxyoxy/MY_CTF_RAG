@@ -1,4 +1,4 @@
-# beginner_tldr-please-summarise_solve_WRITEUP
+# beginner tldr please summarise solve WRITEUP
 
 # tldr please summarise
 

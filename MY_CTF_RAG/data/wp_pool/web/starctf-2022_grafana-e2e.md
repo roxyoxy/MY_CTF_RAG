@@ -1,4 +1,4 @@
-# starctf-2022_grafana-e2e
+# starctf 2022 grafana e2e
 
 # Grafana End-to-End Test library
 

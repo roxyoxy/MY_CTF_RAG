@@ -1,4 +1,4 @@
-# pearlctf-2025_hiddenmarker
+# pearlctf 2025 hiddenmarker
 
 # Hidden Marker
 

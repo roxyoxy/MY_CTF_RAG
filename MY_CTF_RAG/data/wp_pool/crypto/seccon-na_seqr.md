@@ -1,4 +1,4 @@
-# seccon-na_seqr
+# seccon na seqr
 
 # seqr
 ## Question

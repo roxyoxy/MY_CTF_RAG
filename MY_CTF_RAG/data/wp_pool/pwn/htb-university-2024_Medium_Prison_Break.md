@@ -1,4 +1,4 @@
-# htb-university-2024_[Medium] Prison_Break
+# htb university 2024 [Medium] Prison Break
 
 ![](../../assets/banner.png)
 

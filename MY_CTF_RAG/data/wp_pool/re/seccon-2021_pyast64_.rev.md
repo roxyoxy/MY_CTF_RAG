@@ -1,4 +1,4 @@
-# seccon-2021_pyast64++.rev
+# seccon 2021 pyast64++.rev
 
 # reversing: pyast64++.rev
 ## Question

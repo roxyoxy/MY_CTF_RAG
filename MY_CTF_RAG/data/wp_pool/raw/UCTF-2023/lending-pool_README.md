@@ -1,4 +1,4 @@
-# lending-pool_README
+# lending pool README
 
 #### :warning: Please configure `processes` in Nginx Unit in Dockerfile according to server specs and [documentation](https://unit.nginx.org/configuration/#applications), right now it is not set, and the default value is 1, which is not optimal.
 

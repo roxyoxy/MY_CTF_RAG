@@ -1,4 +1,4 @@
-# pwn_adult-csp_README
+# pwn adult csp README
 
 I've decided to a bit of dev work on my chrome instance. I'm not sure if it's very secure though, can you give it a look?
 

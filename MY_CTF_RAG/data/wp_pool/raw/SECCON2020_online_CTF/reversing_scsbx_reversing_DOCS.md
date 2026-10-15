@@ -1,4 +1,4 @@
-# reversing_scsbx_reversing_DOCS
+# reversing scsbx reversing DOCS
 
 # Documentation of SCSBX
 

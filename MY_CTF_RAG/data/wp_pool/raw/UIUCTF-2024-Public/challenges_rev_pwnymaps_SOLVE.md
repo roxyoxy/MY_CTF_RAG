@@ -1,4 +1,4 @@
-# challenges_rev_pwnymaps_SOLVE
+# challenges rev pwnymaps SOLVE
 
 This challenge was a bit-manipulation reverse engineering challenge. The source can be seen in `chal.c`. I will not provide an explanation of morton encoding, though I reccommend reading the "Magic Bits" method from [this blog](https://www.forceflow.be/2013/10/07/morton-encodingdecoding-through-bit-interleaving-implementations/).
 

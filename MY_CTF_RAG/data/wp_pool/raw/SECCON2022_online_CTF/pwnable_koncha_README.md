@@ -1,4 +1,4 @@
-# pwnable_koncha_README
+# pwnable koncha README
 
 # pwnable: koncha
 ## Question

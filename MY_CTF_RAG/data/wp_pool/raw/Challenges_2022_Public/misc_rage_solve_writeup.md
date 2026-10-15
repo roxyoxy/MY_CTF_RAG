@@ -1,4 +1,4 @@
-# misc_rage_solve_writeup
+# misc rage solve writeup
 
 # Rage!
 We are provided with rage.wav, an catchy tune that sounds like it has Morse Code overlaid on it

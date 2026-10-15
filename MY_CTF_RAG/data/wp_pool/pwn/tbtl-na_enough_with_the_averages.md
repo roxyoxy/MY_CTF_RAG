@@ -1,4 +1,4 @@
-# tbtl-na_enough_with_the_averages
+# tbtl na enough with the averages
 
 # Enough with the Averages
 

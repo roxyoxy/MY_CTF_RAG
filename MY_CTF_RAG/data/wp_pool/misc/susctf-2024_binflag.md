@@ -1,4 +1,4 @@
-# susctf-2024_binflag
+# susctf 2024 binflag
 
 # /bin/flag
 

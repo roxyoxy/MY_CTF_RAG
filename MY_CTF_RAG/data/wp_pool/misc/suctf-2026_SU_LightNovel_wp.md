@@ -1,4 +1,4 @@
-# suctf-2026_SU_LightNovel__wp
+# suctf 2026 SU LightNovel wp
 
 # SU_LightNovel
 

@@ -1,4 +1,4 @@
-# pearlctf-2024_noob-login
+# pearlctf 2024 noob login
 
 # I am a web-noob
 

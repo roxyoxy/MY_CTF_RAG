@@ -1,4 +1,4 @@
-# pwnable_simplemod_README
+# pwnable simplemod README
 
 # pwnable: simplemod
 ## Question

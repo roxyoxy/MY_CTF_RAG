@@ -1,4 +1,4 @@
-# misc_flying-spaghetti-monster_solve_writeup
+# misc flying spaghetti monster solve writeup
 
 ## Flying Spaghetti Monster
 

@@ -1,4 +1,4 @@
-# beginner_vimfu_README
+# beginner vimfu README
 
 As per my last email...
 ======================

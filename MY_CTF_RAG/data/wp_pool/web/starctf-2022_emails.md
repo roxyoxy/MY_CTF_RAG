@@ -1,4 +1,4 @@
-# starctf-2022_emails
+# starctf 2022 emails
 
 ## Prerequisites
 

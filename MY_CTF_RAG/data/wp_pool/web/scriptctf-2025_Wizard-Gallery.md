@@ -1,4 +1,4 @@
-# scriptctf-2025_Wizard-Gallery
+# scriptctf 2025 Wizard Gallery
 
 # Wizard Gallery | Ashray Shah
 - Description: The council's top priority is to protect the flag, no matter the cost. Oh hey look, it's a photo gallery. What could go wrong? Hint: RCE is a luxury nowadays.

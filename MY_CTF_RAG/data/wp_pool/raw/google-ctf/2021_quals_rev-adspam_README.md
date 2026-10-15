@@ -1,4 +1,4 @@
-# 2021_quals_rev-adspam_README
+# 2021 quals rev adspam README
 
 # AdSpam
 

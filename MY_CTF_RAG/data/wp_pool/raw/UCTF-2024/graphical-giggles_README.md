@@ -1,4 +1,4 @@
-# graphical-giggles_README
+# graphical giggles README
 
 # Graphical Giggles: The Hidden Message
 

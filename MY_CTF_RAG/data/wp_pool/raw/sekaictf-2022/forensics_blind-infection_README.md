@@ -1,4 +1,4 @@
-# forensics_blind-infection_README
+# forensics blind infection README
 
 # Blind Infection 1
 

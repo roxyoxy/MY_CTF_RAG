@@ -1,4 +1,4 @@
-# pwn_the-bidding_dist_README
+# pwn the bidding dist README
 
 # Setup
 

@@ -1,4 +1,4 @@
-# challenges_web_aquatic_delights_private_private_manager_vendor_github.com_sirupsen_logrus_CHANGELOG
+# challenges web aquatic delights private private manager vendor github.com sirupsen logrus CHANGELOG
 
 # 1.8.1
 Code quality:

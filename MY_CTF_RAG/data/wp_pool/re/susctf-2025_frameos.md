@@ -1,4 +1,4 @@
-# susctf-2025_frameos
+# susctf 2025 frameos
 
 
 # frameos

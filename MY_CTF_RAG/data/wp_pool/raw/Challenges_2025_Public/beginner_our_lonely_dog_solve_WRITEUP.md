@@ -1,4 +1,4 @@
-# beginner_our_lonely_dog_solve_WRITEUP
+# beginner our lonely dog solve WRITEUP
 
 our lonely dog
 ============

@@ -1,4 +1,4 @@
-# cry_many_xor_shift_README
+# cry many xor shift README
 
 ---
 title: "Many Xor Shift"

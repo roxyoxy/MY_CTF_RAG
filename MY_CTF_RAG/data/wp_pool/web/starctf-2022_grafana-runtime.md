@@ -1,4 +1,4 @@
-# starctf-2022_grafana-runtime
+# starctf 2022 grafana runtime
 
 # Grafana Runtime library
 

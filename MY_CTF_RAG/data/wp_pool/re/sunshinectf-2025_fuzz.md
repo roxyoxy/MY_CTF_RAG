@@ -1,4 +1,4 @@
-# sunshinectf-2025_fuzz
+# sunshinectf 2025 fuzz
 
 # About fuzzing
 

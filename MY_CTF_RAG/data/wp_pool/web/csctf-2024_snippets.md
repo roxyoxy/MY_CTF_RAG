@@ -1,4 +1,4 @@
-# csctf-2024_snippets
+# csctf 2024 snippets
 
 # Snippets
 

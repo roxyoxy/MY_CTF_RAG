@@ -1,4 +1,4 @@
-# uctf-2022_precisionism__README
+# uctf 2022 precisionism README
 
 # Solution - precisionism
 

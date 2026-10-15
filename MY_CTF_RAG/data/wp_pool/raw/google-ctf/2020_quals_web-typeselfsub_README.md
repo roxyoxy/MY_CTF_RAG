@@ -1,4 +1,4 @@
-# 2020_quals_web-typeselfsub_README
+# 2020 quals web typeselfsub README
 
 # Tech help
 The Tech Help challenge.

@@ -1,4 +1,4 @@
-# 2020_quals_pwn-exceptional_README
+# 2020 quals pwn exceptional README
 
 
 

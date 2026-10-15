@@ -1,4 +1,4 @@
-# seccon-2021_pppp
+# seccon 2021 pppp
 
 # crypto: pppp
 ## Question

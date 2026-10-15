@@ -1,4 +1,4 @@
-# 2022_beginners_episode5_bonus_third_party_NetSock_README
+# 2022 beginners episode5 bonus third party NetSock README
 
 # NetSock
 Note: If you're looking for netsock2 development files, look under the

@@ -1,4 +1,4 @@
-# 2018_finals_web-pwn-gdb-as-a-service_README
+# 2018 finals web pwn gdb as a service README
 
 # name: GDB as a service
 description: It's GDB but in the Browser. Finally web developers can help debug the backends! Unfortunately, the premium version is not public yet. But you can try out the trial version for now (checkout the pwn category). If you want a product demo, we have it running at the organizers table.

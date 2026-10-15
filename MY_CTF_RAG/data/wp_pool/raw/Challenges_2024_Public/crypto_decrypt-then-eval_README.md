@@ -1,4 +1,4 @@
-# crypto_decrypt-then-eval_README
+# crypto decrypt then eval README
 
 decrypt then eval
 ======================

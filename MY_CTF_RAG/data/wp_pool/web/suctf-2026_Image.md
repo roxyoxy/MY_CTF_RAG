@@ -1,4 +1,4 @@
-# suctf-2026_Image
+# suctf 2026 Image
 
 ## ThinkImage 是什么？
 

@@ -1,4 +1,4 @@
-# crypto_substitution-cipher-iii_solve_writeup
+# crypto substitution cipher iii solve writeup
 
 # Challenge Overview
 

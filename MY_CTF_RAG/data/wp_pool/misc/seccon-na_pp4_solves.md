@@ -1,4 +1,4 @@
-# seccon-na_pp4__solves
+# seccon na pp4 solves
 
 # pp4 - Solves
 | Solved Rank | Team name |

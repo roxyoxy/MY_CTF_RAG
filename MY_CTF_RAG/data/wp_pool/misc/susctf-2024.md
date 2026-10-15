@@ -1,4 +1,4 @@
-# susctf-2024_
+# susctf 2024
 
 # osint
 

@@ -1,4 +1,4 @@
-# suctf-2026_SU-Note
+# suctf 2026 SU Note
 
 # 标题
 SU-Note

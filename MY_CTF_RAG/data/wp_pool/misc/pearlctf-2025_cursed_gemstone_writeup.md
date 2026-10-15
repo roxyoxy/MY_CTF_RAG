@@ -1,4 +1,4 @@
-# pearlctf-2025_cursed_gemstone__writeup
+# pearlctf 2025 cursed gemstone writeup
 
 # Writeup : Cursed Gemstone 
 

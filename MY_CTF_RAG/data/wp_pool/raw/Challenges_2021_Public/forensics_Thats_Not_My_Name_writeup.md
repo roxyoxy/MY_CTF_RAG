@@ -1,4 +1,4 @@
-# forensics_Thats_Not_My_Name_writeup
+# forensics Thats Not My Name writeup
 
 # Solution
 1. We've been provided with a PCAP file, and based off the challenge has been led to believe some data exfiltration is at play. First thing that comes to mind for that topic is DNS exfiltration and tunneling. To check this, we can search for unusally long dns queries in wireshark

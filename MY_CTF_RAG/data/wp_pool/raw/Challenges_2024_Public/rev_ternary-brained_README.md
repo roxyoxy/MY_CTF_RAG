@@ -1,4 +1,4 @@
-# rev_ternary-brained_README
+# rev ternary brained README
 
 Ternary Brained
 ======================

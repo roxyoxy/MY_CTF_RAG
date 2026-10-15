@@ -1,4 +1,4 @@
-# starctf-2022_text
+# starctf 2022 text
 
 # Text Panel -  Native Plugin
 

@@ -1,4 +1,4 @@
-# rev_average-assembly-assignment_README
+# rev average assembly assignment README
 
 average assembly assignment
 ======================

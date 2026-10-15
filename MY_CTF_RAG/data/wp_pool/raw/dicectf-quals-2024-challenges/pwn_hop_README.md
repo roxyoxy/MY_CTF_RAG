@@ -1,4 +1,4 @@
-# pwn_hop_README
+# pwn hop README
 
 # Hop
 ## SerenityOS LibJS JIT pwn

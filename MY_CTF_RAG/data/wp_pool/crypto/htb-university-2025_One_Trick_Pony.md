@@ -1,4 +1,4 @@
-# htb-university-2025_One Trick Pony
+# htb university 2025 One Trick Pony
 
 ![img](../../assets/banner.png)
 

@@ -1,4 +1,4 @@
-# crypto_treasure_solve_writeup
+# crypto treasure solve writeup
 
 # Challenge Overview
 

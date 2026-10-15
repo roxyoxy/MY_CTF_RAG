@@ -1,4 +1,4 @@
-# suctf-2026_images
+# suctf 2026 images
 
 # 图片资源
 

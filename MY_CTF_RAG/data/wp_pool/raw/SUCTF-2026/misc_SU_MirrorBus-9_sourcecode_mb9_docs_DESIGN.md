@@ -1,4 +1,4 @@
-# misc_SU_MirrorBus-9_sourcecode_mb9_docs_DESIGN
+# misc SU MirrorBus 9 sourcecode mb9 docs DESIGN
 
 ﻿# MirrorBus-9 Design Notes
 

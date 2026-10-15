@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_best-practices_best-practices-for-managing-dashboards
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources best practices best practices for managing dashboards
 
 +++
 title = "Best practices for managing dashboards"

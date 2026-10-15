@@ -1,4 +1,4 @@
-# pearlctf-2024_v2-learn-http
+# pearlctf 2024 v2 learn http
 
 # learn HTTP final
 ## Solution

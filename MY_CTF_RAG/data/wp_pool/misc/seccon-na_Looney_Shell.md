@@ -1,4 +1,4 @@
-# seccon-na_Looney Shell
+# seccon na Looney Shell
 
 # Looney Shell
 ## Question

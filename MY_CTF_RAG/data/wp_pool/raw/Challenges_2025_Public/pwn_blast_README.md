@@ -1,4 +1,4 @@
-# pwn_blast_README
+# pwn blast README
 
 BLAST
 ======================

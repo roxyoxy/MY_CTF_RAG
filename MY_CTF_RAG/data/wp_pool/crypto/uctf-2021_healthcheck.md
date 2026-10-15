@@ -1,4 +1,4 @@
-# uctf-2021_healthcheck
+# uctf 2021 healthcheck
 
 # Healthcheck
 

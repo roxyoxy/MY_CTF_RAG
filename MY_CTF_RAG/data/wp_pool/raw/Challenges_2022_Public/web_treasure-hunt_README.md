@@ -1,4 +1,4 @@
-# web_treasure-hunt_README
+# web treasure hunt README
 
 Treasure Hunt
 ============

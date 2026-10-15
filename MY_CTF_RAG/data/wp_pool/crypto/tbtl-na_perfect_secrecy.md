@@ -1,4 +1,4 @@
-# tbtl-na_perfect_secrecy
+# tbtl na perfect secrecy
 
 # Perfect Secrecy
 

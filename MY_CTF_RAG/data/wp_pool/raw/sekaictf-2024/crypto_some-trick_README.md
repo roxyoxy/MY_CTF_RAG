@@ -1,4 +1,4 @@
-# crypto_some-trick_README
+# crypto some trick README
 
 ## Some Trick
 

@@ -1,4 +1,4 @@
-# starctf-2022_tree
+# starctf 2022 tree
 
 This is a tree code from https://github.com/julienschmidt/httprouter with an important fixes made inside Gin web framework.
 

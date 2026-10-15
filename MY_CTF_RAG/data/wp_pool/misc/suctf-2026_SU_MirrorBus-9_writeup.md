@@ -1,4 +1,4 @@
-# suctf-2026_SU_MirrorBus-9__writeup
+# suctf 2026 SU MirrorBus 9 writeup
 
 ﻿# MirrorBus-9 Writeup（作者版）
 

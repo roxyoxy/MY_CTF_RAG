@@ -1,4 +1,4 @@
-# starctf-2022_mysql
+# starctf 2022 mysql
 
 # MySQL Data Source -  Native Plugin
 

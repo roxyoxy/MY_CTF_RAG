@@ -1,4 +1,4 @@
-# uctf-2021_simply_perfect__SOLUTION
+# uctf 2021 simply perfect SOLUTION
 
 # Simply Perfect Solution
 

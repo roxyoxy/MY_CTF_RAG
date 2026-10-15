@@ -1,4 +1,4 @@
-# osint_look_at_all_those_chickens_solve_WRITEUP
+# osint look at all those chickens solve WRITEUP
 
 Look at all those chickens
 ============

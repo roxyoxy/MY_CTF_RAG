@@ -1,4 +1,4 @@
-# starctf-2022_devenv
+# starctf 2022 devenv
 
 # Set up your development environment
 

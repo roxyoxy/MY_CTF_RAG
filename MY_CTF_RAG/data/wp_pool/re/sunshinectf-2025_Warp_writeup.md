@@ -1,4 +1,4 @@
-# sunshinectf-2025_Warp__writeup
+# sunshinectf 2025 Warp writeup
 
 ## Initial Analysis
 

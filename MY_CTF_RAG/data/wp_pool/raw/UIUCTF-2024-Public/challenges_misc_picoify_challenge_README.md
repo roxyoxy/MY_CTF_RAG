@@ -1,4 +1,4 @@
-# challenges_misc_picoify_challenge_README
+# challenges misc picoify challenge README
 
 # Picoify
 

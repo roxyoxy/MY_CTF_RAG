@@ -1,4 +1,4 @@
-# seccon-2021_sequence-as-a-service-1
+# seccon 2021 sequence as a service 1
 
 # web: Sequence as a Service 1
 ## Question

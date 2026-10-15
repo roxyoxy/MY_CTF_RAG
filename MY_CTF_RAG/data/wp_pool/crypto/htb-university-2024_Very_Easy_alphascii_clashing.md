@@ -1,4 +1,4 @@
-# htb-university-2024_[Very Easy] alphascii clashing
+# htb university 2024 [Very Easy] alphascii clashing
 
 ![img](../../assets/banner.png)
 

@@ -1,4 +1,4 @@
-# pwn_context-reducer_README
+# pwn context reducer README
 
 ## Context Reducer
 

@@ -1,4 +1,4 @@
-# 2023_quals_pwn-ubf_solution_README
+# 2023 quals pwn ubf solution README
 
 # Google CTF 2023 - pwn: UBF writeup
 

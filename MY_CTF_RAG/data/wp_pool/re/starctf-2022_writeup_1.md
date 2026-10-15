@@ -1,4 +1,4 @@
-# starctf-2022___writeup~1
+# starctf 2022 writeup~1
 
 ### NaCl writeup
 

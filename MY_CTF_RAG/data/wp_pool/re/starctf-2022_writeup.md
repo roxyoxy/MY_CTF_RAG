@@ -1,4 +1,4 @@
-# starctf-2022___writeup
+# starctf 2022 writeup
 
 ### Jump writeup
 

@@ -1,4 +1,4 @@
-# uctf-2021_prime_extravaganza__SOLUTION
+# uctf 2021 prime extravaganza SOLUTION
 
 # Prime Extravaganza Solution
 

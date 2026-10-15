@@ -1,4 +1,4 @@
-# 2023_quals_pwn-watthewasm_README
+# 2023 quals pwn watthewasm README
 
 # WatTheWasm
 

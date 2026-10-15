@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_shared_preferences_navigate-to-the-dashboard-list
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources shared preferences navigate to the dashboard list
 
 ---
 title: Navigate to the dashboard list

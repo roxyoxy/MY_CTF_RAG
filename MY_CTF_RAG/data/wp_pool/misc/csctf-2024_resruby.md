@@ -1,4 +1,4 @@
-# csctf-2024_resruby
+# csctf 2024 resruby
 
 # resruby
 

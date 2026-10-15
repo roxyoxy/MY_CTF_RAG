@@ -1,4 +1,4 @@
-# challenges_rev_weirdcaml_SOLUTION
+# challenges rev weirdcaml SOLUTION
 
 # weirdcaml - Solution
 

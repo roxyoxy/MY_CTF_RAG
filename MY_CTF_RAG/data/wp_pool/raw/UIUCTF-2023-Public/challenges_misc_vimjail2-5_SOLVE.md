@@ -1,4 +1,4 @@
-# challenges_misc_vimjail2-5_SOLVE
+# challenges misc vimjail2 5 SOLVE
 
 # Solution
 

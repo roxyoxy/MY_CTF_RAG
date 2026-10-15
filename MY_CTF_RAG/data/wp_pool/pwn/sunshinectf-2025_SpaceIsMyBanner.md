@@ -1,4 +1,4 @@
-# sunshinectf-2025_SpaceIsMyBanner
+# sunshinectf 2025 SpaceIsMyBanner
 
 # Space Is My Banner
 Deploy using `./docker-compose.yml`

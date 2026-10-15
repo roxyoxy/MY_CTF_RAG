@@ -1,4 +1,4 @@
-# susctf-2022_SpecialCurve3
+# susctf 2022 SpecialCurve3
 
 # SpecialCurve3
 

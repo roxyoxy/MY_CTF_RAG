@@ -1,4 +1,4 @@
-# seccon-2023_blink
+# seccon 2023 blink
 
 # blink
 ## Question

@@ -1,4 +1,4 @@
-# crypto_1337crypt-v2_solve_writeup
+# crypto 1337crypt v2 solve writeup
 
 # Challenge Overview
 

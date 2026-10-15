@@ -1,4 +1,4 @@
-# seccon-2022_bbb
+# seccon 2022 bbb
 
 # crypto: BBB
 ## Question

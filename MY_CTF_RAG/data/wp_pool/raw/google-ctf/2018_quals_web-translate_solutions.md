@@ -1,4 +1,4 @@
-# 2018_quals_web-translate_solutions
+# 2018 quals web translate solutions
 
 <!--
 Copyright 2018 Google LLC

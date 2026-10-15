@@ -1,4 +1,4 @@
-# beginner_sunzi-perfect-math-class_README
+# beginner sunzi perfect math class README
 
 Sun Zi's Perfect Math Class
 ======================

@@ -1,4 +1,4 @@
-# pwnable_kone_gadget_files_kone_gadget_README
+# pwnable kone gadget files kone gadget README
 
 Added to `arch/x86/entry/syscalls/syscall_64.tbl`
 ```

@@ -1,4 +1,4 @@
-# beginner_static-file-server_solve_README
+# beginner static file server solve README
 
 There is a path traversal vulnerability in the static resource handler as hinted by the comment in `app.py`.
 

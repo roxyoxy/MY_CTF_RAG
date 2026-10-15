@@ -1,4 +1,4 @@
-# Cryptic-Mansion_README
+# Cryptic Mansion README
 
 
 # 🏰 Cryptic Mansion

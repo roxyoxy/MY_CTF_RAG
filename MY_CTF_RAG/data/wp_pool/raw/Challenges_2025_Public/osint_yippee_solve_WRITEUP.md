@@ -1,4 +1,4 @@
-# osint_yippee_solve_WRITEUP
+# osint yippee solve WRITEUP
 
 Yippee
 ============

@@ -1,4 +1,4 @@
-# tbtl-na_baby_flag_checker__README
+# tbtl na baby flag checker README
 
 # Baby Flag Checker -- Solution
 

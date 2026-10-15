@@ -1,4 +1,4 @@
-# web_0day-blog_README
+# web 0day blog README
 
 0day blog
 ============

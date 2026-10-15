@@ -1,4 +1,4 @@
-# crypto_ssss_README
+# crypto ssss README
 
 ## SSSS
 

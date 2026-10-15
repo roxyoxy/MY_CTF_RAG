@@ -1,4 +1,4 @@
-# sunshinectf-2025_WebForge__writeup
+# sunshinectf 2025 WebForge writeup
 
 - We see a simple index page, without much functionality.
 - going to `/robots.txt` shows the following entries:

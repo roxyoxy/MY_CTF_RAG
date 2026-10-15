@@ -1,4 +1,4 @@
-# sunshinectf-2025_MoonClicker__writeup
+# sunshinectf 2025 MoonClicker writeup
 
 # Writeup
 

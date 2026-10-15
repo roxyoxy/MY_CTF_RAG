@@ -1,4 +1,4 @@
-# starctf-2022_plugins-bundled
+# starctf 2022 plugins bundled
 
 Bundled Plugins
 ===============

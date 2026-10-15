@@ -1,4 +1,4 @@
-# 2025_quals_pwn-playbook_solution
+# 2025 quals pwn playbook solution
 
 # Solution
 

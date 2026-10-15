@@ -1,4 +1,4 @@
-# challenges_rev_damaged_SoC_SOLUTION
+# challenges rev damaged SoC SOLUTION
 
 # Damaged SoC
 

@@ -1,4 +1,4 @@
-# ppc_nokotan_solution_README
+# ppc nokotan solution README
 
 # Nokotan's Antlers Won't Stop Growing, So Let's Play a Game on a Binary Tree!
 

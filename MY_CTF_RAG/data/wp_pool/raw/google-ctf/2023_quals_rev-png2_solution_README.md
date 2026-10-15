@@ -1,4 +1,4 @@
-# 2023_quals_rev-png2_solution_README
+# 2023 quals rev png2 solution README
 
 # Google CTF 2023 - RE: PNG2 writeup
 

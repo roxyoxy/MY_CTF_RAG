@@ -1,4 +1,4 @@
-# ppc_README
+# ppc README
 
 # PPC
 

@@ -1,4 +1,4 @@
-# rev_swiftpasswordmanager-clickme_solve_WRITEUP
+# rev swiftpasswordmanager clickme solve WRITEUP
 
 The Flag button is disabled through the call to `View.disabled()`. We can hook
 this function to change its behaviour to prevent the button from being

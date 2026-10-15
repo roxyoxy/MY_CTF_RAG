@@ -1,4 +1,4 @@
-# pwn_write-what-where_README
+# pwn write what where README
 
 # write what where
 

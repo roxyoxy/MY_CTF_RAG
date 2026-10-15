@@ -1,4 +1,4 @@
-# susctf-2025_susmarket
+# susctf 2025 susmarket
 
 
 # SUSMarket

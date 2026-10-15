@@ -1,4 +1,4 @@
-# web_actually-proxed_solve_WRITEUP
+# web actually proxed solve WRITEUP
 
 # Writeup
 

@@ -1,4 +1,4 @@
-# beginner_vimfu_solve_WRITEUP
+# beginner vimfu solve WRITEUP
 
 Pix
 ============

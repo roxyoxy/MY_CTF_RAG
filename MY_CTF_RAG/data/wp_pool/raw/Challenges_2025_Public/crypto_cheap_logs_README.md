@@ -1,4 +1,4 @@
-# crypto_cheap_logs_README
+# crypto cheap logs README
 
 cheap logs
 ======================

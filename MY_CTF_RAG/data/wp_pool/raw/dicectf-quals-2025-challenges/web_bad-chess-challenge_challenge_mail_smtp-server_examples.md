@@ -1,4 +1,4 @@
-# web_bad-chess-challenge_challenge_mail_smtp-server_examples_readme
+# web bad chess challenge challenge mail smtp server examples readme
 
 # Basic example
 Basic usage example. Create `smtp.js`

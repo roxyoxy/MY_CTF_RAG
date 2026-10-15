@@ -1,4 +1,4 @@
-# htb-university-2025_Optimistic
+# htb university 2025 Optimistic
 
 ![img](../../assets/banner.png)
 

@@ -1,4 +1,4 @@
-# justctf-2025_BigInt
+# justctf 2025 BigInt
 
 # BigInt
 

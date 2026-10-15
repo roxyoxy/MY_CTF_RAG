@@ -1,4 +1,4 @@
-# pwnable_BabyQEMU_solves
+# pwnable BabyQEMU solves
 
 # BabyQEMU - Solves
 | Solved Rank | Team name |

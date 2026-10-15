@@ -1,4 +1,4 @@
-# sunshinectf-2024_build-a-flag-workshop
+# sunshinectf 2024 build a flag workshop
 
 # Build-A-Flag-Workshop
 x64 ELF reversing challenge intended to require static and/or dynamic analysis to find the correct flag

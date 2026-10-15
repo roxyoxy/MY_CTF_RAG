@@ -1,4 +1,4 @@
-# beginner_horoscopes_README
+# beginner horoscopes README
 
 Horoscopes
 ======================

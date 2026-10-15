@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_.github_ISSUE_TEMPLATE_1-bug_report
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 .github ISSUE TEMPLATE 1 bug report
 
 ---
 name: Bug report

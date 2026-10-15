@@ -1,4 +1,4 @@
-# htb-university-2024_[Very Easy] CryoPod
+# htb university 2024 [Very Easy] CryoPod
 
 # CryoPod
 

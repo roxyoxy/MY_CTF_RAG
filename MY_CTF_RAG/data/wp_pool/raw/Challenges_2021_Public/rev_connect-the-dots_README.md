@@ -1,4 +1,4 @@
-# rev_connect-the-dots_README
+# rev connect the dots README
 
 # connect the dots
 

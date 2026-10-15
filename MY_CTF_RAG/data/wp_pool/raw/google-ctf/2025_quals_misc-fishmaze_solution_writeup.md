@@ -1,4 +1,4 @@
-# 2025_quals_misc-fishmaze_solution_writeup
+# 2025 quals misc fishmaze solution writeup
 
 # FishMaze
 The challenge tells you to get out of the maze. There is a input section to fill out a "player kernel". If you look at the source of the page you see this hidden blob:

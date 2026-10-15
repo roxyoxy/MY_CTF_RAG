@@ -1,4 +1,4 @@
-# seccon-2023_RSA 4.0__README
+# seccon 2023 RSA 4.0 README
 
 # RSA 4.0
 

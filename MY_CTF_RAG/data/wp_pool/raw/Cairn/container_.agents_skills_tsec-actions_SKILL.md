@@ -1,4 +1,4 @@
-# container_.agents_skills_tsec-actions_SKILL
+# container .agents skills tsec actions SKILL
 
 ---
 name: tsec-actions

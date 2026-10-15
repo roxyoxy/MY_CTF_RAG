@@ -1,4 +1,4 @@
-# pwn_algorithm-multitool_README
+# pwn algorithm multitool README
 
 ## Algorithm Multitool
 

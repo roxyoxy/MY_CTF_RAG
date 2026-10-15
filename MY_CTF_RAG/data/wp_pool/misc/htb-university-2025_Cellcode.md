@@ -1,4 +1,4 @@
-# htb-university-2025_Cellcode
+# htb university 2025 Cellcode
 
 ![](../../assets/banner.png)
 

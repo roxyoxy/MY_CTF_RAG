@@ -1,4 +1,4 @@
-# pwn_encrypted-note_README
+# pwn encrypted note README
 
 # encrypted note
 

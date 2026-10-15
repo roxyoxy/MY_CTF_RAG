@@ -1,4 +1,4 @@
-# crypto_sqrt163_README
+# crypto sqrt163 README
 
 ## √163
 

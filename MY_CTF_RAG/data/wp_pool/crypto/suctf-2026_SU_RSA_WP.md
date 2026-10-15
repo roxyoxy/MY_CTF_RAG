@@ -1,4 +1,4 @@
-# suctf-2026_SU_RSA__WP
+# suctf 2026 SU RSA WP
 
 # SUCTF2026 - SU_RSA - WriteUp
 

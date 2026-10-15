@@ -1,4 +1,4 @@
-# 2024_hackceler8_rounds_round_0_test_server_README
+# 2024 hackceler8 rounds round 0 test server README
 
 # Hackceler8 2024 Game
 

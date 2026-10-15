@@ -1,4 +1,4 @@
-# susctf-2025_ezsignin
+# susctf 2025 ezsignin
 
 
 # ezsignin

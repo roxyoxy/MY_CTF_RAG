@@ -1,4 +1,4 @@
-# uctf-2022_cpsc
+# uctf 2022 cpsc
 
 # CPSC
 

@@ -1,4 +1,4 @@
-# susctf-2024_nosyscall
+# susctf 2024 nosyscall
 
 # no syscall
 

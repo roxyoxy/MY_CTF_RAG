@@ -1,4 +1,4 @@
-# htb-university-2025_A Trail of Snow and Deception
+# htb university 2025 A Trail of Snow and Deception
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

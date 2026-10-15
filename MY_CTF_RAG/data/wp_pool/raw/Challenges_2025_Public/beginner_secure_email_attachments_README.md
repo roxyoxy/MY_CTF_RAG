@@ -1,4 +1,4 @@
-# beginner_secure_email_attachments_README
+# beginner secure email attachments README
 
 secure email attachments
 ======================

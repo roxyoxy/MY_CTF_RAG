@@ -1,4 +1,4 @@
-# 2024_quals_rev-x86perm_solution_writeup
+# 2024 quals rev x86perm solution writeup
 
 **Solving the x86perm**
 

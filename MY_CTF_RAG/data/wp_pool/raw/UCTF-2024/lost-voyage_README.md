@@ -1,4 +1,4 @@
-# lost-voyage_README
+# lost voyage README
 
 # Lost Voyage
 

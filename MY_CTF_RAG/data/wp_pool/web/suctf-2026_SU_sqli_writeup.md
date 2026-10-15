@@ -1,4 +1,4 @@
-# suctf-2026_SU_sqli__writeup
+# suctf 2026 SU sqli writeup
 
 ﻿这题就是两块：签名链路（JS + 双 WASM）和 PG17 JSON 报错注入。先把签名跑通，SQLi 才能打。
 

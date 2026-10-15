@@ -1,4 +1,4 @@
-# 2018_finals_pwn-mojo_README
+# 2018 finals pwn mojo README
 
 = Mojo Rising =
 

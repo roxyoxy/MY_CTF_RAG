@@ -1,4 +1,4 @@
-# 2024_quals_misc-h8-teaser_attachments_hackceler8-2023_game_README
+# 2024 quals misc h8 teaser attachments hackceler8 2023 game README
 
 # Hackceler8 2023 Game
 

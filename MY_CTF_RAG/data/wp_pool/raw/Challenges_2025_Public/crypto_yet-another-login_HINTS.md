@@ -1,4 +1,4 @@
-# crypto_yet-another-login_HINTS
+# crypto yet another login HINTS
 
 1. consider the homomorphic properties of the encryption scheme used
 2. what attacks can be applied to the way the hash function is used as a MAC?

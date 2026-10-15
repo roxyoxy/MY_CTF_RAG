@@ -1,4 +1,4 @@
-# uctf-2022_spoink__README
+# uctf 2022 spoink README
 
 # Solution
 1. it is pretty clear that the challenge involves SSTI, due to there being a template engine being used, and RCE is needed

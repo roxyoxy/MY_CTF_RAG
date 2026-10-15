@@ -1,4 +1,4 @@
-# susctf-2024_vote_now
+# susctf 2024 vote now
 
 # vote now
 

@@ -1,4 +1,4 @@
-# osint_birds-eye-view_solve_writeup
+# osint birds eye view solve writeup
 
 # Birds Eye View!
 We are given a drone shot with the description:

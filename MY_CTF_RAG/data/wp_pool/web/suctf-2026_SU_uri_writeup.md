@@ -1,4 +1,4 @@
-# suctf-2026_SU_uri__writeup
+# suctf 2026 SU uri writeup
 
 ## 出题灵感
 

@@ -1,4 +1,4 @@
-# i95_Canaveral_writeup
+# i95 Canaveral writeup
 
 1. Overflow vuln and set saved RIP to `vuln` again, this allows you to get the stack leak
 2. Prepare payload, you need to set the 2 args for win in various spots in the stack buffer

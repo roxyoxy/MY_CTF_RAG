@@ -1,4 +1,4 @@
-# dfir_shop-oi-get-me-out-of-there_solve_solve
+# dfir shop oi get me out of there solve solve
 
 By Looking at the logs you Identify that there is a "/changepassword" URL which redirects you to /login?ref=<B64 String>
 

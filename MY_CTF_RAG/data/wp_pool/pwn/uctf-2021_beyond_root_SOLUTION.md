@@ -1,4 +1,4 @@
-# uctf-2021_beyond_root__SOLUTION
+# uctf 2021 beyond root SOLUTION
 
 The challenge needs to expose the initrd. One potential way to find out the
 solution, without reading all of the kernel sources, is:

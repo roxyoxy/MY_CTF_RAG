@@ -1,4 +1,4 @@
-# 2022_quals_sandbox-s2_README
+# 2022 quals sandbox s2 README
 
 Sandbox S2
 ==========

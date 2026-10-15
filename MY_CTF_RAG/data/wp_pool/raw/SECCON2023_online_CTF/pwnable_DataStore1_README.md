@@ -1,4 +1,4 @@
-# pwnable_DataStore1_README
+# pwnable DataStore1 README
 
 # DataStore1
 ## Question

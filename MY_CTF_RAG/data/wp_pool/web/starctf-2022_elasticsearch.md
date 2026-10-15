@@ -1,4 +1,4 @@
-# starctf-2022_elasticsearch
+# starctf 2022 elasticsearch
 
 # Elasticsearch Data Source -  Native Plugin
 

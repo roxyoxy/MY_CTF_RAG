@@ -1,4 +1,4 @@
-# beginner_stonks_HINTS
+# beginner stonks HINTS
 
 if completely stuck
 1. look at how the currency conversion performed, is there something there that could break the conversion?

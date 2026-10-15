@@ -1,4 +1,4 @@
-# osint_pre-kebab-competition_README
+# osint pre kebab competition README
 
 Pre-Kebab Competition
 ============

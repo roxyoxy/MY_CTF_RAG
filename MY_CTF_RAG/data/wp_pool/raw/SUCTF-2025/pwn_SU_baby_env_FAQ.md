@@ -1,4 +1,4 @@
-# pwn_SU_baby_env_FAQ
+# pwn SU baby env FAQ
 
 # 常见问题
 

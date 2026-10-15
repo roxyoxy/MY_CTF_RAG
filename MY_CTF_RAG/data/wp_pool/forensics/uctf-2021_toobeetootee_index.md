@@ -1,4 +1,4 @@
-# uctf-2021_toobeetootee__index
+# uctf 2021 toobeetootee index
 
 # toobeetootee solution
 

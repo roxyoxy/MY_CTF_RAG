@@ -1,4 +1,4 @@
-# beginner_for_golf_beginner_solve_WRITEUP
+# beginner for golf beginner solve WRITEUP
 
 # Forensics Golf
 

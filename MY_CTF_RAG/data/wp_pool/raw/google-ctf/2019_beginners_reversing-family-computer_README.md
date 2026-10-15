@@ -1,4 +1,4 @@
-# 2019_beginners_reversing-family-computer_README
+# 2019 beginners reversing family computer README
 
 # name: "Home Computer"
 

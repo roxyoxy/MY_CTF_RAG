@@ -1,4 +1,4 @@
-# suctf-2025_SU_mathgame__README
+# suctf 2025 SU mathgame README
 
 Just a easy challenge. 
 For game1, you need find a big carmichael number. You can google and find that:

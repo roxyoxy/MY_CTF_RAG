@@ -1,4 +1,4 @@
-# pwn_wic_README
+# pwn wic README
 
 ##
 

@@ -1,4 +1,4 @@
-# ppc_purple-sheep-and-the-apple-rush_README
+# ppc purple sheep and the apple rush README
 
 ## Purple Sheep And The Apple Rush
 

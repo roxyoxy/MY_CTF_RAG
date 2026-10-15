@@ -1,4 +1,4 @@
-# rev_rocky_HINTS
+# rev rocky HINTS
 
 1. If you are trying to extract the value of the comparison as characters, you might have some issues. Try bytes instead.
 2. If you're stuck after extracting, try look at the library it's calling.

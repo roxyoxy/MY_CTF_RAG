@@ -1,4 +1,4 @@
-# seccon-2021_CCC
+# seccon 2021 CCC
 
 # crypto: CCC
 ## Question

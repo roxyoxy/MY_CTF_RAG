@@ -1,4 +1,4 @@
-# pwn_gets_solution_README
+# pwn gets solution README
 
 
 # Writeup

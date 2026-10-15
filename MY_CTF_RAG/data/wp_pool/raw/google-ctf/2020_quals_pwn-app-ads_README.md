@@ -1,4 +1,4 @@
-# 2020_quals_pwn-app-ads_README
+# 2020 quals pwn app ads README
 
 # Android Ads
 

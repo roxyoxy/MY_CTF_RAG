@@ -1,4 +1,4 @@
-# csctf-2024_resruby-golf
+# csctf 2024 resruby golf
 
 # resruby golf
 

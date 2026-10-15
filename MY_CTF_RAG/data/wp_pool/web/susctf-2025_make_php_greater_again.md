@@ -1,4 +1,4 @@
-# susctf-2025_make_php_greater_again
+# susctf 2025 make php greater again
 
 
 # make php greater again

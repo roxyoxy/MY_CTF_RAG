@@ -1,4 +1,4 @@
-# ai_ductfbank-2_README
+# ai ductfbank 2 README
 
 ductfbank 2
 ======================

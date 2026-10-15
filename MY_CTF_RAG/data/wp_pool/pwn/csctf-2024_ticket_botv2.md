@@ -1,4 +1,4 @@
-# csctf-2024_ticket_botv2
+# csctf 2024 ticket botv2
 
 # ticket-bot-v2
 

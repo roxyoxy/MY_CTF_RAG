@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_shared_alerts_grafana-managed-alerts
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources shared alerts grafana managed alerts
 
 ---
 title: Grafana managed alerts

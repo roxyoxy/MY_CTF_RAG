@@ -1,4 +1,4 @@
-# web_safelist_README
+# web safelist README
 
 # Safelist
 

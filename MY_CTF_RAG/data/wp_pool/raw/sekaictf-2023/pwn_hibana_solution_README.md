@@ -1,4 +1,4 @@
-# pwn_hibana_solution_README
+# pwn hibana solution README
 
 ## How to run the exploit
 

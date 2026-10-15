@@ -1,4 +1,4 @@
-# susctf-2022_large case__WriteUp
+# susctf 2022 large case WriteUp
 
 # 题目解析(wp)
 观察题目，可以发现首先需要恢复e，由于e的因子分别是p-1,q-1,r-1的因子，分别分解p-1,q-1,r-1并进行判断可以恢复e。由于e和phi非互质，我们有`pow(t,p-1,p)==pow(t,ep*(p-1)//ep,p)==pow(pow(t,ep,p),(p-1)//ep,p)==1`，即`GF(p)`的一个生成元经过加密后会变成其一$\frac{p-1}{e_p}$阶子群的生成元，可以利用这一性质恢复e。

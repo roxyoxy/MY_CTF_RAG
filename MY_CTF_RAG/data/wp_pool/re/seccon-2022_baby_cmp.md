@@ -1,4 +1,4 @@
-# seccon-2022_baby_cmp
+# seccon 2022 baby cmp
 
 # reversing: babycmp
 ## Question

@@ -1,4 +1,4 @@
-# pwn_outdated_solution_README
+# pwn outdated solution README
 
 ## Writeup
 

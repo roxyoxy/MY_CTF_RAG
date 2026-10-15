@@ -1,4 +1,4 @@
-# justctf-2023_~6
+# justctf 2023 ~6
 
 # Secure DB
 

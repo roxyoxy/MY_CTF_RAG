@@ -1,4 +1,4 @@
-# 2023_quals_rev-oldschool_solution_README
+# 2023 quals rev oldschool solution README
 
 # GCTF'23 - Old School (RE)
 

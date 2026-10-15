@@ -1,4 +1,4 @@
-# justctf-2023_~4
+# justctf 2023 ~4
 
 ### Trial of Bugs
 I started working on a web RPG game with an insane scope but then I ran out of time!

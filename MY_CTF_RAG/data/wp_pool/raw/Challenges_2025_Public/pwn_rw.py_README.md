@@ -1,4 +1,4 @@
-# pwn_rw.py_README
+# pwn rw.py README
 
 rw.py
 ======================

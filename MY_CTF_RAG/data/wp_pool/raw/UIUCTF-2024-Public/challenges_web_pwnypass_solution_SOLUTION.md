@@ -1,4 +1,4 @@
-# challenges_web_pwnypass_solution_SOLUTION
+# challenges web pwnypass solution SOLUTION
 
 CHAL 1.
 - Coerce into saving your malicious password via origin spoofing race condition

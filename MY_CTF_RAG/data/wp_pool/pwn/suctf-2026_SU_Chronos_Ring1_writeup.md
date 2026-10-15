@@ -1,4 +1,4 @@
-# suctf-2026_SU_Chronos_Ring1__writeup
+# suctf 2026 SU Chronos Ring1 writeup
 
 ## this is a writeup
 

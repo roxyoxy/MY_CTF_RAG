@@ -1,4 +1,4 @@
-# osint_birds-eye-view_README
+# osint birds eye view README
 
 # Birds Eye View!
 

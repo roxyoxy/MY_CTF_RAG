@@ -1,4 +1,4 @@
-# seccon-2022_latexipy
+# seccon 2022 latexipy
 
 # misc: latexipy
 ## Question

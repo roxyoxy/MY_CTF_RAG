@@ -1,4 +1,4 @@
-# web_mini_me_README
+# web mini me README
 
 mini-me
 ======================

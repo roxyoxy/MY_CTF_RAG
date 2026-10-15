@@ -1,4 +1,4 @@
-# starctf-2022_prometheus
+# starctf 2022 prometheus
 
 # Prometheus Data Source -  Native Plugin
 

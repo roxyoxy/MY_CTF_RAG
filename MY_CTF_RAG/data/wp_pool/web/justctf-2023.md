@@ -1,4 +1,4 @@
-# justctf-2023_
+# justctf 2023
 
 ### 🐠 Dive into Aquatic Delights! 🌊
 

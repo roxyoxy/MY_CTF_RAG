@@ -1,4 +1,4 @@
-# htb-university-2025_Feel My Terror
+# htb university 2025 Feel My Terror
 
 ![](../../assets/banner.png)
 

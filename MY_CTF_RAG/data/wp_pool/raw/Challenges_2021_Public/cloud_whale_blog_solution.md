@@ -1,4 +1,4 @@
-# cloud_whale_blog_solution
+# cloud whale blog solution
 
 # Whale Blog
 

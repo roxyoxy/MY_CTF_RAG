@@ -1,4 +1,4 @@
-# susctf-2025_monitor
+# susctf 2025 monitor
 
 
 # monitor

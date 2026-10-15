@@ -1,4 +1,4 @@
-# susctf-2024_slowsj
+# susctf 2024 slowsj
 
 # slowsj
 

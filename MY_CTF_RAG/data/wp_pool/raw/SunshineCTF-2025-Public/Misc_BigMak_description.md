@@ -1,4 +1,4 @@
-# Misc_BigMak_description
+# Misc BigMak description
 
 I tried typing out the flag for you, but our Astronaut **Cole**son seems to have changed the terminal's
 keyboard layout? He went out to get a big **mak** so I guess we're screwed. Whatever, here's the flag,

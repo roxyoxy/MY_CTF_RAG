@@ -1,4 +1,4 @@
-# tbtl-na_diamonds_and_rust
+# tbtl na diamonds and rust
 
 # Diamonds and Rust
 

@@ -1,4 +1,4 @@
-# htb-university-2024_[Hard] GravitometerGambit
+# htb university 2024 [Hard] GravitometerGambit
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

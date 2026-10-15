@@ -1,4 +1,4 @@
-# 2023_quals_web-vegsoda_solution_README
+# 2023 quals web vegsoda solution README
 
 # Veggie Soda
 

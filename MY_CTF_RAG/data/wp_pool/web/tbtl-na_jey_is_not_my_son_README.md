@@ -1,4 +1,4 @@
-# tbtl-na_jey_is_not_my_son__README
+# tbtl na jey is not my son README
 
 # Jey is not my Son &mdash; Solution
 

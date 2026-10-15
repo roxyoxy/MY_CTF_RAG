@@ -1,4 +1,4 @@
-# seccon-2022_doroboh
+# seccon 2022 doroboh
 
 # reversing: DoroboH
 ## Question

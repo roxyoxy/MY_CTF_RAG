@@ -1,4 +1,4 @@
-# tbtl-na_math_is_hard__README
+# tbtl na math is hard README
 
 # Math is Hard -- Solution
 

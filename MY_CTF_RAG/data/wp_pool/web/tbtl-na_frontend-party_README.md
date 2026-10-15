@@ -1,4 +1,4 @@
-# tbtl-na_frontend-party__README
+# tbtl na frontend party README
 
 
 # Frontend-party -- Solution

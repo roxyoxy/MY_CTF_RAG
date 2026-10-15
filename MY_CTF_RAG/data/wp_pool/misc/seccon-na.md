@@ -1,4 +1,4 @@
-# seccon-na_
+# seccon na
 
 # Welcome
 ## Question

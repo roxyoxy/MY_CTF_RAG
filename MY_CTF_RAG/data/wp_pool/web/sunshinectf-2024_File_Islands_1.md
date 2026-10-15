@@ -1,4 +1,4 @@
-# sunshinectf-2024_File_Islands_1
+# sunshinectf 2024 File Islands 1
 
 # \[Web] File Islands
 

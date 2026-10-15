@@ -1,4 +1,4 @@
-# solve_wp
+# solve wp
 
 # solve_wp
 ---

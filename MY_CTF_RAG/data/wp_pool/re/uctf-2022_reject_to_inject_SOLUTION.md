@@ -1,4 +1,4 @@
-# uctf-2022_reject_to_inject__SOLUTION
+# uctf 2022 reject to inject SOLUTION
 
 # SOLUTION for Reject to Inject 
 

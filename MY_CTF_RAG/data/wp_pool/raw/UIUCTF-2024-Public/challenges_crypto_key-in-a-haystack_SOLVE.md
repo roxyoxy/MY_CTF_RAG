@@ -1,4 +1,4 @@
-# challenges_crypto_key-in-a-haystack_SOLVE
+# challenges crypto key in a haystack SOLVE
 
 # Key in a Haystack
 

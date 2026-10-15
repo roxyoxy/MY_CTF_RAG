@@ -1,4 +1,4 @@
-# crypto_power-sign_solve_writeup
+# crypto power sign solve writeup
 
 ## Challenge Overview
 

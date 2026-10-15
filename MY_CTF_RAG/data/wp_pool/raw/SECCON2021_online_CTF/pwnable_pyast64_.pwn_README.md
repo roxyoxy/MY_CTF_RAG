@@ -1,4 +1,4 @@
-# pwnable_pyast64_.pwn_README
+# pwnable pyast64 .pwn README
 
 # pwnable: pyast64++.pwn
 ## Question

@@ -1,4 +1,4 @@
-# misc_simple-ftp-server_README
+# misc simple ftp server README
 
 SimpleFTPServer
 ============

@@ -1,4 +1,4 @@
-# pwn_context-reducer_dist_README
+# pwn context reducer dist README
 
 # Build
 

@@ -1,4 +1,4 @@
-# rev_nimrod_src_admin_docs_way-of-working
+# rev nimrod src admin docs way of working
 
 # Make it your own!
 That was easy right? You are ready to go modify and built your next killer app. Few points to keep in mind:

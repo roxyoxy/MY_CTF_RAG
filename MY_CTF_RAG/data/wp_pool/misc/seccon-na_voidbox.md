@@ -1,4 +1,4 @@
-# seccon-na_voidbox
+# seccon na voidbox
 
 # voidbox
 ## Question

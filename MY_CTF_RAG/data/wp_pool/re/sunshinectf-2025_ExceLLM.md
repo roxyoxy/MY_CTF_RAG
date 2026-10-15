@@ -1,4 +1,4 @@
-# sunshinectf-2025_ExceLLM
+# sunshinectf 2025 ExceLLM
 
 # ExceLLM
 

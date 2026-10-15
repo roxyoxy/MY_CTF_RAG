@@ -1,4 +1,4 @@
-# blockchain_crypto-casino_README
+# blockchain crypto casino README
 
 Crypto Casino
 ============

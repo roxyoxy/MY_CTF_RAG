@@ -1,4 +1,4 @@
-# htb-university-2025_Disguised
+# htb university 2025 Disguised
 
 ![img](../../assets/banner.png)
 

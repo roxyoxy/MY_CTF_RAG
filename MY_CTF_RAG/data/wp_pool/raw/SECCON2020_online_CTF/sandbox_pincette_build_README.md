@@ -1,4 +1,4 @@
-# sandbox_pincette_build_README
+# sandbox pincette build README
 
 # Usage
 To start pincette server,

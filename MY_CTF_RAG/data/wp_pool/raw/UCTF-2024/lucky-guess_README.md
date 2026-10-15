@@ -1,4 +1,4 @@
-# lucky-guess_README
+# lucky guess README
 
 # Lucky Guess
 

@@ -1,4 +1,4 @@
-# challenges_web_fare-evasion_SOLVE
+# challenges web fare evasion SOLVE
 
 # Solve
 - `kid` is vulnerable to injection, but the backend MD5 hashes is before passing it to SQLite.

@@ -1,4 +1,4 @@
-# 2023_quals_pwn-storygen_README
+# 2023 quals pwn storygen README
 
 # Storygen challenge
 

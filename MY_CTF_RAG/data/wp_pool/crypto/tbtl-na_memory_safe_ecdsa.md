@@ -1,4 +1,4 @@
-# tbtl-na_memory_safe_ecdsa
+# tbtl na memory safe ecdsa
 
 # Memory Safe ECDSA
 

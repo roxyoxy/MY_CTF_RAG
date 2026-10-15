@@ -1,4 +1,4 @@
-# susctf-2022_ra2__WriteUp
+# susctf 2022 ra2 WriteUp
 
 # 题目解析(wp)
 在文件夹内搜索ctf或flag字样，发现题目相关文件在mods/rv/maps/ctf-01文件夹下，根据游戏相关信息可以轻松在游戏内找到flag。

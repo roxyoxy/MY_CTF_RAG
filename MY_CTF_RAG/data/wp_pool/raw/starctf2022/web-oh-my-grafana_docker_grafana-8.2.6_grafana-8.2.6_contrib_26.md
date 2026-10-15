@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_contribute_templates_doc-task-template
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 contribute templates doc task template
 
 +++
 draft = "false"

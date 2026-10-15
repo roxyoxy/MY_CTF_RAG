@@ -1,4 +1,4 @@
-# suctf-2026_env
+# suctf 2026 env
 
 # env
 

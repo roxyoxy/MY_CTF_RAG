@@ -1,4 +1,4 @@
-# misc_yodawg_README
+# misc yodawg README
 
 YoDawg
 ======================

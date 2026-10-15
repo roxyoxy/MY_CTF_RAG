@@ -1,4 +1,4 @@
-# rev_gamer_solve_writeup
+# rev gamer solve writeup
 
 # Challenge Overview
 

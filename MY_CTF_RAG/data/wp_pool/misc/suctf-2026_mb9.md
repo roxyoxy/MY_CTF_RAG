@@ -1,4 +1,4 @@
-# suctf-2026_mb9
+# suctf 2026 mb9
 
 # MirrorBus-9 Source Tree
 

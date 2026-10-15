@@ -1,4 +1,4 @@
-# susctf-2025_am-i-admin
+# susctf 2025 am i admin
 
 
 # am i admin?

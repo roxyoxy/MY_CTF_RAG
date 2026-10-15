@@ -1,4 +1,4 @@
-# third_party_edk2_IntelFsp2Pkg_Tools_UserManuals_SplitFspBinUserManual
+# third party edk2 IntelFsp2Pkg Tools UserManuals SplitFspBinUserManual
 
 # SplitFspBin.py is a python script to support some operations on Intel FSP 2.0 image.
 

@@ -1,4 +1,4 @@
-# starctf-2023___ezCrypto_wp
+# starctf 2023 ezCrypto wp
 
 ## ezCrypto MD
 

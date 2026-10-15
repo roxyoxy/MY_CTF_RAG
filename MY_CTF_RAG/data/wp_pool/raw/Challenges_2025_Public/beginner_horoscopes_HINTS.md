@@ -1,4 +1,4 @@
-# beginner_horoscopes_HINTS
+# beginner horoscopes HINTS
 
 ## I don't know where to start?
 

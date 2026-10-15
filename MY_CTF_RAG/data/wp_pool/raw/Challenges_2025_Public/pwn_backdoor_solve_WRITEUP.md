@@ -1,4 +1,4 @@
-# pwn_backdoor_solve_WRITEUP
+# pwn backdoor solve WRITEUP
 
 {name}
 ============

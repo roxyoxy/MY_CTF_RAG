@@ -1,4 +1,4 @@
-# challenges_misc_comments_only_SOLUTION
+# challenges misc comments only SOLUTION
 
 # Comments Only - Solution
 

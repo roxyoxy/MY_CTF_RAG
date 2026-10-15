@@ -1,4 +1,4 @@
-# hardware_the-door_solve_WRITEUP
+# hardware the door solve WRITEUP
 
 # The Door
 

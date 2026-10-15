@@ -1,4 +1,4 @@
-# starctf-2022_grafana-plugin-ci-alpine
+# starctf 2022 grafana plugin ci alpine
 
 # Using this docker image
 

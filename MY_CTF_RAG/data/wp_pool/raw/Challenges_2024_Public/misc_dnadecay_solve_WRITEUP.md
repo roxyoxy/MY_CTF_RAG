@@ -1,4 +1,4 @@
-# misc_dnadecay_solve_WRITEUP
+# misc dnadecay solve WRITEUP
 
 DNAdecay
 ============

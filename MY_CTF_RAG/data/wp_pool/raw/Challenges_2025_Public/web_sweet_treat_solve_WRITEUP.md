@@ -1,4 +1,4 @@
-# web_sweet_treat_solve_WRITEUP
+# web sweet treat solve WRITEUP
 
 Sweet Treat
 ============

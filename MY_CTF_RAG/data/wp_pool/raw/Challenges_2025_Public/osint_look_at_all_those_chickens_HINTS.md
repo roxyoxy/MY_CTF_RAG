@@ -1,4 +1,4 @@
-# osint_look_at_all_those_chickens_HINTS
+# osint look at all those chickens HINTS
 
 Look At All Those Chickens!
 ============

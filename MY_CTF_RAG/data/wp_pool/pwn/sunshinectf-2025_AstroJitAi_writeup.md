@@ -1,4 +1,4 @@
-# sunshinectf-2025_AstroJitAi__writeup
+# sunshinectf 2025 AstroJitAi writeup
 
 # Writeup
 ## Backstory

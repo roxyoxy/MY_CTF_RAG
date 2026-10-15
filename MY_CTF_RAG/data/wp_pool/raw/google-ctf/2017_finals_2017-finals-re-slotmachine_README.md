@@ -1,4 +1,4 @@
-# 2017_finals_2017-finals-re-slotmachine_README
+# 2017 finals 2017 finals re slotmachine README
 
 {
 

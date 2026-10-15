@@ -1,4 +1,4 @@
-# suctf-2026_SU_wms__writeup
+# suctf 2026 SU wms writeup
 
 # SU_wms
 

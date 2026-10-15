@@ -1,4 +1,4 @@
-# wanictf-2024_codebreaker
+# wanictf 2024 codebreaker
 
 ---
 title: "codebreaker"

@@ -1,4 +1,4 @@
-# 2025_quals_misc-mega-rust-1_attachments_README
+# 2025 quals misc mega rust 1 attachments README
 
 # Mega Sonk in MegaRust
 

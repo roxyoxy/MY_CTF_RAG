@@ -1,4 +1,4 @@
-# web_mini_me_HINTS
+# web mini me HINTS
 
 # Hint 1 
 

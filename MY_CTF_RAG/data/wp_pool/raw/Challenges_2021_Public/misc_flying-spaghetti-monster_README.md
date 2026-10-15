@@ -1,4 +1,4 @@
-# misc_flying-spaghetti-monster_README
+# misc flying spaghetti monster README
 
 # Flying Spaghetti Monster
 

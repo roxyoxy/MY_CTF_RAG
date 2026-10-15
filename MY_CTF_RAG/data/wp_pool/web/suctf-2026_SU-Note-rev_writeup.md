@@ -1,4 +1,4 @@
-# suctf-2026_SU-Note-rev__writeup
+# suctf 2026 SU Note rev writeup
 
 # SU-Note-rev Writeup
 

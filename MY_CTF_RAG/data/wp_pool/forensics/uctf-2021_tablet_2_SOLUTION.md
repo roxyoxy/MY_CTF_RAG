@@ -1,4 +1,4 @@
-# uctf-2021_tablet_2__SOLUTION
+# uctf 2021 tablet 2 SOLUTION
 
 # Tablet 4 solution
 

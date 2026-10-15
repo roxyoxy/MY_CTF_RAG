@@ -1,4 +1,4 @@
-# seccon-na_JavaScrypto
+# seccon na JavaScrypto
 
 # JavaScrypto
 ## Question

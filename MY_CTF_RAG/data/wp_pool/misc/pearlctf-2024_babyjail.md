@@ -1,4 +1,4 @@
-# pearlctf-2024_babyjail
+# pearlctf 2024 babyjail
 
 # Baby Jail
 

@@ -1,4 +1,4 @@
-# pearlctf-2025_hiddenpassage__solve
+# pearlctf 2025 hiddenpassage solve
 
 # Solve Writeup - Hidden Passage
 

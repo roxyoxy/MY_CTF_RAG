@@ -1,4 +1,4 @@
-# 2023_quals_rev-jxl_solution_README
+# 2023 quals rev jxl solution README
 
 # Google CTF 2023 - RE: JXL writeup
 

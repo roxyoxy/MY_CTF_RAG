@@ -1,4 +1,4 @@
-# misc_scrapbooking_solve_WRITEUP
+# misc scrapbooking solve WRITEUP
 
 Scrapbooking
 ============

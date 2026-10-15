@@ -1,4 +1,4 @@
-# seccon-2023_SimpleCalc
+# seccon 2023 SimpleCalc
 
 # SimpleCalc
 ## Question

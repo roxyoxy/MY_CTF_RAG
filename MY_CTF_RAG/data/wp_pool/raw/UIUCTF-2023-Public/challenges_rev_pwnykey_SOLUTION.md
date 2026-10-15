@@ -1,4 +1,4 @@
-# challenges_rev_pwnykey_SOLUTION
+# challenges rev pwnykey SOLUTION
 
 1. pwnykey is a devicescript bytecode rev challenge. it consists of:
   1. a webserver for users to interface with (submit a key) and invoke the devicescript program

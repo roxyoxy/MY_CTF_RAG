@@ -1,4 +1,4 @@
-# misc_discord_WRITEUP
+# misc discord WRITEUP
 
 # Discord
 

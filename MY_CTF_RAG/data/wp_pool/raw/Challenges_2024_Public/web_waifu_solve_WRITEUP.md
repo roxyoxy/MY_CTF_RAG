@@ -1,4 +1,4 @@
-# web_waifu_solve_WRITEUP
+# web waifu solve WRITEUP
 
 waifu
 ============

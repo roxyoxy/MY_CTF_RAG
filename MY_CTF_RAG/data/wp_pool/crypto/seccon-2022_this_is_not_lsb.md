@@ -1,4 +1,4 @@
-# seccon-2022_this_is_not_lsb
+# seccon 2022 this is not lsb
 
 # crypto: this_is_not_lsb
 ## Question

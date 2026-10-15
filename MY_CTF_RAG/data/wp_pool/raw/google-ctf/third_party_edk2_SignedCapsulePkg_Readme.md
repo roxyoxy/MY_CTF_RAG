@@ -1,4 +1,4 @@
-# third_party_edk2_SignedCapsulePkg_Readme
+# third party edk2 SignedCapsulePkg Readme
 
 # SignedCapsulePkg
 

@@ -1,4 +1,4 @@
-# susctf-2024_tips
+# susctf 2024 tips
 
 # tips
 

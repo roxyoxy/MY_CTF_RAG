@@ -1,4 +1,4 @@
-# aiml_Loyalty_Survey_README
+# aiml Loyalty Survey README
 
 ![img](../../assets/banner.png)
 

@@ -1,4 +1,4 @@
-# starctf-2022_alertlist
+# starctf 2022 alertlist
 
 # Alert List Panel - Native plugin
 

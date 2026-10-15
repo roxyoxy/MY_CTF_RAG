@@ -1,4 +1,4 @@
-# osint_shipwrecked_README
+# osint shipwrecked README
 
 Shipwrecked
 ============

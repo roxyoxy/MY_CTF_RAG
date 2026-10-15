@@ -1,4 +1,4 @@
-# crypto_aes-ecb_solve_writeup
+# crypto aes ecb solve writeup
 
 # Easily Can Break
 

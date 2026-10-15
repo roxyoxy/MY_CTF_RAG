@@ -1,4 +1,4 @@
-# suctf-2025_SU_JIT16
+# suctf 2025 SU JIT16
 
 ## 标题
 JIT16

@@ -1,4 +1,4 @@
-# suctf-2026_ckeditor
+# suctf 2026 ckeditor
 
 CKEditor 4 - Releases
 =====================

@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_alerting_unified-alerting_silences
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources alerting unified alerting silences
 
 +++
 title = "Silences"

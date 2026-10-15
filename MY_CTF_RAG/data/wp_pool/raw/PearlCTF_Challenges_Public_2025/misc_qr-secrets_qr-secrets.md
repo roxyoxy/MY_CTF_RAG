@@ -1,4 +1,4 @@
-# misc_qr-secrets_qr-secrets
+# misc qr secrets qr secrets
 
 # QR Secrets Writeup  
 

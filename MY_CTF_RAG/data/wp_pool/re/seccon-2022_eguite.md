@@ -1,4 +1,4 @@
-# seccon-2022_eguite
+# seccon 2022 eguite
 
 # reversing: eguite
 ## Question

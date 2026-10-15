@@ -1,4 +1,4 @@
-# scriptctf-2025_Secure-Server
+# scriptctf 2025 Secure Server
 
 # Secure Server | NoobMaster
 

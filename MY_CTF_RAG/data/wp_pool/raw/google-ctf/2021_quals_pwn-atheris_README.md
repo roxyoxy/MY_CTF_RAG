@@ -1,4 +1,4 @@
-# 2021_quals_pwn-atheris_README
+# 2021 quals pwn atheris README
 
 # Autorunner
 

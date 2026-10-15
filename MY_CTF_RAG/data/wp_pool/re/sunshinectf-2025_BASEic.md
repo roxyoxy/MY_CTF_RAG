@@ -1,4 +1,4 @@
-# sunshinectf-2025_BASEic
+# sunshinectf 2025 BASEic
 
 # BASEic Build/Maintaining Instructions
 

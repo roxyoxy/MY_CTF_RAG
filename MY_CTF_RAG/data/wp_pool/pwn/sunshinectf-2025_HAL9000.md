@@ -1,4 +1,4 @@
-# sunshinectf-2025_HAL9000
+# sunshinectf 2025 HAL9000
 
 # HAL9000.mov
 

@@ -1,4 +1,4 @@
-# 2021_quals_pwn-fullchain_README
+# 2021 quals pwn fullchain README
 
 # Fullchain
 

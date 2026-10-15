@@ -1,4 +1,4 @@
-# uctf-2021_private__solution
+# uctf 2021 private solution
 
 # Solution
 

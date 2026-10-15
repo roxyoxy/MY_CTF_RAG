@@ -1,4 +1,4 @@
-# beginner_all-fathers-wisdom_HINTS
+# beginner all fathers wisdom HINTS
 
 ## In order of where they are at ish:
 Feel free to adapt these if they are still stuck, you can give the same advise in a different way

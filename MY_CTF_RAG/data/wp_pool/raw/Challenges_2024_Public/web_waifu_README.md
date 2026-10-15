@@ -1,4 +1,4 @@
-# web_waifu_README
+# web waifu README
 
 waifu
 ======================

@@ -1,4 +1,4 @@
-# 2023_quals_web-biohazard_challenge_src_js_static_README
+# 2023 quals web biohazard challenge src js static README
 
 ## Closure Library
 

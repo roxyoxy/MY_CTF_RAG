@@ -1,4 +1,4 @@
-# susctf-2022_DigitalCircuits__DigitalCircuits_wp
+# susctf 2022 DigitalCircuits DigitalCircuits wp
 
 ##[数电]
 程序为python打包的exe文件，用pyinstxtractor.py和uncompyle6处理后，可以得到python源代码，python版本为3.7

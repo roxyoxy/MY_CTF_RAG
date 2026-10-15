@@ -1,4 +1,4 @@
-# pearlctf-2025_pearlinthesky__solve
+# pearlctf 2025 pearlinthesky solve
 
 ## Writeup PearlCTF (2025): Pearl in the Sky
 

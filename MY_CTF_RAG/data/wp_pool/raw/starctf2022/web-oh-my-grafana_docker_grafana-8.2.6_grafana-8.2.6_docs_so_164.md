@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_enterprise_usage-insights_export-logs
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources enterprise usage insights export logs
 
 +++
 title = "Export logs of usage insights"

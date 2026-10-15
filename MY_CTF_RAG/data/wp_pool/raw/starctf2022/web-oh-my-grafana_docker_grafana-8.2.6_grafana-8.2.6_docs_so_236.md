@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_manage-users_org-admin_index
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources manage users org admin index
 
 +++
 title = "Org admin tasks"

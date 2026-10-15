@@ -1,4 +1,4 @@
-# sunshinectf-2024_drone-adventure__writeup
+# sunshinectf 2024 drone adventure writeup
 
 # Write-Up: Drone Adventure!
 

@@ -1,4 +1,4 @@
-# third_party_edk2_CryptoPkg_Library_OpensslLib_openssl_test_README.ssltest
+# third party edk2 CryptoPkg Library OpensslLib openssl test README.ssltest
 
 # SSL tests
 

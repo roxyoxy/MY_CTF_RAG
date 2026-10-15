@@ -1,4 +1,4 @@
-# susctf-2025_simple_message
+# susctf 2025 simple message
 
 
 # simple_message

@@ -1,4 +1,4 @@
-# beginner_blinky-bill_solve_WRITEUP
+# beginner blinky bill solve WRITEUP
 
 # Writeup
 We are provided with blinkybill.wav, an catchy tune that sounds like it has Morse Code overlaid on it

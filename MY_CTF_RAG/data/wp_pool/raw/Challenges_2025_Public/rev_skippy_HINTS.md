@@ -1,4 +1,4 @@
-# rev_skippy_HINTS
+# rev skippy HINTS
 
 1. Draw out a control flow diagram for the program. Which functions are called, and in what order? Are there functions which are simply there to encrypt and decrypt a payload?
 2. There are only 2 functions which affect the output of program. Try to identify which one is needed, and which one is mangling the output.

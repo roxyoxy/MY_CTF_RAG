@@ -1,4 +1,4 @@
-# third_party_PEGTL_doc_Grammar-Analysis
+# third party PEGTL doc Grammar Analysis
 
 # Grammar Analysis
 

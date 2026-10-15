@@ -1,4 +1,4 @@
-# suctf-2026_SU_Prng__writeup
+# suctf 2026 SU Prng writeup
 
 # CTF Writeup: Rotated XOR-Half 256-bit LCG (n=56, Interactive)
 

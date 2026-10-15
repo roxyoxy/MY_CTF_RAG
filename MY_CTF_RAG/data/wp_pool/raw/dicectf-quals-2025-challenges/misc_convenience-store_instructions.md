@@ -1,4 +1,4 @@
-# misc_convenience-store_instructions
+# misc convenience store instructions
 
 This is an Android challenge. You must develop and build a signed APK and upload it to the provided site.
 

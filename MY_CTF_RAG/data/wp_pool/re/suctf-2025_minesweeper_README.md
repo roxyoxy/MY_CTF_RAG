@@ -1,4 +1,4 @@
-# suctf-2025_minesweeper__README
+# suctf 2025 minesweeper README
 
 
 题目逻辑不多也不难，很容易逆向得到：

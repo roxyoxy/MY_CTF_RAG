@@ -1,4 +1,4 @@
-# forensics_The_File_Is_Lava_WRITEUP
+# forensics The File Is Lava WRITEUP
 
 # Challenge writeup
 

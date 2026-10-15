@@ -1,4 +1,4 @@
-# susctf-2025_android-native
+# susctf 2025 android native
 
 
 # android-native

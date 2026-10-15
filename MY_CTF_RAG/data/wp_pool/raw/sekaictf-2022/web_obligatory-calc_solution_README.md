@@ -1,4 +1,4 @@
-# web_obligatory-calc_solution_README
+# web obligatory calc solution README
 
 # Writeup
 

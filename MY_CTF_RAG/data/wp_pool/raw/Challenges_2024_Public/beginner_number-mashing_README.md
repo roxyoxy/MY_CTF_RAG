@@ -1,4 +1,4 @@
-# beginner_number-mashing_README
+# beginner number mashing README
 
 number mashing
 ======================

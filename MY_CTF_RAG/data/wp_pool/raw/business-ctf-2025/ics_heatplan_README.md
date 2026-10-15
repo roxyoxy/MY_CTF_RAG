@@ -1,4 +1,4 @@
-# ics_heatplan_README
+# ics heatplan README
 
 ![img](../../assets/banner.png)
 

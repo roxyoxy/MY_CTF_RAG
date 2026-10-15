@@ -1,4 +1,4 @@
-# web_gomail_solve_WRITEUP
+# web gomail solve WRITEUP
 
 gomail
 ============

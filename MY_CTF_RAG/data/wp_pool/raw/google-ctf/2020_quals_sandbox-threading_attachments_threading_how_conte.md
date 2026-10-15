@@ -1,4 +1,4 @@
-# 2020_quals_sandbox-threading_attachments_threading_how_context_switching_works
+# 2020 quals sandbox threading attachments threading how context switching works
 
 # How Context Switching Works
 

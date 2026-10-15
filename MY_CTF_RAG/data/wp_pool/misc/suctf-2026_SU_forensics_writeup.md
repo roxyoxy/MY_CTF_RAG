@@ -1,4 +1,4 @@
-# suctf-2026_SU_forensics__writeup
+# suctf 2026 SU forensics writeup
 
 ## SU_forensics-WP
 

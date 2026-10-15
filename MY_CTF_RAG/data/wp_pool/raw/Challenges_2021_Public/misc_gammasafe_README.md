@@ -1,4 +1,4 @@
-# misc_gammasafe_README
+# misc gammasafe README
 
 # GammaSafe
 

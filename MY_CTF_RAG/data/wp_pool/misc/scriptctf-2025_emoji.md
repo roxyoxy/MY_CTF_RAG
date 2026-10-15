@@ -1,4 +1,4 @@
-# scriptctf-2025_emoji
+# scriptctf 2025 emoji
 
 # Emoji | noob-abhinav
 

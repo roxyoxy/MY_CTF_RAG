@@ -1,4 +1,4 @@
-# Guess Number_wp
+# Guess Number wp
 
 # Guess Number_wp
 ---

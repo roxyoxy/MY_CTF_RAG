@@ -1,4 +1,4 @@
-# susctf-2024_cpptemplate
+# susctf 2024 cpptemplate
 
 # 面向 flag 编程
 

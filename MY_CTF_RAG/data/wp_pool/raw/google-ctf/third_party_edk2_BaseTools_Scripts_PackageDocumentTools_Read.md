@@ -1,4 +1,4 @@
-# third_party_edk2_BaseTools_Scripts_PackageDocumentTools_Readme
+# third party edk2 BaseTools Scripts PackageDocumentTools Readme
 
 Prerequisite Tools:
 1. Install Python 2.7.3 from https://www.python.org/download/releases/2.7.3/

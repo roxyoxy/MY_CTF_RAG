@@ -1,4 +1,4 @@
-# misc_SU_MirrorBus-9_env_pwn_deploy_deploy
+# misc SU MirrorBus 9 env pwn deploy deploy
 
 ﻿1.
 ```bash

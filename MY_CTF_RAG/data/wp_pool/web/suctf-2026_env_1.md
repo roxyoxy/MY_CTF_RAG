@@ -1,4 +1,4 @@
-# suctf-2026_env~1
+# suctf 2026 env~1
 
 # CloudHook Service (SU_uri)
 

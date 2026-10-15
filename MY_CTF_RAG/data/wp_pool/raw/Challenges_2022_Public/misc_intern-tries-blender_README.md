@@ -1,4 +1,4 @@
-# misc_intern-tries-blender_README
+# misc intern tries blender README
 
 Intern Tries Blender
 ============

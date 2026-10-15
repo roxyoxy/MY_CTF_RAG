@@ -1,4 +1,4 @@
-# third_party_hash-library_readme
+# third party hash library readme
 
 # Portable C++ Hashing Library
 

@@ -1,4 +1,4 @@
-# seccon-2021_qchecker
+# seccon 2021 qchecker
 
 # misc: qchecker
 ## Question

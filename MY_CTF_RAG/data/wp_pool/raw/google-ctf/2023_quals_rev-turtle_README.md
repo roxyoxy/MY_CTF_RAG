@@ -1,4 +1,4 @@
-# 2023_quals_rev-turtle_README
+# 2023 quals rev turtle README
 
 ## Turtle
 

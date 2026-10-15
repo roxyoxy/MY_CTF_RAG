@@ -1,4 +1,4 @@
-# htb-university-2025_SHL337
+# htb university 2025 SHL337
 
 ![](../../assets/banner.png)
 

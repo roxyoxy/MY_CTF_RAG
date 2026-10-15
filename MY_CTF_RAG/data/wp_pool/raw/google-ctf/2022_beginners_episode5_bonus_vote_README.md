@@ -1,4 +1,4 @@
-# 2022_beginners_episode5_bonus_vote_README
+# 2022 beginners episode5 bonus vote README
 
 Note that you need to provide OAUTH2 credentials to be used by the chat bot in
 the form of `client_secret.json` and `oauth_credentials.json` files.

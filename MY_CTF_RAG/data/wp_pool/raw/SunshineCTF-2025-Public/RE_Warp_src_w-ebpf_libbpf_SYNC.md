@@ -1,4 +1,4 @@
-# RE_Warp_src_w-ebpf_libbpf_SYNC
+# RE Warp src w ebpf libbpf SYNC
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/libbpf-logo-sideways-darkbg.png" width="40%">

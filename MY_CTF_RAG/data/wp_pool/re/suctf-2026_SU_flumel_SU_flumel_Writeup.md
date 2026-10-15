@@ -1,4 +1,4 @@
-# suctf-2026_SU_flumel__SU_flumel Writeup
+# suctf 2026 SU flumel SU flumel Writeup
 
 # SU_flumel Writeup
 

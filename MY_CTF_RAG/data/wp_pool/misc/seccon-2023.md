@@ -1,4 +1,4 @@
-# seccon-2023_
+# seccon 2023
 
 # Welcome
 ## Question

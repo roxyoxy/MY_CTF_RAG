@@ -1,4 +1,4 @@
-# rev_swiftpasswordmanager-crackme_solve_WRITEUP
+# rev swiftpasswordmanager crackme solve WRITEUP
 
 Looking for usages of `Binding.onChange(_:)` in the app leads to the follow
 function which is used to check the password/flag when the password field is

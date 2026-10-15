@@ -1,4 +1,4 @@
-# csctf-2024_quiz
+# csctf 2024 quiz
 
 # Quiz
 

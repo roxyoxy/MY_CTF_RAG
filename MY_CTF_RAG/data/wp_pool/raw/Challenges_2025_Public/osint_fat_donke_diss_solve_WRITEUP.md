@@ -1,4 +1,4 @@
-# osint_fat_donke_diss_solve_WRITEUP
+# osint fat donke diss solve WRITEUP
 
 fat donke diss
 ============

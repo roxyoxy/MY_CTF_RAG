@@ -1,4 +1,4 @@
-# tbtl-na_diamonds_and_rust__README
+# tbtl na diamonds and rust README
 
 # Diamonds and Rust &mdash; Solution
 

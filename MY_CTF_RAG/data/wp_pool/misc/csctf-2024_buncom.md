@@ -1,4 +1,4 @@
-# csctf-2024_buncom
+# csctf 2024 buncom
 
 # buncom
 

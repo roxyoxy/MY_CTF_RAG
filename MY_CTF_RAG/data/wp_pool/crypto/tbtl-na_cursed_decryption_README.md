@@ -1,4 +1,4 @@
-# tbtl-na_cursed_decryption__README
+# tbtl na cursed decryption README
 
 # Cursed Decryption &mdash; Solution
 

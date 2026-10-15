@@ -1,4 +1,4 @@
-# starctf-2022_bargauge
+# starctf 2022 bargauge
 
 # Bar gauge
 

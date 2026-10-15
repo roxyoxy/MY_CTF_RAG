@@ -1,4 +1,4 @@
-# osint_offtheramp_solve_WRITEUP
+# osint offtheramp solve WRITEUP
 
 offtheramp
 ============

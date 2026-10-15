@@ -1,4 +1,4 @@
-# forensics_macromagic_solve_WRITEUP
+# forensics macromagic solve WRITEUP
 
 Macro Magic
 ============

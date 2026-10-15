@@ -1,4 +1,4 @@
-# scriptctf-2025_Plastic Shield 2
+# scriptctf 2025 Plastic Shield 2
 
 
 # Plastic Shield 2 | Ashray Shah

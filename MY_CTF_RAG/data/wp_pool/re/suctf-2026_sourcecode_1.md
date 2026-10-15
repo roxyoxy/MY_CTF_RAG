@@ -1,4 +1,4 @@
-# suctf-2026_sourcecode~1
+# suctf 2026 sourcecode~1
 
 # 源码说明
 

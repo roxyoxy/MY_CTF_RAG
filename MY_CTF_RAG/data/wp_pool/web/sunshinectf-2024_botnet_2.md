@@ -1,4 +1,4 @@
-# sunshinectf-2024_botnet_2
+# sunshinectf 2024 botnet 2
 
 # \[Web] BotNet
 

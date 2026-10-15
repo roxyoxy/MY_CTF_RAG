@@ -1,4 +1,4 @@
-# seccon-2023_SimpleCalc__solves
+# seccon 2023 SimpleCalc solves
 
 # SimpleCalc - Solves
 | Solved Rank | Team name |

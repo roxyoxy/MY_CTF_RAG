@@ -1,4 +1,4 @@
-# misc_smart-calculator_solve_WRITEUP
+# misc smart calculator solve WRITEUP
 
 Smart Calculator
 ============

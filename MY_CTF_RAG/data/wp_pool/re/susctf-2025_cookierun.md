@@ -1,4 +1,4 @@
-# susctf-2025_cookierun
+# susctf 2025 cookierun
 
 
 # 一个饼干人

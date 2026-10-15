@@ -1,4 +1,4 @@
-# starctf-2022_mssql
+# starctf 2022 mssql
 
 # Grafana Microsoft SQL Server Data Source -  Native Plugin
 

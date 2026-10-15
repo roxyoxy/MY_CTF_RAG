@@ -1,4 +1,4 @@
-# justctf-2023_go-sqlite3
+# justctf 2023 go sqlite3
 
 go-sqlite3
 ==========

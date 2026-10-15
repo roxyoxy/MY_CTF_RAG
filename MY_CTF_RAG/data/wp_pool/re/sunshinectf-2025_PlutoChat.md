@@ -1,4 +1,4 @@
-# sunshinectf-2025_PlutoChat
+# sunshinectf 2025 PlutoChat
 
 # PlutoChat Build/Maintaining Instructions
 

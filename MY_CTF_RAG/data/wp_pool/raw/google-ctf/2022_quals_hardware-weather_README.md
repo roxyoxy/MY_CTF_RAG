@@ -1,4 +1,4 @@
-# 2022_quals_hardware-weather_README
+# 2022 quals hardware weather README
 
 # Weather (Hardware)
 Blame: gynvael@

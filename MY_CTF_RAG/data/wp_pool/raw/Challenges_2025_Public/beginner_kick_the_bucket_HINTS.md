@@ -1,4 +1,4 @@
-# beginner_kick_the_bucket_HINTS
+# beginner kick the bucket HINTS
 
 ### Hint 1:
 Look closely at the access policy of the bucket, which is what is preventing you from accessing the flag file when you browse to the URL provided. What condition must be met for successful access?

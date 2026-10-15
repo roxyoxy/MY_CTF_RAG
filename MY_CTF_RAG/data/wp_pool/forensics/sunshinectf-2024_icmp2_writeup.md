@@ -1,4 +1,4 @@
-# sunshinectf-2024_icmp2__writeup
+# sunshinectf 2024 icmp2 writeup
 
 ## Writeup
 

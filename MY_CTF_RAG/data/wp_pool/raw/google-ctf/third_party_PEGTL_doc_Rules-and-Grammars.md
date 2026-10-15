@@ -1,4 +1,4 @@
-# third_party_PEGTL_doc_Rules-and-Grammars
+# third party PEGTL doc Rules and Grammars
 
 # Rules and Grammars
 

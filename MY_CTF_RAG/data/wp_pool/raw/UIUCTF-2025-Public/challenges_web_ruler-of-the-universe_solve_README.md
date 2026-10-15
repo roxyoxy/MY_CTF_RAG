@@ -1,4 +1,4 @@
-# challenges_web_ruler-of-the-universe_solve_README
+# challenges web ruler of the universe solve README
 
 # Spoilers...
 

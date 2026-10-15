@@ -1,4 +1,4 @@
-# scriptctf-2025_Auction
+# scriptctf 2025 Auction
 
 # Auction | NoobMaster
 

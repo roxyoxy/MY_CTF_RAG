@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_public_app_plugins_datasource_influxdb_query_help
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 public app plugins datasource influxdb query help
 
 #### Alias patterns
 - replaced with measurement name

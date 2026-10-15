@@ -1,4 +1,4 @@
-# 2022_quals_pwn-madcore_README
+# 2022 quals pwn madcore README
 
 # Coredump handler challenge (madcore)
 This was intended to be a privesc challenge, but due to time constraints, is a

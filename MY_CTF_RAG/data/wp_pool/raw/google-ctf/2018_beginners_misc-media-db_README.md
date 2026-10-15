@@ -1,4 +1,4 @@
-# 2018_beginners_misc-media-db_README
+# 2018 beginners misc media db README
 
 # name:media-db
 description: The gatekeeper software gave you access to a custom database to organize a music playlist. It looks like it might also be connected to the smart fridge to play custom door alarms. Maybe we can grab an oauth token that gets us closer to cake.

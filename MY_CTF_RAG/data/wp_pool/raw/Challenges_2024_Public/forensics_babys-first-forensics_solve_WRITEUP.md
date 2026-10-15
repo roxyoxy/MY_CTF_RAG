@@ -1,4 +1,4 @@
-# forensics_babys-first-forensics_solve_WRITEUP
+# forensics babys first forensics solve WRITEUP
 
 Pix's Writeup
 ============

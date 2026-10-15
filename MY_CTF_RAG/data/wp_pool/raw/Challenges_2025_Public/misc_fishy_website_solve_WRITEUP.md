@@ -1,4 +1,4 @@
-# misc_fishy_website_solve_WRITEUP
+# misc fishy website solve WRITEUP
 
 Fishy Website
 ============

@@ -1,4 +1,4 @@
-# susctf-2024_fibonacci
+# susctf 2024 fibonacci
 
 # fibonacci
 

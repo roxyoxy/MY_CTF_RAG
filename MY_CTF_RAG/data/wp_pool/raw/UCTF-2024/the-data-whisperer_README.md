@@ -1,4 +1,4 @@
-# the-data-whisperer_README
+# the data whisperer README
 
 # The Data Whisperer
 

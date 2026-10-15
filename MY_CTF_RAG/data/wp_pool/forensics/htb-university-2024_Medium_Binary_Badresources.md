@@ -1,4 +1,4 @@
-# htb-university-2024_[Medium] Binary Badresources
+# htb university 2024 [Medium] Binary Badresources
 
 ![](../../assets/banner.png)
 

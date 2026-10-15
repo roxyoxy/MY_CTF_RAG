@@ -1,4 +1,4 @@
-# pearlctf-2024_scrutiny
+# pearlctf 2024 scrutiny
 
 # Scrutiny #
 Upon accessing the provided YouTube video link, it's apparent that the video details a server hacking incident. Upon visiting the channel, the thumbnail depicts a man with text that reads "Me waiting for flag here." Additionally, a comment provides a hint regarding the thumbnail.

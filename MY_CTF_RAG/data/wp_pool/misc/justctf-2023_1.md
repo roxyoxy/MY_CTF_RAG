@@ -1,4 +1,4 @@
-# justctf-2023_~1
+# justctf 2023 ~1
 
 ### ECC not only for Dummies
 This to you will need to use all logic that you have

@@ -1,4 +1,4 @@
-# starctf-2022_collectd
+# starctf 2022 collectd
 
 collectd-write-graphite
 =======================

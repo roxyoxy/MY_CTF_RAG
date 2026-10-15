@@ -1,4 +1,4 @@
-# seccon-na_dual_summon__solves
+# seccon na dual summon solves
 
 # dual_summon - Solves
 | Solved Rank | Team name |

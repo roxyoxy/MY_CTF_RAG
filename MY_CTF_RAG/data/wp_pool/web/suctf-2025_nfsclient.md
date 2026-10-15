@@ -1,4 +1,4 @@
-# suctf-2025_nfsclient
+# suctf 2025 nfsclient
 
 # nfsclient
 

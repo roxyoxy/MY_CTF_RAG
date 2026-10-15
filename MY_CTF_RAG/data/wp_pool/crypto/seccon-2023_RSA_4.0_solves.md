@@ -1,4 +1,4 @@
-# seccon-2023_RSA 4.0__solves
+# seccon 2023 RSA 4.0 solves
 
 # RSA 4.0 - Solves
 | Solved Rank | Team name |

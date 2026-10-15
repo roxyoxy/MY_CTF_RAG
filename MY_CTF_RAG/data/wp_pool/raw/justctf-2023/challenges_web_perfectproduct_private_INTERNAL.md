@@ -1,4 +1,4 @@
-# challenges_web_perfectproduct_private_INTERNAL
+# challenges web perfectproduct private INTERNAL
 
 ## Perfect Product
 

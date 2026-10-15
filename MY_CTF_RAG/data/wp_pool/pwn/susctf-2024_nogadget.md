@@ -1,4 +1,4 @@
-# susctf-2024_nogadget
+# susctf 2024 nogadget
 
 # no gadget
 

@@ -1,4 +1,4 @@
-# sunshinectf-2024_tests
+# sunshinectf 2024 tests
 
 # Running Application Tests
 

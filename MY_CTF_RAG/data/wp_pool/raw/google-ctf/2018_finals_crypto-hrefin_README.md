@@ -1,4 +1,4 @@
-# 2018_finals_crypto-hrefin_README
+# 2018 finals crypto hrefin README
 
 # name: HREFIN
 description: I'd Like To Add You To My Professional Network -- http://hrefin.ctfcompetition.com:8080

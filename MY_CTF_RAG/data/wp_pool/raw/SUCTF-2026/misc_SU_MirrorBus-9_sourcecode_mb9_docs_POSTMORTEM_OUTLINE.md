@@ -1,4 +1,4 @@
-# misc_SU_MirrorBus-9_sourcecode_mb9_docs_POSTMORTEM_OUTLINE
+# misc SU MirrorBus 9 sourcecode mb9 docs POSTMORTEM OUTLINE
 
 # MirrorBus-9 Postmortem Outline
 

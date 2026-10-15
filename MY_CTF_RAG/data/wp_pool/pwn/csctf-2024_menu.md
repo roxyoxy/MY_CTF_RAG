@@ -1,4 +1,4 @@
-# csctf-2024_menu
+# csctf 2024 menu
 
 # Menu
 

@@ -1,4 +1,4 @@
-# susctf-2025_
+# susctf 2025
 
 
 # jail

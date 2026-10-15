@@ -1,4 +1,4 @@
-# sunshinectf-2024_Puzzling__writeup
+# sunshinectf 2024 Puzzling writeup
 
 # Puzzling
 

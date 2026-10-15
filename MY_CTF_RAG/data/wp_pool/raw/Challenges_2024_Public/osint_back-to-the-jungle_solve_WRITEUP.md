@@ -1,4 +1,4 @@
-# osint_back-to-the-jungle_solve_WRITEUP
+# osint back to the jungle solve WRITEUP
 
 back to the jungle write up
 ============

@@ -1,4 +1,4 @@
-# suctf-2026_SU_revird__writeup
+# suctf 2026 SU revird writeup
 
 # SU_Revird
 

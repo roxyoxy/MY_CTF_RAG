@@ -1,4 +1,4 @@
-# suctf-2025_SU_PAS_sport__README
+# suctf 2025 SU PAS sport README
 
 # PAS_sport writeup
 

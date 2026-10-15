@@ -1,4 +1,4 @@
-# dfir_doxme_solve_solve
+# dfir doxme solve solve
 
 ## Solution
 1. File the doxme file and notice that it is Microsoft OOXML which is a word docx.

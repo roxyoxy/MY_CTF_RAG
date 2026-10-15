@@ -1,4 +1,4 @@
-# uctf-2022_a_horse_with_no_names
+# uctf 2022 a horse with no names
 
 # Quickstart guide to writing a challenge
 

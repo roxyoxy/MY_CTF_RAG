@@ -1,4 +1,4 @@
-# sunshinectf-2025_PlutoChat__writeup
+# sunshinectf 2025 PlutoChat writeup
 
 # SunshineCTF 2025 - PlutoChat Official Writeup
 

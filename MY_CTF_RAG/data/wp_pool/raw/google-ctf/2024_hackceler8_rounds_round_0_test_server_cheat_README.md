@@ -1,4 +1,4 @@
-# 2024_hackceler8_rounds_round_0_test_server_cheat_README
+# 2024 hackceler8 rounds round 0 test server cheat README
 
 # Modified client for easier playtesting
 

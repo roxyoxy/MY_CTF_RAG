@@ -1,4 +1,4 @@
-# csctf-2024_byte-modification-service
+# csctf 2024 byte modification service
 
 # Byte Modification Service
 

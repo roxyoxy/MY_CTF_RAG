@@ -1,4 +1,4 @@
-# ics_floody_README
+# ics floody README
 
 ![img](../../assets/banner.png)
 

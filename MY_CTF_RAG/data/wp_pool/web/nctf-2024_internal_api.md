@@ -1,4 +1,4 @@
-# nctf-2024_internal_api
+# nctf 2024 internal api
 
 # internal_api
 

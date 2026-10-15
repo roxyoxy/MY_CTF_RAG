@@ -1,4 +1,4 @@
-# seccon-2023_optinimize
+# seccon 2023 optinimize
 
 # optinimize
 ## Question

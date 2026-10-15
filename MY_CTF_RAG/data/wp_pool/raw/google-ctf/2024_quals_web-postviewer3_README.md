@@ -1,4 +1,4 @@
-# 2024_quals_web-postviewer3_README
+# 2024 quals web postviewer3 README
 
 # Postviewer v3 writeup by [@terjanq](https://twitter.com/terjanq)
 

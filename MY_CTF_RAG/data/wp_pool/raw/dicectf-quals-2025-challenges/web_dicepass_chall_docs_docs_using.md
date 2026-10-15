@@ -1,4 +1,4 @@
-# web_dicepass_chall_docs_docs_using
+# web dicepass chall docs docs using
 
 ---
 sidebar_position: 3

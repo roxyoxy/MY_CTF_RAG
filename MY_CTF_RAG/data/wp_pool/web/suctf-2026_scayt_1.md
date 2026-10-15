@@ -1,4 +1,4 @@
-# suctf-2026_scayt~1
+# suctf 2026 scayt~1
 
 CKEditor SCAYT Plugin
 =====================

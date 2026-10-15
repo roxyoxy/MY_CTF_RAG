@@ -1,4 +1,4 @@
-# beginner_xxd-server_HINTS
+# beginner xxd server HINTS
 
 If they have no idea what to do:
 

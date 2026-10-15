@@ -1,4 +1,4 @@
-# 2024_quals_web-game-arcade_solution_README
+# 2024 quals web game arcade solution README
 
 # Game Arcade
 

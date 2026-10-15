@@ -1,4 +1,4 @@
-# 2025_quals_rev-cgb_README
+# 2025 quals rev cgb README
 
 # Color Game Boy challenge
 

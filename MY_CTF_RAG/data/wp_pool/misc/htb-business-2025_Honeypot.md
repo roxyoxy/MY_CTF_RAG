@@ -1,4 +1,4 @@
-# htb-business-2025_Honeypot
+# htb business 2025 Honeypot
 
 ![](../../assets/banner.png)
 

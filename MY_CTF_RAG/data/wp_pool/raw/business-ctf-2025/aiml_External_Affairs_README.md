@@ -1,4 +1,4 @@
-# aiml_External_Affairs_README
+# aiml External Affairs README
 
 ![img](../../assets/banner.png)
 

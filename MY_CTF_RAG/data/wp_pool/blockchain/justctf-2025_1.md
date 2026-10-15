@@ -1,4 +1,4 @@
-# justctf-2025_~1
+# justctf 2025 ~1
 
 ### Otternaut Exodus
 With the guard corrupted and the vault exposed, the Otternaut finally secures the Forbidden Fuel Cell — the last piece needed to escape Cryon-7.

@@ -1,4 +1,4 @@
-# reverse_secure-computing_dist_README
+# reverse secure computing dist README
 
 # Secure Computing Distributable
 

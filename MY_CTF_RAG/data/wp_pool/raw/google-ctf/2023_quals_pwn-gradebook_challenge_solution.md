@@ -1,4 +1,4 @@
-# 2023_quals_pwn-gradebook_challenge_solution
+# 2023 quals pwn gradebook challenge solution
 
 # Solution
 

@@ -1,4 +1,4 @@
-# 2019_quals_pwn-secureboot_README
+# 2019 quals pwn secureboot README
 
 # name: "Secure Boot"
 

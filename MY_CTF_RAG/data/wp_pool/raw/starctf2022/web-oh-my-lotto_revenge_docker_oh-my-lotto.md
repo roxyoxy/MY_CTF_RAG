@@ -1,4 +1,4 @@
-# web-oh-my-lotto_revenge_docker_oh-my-lotto_
+# web oh my lotto revenge docker oh my lotto
 
 # 部署说明
 

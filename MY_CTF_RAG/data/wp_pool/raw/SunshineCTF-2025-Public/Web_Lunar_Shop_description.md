@@ -1,4 +1,4 @@
-# Web_Lunar_Shop_description
+# Web Lunar Shop description
 
 - We have amazing new products for our gaming service! Unfortunately we don't sell our unreleased `flag` product yet !
 

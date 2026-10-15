@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_manage-users_user-admin_switch-org
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources manage users user admin switch org
 
 +++
 title = "Switch organization"

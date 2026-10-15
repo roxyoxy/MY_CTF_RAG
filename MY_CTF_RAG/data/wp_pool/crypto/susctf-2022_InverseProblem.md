@@ -1,4 +1,4 @@
-# susctf-2022_InverseProblem
+# susctf 2022 InverseProblem
 
 # InverseProblem
 

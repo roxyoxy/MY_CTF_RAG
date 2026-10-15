@@ -1,4 +1,4 @@
-# misc_scrapbooking_HINTS
+# misc scrapbooking HINTS
 
 # Hint 1
 

@@ -1,4 +1,4 @@
-# forensics_emuc2_src_README
+# forensics emuc2 src README
 
 ## How to build this challenge:
 

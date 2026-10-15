@@ -1,4 +1,4 @@
-# challenges_crypto_without-a-trace_solve
+# challenges crypto without a trace solve
 
 Solution code can be found in `sol.py`.
 

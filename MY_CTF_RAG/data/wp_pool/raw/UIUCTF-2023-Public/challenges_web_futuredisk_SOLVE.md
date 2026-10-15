@@ -1,4 +1,4 @@
-# challenges_web_futuredisk_SOLVE
+# challenges web futuredisk SOLVE
 
 # futuredisk writeup
 

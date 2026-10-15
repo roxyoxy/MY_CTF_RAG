@@ -1,4 +1,4 @@
-# susctf-2022_InverseProblem__WriteUp
+# susctf 2022 InverseProblem WriteUp
 
 # 题目解析(wp)
 进行简单的测试可以发现，本题的系数矩阵条件数过大，难以直接通过矩阵求逆或高斯消去法等求解方程。考虑进行数值分析，由于模型误差不影响结果，这里只考虑舍入误差。对于IEEE双浮点计算系统，有误差估计$|e| = |\mathrm{fl}(A*x)-(A*x)| \leq n \varepsilon |A*x|$，这里$n = 85 \approx 10^{2}, \varepsilon=2^{-52} \approx 10^{-16}, |A*x|_i \approx 10^{5}$，故$e_i \leq 10^{-9}$，是一个小量。考虑到将方程视为有理数域上的运算，则有$b=A*x+e$，其中$A,b$均为精确值，$x$为未知整系数，则这是一个有理数域上的LWE搜索问题，直接LLL一下就能求解得到$e$。具体脚本参见`solution.sage`。

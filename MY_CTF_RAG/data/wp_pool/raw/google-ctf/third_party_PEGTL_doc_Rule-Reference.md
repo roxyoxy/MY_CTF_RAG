@@ -1,4 +1,4 @@
-# third_party_PEGTL_doc_Rule-Reference
+# third party PEGTL doc Rule Reference
 
 # Rule Reference
 

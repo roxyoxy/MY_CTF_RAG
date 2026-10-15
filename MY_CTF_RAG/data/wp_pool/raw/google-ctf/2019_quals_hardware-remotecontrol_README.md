@@ -1,4 +1,4 @@
-# 2019_quals_hardware-remotecontrol_README
+# 2019 quals hardware remotecontrol README
 
 # name: "Remote Control"
 

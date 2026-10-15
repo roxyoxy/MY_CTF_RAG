@@ -1,4 +1,4 @@
-# suctf-2025_SU_JIT16__README
+# suctf 2025 SU JIT16 README
 
 # JIT16 writeup
 

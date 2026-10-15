@@ -1,4 +1,4 @@
-# web_README
+# web README
 
 <img src="https://files.catbox.moe/j0zw08.svg" align="right" width=300>
 

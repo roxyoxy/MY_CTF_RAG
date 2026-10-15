@@ -1,4 +1,4 @@
-# i95_i95-jacksonville_description
+# i95 i95 jacksonville description
 
 Gotta solve this one in time for the Patriots @ Jaguars game!
 

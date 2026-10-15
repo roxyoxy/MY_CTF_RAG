@@ -1,4 +1,4 @@
-# suctf-2026_SU_minivfs
+# suctf 2026 SU minivfs
 
 ## 标题
 SU_minivfs

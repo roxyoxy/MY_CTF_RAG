@@ -1,4 +1,4 @@
-# 2023_quals_rev-jxl_attachments_README
+# 2023 quals rev jxl attachments README
 
 Try:
 

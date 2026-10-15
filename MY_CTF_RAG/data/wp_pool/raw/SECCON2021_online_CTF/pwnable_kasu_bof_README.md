@@ -1,4 +1,4 @@
-# pwnable_kasu_bof_README
+# pwnable kasu bof README
 
 # pwnable: kasu bof
 ## Question

@@ -1,4 +1,4 @@
-# htb-university-2024_htb
+# htb university 2024 htb
 
 # Solving
 

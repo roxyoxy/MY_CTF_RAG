@@ -1,4 +1,4 @@
-# 2021_quals_pwn-memsafety_README
+# 2021 quals pwn memsafety README
 
 # Memsafety
 

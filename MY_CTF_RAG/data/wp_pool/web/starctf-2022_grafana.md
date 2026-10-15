@@ -1,4 +1,4 @@
-# starctf-2022_grafana
+# starctf 2022 grafana
 
 # Grafana Fake Data Datasource -  Native Plugin
 

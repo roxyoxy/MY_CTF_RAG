@@ -1,4 +1,4 @@
-# Scripting_HailMary_README
+# Scripting HailMary README
 
 # Hail Mary
 

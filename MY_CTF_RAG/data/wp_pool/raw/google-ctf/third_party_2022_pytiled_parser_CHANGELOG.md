@@ -1,4 +1,4 @@
-# third_party_2022_pytiled_parser_CHANGELOG
+# third party 2022 pytiled parser CHANGELOG
 
 # Changelog
 

@@ -1,4 +1,4 @@
-# challenges_pwn_pwnymalloc_SOLVE
+# challenges pwn pwnymalloc SOLVE
 
 ## Challenge Overview
 

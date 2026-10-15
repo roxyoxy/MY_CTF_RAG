@@ -1,4 +1,4 @@
-# susctf-2024_table
+# susctf 2024 table
 
 # very-safe table
 

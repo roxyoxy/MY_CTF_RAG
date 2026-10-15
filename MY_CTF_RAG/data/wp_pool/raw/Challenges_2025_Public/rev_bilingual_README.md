@@ -1,4 +1,4 @@
-# rev_bilingual_README
+# rev bilingual README
 
 bilingual
 ======================

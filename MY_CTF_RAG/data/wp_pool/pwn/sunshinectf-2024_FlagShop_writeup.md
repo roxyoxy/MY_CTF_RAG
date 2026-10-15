@@ -1,4 +1,4 @@
-# sunshinectf-2024_FlagShop__writeup
+# sunshinectf 2024 FlagShop writeup
 
 SOLUTION: `AABBBBBBBB%9$sCCCCCCCCCCCCCC1`
   - (`AA`) -> overflows the option character variable

@@ -1,4 +1,4 @@
-# osint_shipwrecked_solve_WRITEUP
+# osint shipwrecked solve WRITEUP
 
 Shipwrecked
 ============

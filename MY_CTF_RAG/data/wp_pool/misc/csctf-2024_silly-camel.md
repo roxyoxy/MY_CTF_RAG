@@ -1,4 +1,4 @@
-# csctf-2024_silly-camel
+# csctf 2024 silly camel
 
 # silly-camel
 

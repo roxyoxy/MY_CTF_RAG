@@ -1,4 +1,4 @@
-# seccon-na_OSAKA
+# seccon na OSAKA
 
 # OSAKA
 ## Question

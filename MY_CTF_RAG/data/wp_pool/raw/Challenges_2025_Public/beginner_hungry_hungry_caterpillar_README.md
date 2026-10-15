@@ -1,4 +1,4 @@
-# beginner_hungry_hungry_caterpillar_README
+# beginner hungry hungry caterpillar README
 
 hungry-hungry-caterpillar
 ======================

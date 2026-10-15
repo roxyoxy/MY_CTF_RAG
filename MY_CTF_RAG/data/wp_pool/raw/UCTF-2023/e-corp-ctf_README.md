@@ -1,4 +1,4 @@
-# e-corp-ctf_README
+# e corp ctf README
 
 # E Corp.
 Your task is to access the admin panel of E Corp. servers. The admin panel is located at `http://admin-panel.local` but it's not accessible from the outside.

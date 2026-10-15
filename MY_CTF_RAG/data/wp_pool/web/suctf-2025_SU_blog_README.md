@@ -1,4 +1,4 @@
-# suctf-2025_SU_blog__README
+# suctf 2025 SU blog README
 
 # 预期
 

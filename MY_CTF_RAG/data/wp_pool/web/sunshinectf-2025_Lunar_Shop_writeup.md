@@ -1,4 +1,4 @@
-# sunshinectf-2025_Lunar_Shop__writeup
+# sunshinectf 2025 Lunar Shop writeup
 
 - > NOTE: because of WSGI2ASGI + HYPERCORN we will not see the WSGI debug errors, so to compensate and keep the challenge easier when the query errors out I simply just return the query so they don't get the trying the classic `' OR '1'='1` and realize the query is for an integer and thus they don't even need to break out of query to keep the challenge easier for the beginners.
 

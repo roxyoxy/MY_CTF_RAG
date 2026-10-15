@@ -1,4 +1,4 @@
-# uctf-2022_modernism__README
+# uctf 2022 modernism README
 
 # Solution - modernism
 

@@ -1,4 +1,4 @@
-# flag-reveal_solution_solution
+# flag reveal solution solution
 
 ## solution 1: directly get flag from contract storage:
 flag is at slot 0:

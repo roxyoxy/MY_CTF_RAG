@@ -1,4 +1,4 @@
-# crypto_secuchat_README
+# crypto secuchat README
 
 # Secuchat
 

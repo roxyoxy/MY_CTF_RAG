@@ -1,4 +1,4 @@
-# Programming_MoreDivisors_README
+# Programming MoreDivisors README
 
 # More Divisors | Connor Chang
 

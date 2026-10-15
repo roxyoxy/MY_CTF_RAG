@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_variables_variable-types_add-custom-variable
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources variables variable types add custom variable
 
 +++
 title = "Add a custom variable"

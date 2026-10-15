@@ -1,4 +1,4 @@
-# uctf-2021_wasmbaby
+# uctf 2021 wasmbaby
 
 * TO TEST JUST THIS ONE CHALLENGE:
   * sudo docker-compose up --build

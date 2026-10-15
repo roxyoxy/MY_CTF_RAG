@@ -1,4 +1,4 @@
-# starctf-2023___WriteUp
+# starctf 2023 WriteUp
 
 # 题目解析
 > As you can see，本题是整活题。

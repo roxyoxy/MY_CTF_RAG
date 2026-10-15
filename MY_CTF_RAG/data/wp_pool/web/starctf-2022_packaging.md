@@ -1,4 +1,4 @@
-# starctf-2022_packaging
+# starctf 2022 packaging
 
 # Grafana Docker image
 

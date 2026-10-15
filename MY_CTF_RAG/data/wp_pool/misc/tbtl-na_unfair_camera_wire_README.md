@@ -1,4 +1,4 @@
-# tbtl-na_unfair_camera_wire__README
+# tbtl na unfair camera wire README
 
 # Unfair Camera Wire &mdash; Solution
 

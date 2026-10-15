@@ -1,4 +1,4 @@
-# suctf-2026_SU_Thief__writeup
+# suctf 2026 SU Thief writeup
 
 # Thief-Writeup
 

@@ -1,4 +1,4 @@
-# web_beginners_capsule_README
+# web beginners capsule README
 
 # Beginner's Capsule
 

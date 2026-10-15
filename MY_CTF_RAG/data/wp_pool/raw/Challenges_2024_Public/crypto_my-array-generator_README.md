@@ -1,4 +1,4 @@
-# crypto_my-array-generator_README
+# crypto my array generator README
 
 my array generator
 ======================

@@ -1,4 +1,4 @@
-# 2019_beginners_crypto-caulingo_hint
+# 2019 beginners crypto caulingo hint
 
 # Hints
 

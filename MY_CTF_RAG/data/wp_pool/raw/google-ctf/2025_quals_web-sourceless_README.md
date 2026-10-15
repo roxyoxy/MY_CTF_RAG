@@ -1,4 +1,4 @@
-# 2025_quals_web-sourceless_README
+# 2025 quals web sourceless README
 
 # Sourceless writeup by [@terjanq](https://twitter.com/terjanq)
 Google CTF 2025

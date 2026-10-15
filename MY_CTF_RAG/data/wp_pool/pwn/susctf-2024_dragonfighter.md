@@ -1,4 +1,4 @@
-# susctf-2024_dragonfighter
+# susctf 2024 dragonfighter
 
 # 多拉贡斐塔
 

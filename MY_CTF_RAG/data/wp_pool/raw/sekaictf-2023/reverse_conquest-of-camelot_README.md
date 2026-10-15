@@ -1,4 +1,4 @@
-# reverse_conquest-of-camelot_README
+# reverse conquest of camelot README
 
 ## Conquest of Camelot
 

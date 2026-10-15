@@ -1,4 +1,4 @@
-# csctf-2024_Trendzzzz
+# csctf 2024 Trendzzzz
 
 ## Trendzzzz (Part 4)
 

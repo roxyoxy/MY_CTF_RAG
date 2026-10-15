@@ -1,4 +1,4 @@
-# competition_rules
+# competition rules
 
 # SECCON CTF 2021 Online Competition.
 SECCON CTF is a capture the flag competition hosted by SECCON.

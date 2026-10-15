@@ -1,4 +1,4 @@
-# 2018_finals_web-quinify_README
+# 2018 finals web quinify README
 
 # name: Quinify
 description: You are in a maze of twisty little nested variable contexts, all alike. Might you inject some sanity and in so doing, learn the flag.txt? -- http://quinify.ctfcompetition.com:1337/

@@ -1,4 +1,4 @@
-# rev_nimrod_src_admin_docs_git-branch-commit
+# rev nimrod src admin docs git branch commit
 
 # Git Branch and Commit conventions
 

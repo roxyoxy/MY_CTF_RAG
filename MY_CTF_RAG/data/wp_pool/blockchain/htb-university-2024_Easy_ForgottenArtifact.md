@@ -1,4 +1,4 @@
-# htb-university-2024_[Easy] ForgottenArtifact
+# htb university 2024 [Easy] ForgottenArtifact
 
 # ForgottenArtifact
 

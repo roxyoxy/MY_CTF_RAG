@@ -1,4 +1,4 @@
-# htb-university-2025_Starshard Reassembly
+# htb university 2025 Starshard Reassembly
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

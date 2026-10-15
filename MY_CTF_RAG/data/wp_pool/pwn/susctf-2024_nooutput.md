@@ -1,4 +1,4 @@
-# susctf-2024_nooutput
+# susctf 2024 nooutput
 
 # nooutput
 

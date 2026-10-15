@@ -1,4 +1,4 @@
-# misc_play-for-free_README
+# misc play for free README
 
 ## [Blockchain] Play for Free
 

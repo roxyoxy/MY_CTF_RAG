@@ -1,4 +1,4 @@
-# suctf-2025_Onchain_Magician__README
+# suctf 2025 Onchain Magician README
 
 # Onchain Magician
 

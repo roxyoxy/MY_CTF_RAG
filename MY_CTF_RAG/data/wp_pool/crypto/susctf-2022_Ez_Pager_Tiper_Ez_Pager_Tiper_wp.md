@@ -1,4 +1,4 @@
-# susctf-2022_Ez_Pager_Tiper__Ez_Pager_Tiper wp
+# susctf 2022 Ez Pager Tiper Ez Pager Tiper wp
 
 # Ez_Pager_Tiper
 

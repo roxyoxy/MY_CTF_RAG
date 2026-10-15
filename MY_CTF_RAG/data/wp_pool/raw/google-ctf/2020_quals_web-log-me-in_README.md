@@ -1,4 +1,4 @@
-# 2020_quals_web-log-me-in_README
+# 2020 quals web log me in README
 
 # Log-Me-In
 the log-me-in challenge

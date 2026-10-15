@@ -1,4 +1,4 @@
-# beginner_intercepted-transmissions_solve_WRITEUP
+# beginner intercepted transmissions solve WRITEUP
 
 Pix's Writeup
 ============

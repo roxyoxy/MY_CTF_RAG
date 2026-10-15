@@ -1,4 +1,4 @@
-# crypto_O_1__Punch_Log_O_1__Punch_Log
+# crypto O 1 Punch Log O 1 Punch Log
 
 # O(1) Punch Log
 

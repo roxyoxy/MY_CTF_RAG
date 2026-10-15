@@ -1,4 +1,4 @@
-# suctf-2026_moono
+# suctf 2026 moono
 
 "Moono" Skin
 ====================

@@ -1,4 +1,4 @@
-# ppc_miku-vs-machine_README
+# ppc miku vs machine README
 
 ## Miku vs. Machine
 

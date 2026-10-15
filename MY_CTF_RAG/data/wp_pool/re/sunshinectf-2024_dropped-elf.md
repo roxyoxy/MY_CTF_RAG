@@ -1,4 +1,4 @@
-# sunshinectf-2024_dropped-elf
+# sunshinectf 2024 dropped elf
 
 # Dropped ELF
 

@@ -1,4 +1,4 @@
-# misc_glail_challenge_gleam_README
+# misc glail challenge gleam README
 
 # Compiler WASM
 

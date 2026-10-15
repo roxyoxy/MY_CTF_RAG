@@ -1,4 +1,4 @@
-# challenges_web_aquatic_delights_private_private_manager_vendor_github.com_umahmood_hashcash_LICENSE
+# challenges web aquatic delights private private manager vendor github.com umahmood hashcash LICENSE
 
 The MIT License (MIT)
 

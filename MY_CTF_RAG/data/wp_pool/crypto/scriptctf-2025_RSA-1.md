@@ -1,4 +1,4 @@
-# scriptctf-2025_RSA-1
+# scriptctf 2025 RSA 1
 
 # RSA-1 | noob-abhinav
 

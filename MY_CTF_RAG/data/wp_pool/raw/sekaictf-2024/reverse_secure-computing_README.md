@@ -1,4 +1,4 @@
-# reverse_secure-computing_README
+# reverse secure computing README
 
 ## Secure Computing
 

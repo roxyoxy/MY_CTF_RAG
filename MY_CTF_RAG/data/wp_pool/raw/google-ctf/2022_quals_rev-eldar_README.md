@@ -1,4 +1,4 @@
-# 2022_quals_rev-eldar_README
+# 2022 quals rev eldar README
 
 # Eldar
 

@@ -1,4 +1,4 @@
-# osint_sharing_is_caring_README
+# osint sharing is caring README
 
 # Sharing is Caring
 

@@ -1,4 +1,4 @@
-# seccon-2023_eeeeejs__solves
+# seccon 2023 eeeeejs solves
 
 # eeeeejs - Solves
 | Solved Rank | Team name |

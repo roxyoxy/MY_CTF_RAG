@@ -1,4 +1,4 @@
-# uctf-2022_library_of_babel
+# uctf 2022 library of babel
 
 # Library of Babel
 

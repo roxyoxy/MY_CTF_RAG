@@ -1,4 +1,4 @@
-# seccon-2022_insufficient
+# seccon 2022 insufficient
 
 # crypto: insufficient
 ## Question

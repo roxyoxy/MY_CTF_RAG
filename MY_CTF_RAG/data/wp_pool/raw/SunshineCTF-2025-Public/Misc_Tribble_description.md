@@ -1,4 +1,4 @@
-# Misc_Tribble_description
+# Misc Tribble description
 
 My Minecraft account got hacked and now my skin seems to be a little off... 
 

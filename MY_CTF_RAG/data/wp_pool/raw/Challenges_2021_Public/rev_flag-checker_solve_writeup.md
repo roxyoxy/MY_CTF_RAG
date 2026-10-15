@@ -1,4 +1,4 @@
-# rev_flag-checker_solve_writeup
+# rev flag checker solve writeup
 
 # Challenge Overview
 

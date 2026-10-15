@@ -1,4 +1,4 @@
-# crypto_super-party-computation_README
+# crypto super party computation README
 
 super party computation
 ======================

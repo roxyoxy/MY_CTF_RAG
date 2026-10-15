@@ -1,4 +1,4 @@
-# container_AGENTS
+# container AGENTS
 
 # 环境介绍
 * 当前环境是用于做 CTF 竞赛的 Kali 容器，各种命令行工具齐全

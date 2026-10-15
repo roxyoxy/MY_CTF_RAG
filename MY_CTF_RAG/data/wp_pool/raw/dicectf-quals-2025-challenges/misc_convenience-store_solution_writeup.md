@@ -1,4 +1,4 @@
-# misc_convenience-store_solution_writeup
+# misc convenience store solution writeup
 
 # convenience store (dicectf2025)
 

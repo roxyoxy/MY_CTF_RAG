@@ -1,4 +1,4 @@
-# 2023_quals_sandbox-v8box_solution_README
+# 2023 quals sandbox v8box solution README
 
 # Writeup for v8box
 

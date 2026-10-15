@@ -1,4 +1,4 @@
-# FindTheTruth_wp
+# FindTheTruth wp
 
 # FindTheTruth_wp
 ---

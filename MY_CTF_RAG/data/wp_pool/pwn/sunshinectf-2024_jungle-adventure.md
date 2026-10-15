@@ -1,4 +1,4 @@
-# sunshinectf-2024_jungle-adventure
+# sunshinectf 2024 jungle adventure
 
 ### Notes from kcolley
 

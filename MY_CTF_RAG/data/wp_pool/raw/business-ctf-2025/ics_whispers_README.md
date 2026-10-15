@@ -1,4 +1,4 @@
-# ics_whispers_README
+# ics whispers README
 
 ![img](../../assets/banner.png)
 

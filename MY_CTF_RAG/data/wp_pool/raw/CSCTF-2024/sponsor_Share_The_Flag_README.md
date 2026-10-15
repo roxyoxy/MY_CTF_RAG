@@ -1,4 +1,4 @@
-# sponsor_Share_The_Flag_README
+# sponsor Share The Flag README
 
 # Share The Flag
 

@@ -1,4 +1,4 @@
-# starctf-2022_docs
+# starctf 2022 docs
 
 # Building the docs locally
 

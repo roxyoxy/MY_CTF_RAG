@@ -1,4 +1,4 @@
-# third_party_edk2_IntelFsp2WrapperPkg_Readme
+# third party edk2 IntelFsp2WrapperPkg Readme
 
 # IntelFsp2WrapperPkg
 

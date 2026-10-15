@@ -1,4 +1,4 @@
-# misc_the_introduction_WRITEUP
+# misc the introduction WRITEUP
 
 # The Introduction Writeup
 

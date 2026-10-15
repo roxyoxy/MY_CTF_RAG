@@ -1,4 +1,4 @@
-# the-void-ctf_README
+# the void ctf README
 
 # The Void
 Your consciousness is lost in [the void](http://thevoidfx5o5da24s27ktnxlpgjj3nl7vnrqcdtkop36jptivs7y5bad.onion/).

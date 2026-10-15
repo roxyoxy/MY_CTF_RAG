@@ -1,4 +1,4 @@
-# uctf-2022_library_of_babel__SOLUTION
+# uctf 2022 library of babel SOLUTION
 
 # Library of Babel solution
 

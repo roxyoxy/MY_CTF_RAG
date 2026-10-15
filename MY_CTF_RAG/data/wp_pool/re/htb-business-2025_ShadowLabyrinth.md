@@ -1,4 +1,4 @@
-# htb-business-2025_ShadowLabyrinth
+# htb business 2025 ShadowLabyrinth
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

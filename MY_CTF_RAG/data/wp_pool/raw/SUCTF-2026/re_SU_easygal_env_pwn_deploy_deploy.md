@@ -1,4 +1,4 @@
-# re_SU_easygal_env_pwn_deploy_deploy
+# re SU easygal env pwn deploy deploy
 
 1. 
 ```bash

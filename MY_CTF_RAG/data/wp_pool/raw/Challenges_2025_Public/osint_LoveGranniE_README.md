@@ -1,4 +1,4 @@
-# osint_LoveGranniE_README
+# osint LoveGranniE README
 
 Love GranniE
 ======================

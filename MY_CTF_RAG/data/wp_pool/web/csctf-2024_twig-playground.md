@@ -1,4 +1,4 @@
-# csctf-2024_twig-playground
+# csctf 2024 twig playground
 
 # Twig Playground
 

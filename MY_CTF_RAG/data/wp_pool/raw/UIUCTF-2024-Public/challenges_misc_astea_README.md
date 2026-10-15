@@ -1,4 +1,4 @@
-# challenges_misc_astea_README
+# challenges misc astea README
 
 # astea
 

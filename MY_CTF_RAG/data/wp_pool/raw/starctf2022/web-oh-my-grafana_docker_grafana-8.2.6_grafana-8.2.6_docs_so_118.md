@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_developers_plugins_add-support-for-variables
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources developers plugins add support for variables
 
 +++
 title = "Add support for variables in plugins"

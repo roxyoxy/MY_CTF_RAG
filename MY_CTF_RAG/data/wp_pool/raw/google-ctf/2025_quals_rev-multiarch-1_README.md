@@ -1,4 +1,4 @@
-# 2025_quals_rev-multiarch-1_README
+# 2025 quals rev multiarch 1 README
 
 # rev/multiarch-1
 

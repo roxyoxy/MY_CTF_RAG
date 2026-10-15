@@ -1,4 +1,4 @@
-# starctf-2022_grafana-ui
+# starctf 2022 grafana ui
 
 # Grafana UI components library
 

@@ -1,4 +1,4 @@
-# justctf-2023_~2
+# justctf 2023 ~2
 
 ### ESSAMTP
 ESSAMTP: Encrypted Simple Sender-Adversary Mail Transfer Protocol

@@ -1,4 +1,4 @@
-# 2023_quals_misc-papapapa_solution_README
+# 2023 quals misc papapapa solution README
 
 JPEG divides image data in 8x8 blocks that are transformed using a Discrete
 Cosine Transform. Thus, image data in every JPEG file is present up to side

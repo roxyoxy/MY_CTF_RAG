@@ -1,4 +1,4 @@
-# seccon-na_qrackv__solves
+# seccon na qrackv solves
 
 # qrackv - Solves
 | Solved Rank | Team name |

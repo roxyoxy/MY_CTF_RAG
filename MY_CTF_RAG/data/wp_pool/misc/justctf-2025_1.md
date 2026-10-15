@@ -1,4 +1,4 @@
-# justctf-2025_~1
+# justctf 2025 ~1
 
 ### Baby SUID
 Give it your all, level up to root, and print the flag!

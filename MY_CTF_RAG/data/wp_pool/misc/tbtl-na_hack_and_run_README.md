@@ -1,4 +1,4 @@
-# tbtl-na_hack_and_run__README
+# tbtl na hack and run README
 
 # Hack & Run &mdash; solution
 

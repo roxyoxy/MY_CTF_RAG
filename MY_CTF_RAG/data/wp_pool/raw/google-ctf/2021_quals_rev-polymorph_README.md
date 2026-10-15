@@ -1,4 +1,4 @@
-# 2021_quals_rev-polymorph_README
+# 2021 quals rev polymorph README
 
 # Polymorph
 

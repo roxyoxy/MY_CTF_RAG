@@ -1,4 +1,4 @@
-# scriptctf-2025_Subtract
+# scriptctf 2025 Subtract
 
 # Subtract | NoobMaster
 

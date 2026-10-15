@@ -1,4 +1,4 @@
-# misc_jimmy-builds-a-kite_solve_solution
+# misc jimmy builds a kite solve solution
 
 # Solution
 

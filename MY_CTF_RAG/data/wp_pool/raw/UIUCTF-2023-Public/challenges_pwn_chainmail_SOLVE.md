@@ -1,4 +1,4 @@
-# challenges_pwn_chainmail_SOLVE
+# challenges pwn chainmail SOLVE
 
 # Chainmail
 

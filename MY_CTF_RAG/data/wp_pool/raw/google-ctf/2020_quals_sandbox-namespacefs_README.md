@@ -1,4 +1,4 @@
-# 2020_quals_sandbox-namespacefs_README
+# 2020 quals sandbox namespacefs README
 
 # Challenge Description
 

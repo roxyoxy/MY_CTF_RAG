@@ -1,4 +1,4 @@
-# third_party_edk2_IntelSiliconPkg_Feature_Capsule_MicrocodeCapsuleTxt_Readme
+# third party edk2 IntelSiliconPkg Feature Capsule MicrocodeCapsuleTxt Readme
 
 # How to generate Microcode FMP from Microcode TXT file
 

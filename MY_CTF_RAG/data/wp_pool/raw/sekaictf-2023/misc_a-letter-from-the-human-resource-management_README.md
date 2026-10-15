@@ -1,4 +1,4 @@
-# misc_a-letter-from-the-human-resource-management_README
+# misc a letter from the human resource management README
 
 ## A letter from the Human Resource Management
 

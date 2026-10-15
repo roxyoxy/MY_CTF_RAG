@@ -1,4 +1,4 @@
-# beginner_x_HINTS
+# beginner x HINTS
 
 1. Have you clicked the link given in the challenge?
 2. Have you checked out ALL the spicy memes in the post? 

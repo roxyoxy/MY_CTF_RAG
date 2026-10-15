@@ -1,4 +1,4 @@
-# htb-business-2025_NeonCGI__README
+# htb business 2025 NeonCGI README
 
 ![img](assets/banner.png)
 

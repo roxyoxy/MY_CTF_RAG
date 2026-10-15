@@ -1,4 +1,4 @@
-# pwn_encryptor_README
+# pwn encryptor README
 
 # encryptor
 pwn, easy〜medium

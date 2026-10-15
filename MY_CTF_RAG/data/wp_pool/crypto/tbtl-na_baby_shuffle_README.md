@@ -1,4 +1,4 @@
-# tbtl-na_baby_shuffle__README
+# tbtl na baby shuffle README
 
 # Baby Shuffle &mdash; Solution
 

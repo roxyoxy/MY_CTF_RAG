@@ -1,4 +1,4 @@
-# web_SU_easyk8s_env_deployment
+# web SU easyk8s env deployment
 
 ### 部署指南
 

@@ -1,4 +1,4 @@
-# osint_does-it-fit-my-ctf_README
+# osint does it fit my ctf README
 
 Does It Fit My CTF?
 ============

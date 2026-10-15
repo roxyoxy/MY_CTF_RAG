@@ -1,4 +1,4 @@
-# 2023_quals_sandbox-fastbox_solution_README
+# 2023 quals sandbox fastbox solution README
 
 # Writeup for fastbox
 

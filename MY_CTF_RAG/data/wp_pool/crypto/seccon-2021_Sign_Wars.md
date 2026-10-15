@@ -1,4 +1,4 @@
-# seccon-2021_Sign_Wars
+# seccon 2021 Sign Wars
 
 # crypto: Sign Wars
 ## Question

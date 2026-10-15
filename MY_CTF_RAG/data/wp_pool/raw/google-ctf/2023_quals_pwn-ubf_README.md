@@ -1,4 +1,4 @@
-# 2023_quals_pwn-ubf_README
+# 2023 quals pwn ubf README
 
 # Unnecessary Binary Format
 

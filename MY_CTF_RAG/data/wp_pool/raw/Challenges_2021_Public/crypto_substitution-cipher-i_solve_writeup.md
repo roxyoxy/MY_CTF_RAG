@@ -1,4 +1,4 @@
-# crypto_substitution-cipher-i_solve_writeup
+# crypto substitution cipher i solve writeup
 
 The encryption used in the challenge is indeed a simple substitution cipher in disguise. If the text was longer and closer to English, it could be cracked with frequency analysis since each character is encrypted individually and independently of each other.
 

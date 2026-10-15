@@ -1,4 +1,4 @@
-# 2023_quals_misc-npc_README
+# 2023 quals misc npc README
 
 This is an implementation of:
 

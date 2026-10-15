@@ -1,4 +1,4 @@
-# starctf-2022_
+# starctf 2022
 
 # README
 

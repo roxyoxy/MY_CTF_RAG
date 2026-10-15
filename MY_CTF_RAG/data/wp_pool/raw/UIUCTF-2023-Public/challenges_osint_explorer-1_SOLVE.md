@@ -1,4 +1,4 @@
-# challenges_osint_explorer-1_SOLVE
+# challenges osint explorer 1 SOLVE
 
 Google search bronze statue, "excellent one”, NYC brings up the statue of Mahakala. Using that, you can search up the permanent gallery it is located at. 
 

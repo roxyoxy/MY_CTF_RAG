@@ -1,4 +1,4 @@
-# seccon-na_Reaction__solves
+# seccon na Reaction solves
 
 # Reaction - Solves
 | Solved Rank | Team name |

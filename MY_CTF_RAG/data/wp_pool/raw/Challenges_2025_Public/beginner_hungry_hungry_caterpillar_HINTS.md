@@ -1,4 +1,4 @@
-# beginner_hungry_hungry_caterpillar_HINTS
+# beginner hungry hungry caterpillar HINTS
 
 # Hints
 

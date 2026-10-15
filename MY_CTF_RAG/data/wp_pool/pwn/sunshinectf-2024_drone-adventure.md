@@ -1,4 +1,4 @@
-# sunshinectf-2024_drone-adventure
+# sunshinectf 2024 drone adventure
 
 ### Notes from kcolley
 

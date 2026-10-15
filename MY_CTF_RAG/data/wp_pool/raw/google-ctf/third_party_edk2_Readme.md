@@ -1,4 +1,4 @@
-# third_party_edk2_Readme
+# third party edk2 Readme
 
 # WARNING!
 

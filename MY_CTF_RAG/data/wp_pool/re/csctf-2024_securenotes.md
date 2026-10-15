@@ -1,4 +1,4 @@
-# csctf-2024_securenotes
+# csctf 2024 securenotes
 
 # Secure Notes
 

@@ -1,4 +1,4 @@
-# crypto_encrypted-mail_README
+# crypto encrypted mail README
 
 encrypted mail
 ============

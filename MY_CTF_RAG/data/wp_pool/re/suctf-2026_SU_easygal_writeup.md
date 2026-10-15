@@ -1,4 +1,4 @@
-# suctf-2026_SU_easygal__writeup
+# suctf 2026 SU easygal writeup
 
 # Esaygal Writeup
 

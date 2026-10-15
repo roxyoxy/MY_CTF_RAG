@@ -1,4 +1,4 @@
-# susctf-2025_mosaic
+# susctf 2025 mosaic
 
 
 # mosaic

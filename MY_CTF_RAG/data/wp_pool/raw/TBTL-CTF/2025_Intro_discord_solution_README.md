@@ -1,4 +1,4 @@
-# 2025_Intro_discord_solution_README
+# 2025 Intro discord solution README
 
 # Discord &mdash; solution
 

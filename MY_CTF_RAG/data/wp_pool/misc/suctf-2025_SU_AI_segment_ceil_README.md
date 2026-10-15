@@ -1,4 +1,4 @@
-# suctf-2025_SU_AI_segment_ceil__README
+# suctf 2025 SU AI segment ceil README
 
 # WP
 

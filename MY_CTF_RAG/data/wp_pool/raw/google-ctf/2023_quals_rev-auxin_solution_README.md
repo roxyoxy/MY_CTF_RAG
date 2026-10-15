@@ -1,4 +1,4 @@
-# 2023_quals_rev-auxin_solution_README
+# 2023 quals rev auxin solution README
 
 # Google CTF 2023 - RE: Auxin writeup
 

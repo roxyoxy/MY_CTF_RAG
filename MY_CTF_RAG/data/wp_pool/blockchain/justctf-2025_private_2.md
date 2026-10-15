@@ -1,4 +1,4 @@
-# justctf-2025_private~2
+# justctf 2025 private~2
 
 # medium task
 

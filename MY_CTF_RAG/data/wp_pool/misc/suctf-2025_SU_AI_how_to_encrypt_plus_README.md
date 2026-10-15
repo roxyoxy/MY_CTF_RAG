@@ -1,4 +1,4 @@
-# suctf-2025_SU_AI_how_to_encrypt_plus__README
+# suctf 2025 SU AI how to encrypt plus README
 
 # WP
 

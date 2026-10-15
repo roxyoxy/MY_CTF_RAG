@@ -1,4 +1,4 @@
-# justctf-2025_
+# justctf 2025
 
 ### HTTP Signing
 The truth is out there

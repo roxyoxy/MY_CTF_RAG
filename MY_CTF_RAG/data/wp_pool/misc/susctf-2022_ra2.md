@@ -1,4 +1,4 @@
-# susctf-2022_ra2
+# susctf 2022 ra2
 
 # ra2
 

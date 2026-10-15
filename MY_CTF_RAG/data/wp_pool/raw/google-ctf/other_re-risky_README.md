@@ -1,4 +1,4 @@
-# other_re-risky_README
+# other re risky README
 
 ### RiskY
 This was a guest challenge made for the Winja 2018 CTF.

@@ -1,4 +1,4 @@
-# justctf-2025_~3
+# justctf 2025 ~3
 
 ### PyEvaline crimes
 We developed a simple Python shell. Did we commit some programming crime here?

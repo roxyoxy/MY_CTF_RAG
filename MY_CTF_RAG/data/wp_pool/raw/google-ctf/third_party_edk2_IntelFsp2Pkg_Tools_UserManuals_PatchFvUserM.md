@@ -1,4 +1,4 @@
-# third_party_edk2_IntelFsp2Pkg_Tools_UserManuals_PatchFvUserManual
+# third party edk2 IntelFsp2Pkg Tools UserManuals PatchFvUserManual
 
 #Name
 **_PatchFv.py_** - The python script that patches the firmware volumes (**FV**)

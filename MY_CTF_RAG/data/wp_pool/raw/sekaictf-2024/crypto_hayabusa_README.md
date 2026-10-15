@@ -1,4 +1,4 @@
-# crypto_hayabusa_README
+# crypto hayabusa README
 
 ## はやぶさ
 

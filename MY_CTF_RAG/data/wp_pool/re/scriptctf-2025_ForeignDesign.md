@@ -1,4 +1,4 @@
-# scriptctf-2025_ForeignDesign
+# scriptctf 2025 ForeignDesign
 
 # ForeignDesign | Ashray Shah
 - Description: Java is fun, but sometimes I crave more.

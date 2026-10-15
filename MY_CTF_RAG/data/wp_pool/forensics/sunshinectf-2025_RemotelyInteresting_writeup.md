@@ -1,4 +1,4 @@
-# sunshinectf-2025_RemotelyInteresting__writeup
+# sunshinectf 2025 RemotelyInteresting writeup
 
 # Remotely Interesting
 

@@ -1,4 +1,4 @@
-# csctf-2024_swimming-to-escape
+# csctf 2024 swimming to escape
 
 # Swimming to Escape
 

@@ -1,4 +1,4 @@
-# seccon-2022_piyosay
+# seccon 2022 piyosay
 
 # web: piyosay
 ## Question

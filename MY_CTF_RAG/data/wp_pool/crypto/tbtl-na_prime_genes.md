@@ -1,4 +1,4 @@
-# tbtl-na_prime_genes
+# tbtl na prime genes
 
 # Prime Genes
 

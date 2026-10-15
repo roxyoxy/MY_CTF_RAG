@@ -1,4 +1,4 @@
-# 2025_quals_pwn-datadefinition_README
+# 2025 quals pwn datadefinition README
 
 ### DataDefinition
 

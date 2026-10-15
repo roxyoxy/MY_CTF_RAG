@@ -1,4 +1,4 @@
-# seccon-2022_devil_hunter
+# seccon 2022 devil hunter
 
 # reversing: Devil Hunter
 ## Question

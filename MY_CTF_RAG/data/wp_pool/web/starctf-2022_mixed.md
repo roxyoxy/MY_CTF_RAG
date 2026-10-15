@@ -1,4 +1,4 @@
-# starctf-2022_mixed
+# starctf 2022 mixed
 
 # Mixed Data Source -  Native Plugin
 

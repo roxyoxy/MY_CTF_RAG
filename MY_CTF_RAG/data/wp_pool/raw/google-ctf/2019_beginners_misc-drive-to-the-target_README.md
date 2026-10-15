@@ -1,4 +1,4 @@
-# 2019_beginners_misc-drive-to-the-target_README
+# 2019 beginners misc drive to the target README
 
 # Google CTF 2019 Beginner's quest - Drive to the target
 

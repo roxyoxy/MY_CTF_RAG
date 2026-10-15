@@ -1,4 +1,4 @@
-# web_lookup_solution_README
+# web lookup solution README
 
 ### Writeup
 - parser differential through `new URI("//_/lookup").getPath() == "/lookup"` (https://github.com/openjdk/jdk17/blob/master/src/jdk.httpserver/share/classes/sun/net/httpserver/ServerImpl.java#L581)

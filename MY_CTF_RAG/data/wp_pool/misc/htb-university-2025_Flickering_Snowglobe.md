@@ -1,4 +1,4 @@
-# htb-university-2025_Flickering Snowglobe
+# htb university 2025 Flickering Snowglobe
 
 ![](../../assets/banner.png)
 

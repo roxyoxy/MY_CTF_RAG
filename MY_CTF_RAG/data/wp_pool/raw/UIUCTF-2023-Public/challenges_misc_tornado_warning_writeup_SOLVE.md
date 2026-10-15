@@ -1,4 +1,4 @@
-# challenges_misc_tornado_warning_writeup_SOLVE
+# challenges misc tornado warning writeup SOLVE
 
 # About the Challenge
 This challenge aims to teach people about [SAME](https://en.wikipedia.org/wiki/Specific_Area_Message_Encoding), the encoding scheme that lets the US Emergency Alert System communicate data to weather radios and broadcast stations. SAME headers sound like three buzzes before the voice part of a weather radio alert. The same data is sent three times in a row so that weather radios can implement byte-by-byte best-two-out-of-three error checking.

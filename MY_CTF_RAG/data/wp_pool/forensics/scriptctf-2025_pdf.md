@@ -1,4 +1,4 @@
-# scriptctf-2025_pdf
+# scriptctf 2025 pdf
 
 # pdf | Connor Chang
 

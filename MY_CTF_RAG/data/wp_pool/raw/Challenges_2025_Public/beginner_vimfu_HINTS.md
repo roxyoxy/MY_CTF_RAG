@@ -1,4 +1,4 @@
-# beginner_vimfu_HINTS
+# beginner vimfu HINTS
 
 # No idea where to start 
 

@@ -1,4 +1,4 @@
-# pearlctf-2025_mr-ropot
+# pearlctf 2025 mr ropot
 
 ### Mr. %ROPOT% writeup
 

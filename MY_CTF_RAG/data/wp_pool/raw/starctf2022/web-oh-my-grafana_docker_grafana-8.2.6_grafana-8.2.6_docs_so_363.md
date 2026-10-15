@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_variables_inspect-variable
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources variables inspect variable
 
 +++
 title = "Inspect variables"

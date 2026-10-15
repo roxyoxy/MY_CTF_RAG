@@ -1,4 +1,4 @@
-# sunshinectf-2024_File_Islands_1__writeup
+# sunshinectf 2024 File Islands 1 writeup
 
 # Writeup
 

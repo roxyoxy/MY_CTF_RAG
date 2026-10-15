@@ -1,4 +1,4 @@
-# forensics_emuc2_solve_WRITEUP
+# forensics emuc2 solve WRITEUP
 
 emuc2
 ============

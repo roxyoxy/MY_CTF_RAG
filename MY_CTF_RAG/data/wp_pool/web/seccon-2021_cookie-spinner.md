@@ -1,4 +1,4 @@
-# seccon-2021_cookie-spinner
+# seccon 2021 cookie spinner
 
 # web: Cookie Spinner
 ## Question

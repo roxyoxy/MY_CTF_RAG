@@ -1,4 +1,4 @@
-# 2019_finals_reversing-tob_README
+# 2019 finals reversing tob README
 
 # name: "The Onion Binary"
 

@@ -1,4 +1,4 @@
-# beginner_dtmf_HINTS
+# beginner dtmf HINTS
 
 # Hints
 

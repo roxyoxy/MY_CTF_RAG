@@ -1,4 +1,4 @@
-# htb-university-2024_[Very Easy] CryoWarmup
+# htb university 2024 [Very Easy] CryoWarmup
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

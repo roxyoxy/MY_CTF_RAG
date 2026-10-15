@@ -1,4 +1,4 @@
-# 2018_finals_re-elisp_README
+# 2018 finals re elisp README
 
 # name: Elisp
 description: A challenge featuring the perfect programming language and the perfect text editor/operating system! What more could one wish for?

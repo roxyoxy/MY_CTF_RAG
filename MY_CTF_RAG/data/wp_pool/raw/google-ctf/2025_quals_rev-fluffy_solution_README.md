@@ -1,4 +1,4 @@
-# 2025_quals_rev-fluffy_solution_README
+# 2025 quals rev fluffy solution README
 
 # Google CTF 2025 - Fluffy (RE)
 

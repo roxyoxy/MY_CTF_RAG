@@ -1,4 +1,4 @@
-# 2024_quals_web-game-arcade_README
+# 2024 quals web game arcade README
 
 # Game Arcade writeup by [@terjanq](https://twitter.com/terjanq)
 

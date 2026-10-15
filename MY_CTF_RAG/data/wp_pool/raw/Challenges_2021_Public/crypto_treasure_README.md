@@ -1,4 +1,4 @@
-# crypto_treasure_README
+# crypto treasure README
 
 # treasure
 

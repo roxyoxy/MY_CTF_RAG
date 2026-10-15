@@ -1,4 +1,4 @@
-# beginner_corporate_cliche_README
+# beginner corporate cliche README
 
 corporate-cliche
 ======================

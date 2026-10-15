@@ -1,4 +1,4 @@
-# beginner_secure_email_attachments_HINTS
+# beginner secure email attachments HINTS
 
 1. Does `filepath.Clean` actually clean the file path and prevent directory traversal attacks?
 

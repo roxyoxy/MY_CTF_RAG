@@ -1,4 +1,4 @@
-# reverse_miku-music-machine_solution_README
+# reverse miku music machine solution README
 
 # Escape
 

@@ -1,4 +1,4 @@
-# 2023_hackceler8_game_README
+# 2023 hackceler8 game README
 
 # Hackceler8 2023 Game
 

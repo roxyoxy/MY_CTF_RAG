@@ -1,4 +1,4 @@
-# 2021_quals_web-letschatserver_README
+# 2021 quals web letschatserver README
 
 # Lets Chat
 

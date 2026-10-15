@@ -1,4 +1,4 @@
-# 2020_hackceler8_README
+# 2020 hackceler8 README
 
 # Hackceler8 2020
 

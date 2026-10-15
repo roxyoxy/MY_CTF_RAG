@@ -1,4 +1,4 @@
-# modal2_README
+# modal2 README
 
 # Modal 2
 

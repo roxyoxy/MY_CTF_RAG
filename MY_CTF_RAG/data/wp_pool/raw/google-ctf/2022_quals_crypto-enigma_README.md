@@ -1,4 +1,4 @@
-# 2022_quals_crypto-enigma_README
+# 2022 quals crypto enigma README
 
 # Enigma
 Cryptanalysis has advanced a long way.

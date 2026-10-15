@@ -1,4 +1,4 @@
-# misc_geminiblog_SOLUTION
+# misc geminiblog SOLUTION
 
 Tl;dr bash argument injection when invoking openssl s_client allows you to smuggle memcached command via SNI
 

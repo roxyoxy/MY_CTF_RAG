@@ -1,4 +1,4 @@
-# pwn_debugapwner_README
+# pwn debugapwner README
 
 # debugapwner
 ## [`debugalyzer`](../rev/debugalyzer) but pwn

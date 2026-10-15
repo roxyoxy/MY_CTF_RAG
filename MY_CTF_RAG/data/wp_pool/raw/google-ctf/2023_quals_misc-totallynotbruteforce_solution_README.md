@@ -1,4 +1,4 @@
-# 2023_quals_misc-totallynotbruteforce_solution_README
+# 2023 quals misc totallynotbruteforce solution README
 
 # Totally Not Brute Force Writeup
 

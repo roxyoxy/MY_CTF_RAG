@@ -1,4 +1,4 @@
-# suctf-2025_Onchain_Magician
+# suctf 2025 Onchain Magician
 
 题目名称：Onchain Magician
 类型：Blockchain

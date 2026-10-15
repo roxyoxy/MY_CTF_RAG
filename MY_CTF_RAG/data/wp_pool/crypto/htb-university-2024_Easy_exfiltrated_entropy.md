@@ -1,4 +1,4 @@
-# htb-university-2024_[Easy] exfiltrated entropy
+# htb university 2024 [Easy] exfiltrated entropy
 
 ![img](../../assets/banner.png)
 

@@ -1,4 +1,4 @@
-# infrastructure_scoreboard_README
+# infrastructure scoreboard README
 
 # Google CTF 2018 Scoreboard
 

@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_public_app_plugins_datasource_elasticsearch_query_help
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 public app plugins datasource elasticsearch query help
 
 #### Alias patterns
 - {{term fieldname}} = replaced with value of term group by

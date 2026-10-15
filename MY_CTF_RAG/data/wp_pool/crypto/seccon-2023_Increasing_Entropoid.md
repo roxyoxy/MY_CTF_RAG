@@ -1,4 +1,4 @@
-# seccon-2023_Increasing Entropoid
+# seccon 2023 Increasing Entropoid
 
 # Increasing Entropoid
 ## Question

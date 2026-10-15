@@ -1,4 +1,4 @@
-# seccon-na_1linepyjail
+# seccon na 1linepyjail
 
 # 1linepyjail
 ## Question

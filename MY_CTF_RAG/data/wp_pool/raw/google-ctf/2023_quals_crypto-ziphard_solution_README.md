@@ -1,4 +1,4 @@
-# 2023_quals_crypto-ziphard_solution_README
+# 2023 quals crypto ziphard solution README
 
 # GCTF'23 - ZIP (hard variant) (Crypto)
 

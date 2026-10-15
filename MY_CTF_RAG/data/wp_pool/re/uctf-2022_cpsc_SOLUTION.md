@@ -1,4 +1,4 @@
-# uctf-2022_cpsc__SOLUTION
+# uctf 2022 cpsc SOLUTION
 
 # CPSC writeup
 

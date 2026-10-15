@@ -1,4 +1,4 @@
-# forensics_blind-infection_solution_README
+# forensics blind infection solution README
 
 # Writeup
 

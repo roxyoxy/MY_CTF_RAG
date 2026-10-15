@@ -1,4 +1,4 @@
-# beginner_encryptor_README
+# beginner encryptor README
 
 # Encryptor
 

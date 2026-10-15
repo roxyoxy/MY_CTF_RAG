@@ -1,4 +1,4 @@
-# sunshinectf-2025_Warp
+# sunshinectf 2025 Warp
 
 # Warp Build/Maintaining Instructions
 

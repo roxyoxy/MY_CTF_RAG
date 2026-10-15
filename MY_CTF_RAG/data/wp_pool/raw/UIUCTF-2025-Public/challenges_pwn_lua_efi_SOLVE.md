@@ -1,4 +1,4 @@
-# challenges_pwn_lua_efi_SOLVE
+# challenges pwn lua efi SOLVE
 
 # Lua.efi
 

@@ -1,4 +1,4 @@
-# uctf_mongo_README
+# uctf mongo README
 
 # MongoDB NoSQL Injection
 <img src="resources/injection.png" title="nosql injection" alt="nosql injection" data-align="center"><br>

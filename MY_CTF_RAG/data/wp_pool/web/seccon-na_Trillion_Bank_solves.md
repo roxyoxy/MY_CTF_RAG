@@ -1,4 +1,4 @@
-# seccon-na_Trillion Bank__solves
+# seccon na Trillion Bank solves
 
 # Trillion Bank - Solves
 | Solved Rank | Team name |

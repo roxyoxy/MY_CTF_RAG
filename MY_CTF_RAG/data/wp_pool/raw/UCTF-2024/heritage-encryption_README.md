@@ -1,4 +1,4 @@
-# heritage-encryption_README
+# heritage encryption README
 
 # Heritage-Encryption
 

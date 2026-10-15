@@ -1,4 +1,4 @@
-# third_party_PEGTL_doc_Installing-and-Using
+# third party PEGTL doc Installing and Using
 
 # Installing and Using
 

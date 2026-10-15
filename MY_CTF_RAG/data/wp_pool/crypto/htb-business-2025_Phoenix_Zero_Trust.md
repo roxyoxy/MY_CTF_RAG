@@ -1,4 +1,4 @@
-# htb-business-2025_Phoenix Zero Trust
+# htb business 2025 Phoenix Zero Trust
 
 ![img](../../assets/banner.png)
 

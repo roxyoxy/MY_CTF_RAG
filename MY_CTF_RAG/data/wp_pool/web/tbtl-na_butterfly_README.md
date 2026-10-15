@@ -1,4 +1,4 @@
-# tbtl-na_butterfly__README
+# tbtl na butterfly README
 
 # Butterfly &mdash; Solution
 

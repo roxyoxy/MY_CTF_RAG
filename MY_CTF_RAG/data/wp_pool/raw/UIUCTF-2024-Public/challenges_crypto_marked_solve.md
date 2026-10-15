@@ -1,4 +1,4 @@
-# challenges_crypto_marked_solve
+# challenges crypto marked solve
 
 For the challenge `X Marked the Spot`, the challenge was an XOR cipher, also called a one-time-pad, with known plaintext.
 Solution code is in `sol.py`.

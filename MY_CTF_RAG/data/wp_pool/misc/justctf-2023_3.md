@@ -1,4 +1,4 @@
-# justctf-2023_~3
+# justctf 2023 ~3
 
 ### PyPlugins
 _Digital dreams crossing over the sea,_

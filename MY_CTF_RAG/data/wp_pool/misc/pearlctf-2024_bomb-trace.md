@@ -1,4 +1,4 @@
-# pearlctf-2024_bomb-trace
+# pearlctf 2024 bomb trace
 
 ## bomb-trace
 

@@ -1,4 +1,4 @@
-# htb-university-2024_[Easy] Breaking Bank
+# htb university 2024 [Easy] Breaking Bank
 
 ![img](../../assets/banner.png)
 

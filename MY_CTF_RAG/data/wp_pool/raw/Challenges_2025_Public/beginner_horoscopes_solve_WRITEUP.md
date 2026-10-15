@@ -1,4 +1,4 @@
-# beginner_horoscopes_solve_WRITEUP
+# beginner horoscopes solve WRITEUP
 
 Pix's Writeup
 ============

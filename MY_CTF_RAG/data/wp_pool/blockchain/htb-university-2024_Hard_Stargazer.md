@@ -1,4 +1,4 @@
-# htb-university-2024_[Hard] Stargazer
+# htb university 2024 [Hard] Stargazer
 
 # Stargazer
 

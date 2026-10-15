@@ -1,4 +1,4 @@
-# 2022_quals_pwn-fixedaslr_solution
+# 2022 quals pwn fixedaslr solution
 
 # Solution for FixedASLR
 

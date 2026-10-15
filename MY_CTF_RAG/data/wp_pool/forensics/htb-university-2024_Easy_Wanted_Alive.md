@@ -1,4 +1,4 @@
-# htb-university-2024_[Easy] Wanted Alive
+# htb university 2024 [Easy] Wanted Alive
 
 ![](../../assets/banner.png)
 

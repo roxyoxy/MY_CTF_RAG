@@ -1,4 +1,4 @@
-# htb-university-2024_[Very Easy] Armaxis
+# htb university 2024 [Very Easy] Armaxis
 
 ![img](../../assets/banner.png)
 

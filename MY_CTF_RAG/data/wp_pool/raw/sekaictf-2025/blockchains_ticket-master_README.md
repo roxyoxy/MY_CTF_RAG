@@ -1,4 +1,4 @@
-# blockchains_ticket-master_README
+# blockchains ticket master README
 
 ## チケットマスター (Ticket Master)
 

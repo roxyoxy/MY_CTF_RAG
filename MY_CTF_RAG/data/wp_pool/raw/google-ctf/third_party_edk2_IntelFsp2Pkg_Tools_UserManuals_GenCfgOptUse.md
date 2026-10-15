@@ -1,4 +1,4 @@
-# third_party_edk2_IntelFsp2Pkg_Tools_UserManuals_GenCfgOptUserManual
+# third party edk2 IntelFsp2Pkg Tools UserManuals GenCfgOptUserManual
 
 #Name
 **GenCfgOpt.py** The python script that generates UPD text (**.txt**) files for

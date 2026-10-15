@@ -1,4 +1,4 @@
-# osint_bridget-returns_solve_writeup
+# osint bridget returns solve writeup
 
 # Bridget Returns!
 We are provided with the string: download.pausing.counterparts & asked for the name of the bridge where this is located.

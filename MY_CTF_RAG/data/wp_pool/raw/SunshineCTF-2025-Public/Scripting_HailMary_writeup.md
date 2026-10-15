@@ -1,4 +1,4 @@
-# Scripting_HailMary_writeup
+# Scripting HailMary writeup
 
 # Hail Mary - Solution
 

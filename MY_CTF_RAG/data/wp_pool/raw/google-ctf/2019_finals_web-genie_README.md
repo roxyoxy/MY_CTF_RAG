@@ -1,4 +1,4 @@
-# 2019_finals_web-genie_README
+# 2019 finals web genie README
 
 Copyright 2019 Google LLC
 

@@ -1,4 +1,4 @@
-# challenges_pwn_smm_is_asleep_SOLVE
+# challenges pwn smm is asleep SOLVE
 
 # SMM Is Asleep
 

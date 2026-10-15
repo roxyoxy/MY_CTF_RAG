@@ -1,4 +1,4 @@
-# Pwn_Secure_Flag_Terminal_description
+# Pwn Secure Flag Terminal description
 
 # Hackers Beware
 

@@ -1,4 +1,4 @@
-# tbtl-na_your_papers_please__README
+# tbtl na your papers please README
 
 # Your papers, please &mdash; Solution
 

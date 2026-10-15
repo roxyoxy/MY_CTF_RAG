@@ -1,4 +1,4 @@
-# easyupload_wp
+# easyupload wp
 
 # easyupload_wp
 ---

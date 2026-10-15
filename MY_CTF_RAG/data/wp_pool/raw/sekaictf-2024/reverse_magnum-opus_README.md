@@ -1,4 +1,4 @@
-# reverse_magnum-opus_README
+# reverse magnum opus README
 
 ## Magnum Opus
 

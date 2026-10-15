@@ -1,4 +1,4 @@
-# tbtl-na_do_you_still_feel_lucky__README
+# tbtl na do you still feel lucky README
 
 # Do You Still Feel Lucky? -- Solution
 

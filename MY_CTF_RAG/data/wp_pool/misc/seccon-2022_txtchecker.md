@@ -1,4 +1,4 @@
-# seccon-2022_txtchecker
+# seccon 2022 txtchecker
 
 # misc: txtchecker
 ## Question

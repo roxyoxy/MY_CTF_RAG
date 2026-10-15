@@ -1,4 +1,4 @@
-# 2022_quals_hardware-weather_solution
+# 2022 quals hardware weather solution
 
 # Weather (Hardware) - Solution
 ## Spoiler ahead - you have been warned

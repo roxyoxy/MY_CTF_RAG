@@ -1,4 +1,4 @@
-# 2025_README
+# 2025 README
 
 # FortID CTF 2025
 

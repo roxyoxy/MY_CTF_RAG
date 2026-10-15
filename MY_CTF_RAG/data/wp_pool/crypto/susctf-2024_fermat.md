@@ -1,4 +1,4 @@
-# susctf-2024_fermat
+# susctf 2024 fermat
 
 # fermat
 

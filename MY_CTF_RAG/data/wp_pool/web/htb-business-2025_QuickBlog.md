@@ -1,4 +1,4 @@
-# htb-business-2025_QuickBlog
+# htb business 2025 QuickBlog
 
 ![img](https://github.com/hackthebox/writeup-templates/raw/master/challenge/assets/images/banner.png)
 

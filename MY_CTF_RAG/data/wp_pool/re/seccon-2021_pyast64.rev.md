@@ -1,4 +1,4 @@
-# seccon-2021_pyast64.rev
+# seccon 2021 pyast64.rev
 
 # About pyast64
 URL: https://github.com/benhoyt/pyast64/blob/e91c97a060debfe6f0abbae782f1d21d6b0fed8a/pyast64.py

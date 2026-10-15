@@ -1,4 +1,4 @@
-# scriptctf-2025_index
+# scriptctf 2025 index
 
 # Index | NoobMaster
 

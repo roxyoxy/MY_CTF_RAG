@@ -1,4 +1,4 @@
-# dfir_shop-im-just-looking_solve_solve
+# dfir shop im just looking solve solve
 
 Examining the  location of all IP's (Using Splunk's |iplocation) you'll notice some activity from a German VPS.
 

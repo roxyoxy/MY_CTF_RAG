@@ -1,4 +1,4 @@
-# pearlctf-2025_concealed
+# pearlctf 2025 concealed
 
 The first tricky part was which python version to use. In the description it was given a ``core maintainer``, and any person who contributes to any software will use the latest bleeding edge stuff compiled from master.
 

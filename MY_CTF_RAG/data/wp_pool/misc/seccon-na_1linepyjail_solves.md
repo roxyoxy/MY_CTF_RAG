@@ -1,4 +1,4 @@
-# seccon-na_1linepyjail__solves
+# seccon na 1linepyjail solves
 
 # 1linepyjail - Solves
 | Solved Rank | Team name |

@@ -1,4 +1,4 @@
-# pearlctf-2024_nimrod
+# pearlctf 2024 nimrod
 
 ## Nimrod
 

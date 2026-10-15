@@ -1,4 +1,4 @@
-# blockchains_ticket-master_dist_README
+# blockchains ticket master dist README
 
 # TON CTF Framework
 

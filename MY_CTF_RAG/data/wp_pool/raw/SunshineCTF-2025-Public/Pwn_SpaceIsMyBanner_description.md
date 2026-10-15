@@ -1,4 +1,4 @@
-# Pwn_SpaceIsMyBanner_description
+# Pwn SpaceIsMyBanner description
 
 # I did it again.
 This time I'm sure I accessed a satellite.

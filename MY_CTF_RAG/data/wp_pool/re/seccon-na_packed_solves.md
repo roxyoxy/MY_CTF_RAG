@@ -1,4 +1,4 @@
-# seccon-na_packed__solves
+# seccon na packed solves
 
 # packed - Solves
 | Solved Rank | Team name |

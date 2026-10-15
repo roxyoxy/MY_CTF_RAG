@@ -1,4 +1,4 @@
-# pwn_leaking-like-a-sieve_WRITEUP
+# pwn leaking like a sieve WRITEUP
 
 
 # Leaking like a sieve solution

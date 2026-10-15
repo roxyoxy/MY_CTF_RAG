@@ -1,4 +1,4 @@
-# seccon-2021_hitchhike
+# seccon 2021 hitchhike
 
 # misc: hitchhike
 ## Question

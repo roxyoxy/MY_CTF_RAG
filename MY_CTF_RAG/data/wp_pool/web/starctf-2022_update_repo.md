@@ -1,4 +1,4 @@
-# starctf-2022_update_repo
+# starctf 2022 update repo
 
 # Repository updates deb/rpm
 

@@ -1,4 +1,4 @@
-# sunshinectf-2025_Plutonian__writeup
+# sunshinectf 2025 Plutonian writeup
 
 # Plutonian Crypto
 

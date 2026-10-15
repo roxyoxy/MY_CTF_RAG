@@ -1,4 +1,4 @@
-# osint_excellent-vista_solve_WRITEUP
+# osint excellent vista solve WRITEUP
 
 # Writeup
 We are given a photo with the description:

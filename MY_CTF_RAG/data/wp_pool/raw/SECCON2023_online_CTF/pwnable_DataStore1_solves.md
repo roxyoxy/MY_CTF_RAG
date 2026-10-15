@@ -1,4 +1,4 @@
-# pwnable_DataStore1_solves
+# pwnable DataStore1 solves
 
 # DataStore1 - Solves
 | Solved Rank | Team name |

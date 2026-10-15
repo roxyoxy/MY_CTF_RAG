@@ -1,4 +1,4 @@
-# crypto_poly1305-otm_README
+# crypto poly1305 otm README
 
 Poly1305 OTM
 ======================

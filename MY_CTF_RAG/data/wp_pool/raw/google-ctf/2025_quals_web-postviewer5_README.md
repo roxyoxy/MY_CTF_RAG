@@ -1,4 +1,4 @@
-# 2025_quals_web-postviewer5_README
+# 2025 quals web postviewer5 README
 
 # Postviewer v5² Writeup by [@terjanq](https://twitter.com/terjanq)
 

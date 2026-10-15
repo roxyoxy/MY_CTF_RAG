@@ -1,4 +1,4 @@
-# seccon-2022_
+# seccon 2022
 
 # welcome: welcome
 ## Question

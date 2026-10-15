@@ -1,4 +1,4 @@
-# crypto_dilithium_solve_README
+# crypto dilithium solve README
 
 # dilithium± mini writeup
 

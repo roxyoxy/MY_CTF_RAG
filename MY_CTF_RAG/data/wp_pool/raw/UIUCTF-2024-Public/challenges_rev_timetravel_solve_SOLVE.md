@@ -1,4 +1,4 @@
-# challenges_rev_timetravel_solve_SOLVE
+# challenges rev timetravel solve SOLVE
 
 program.py contains the 5dbfwmvtt bytecode extracted from the binary
 

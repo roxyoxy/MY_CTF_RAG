@@ -1,4 +1,4 @@
-# sunshinectf-2025_IntergalacticCopyrightInfringement
+# sunshinectf 2025 IntergalacticCopyrightInfringement
 
 # Intergalactic Copyright Infringement
 

@@ -1,4 +1,4 @@
-# rev_artisan_src_third_party_nana_build_makefile_readme
+# rev artisan src third party nana build makefile readme
 
 # Building Nana C++ Library directly with make
 If you are using make directly, it require:

@@ -1,4 +1,4 @@
-# 2021_quals_pwn-tridroid_README
+# 2021 quals pwn tridroid README
 
 # TriDroid
 

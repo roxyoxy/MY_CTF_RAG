@@ -1,4 +1,4 @@
-# suctf-2026_SU_Lock__writeup
+# suctf 2026 SU Lock writeup
 
 ## Lock
 拿到的附件是一个inno setup安装包，使用[innounp](https://github.com/jrathlev/InnoUnpacker-Windows-GUI/releases/tag/iu_2_2_4)可以查看安装包中包含的文件，但是尝试提取会显示需要密码

@@ -1,4 +1,4 @@
-# htb-business-2025_Blackout Ops
+# htb business 2025 Blackout Ops
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

@@ -1,4 +1,4 @@
-# 2018_beginners_pwn-motd_README
+# 2018 beginners pwn motd README
 
 # name:Message of the Day
 description: From the OffHub router, you jump onto the Google-Haus smart hub. This fully feature assistant of the future that uses machine learning on the blockchain to control all our IoT devices promises it all. It delivers the ability to print a Message-of-the-day. The rest is available as a premium subscription service paid monthly.

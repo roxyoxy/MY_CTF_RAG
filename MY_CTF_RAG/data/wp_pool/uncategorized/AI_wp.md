@@ -1,4 +1,4 @@
-# AI_wp
+# AI wp
 
 # AI_wp
 ---

@@ -1,4 +1,4 @@
-# docs_specs_server-protocol
+# docs specs server protocol
 
 # Cairn 协作探索协议
 

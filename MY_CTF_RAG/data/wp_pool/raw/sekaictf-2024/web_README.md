@@ -1,4 +1,4 @@
-# web_README
+# web README
 
 <img src="https://2024.ctf.sekai.team/themes/luna-vite/static/img/categories/Web.svg" align="right" width=300>
 

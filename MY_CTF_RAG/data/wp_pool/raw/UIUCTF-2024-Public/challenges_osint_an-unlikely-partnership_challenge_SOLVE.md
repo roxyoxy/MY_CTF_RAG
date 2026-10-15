@@ -1,4 +1,4 @@
-# challenges_osint_an-unlikely-partnership_challenge_SOLVE
+# challenges osint an unlikely partnership challenge SOLVE
 
 # Solution
 

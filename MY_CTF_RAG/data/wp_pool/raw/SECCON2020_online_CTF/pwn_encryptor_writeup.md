@@ -1,4 +1,4 @@
-# pwn_encryptor_writeup
+# pwn encryptor writeup
 
 # encryptor writeup
 ## 調査

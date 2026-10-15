@@ -1,4 +1,4 @@
-# pwn_Hard_Dead_or_Alive_DEAD_OR_ALIVE
+# pwn Hard Dead or Alive DEAD OR ALIVE
 
 ![](../../assets/banner.png)
 

@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_public_app_plugins_datasource_grafana-azure-monitor-datasource_query_help
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 public app plugins datasource grafana azure monitor datasource query help
 
 Format the legend keys any way you want by using alias patterns.
 

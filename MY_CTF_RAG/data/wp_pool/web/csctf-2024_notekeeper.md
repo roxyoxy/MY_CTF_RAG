@@ -1,4 +1,4 @@
-# csctf-2024_notekeeper
+# csctf 2024 notekeeper
 
 # Notekeeper
 

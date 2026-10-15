@@ -1,4 +1,4 @@
-# 2026_hackceler8_plugins_README
+# 2026 hackceler8 plugins README
 
 # Recording plugins for scripted input
 

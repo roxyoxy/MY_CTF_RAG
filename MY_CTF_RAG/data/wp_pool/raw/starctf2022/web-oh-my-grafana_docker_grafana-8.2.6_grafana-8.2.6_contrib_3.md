@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_contribute_architecture_backend_package-hierarchy
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 contribute architecture backend package hierarchy
 
 # Package hierarchy
 

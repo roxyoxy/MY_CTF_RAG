@@ -1,4 +1,4 @@
-# seccon-2021_vulnerabilities
+# seccon 2021 vulnerabilities
 
 # web: Vulnerabilities
 ## Question

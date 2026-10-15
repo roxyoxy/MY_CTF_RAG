@@ -1,4 +1,4 @@
-# pwnable_seccon_tree_README
+# pwnable seccon tree README
 
 # pwnable: seccon_tree
 ## Question

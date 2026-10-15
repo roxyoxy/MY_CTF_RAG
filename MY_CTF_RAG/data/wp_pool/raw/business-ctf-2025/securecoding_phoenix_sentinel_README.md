@@ -1,4 +1,4 @@
-# securecoding_phoenix_sentinel_README
+# securecoding phoenix sentinel README
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

@@ -1,4 +1,4 @@
-# challenges_misc_ai-clippy_README
+# challenges misc ai clippy README
 
 users provide a MCP server as a URL, laterally extracting flag from a server
 

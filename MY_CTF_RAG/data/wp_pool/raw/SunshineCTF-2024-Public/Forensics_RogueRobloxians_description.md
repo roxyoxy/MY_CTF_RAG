@@ -1,4 +1,4 @@
-# Forensics_RogueRobloxians_description
+# Forensics RogueRobloxians description
 
 We recently found a rogue author who went and published their flag generator. Luckily, we've checked and they've uploaded the wrong one, and so the real flag is safe! Surely we're good now, right?
 

@@ -1,4 +1,4 @@
-# osint_get-over-it_writeup
+# osint get over it writeup
 
 # Get over it!
 We are provided with get-over-it.jpg, a picture of a bridge and asked to find the following:

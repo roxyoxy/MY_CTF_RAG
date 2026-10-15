@@ -1,4 +1,4 @@
-# 2020_quals_pwn-echo_README
+# 2020 quals pwn echo README
 
 # Challenge
 A select base echo server is exposed.

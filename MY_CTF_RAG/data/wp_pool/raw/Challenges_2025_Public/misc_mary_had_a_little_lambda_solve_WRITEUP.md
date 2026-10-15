@@ -1,4 +1,4 @@
-# misc_mary_had_a_little_lambda_solve_WRITEUP
+# misc mary had a little lambda solve WRITEUP
 
 M.A.R.Y Had A Little Lambda
 ============

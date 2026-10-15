@@ -1,4 +1,4 @@
-# misc_SU_forensics_env_pwn_deploy_deploy
+# misc SU forensics env pwn deploy deploy
 
 1. 
 ```bash

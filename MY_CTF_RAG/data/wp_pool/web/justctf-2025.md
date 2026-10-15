@@ -1,4 +1,4 @@
-# justctf-2025_
+# justctf 2025
 
 ### Busy Traffic
 The traffic has been busy lately. Can you go through it in time?

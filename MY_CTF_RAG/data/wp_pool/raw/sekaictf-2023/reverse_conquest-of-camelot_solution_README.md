@@ -1,4 +1,4 @@
-# reverse_conquest-of-camelot_solution_README
+# reverse conquest of camelot solution README
 
 # Walkthrough
 

@@ -1,4 +1,4 @@
-# pearlctf-2025_the-covert-exchange__writeup
+# pearlctf 2025 the covert exchange writeup
 
 # The Covert Exchange
 

@@ -1,4 +1,4 @@
-# tbtl-na_work_of_art__README
+# tbtl na work of art README
 
 # Work of Art -- Solution
 

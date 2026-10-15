@@ -1,4 +1,4 @@
-# misc_yodawg_solve_WRITEUP
+# misc yodawg solve WRITEUP
 
 Yo Dawg
 ============

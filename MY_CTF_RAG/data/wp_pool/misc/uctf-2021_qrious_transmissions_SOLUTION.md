@@ -1,4 +1,4 @@
-# uctf-2021_qrious_transmissions__SOLUTION
+# uctf 2021 qrious transmissions SOLUTION
 
 ```python
 

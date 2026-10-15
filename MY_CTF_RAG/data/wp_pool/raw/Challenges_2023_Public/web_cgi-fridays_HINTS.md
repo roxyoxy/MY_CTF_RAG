@@ -1,4 +1,4 @@
-# web_cgi-fridays_HINTS
+# web cgi fridays HINTS
 
 If they have no idea what to do:
 

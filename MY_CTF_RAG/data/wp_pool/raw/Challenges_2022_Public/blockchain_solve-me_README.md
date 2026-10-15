@@ -1,4 +1,4 @@
-# blockchain_solve-me_README
+# blockchain solve me README
 
 Solve Me
 ============

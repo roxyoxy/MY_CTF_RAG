@@ -1,4 +1,4 @@
-# justctf-2023_~3
+# justctf 2023 ~3
 
 ### notabug2
 Let it roll ( :) this time intended way). It's a feature, not a bug!

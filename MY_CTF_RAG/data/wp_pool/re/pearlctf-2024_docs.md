@@ -1,4 +1,4 @@
-# pearlctf-2024_docs
+# pearlctf 2024 docs
 
 # Documentation
 * [Getting Started](getting-started.md)

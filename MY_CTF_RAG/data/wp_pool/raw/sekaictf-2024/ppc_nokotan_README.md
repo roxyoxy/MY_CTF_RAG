@@ -1,4 +1,4 @@
-# ppc_nokotan_README
+# ppc nokotan README
 
 ## Nokotan
 

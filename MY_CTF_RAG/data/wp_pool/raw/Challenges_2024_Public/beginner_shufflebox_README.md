@@ -1,4 +1,4 @@
-# beginner_shufflebox_README
+# beginner shufflebox README
 
 shufflebox
 ======================

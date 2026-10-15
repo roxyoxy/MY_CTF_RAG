@@ -1,4 +1,4 @@
-# web_secret_bin_README
+# web secret bin README
 
 # Secrets Bin
 

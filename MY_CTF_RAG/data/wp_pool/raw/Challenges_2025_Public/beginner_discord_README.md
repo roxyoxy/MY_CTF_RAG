@@ -1,4 +1,4 @@
-# beginner_discord_README
+# beginner discord README
 
 discord
 ======================

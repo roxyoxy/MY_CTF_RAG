@@ -1,4 +1,4 @@
-# susctf-2024_redroid
+# susctf 2024 redroid
 
 # Redroid
 

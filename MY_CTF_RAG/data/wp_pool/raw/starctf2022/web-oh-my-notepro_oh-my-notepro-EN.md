@@ -1,4 +1,4 @@
-# web-oh-my-notepro_oh-my-notepro-EN
+# web oh my notepro oh my notepro EN
 
 # oh-my-notepro-EN
 

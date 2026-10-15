@@ -1,4 +1,4 @@
-# tbtl-na_baby_flag_checker
+# tbtl na baby flag checker
 
 # Baby Flag Checker
 

@@ -1,4 +1,4 @@
-# 2023_quals_rev-turtle_solution_README
+# 2023 quals rev turtle solution README
 
 # Google CTF 2023 - RE: Turtle writeup
 

@@ -1,4 +1,4 @@
-# misc_mary_had_a_little_lambda_README
+# misc mary had a little lambda README
 
 Mary had a little lambda
 ======================

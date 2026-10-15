@@ -1,4 +1,4 @@
-# 2023_quals_web-postviewer2_solution_README
+# 2023 quals web postviewer2 solution README
 
 # Postviewer v2 - writeup
 

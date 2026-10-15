@@ -1,4 +1,4 @@
-# seccon-na_Trillion Bank
+# seccon na Trillion Bank
 
 # Trillion Bank
 ## Question

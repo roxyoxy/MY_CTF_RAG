@@ -1,4 +1,4 @@
-# pwn_ready-bounce-pwn_README
+# pwn ready bounce pwn README
 
 # ready, bounce, pwn!
 

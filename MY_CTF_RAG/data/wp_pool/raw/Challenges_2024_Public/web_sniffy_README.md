@@ -1,4 +1,4 @@
-# web_sniffy_README
+# web sniffy README
 
 sniffy
 ======================

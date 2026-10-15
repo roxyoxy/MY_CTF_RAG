@@ -1,4 +1,4 @@
-# scriptctf-2025_The Insider 2
+# scriptctf 2025 The Insider 2
 
 # The Insider 2 | NoobMaster
 

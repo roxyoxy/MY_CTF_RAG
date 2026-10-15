@@ -1,4 +1,4 @@
-# susctf-2024_http-server-emulator
+# susctf 2024 http server emulator
 
 # http server emulator
 

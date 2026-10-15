@@ -1,4 +1,4 @@
-# starctf-2022_grafana-toolkit
+# starctf 2022 grafana toolkit
 
 > **WARNING: @grafana/toolkit is currently in BETA**.
 

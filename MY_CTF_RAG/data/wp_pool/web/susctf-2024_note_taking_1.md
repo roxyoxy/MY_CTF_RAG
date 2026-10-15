@@ -1,4 +1,4 @@
-# susctf-2024_note_taking_1
+# susctf 2024 note taking 1
 
 # note taking 1
 

@@ -1,4 +1,4 @@
-# osint_zer0c00l_solve_WRITEUP
+# osint zer0c00l solve WRITEUP
 
 Zer0c00l
 ============

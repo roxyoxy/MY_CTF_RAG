@@ -1,4 +1,4 @@
-# tbtl-na_locking_mechanism__README
+# tbtl na locking mechanism README
 
 # Locking Mechanism &mdash; Solution
 

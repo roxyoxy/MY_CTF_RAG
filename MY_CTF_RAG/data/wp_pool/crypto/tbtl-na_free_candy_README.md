@@ -1,4 +1,4 @@
-# tbtl-na_free_candy__README
+# tbtl na free candy README
 
 # Free Candy &mdash; Solution
 

@@ -1,4 +1,4 @@
-# wanictf-2024_one-day-one-letter
+# wanictf 2024 one day one letter
 
 ---
 title: One Day One Letter    # (必須) 問題名

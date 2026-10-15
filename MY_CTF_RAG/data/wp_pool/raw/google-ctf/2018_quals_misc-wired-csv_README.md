@@ -1,4 +1,4 @@
-# 2018_quals_misc-wired-csv_README
+# 2018 quals misc wired csv README
 
 # name:wired CSV
 description: We have a photo and a CSV file. NOTE: The flag does not follow the CTF{...} format, but is clearly marked as the flag. Please add the CTF{...} around the flag manually when submitting.

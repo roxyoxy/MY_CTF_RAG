@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_shared_basics_grafana-enterprise
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources shared basics grafana enterprise
 
 ---
 title: Grafana Enterprise

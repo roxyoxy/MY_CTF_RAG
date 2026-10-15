@@ -1,4 +1,4 @@
-# starctf-2022_grafana-azure-monitor-datasource
+# starctf 2022 grafana azure monitor datasource
 
 # Azure Monitor data source - native plugin
 

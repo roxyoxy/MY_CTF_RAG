@@ -1,4 +1,4 @@
-# challenges_web_adminplz_SOLUTION
+# challenges web adminplz SOLUTION
 
 Sorry, i didnt have time to make a good writeup, but TL;DR:
 

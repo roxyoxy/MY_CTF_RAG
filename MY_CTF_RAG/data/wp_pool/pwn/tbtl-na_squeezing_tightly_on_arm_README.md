@@ -1,4 +1,4 @@
-# tbtl-na_squeezing_tightly_on_arm__README
+# tbtl na squeezing tightly on arm README
 
 # Squeezing_Tightly_On_Arm &mdash; Solution
 

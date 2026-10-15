@@ -1,4 +1,4 @@
-# sunshinectf-2025_SpaceIsLessThanIdeal
+# sunshinectf 2025 SpaceIsLessThanIdeal
 
 # Space Is Less than Ideal
 Deploy using `./docker-compose.yml`

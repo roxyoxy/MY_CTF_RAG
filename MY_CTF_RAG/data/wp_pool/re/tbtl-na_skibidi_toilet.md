@@ -1,4 +1,4 @@
-# tbtl-na_skibidi_toilet
+# tbtl na skibidi toilet
 
 # Skibidi Toilet
 

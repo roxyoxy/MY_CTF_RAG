@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_http_api_curl-examples
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources http api curl examples
 
 +++
 title = "cURL examples"

@@ -1,4 +1,4 @@
-# htb-business-2025_Scrambled Payload
+# htb business 2025 Scrambled Payload
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

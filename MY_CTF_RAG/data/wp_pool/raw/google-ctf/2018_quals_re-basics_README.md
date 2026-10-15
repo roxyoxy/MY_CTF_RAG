@@ -1,4 +1,4 @@
-# 2018_quals_re-basics_README
+# 2018 quals re basics README
 
 # name:Back to the BASICs
 description: You won't find any assembly in this challenge, only C64 BASIC. Once you get the password, the flag is CTF{password}. P.S. The challenge has been tested on the VICE emulator.

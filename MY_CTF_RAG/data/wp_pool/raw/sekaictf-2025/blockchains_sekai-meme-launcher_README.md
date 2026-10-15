@@ -1,4 +1,4 @@
-# blockchains_sekai-meme-launcher_README
+# blockchains sekai meme launcher README
 
 ## Sekai Meme Launcher
 

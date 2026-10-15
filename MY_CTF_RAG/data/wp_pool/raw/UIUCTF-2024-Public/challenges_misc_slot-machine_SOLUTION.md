@@ -1,4 +1,4 @@
-# challenges_misc_slot-machine_SOLUTION
+# challenges misc slot machine SOLUTION
 
 One kind of hash that has a lot of matching leading characters is a bitcoin block hash. Construct one using [block 756951](https://blockchain.info/rawblock/756951) ([ref](https://medium.com/hackergirl/how-to-calculate-the-hash-of-a-block-in-bitcoin-8f6aebb0dc6d)).
 

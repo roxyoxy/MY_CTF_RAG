@@ -1,4 +1,4 @@
-# starctf-2023_~1
+# starctf 2023 ~1
 
 # GoGpt
 

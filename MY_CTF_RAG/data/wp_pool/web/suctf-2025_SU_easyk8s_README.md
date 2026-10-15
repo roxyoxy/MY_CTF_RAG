@@ -1,4 +1,4 @@
-# suctf-2025_SU_easyk8s__README
+# suctf 2025 SU easyk8s README
 
 ### SUCTF - easyk8s
 

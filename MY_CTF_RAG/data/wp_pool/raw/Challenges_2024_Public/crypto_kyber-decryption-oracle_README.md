@@ -1,4 +1,4 @@
-# crypto_kyber-decryption-oracle_README
+# crypto kyber decryption oracle README
 
 kyber decryption oracle
 ======================

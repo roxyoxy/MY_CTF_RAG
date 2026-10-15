@@ -1,4 +1,4 @@
-# osint_comeacroppa_solve_WRITEUP
+# osint comeacroppa solve WRITEUP
 
 Comeacroppa
 ============

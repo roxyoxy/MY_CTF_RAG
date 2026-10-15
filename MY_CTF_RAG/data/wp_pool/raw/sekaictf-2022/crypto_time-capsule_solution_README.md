@@ -1,4 +1,4 @@
-# crypto_time-capsule_solution_README
+# crypto time capsule solution README
 
 # Writeup
 

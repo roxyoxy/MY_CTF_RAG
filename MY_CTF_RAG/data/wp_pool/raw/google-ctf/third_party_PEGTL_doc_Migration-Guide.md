@@ -1,4 +1,4 @@
-# third_party_PEGTL_doc_Migration-Guide
+# third party PEGTL doc Migration Guide
 
 # Migration Guide
 

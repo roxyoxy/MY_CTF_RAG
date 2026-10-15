@@ -1,4 +1,4 @@
-# tbtl-na_hard_rock__README
+# tbtl na hard rock README
 
 # Hard Rock &mdash; Solution
 

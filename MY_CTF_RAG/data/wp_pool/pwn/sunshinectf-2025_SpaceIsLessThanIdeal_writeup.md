@@ -1,4 +1,4 @@
-# sunshinectf-2025_SpaceIsLessThanIdeal__writeup
+# sunshinectf 2025 SpaceIsLessThanIdeal writeup
 
 # Space is Less than Ideal
 This challenge is a breakout of less.

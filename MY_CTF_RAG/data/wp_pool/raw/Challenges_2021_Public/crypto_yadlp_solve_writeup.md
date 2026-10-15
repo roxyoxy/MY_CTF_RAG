@@ -1,4 +1,4 @@
-# crypto_yadlp_solve_writeup
+# crypto yadlp solve writeup
 
 This challenge follows a similar structure to a commonly seen style of crypto CTF challenges that involve solving the discrete logarithm problem in some group other than the usual $(\mathbb{Z}/p\mathbb{Z})^\times$. The general approach is to figure out some information about what the group elements are like, and then try to find an isomorphism from the group to a group where we can easily solve the discrete logarithm problem.
 

@@ -1,4 +1,4 @@
-# justctf-2025_~2
+# justctf 2025 ~2
 
 ### Prospector
 

@@ -1,4 +1,4 @@
-# beginner_Baby_PyBash_README
+# beginner Baby PyBash README
 
 # Baby-PyBash
 

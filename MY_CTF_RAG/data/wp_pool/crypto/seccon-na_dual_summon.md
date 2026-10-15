@@ -1,4 +1,4 @@
-# seccon-na_dual_summon
+# seccon na dual summon
 
 # dual_summon
 ## Question

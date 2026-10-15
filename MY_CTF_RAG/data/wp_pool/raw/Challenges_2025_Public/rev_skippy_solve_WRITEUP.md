@@ -1,4 +1,4 @@
-# rev_skippy_solve_WRITEUP
+# rev skippy solve WRITEUP
 
 Skippy
 ============

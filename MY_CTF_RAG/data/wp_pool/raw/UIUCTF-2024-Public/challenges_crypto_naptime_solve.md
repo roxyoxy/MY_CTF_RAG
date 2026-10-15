@@ -1,4 +1,4 @@
-# challenges_crypto_naptime_solve
+# challenges crypto naptime solve
 
 Solution code can be found in `attack.sage`.
 

@@ -1,4 +1,4 @@
-# misc_smart-calculator_HINTS
+# misc smart calculator HINTS
 
 # HINTS
 

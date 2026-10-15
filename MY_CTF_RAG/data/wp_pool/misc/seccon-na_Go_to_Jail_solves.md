@@ -1,4 +1,4 @@
-# seccon-na_Go to Jail__solves
+# seccon na Go to Jail solves
 
 # Go to Jail - Solves
 | Solved Rank | Team name |

@@ -1,4 +1,4 @@
-# third_party_PEGTL_doc_Control-and-Debug
+# third party PEGTL doc Control and Debug
 
 # Control and Debug
 

@@ -1,4 +1,4 @@
-# beginner_proxed_solve_WRITEUP
+# beginner proxed solve WRITEUP
 
 # Writeup
 

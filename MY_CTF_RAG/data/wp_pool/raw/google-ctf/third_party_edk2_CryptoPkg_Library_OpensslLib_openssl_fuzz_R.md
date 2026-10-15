@@ -1,4 +1,4 @@
-# third_party_edk2_CryptoPkg_Library_OpensslLib_openssl_fuzz_README
+# third party edk2 CryptoPkg Library OpensslLib openssl fuzz README
 
 # I Can Haz Fuzz?
 

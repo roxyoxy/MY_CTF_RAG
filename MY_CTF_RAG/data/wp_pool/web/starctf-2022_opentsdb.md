@@ -1,4 +1,4 @@
-# starctf-2022_opentsdb
+# starctf 2022 opentsdb
 
 # OpenTSDB Data Source -  Native Plugin
 

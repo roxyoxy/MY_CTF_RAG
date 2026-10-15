@@ -1,4 +1,4 @@
-# pwnable_Paragraph_solves
+# pwnable Paragraph solves
 
 # Paragraph - Solves
 | Solved Rank | Team name |

@@ -1,4 +1,4 @@
-# misc_my-first-c-prog_HINTS
+# misc my first c prog HINTS
 
 ## In order of where they are at ish:
 Feel free to adapt these if they are still stuck, you can give the same advise in a different way

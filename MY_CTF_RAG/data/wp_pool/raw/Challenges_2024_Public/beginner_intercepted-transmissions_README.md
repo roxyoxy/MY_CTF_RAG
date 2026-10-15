@@ -1,4 +1,4 @@
-# beginner_intercepted-transmissions_README
+# beginner intercepted transmissions README
 
 Intercepted Transmissions
 ======================

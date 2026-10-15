@@ -1,4 +1,4 @@
-# starctf-2022_dashlist
+# starctf 2022 dashlist
 
 # Dashlist Panel -  Native Plugin
 

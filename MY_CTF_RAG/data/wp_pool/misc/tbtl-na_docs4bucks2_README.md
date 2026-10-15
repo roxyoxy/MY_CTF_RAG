@@ -1,4 +1,4 @@
-# tbtl-na_docs4bucks2__README
+# tbtl na docs4bucks2 README
 
 # Docs 4 Bucks II &mdash; solution
 

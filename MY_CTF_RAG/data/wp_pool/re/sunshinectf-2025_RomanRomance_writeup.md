@@ -1,4 +1,4 @@
-# sunshinectf-2025_RomanRomance__writeup
+# sunshinectf 2025 RomanRomance writeup
 
 Pop the binary into Ghidra, you'll see we have a file being opened, a for loop after some checks, a file named "enc.txt" is made, then a printout saying our flag is encrypted.
 

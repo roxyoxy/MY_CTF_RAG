@@ -1,4 +1,4 @@
-# seccon-2023_jumpout
+# seccon 2023 jumpout
 
 # jumpout
 ## Question

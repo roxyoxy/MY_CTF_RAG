@@ -1,4 +1,4 @@
-# susctf-2022_large case
+# susctf 2022 large case
 
 # large case
 

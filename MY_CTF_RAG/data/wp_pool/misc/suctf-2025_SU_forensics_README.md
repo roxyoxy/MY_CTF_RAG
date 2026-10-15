@@ -1,4 +1,4 @@
-# suctf-2025_SU_forensics__README
+# suctf 2025 SU forensics README
 
 # SU_forensics
 

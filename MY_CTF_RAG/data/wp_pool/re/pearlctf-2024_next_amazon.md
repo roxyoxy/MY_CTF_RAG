@@ -1,4 +1,4 @@
-# pearlctf-2024_next_amazon
+# pearlctf 2024 next amazon
 
 # Ecommerce-Website [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 The *Planet Shopify* is a ecommerce website.Developed using php in backend and mysql database and used html and bootstrap in frontend.

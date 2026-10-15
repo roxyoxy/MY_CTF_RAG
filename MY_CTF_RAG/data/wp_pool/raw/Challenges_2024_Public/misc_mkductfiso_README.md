@@ -1,4 +1,4 @@
-# misc_mkductfiso_README
+# misc mkductfiso README
 
 mkductfiso
 ======================

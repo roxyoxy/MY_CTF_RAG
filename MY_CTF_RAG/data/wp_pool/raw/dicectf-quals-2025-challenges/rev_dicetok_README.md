@@ -1,4 +1,4 @@
-# rev_dicetok_README
+# rev dicetok README
 
 # Solving
 

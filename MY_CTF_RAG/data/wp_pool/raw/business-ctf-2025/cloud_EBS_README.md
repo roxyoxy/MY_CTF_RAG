@@ -1,4 +1,4 @@
-# cloud_EBS_README
+# cloud EBS README
 
 <img src="../../assets/htb.png" style="zoom: 80%;" align='left' /><font size="5">Vault</font>
 

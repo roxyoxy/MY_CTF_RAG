@@ -1,4 +1,4 @@
-# suctf-2026_SU_chaos__wp
+# suctf 2026 SU chaos wp
 
 # SU_chaos
 

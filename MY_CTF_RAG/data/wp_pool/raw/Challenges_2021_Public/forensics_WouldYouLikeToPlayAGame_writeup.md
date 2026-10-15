@@ -1,4 +1,4 @@
-# forensics_WouldYouLikeToPlayAGame_writeup
+# forensics WouldYouLikeToPlayAGame writeup
 
 # Solution
 1. First step is to determine the profile and OS of the memory dump - (with volatility)

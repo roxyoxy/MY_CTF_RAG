@@ -1,4 +1,4 @@
-# beginner_our_lonely_dog_README
+# beginner our lonely dog README
 
 our-lonely-dog
 ======================

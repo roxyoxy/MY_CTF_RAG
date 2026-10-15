@@ -1,4 +1,4 @@
-# wanictf-2024_nc
+# wanictf 2024 nc
 
 ---
 title: nc

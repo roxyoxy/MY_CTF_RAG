@@ -1,4 +1,4 @@
-# tbtl-na___README
+# tbtl na README
 
 # OSINT Exam
 

@@ -1,4 +1,4 @@
-# web_chainreaction_README
+# web chainreaction README
 
 # Chainreaction
 

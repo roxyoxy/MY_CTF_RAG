@@ -1,4 +1,4 @@
-# 2019_beginners_web-wafwaf_README
+# 2019 beginners web wafwaf README
 
 Copyright 2019 Google LLC
 

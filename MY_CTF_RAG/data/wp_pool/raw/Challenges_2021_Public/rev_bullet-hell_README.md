@@ -1,4 +1,4 @@
-# rev_bullet-hell_README
+# rev bullet hell README
 
 # bullet hell
 

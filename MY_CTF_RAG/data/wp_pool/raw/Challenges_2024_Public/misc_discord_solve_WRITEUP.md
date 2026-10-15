@@ -1,4 +1,4 @@
-# misc_discord_solve_WRITEUP
+# misc discord solve WRITEUP
 
 Join the DUCTF Discord and visit the `#team-search` channel to find a message posted by the hex bug that contains the first section of the flag. `DUCTF{f1r57`.
 

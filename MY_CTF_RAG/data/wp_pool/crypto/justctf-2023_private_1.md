@@ -1,4 +1,4 @@
-# justctf-2023_private~1
+# justctf 2023 private~1
 
 If running locally does not work and you can see the following in the Docker container logs:
 

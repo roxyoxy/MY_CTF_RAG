@@ -1,4 +1,4 @@
-# third_party_edk2_BaseTools_Source_Python_Pkcs7Sign_Readme
+# third party edk2 BaseTools Source Python Pkcs7Sign Readme
 
 # Step by step to generate sample self-signed X.509 certificate chain and sign data with PKCS7 structure
 

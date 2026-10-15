@@ -1,4 +1,4 @@
-# 2024_quals_pwn-heat_solution_README
+# 2024 quals pwn heat solution README
 
 # HEAT Solution
 

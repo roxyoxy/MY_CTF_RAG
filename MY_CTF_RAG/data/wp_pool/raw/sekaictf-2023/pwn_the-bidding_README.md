@@ -1,4 +1,4 @@
-# pwn_the-bidding_README
+# pwn the bidding README
 
 ## [Blockchain] The Bidding
 

@@ -1,4 +1,4 @@
-# challenges_rev_launch_sequence_SOLVE
+# challenges rev launch sequence SOLVE
 
 This is a program written in Apollo Guidance Computer (AGC) (Block 2) assembly.
 An interpreter can be found at https://www.ibiblio.org/apollo/download.html and the programmer's manual at https://www.ibiblio.org/apollo/assembly_language_manual.html.

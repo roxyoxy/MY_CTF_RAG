@@ -1,4 +1,4 @@
-# starctf-2023___wp
+# starctf 2023 wp
 
 简单的powershell混淆技术
 解法：

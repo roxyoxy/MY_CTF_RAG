@@ -1,4 +1,4 @@
-# cry_speedy_README
+# cry speedy README
 
 ---
 title: speedy   

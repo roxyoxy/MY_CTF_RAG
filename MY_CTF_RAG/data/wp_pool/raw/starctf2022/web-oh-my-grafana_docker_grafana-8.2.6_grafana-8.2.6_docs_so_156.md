@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_enterprise_license__index
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources enterprise license index
 
 +++
 title = "Grafana Enterprise license"

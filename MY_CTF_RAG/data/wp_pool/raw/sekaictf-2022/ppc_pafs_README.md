@@ -1,4 +1,4 @@
-# ppc_pafs_README
+# ppc pafs README
 
 # Pafs
 

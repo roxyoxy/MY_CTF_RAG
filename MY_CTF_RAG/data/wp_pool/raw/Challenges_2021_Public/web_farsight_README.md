@@ -1,4 +1,4 @@
-# web_farsight_README
+# web farsight README
 
 # FarSight
 

@@ -1,4 +1,4 @@
-# suctf-2025_SU_msg_cfgd__README_en
+# suctf 2025 SU msg cfgd README en
 
 
 ## Vulnerability

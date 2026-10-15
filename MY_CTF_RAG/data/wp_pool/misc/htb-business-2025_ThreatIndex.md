@@ -1,4 +1,4 @@
-# htb-business-2025_ThreatIndex
+# htb business 2025 ThreatIndex
 
 ![](../../assets/banner.png)
 

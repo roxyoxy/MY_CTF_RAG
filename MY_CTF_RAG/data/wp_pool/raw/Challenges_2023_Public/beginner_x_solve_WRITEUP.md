@@ -1,4 +1,4 @@
-# beginner_x_solve_WRITEUP
+# beginner x solve WRITEUP
 
 𝕏
 ============

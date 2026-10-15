@@ -1,4 +1,4 @@
-# license-please-ctf_README
+# license please ctf README
 
 # License, Please
 

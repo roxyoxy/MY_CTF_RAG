@@ -1,4 +1,4 @@
-# sunshinectf-2024_doubly-secure
+# sunshinectf 2024 doubly secure
 
 # Doubly Secure
 

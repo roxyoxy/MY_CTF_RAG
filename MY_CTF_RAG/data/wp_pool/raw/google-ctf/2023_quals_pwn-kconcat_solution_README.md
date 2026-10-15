@@ -1,4 +1,4 @@
-# 2023_quals_pwn-kconcat_solution_README
+# 2023 quals pwn kconcat solution README
 
 # Google CTF 2023 - pwn: kconcat writeup
 

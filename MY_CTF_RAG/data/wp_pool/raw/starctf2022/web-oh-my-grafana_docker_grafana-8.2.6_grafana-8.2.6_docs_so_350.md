@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_shared_visualizations_legend-mode
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources shared visualizations legend mode
 
 ---
 title: Legend mode and legend placement

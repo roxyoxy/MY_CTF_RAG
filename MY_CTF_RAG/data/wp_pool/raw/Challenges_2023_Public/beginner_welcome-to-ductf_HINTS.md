@@ -1,4 +1,4 @@
-# beginner_welcome-to-ductf_HINTS
+# beginner welcome to ductf HINTS
 
 # Hints!
 

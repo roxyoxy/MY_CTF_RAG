@@ -1,4 +1,4 @@
-# challenges_web_peanut-xss_SOLUTION
+# challenges web peanut xss SOLUTION
 
 - the goal of this challenge was to find xss in nutshell when it's run on sanitized HTML
 - read through nutshell source code :)

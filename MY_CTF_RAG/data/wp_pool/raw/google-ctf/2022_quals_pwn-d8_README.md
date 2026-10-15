@@ -1,4 +1,4 @@
-# 2022_quals_pwn-d8_README
+# 2022 quals pwn d8 README
 
 # d8
 

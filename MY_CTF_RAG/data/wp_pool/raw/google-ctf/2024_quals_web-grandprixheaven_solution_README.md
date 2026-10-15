@@ -1,4 +1,4 @@
-# 2024_quals_web-grandprixheaven_solution_README
+# 2024 quals web grandprixheaven solution README
 
 # Grand Prix Heaven Solution 
 

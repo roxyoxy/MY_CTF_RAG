@@ -1,4 +1,4 @@
-# 2023_quals_pwn-write-flag-where_solution_README
+# 2023 quals pwn write flag where solution README
 
 # Google CTF 2023 - pwn: write-flag-where writeup
 

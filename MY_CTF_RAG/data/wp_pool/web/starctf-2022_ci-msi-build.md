@@ -1,4 +1,4 @@
-# starctf-2022_ci-msi-build
+# starctf 2022 ci msi build
 
 # Grafana MSI Generator
 

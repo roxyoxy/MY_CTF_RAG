@@ -1,4 +1,4 @@
-# htb-business-2025_Power Greed
+# htb business 2025 Power Greed
 
 ![](../../assets/banner.png)
 

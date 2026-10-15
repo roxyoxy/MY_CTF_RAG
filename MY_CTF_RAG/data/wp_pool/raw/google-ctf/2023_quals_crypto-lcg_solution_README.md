@@ -1,4 +1,4 @@
-# 2023_quals_crypto-lcg_solution_README
+# 2023 quals crypto lcg solution README
 
 # Google CTF 2023 - crypto: LCG writeup
 

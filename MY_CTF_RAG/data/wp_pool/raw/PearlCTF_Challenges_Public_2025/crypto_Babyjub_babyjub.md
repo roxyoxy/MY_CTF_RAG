@@ -1,4 +1,4 @@
-# crypto_Babyjub_babyjub
+# crypto Babyjub babyjub
 
 # BabyJub
 

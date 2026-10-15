@@ -1,4 +1,4 @@
-# misc_qr-god_README
+# misc qr god README
 
 ## QR God
 

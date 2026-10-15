@@ -1,4 +1,4 @@
-# 2021_quals_pwn-ebpf_README
+# 2021 quals pwn ebpf README
 
 # EBPF
 

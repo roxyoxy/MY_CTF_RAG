@@ -1,4 +1,4 @@
-# rev_legit-app-not-ransomware_solve_WRITEUP
+# rev legit app not ransomware solve WRITEUP
 
 Legit App Not Ransomware
 ============

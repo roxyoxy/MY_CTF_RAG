@@ -1,4 +1,4 @@
-# justctf-2023_hashcash
+# justctf 2023 hashcash
 
 # Hashcash
 

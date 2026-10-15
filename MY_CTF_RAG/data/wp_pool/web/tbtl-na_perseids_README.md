@@ -1,4 +1,4 @@
-# tbtl-na_perseids__README
+# tbtl na perseids README
 
 # Perseids &mdash; Solution
 

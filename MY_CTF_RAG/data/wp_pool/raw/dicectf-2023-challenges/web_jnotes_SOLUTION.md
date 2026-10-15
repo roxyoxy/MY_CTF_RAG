@@ -1,4 +1,4 @@
-# web_jnotes_SOLUTION
+# web jnotes SOLUTION
 
 - the basic idea: smuggle flag cookie into notes cookie, use XSS to read the rendered contents on the page
 

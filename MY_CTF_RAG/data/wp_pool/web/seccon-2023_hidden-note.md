@@ -1,4 +1,4 @@
-# seccon-2023_hidden-note
+# seccon 2023 hidden note
 
 # hidden-note
 ## Question

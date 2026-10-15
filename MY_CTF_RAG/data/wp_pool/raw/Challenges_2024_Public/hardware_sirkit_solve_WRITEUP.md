@@ -1,4 +1,4 @@
-# hardware_sirkit_solve_WRITEUP
+# hardware sirkit solve WRITEUP
 
 # Sitkit
 

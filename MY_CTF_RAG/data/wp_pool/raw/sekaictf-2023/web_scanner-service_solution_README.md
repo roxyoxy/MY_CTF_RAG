@@ -1,4 +1,4 @@
-# web_scanner-service_solution_README
+# web scanner service solution README
 
 ## Sekai Web-Scanner Writeup
 

@@ -1,4 +1,4 @@
-# pwnable_TOY2_solves
+# pwnable TOY2 solves
 
 # TOY2 - Solves
 | Solved Rank | Team name |

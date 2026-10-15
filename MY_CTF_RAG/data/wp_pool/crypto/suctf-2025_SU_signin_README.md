@@ -1,4 +1,4 @@
-# suctf-2025_SU_signin__README
+# suctf 2025 SU signin README
 
 The curve in question is the pair-friendly curve BLS12-381. For this challenge, our goal is to find G1 or G2. Because the flag is padded, the most significant bit of the flag character is 0. The corresponding curve points have this form：
 $$

@@ -1,4 +1,4 @@
-# 2024_quals_web-postviewer3-bot_README
+# 2024 quals web postviewer3 bot README
 
 # XSS Bot for Postviewer v3
 

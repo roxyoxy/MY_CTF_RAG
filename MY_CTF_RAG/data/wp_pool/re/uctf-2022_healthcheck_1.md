@@ -1,4 +1,4 @@
-# uctf-2022_healthcheck~1
+# uctf 2022 healthcheck~1
 
 # Healthcheck
 

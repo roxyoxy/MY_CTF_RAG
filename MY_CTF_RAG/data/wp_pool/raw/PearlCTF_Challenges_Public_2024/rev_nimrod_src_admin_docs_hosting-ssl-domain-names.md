@@ -1,4 +1,4 @@
-# rev_nimrod_src_admin_docs_hosting-ssl-domain-names
+# rev nimrod src admin docs hosting ssl domain names
 
 # On Hosting, SSL, and Domain Names
 Of course you want to publish your project to the world. Therefor in the [Getting Started](getting-started.md) page you are immediately setup with a Heroku project for staging and production. However, this still runs on the Heroku domain (e.g. yourproject-staging.herokuapp.com). We want to change this to your own domain name and introduce SSL to the mix to ensure you are setup properly.

@@ -1,4 +1,4 @@
-# wanictf-2024_do_not_rewrite
+# wanictf 2024 do not rewrite
 
 ---
 title: do_not_rewrite

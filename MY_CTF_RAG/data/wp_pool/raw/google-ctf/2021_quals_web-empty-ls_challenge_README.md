@@ -1,4 +1,4 @@
-# 2021_quals_web-empty-ls_challenge_README
+# 2021 quals web empty ls challenge README
 
 # License of this file
 

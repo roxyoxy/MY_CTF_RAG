@@ -1,4 +1,4 @@
-# suctf-2026_SU_thief__writeup
+# suctf 2026 SU thief writeup
 
 # SU Thief 官方 WP
 

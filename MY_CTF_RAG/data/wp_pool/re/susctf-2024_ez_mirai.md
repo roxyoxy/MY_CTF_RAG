@@ -1,4 +1,4 @@
-# susctf-2024_ez_mirai
+# susctf 2024 ez mirai
 
 # ez_mirai
 

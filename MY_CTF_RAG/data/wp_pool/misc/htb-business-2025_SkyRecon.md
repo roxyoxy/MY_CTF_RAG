@@ -1,4 +1,4 @@
-# htb-business-2025_SkyRecon
+# htb business 2025 SkyRecon
 
 ![img](../../assets/banner.png)
 

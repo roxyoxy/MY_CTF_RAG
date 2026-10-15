@@ -1,4 +1,4 @@
-# misc_vocaloid-heardle_README
+# misc vocaloid heardle README
 
 # Vocaloid Heardle
 

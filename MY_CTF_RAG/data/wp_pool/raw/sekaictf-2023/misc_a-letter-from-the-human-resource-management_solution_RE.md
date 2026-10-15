@@ -1,4 +1,4 @@
-# misc_a-letter-from-the-human-resource-management_solution_README
+# misc a letter from the human resource management solution README
 
 ## Solution (by sahuang)
 

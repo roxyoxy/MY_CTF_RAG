@@ -1,4 +1,4 @@
-# tbtl-na_memory_safe_ecdsa__README
+# tbtl na memory safe ecdsa README
 
 # Memory Safe ECDSA &mdash; Solution
 

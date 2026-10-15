@@ -1,4 +1,4 @@
-# challenges_rev_fastcalc_SOLVE
+# challenges rev fastcalc SOLVE
 
 # Fast Calculator Solution
 

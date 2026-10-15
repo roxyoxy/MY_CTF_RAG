@@ -1,4 +1,4 @@
-# crypto_unfairy-ring-plusplus_README
+# crypto unfairy ring plusplus README
 
 ## unfairy-ring++
 

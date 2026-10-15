@@ -1,4 +1,4 @@
-# third_party_PEGTL_doc_Contrib-and-Examples
+# third party PEGTL doc Contrib and Examples
 
 # Contrib and Examples
 

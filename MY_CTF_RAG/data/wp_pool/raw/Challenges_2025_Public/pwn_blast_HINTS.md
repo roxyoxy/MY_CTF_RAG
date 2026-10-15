@@ -1,4 +1,4 @@
-# pwn_blast_HINTS
+# pwn blast HINTS
 
 # Hints
 

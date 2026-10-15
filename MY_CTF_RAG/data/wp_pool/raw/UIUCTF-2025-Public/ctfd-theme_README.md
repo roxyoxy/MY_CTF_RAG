@@ -1,4 +1,4 @@
-# ctfd-theme_README
+# ctfd theme README
 
 # UIUCTF 2025 Theme
 

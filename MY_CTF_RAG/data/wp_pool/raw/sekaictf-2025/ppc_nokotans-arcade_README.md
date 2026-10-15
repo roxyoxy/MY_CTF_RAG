@@ -1,4 +1,4 @@
-# ppc_nokotans-arcade_README
+# ppc nokotans arcade README
 
 ## Nokotan's Arcade
 

@@ -1,4 +1,4 @@
-# 2025_quals_web-lost-in-transliteration_README
+# 2025 quals web lost in transliteration README
 
 # Lost In Transliteration
 

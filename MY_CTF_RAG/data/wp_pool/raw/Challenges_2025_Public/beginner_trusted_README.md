@@ -1,4 +1,4 @@
-# beginner_trusted_README
+# beginner trusted README
 
 Trusted
 ======================

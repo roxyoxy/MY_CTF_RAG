@@ -1,4 +1,4 @@
-# csctf-2024_3d-obj
+# csctf 2024 3d obj
 
 # 3D Obj
 

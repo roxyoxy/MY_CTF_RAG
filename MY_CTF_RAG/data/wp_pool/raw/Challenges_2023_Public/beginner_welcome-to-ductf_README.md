@@ -1,4 +1,4 @@
-# beginner_welcome-to-ductf_README
+# beginner welcome to ductf README
 
 # Welcome to DUCTF!
 ===================

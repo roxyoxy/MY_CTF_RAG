@@ -1,4 +1,4 @@
-# scriptctf-2025_div-2
+# scriptctf 2025 div 2
 
 # Div 2 | NoobMaster
 

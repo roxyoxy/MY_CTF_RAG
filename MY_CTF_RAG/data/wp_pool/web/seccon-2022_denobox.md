@@ -1,4 +1,4 @@
-# seccon-2022_denobox
+# seccon 2022 denobox
 
 # web: denobox
 ## Question

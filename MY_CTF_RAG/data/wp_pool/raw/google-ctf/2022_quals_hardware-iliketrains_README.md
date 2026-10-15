@@ -1,4 +1,4 @@
-# 2022_quals_hardware-iliketrains_README
+# 2022 quals hardware iliketrains README
 
 # I Like Trains
 

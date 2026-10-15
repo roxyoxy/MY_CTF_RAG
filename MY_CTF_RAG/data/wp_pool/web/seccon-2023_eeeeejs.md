@@ -1,4 +1,4 @@
-# seccon-2023_eeeeejs
+# seccon 2023 eeeeejs
 
 # eeeeejs
 ## Question

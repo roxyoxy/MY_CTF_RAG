@@ -1,4 +1,4 @@
-# tbtl-na_kung_fu_cipher__README
+# tbtl na kung fu cipher README
 
 # Kung-Fu Cipher &mdash; Solution
 

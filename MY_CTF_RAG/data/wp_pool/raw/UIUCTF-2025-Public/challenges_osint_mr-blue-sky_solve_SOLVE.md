@@ -1,4 +1,4 @@
-# challenges_osint_mr-blue-sky_solve_SOLVE
+# challenges osint mr blue sky solve SOLVE
 
 # "Mr. Blue Sky" Solution Writeup
 

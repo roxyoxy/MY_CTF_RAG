@@ -1,4 +1,4 @@
-# htb-university-2025_SleighComms
+# htb university 2025 SleighComms
 
 **Challenge Name:** SnowSignal OS - SleighComms Edition
 **Creator:** Joaquin Iglesias (Joey)

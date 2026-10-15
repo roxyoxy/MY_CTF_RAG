@@ -1,4 +1,4 @@
-# sunshinectf-2025_BASEic__writeup
+# sunshinectf 2025 BASEic writeup
 
 # BASEic CTF challenge writeup
 

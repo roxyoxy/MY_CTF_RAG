@@ -1,4 +1,4 @@
-# suctf-2025_SU_rsa__README
+# suctf 2025 SU rsa README
 
 ### SU_rsa
 

@@ -1,4 +1,4 @@
-# hidden-coordinates_README
+# hidden coordinates README
 
 # Hidden Coordinates
 

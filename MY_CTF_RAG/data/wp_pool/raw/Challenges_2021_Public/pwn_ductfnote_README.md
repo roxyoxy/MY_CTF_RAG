@@ -1,4 +1,4 @@
-# pwn_ductfnote_README
+# pwn ductfnote README
 
 # DUCTFnote
 

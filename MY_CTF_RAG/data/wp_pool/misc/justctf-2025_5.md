@@ -1,4 +1,4 @@
-# justctf-2025_~5
+# justctf 2025 ~5
 
 ### QSecureByRejection
 I tried to add a simple `qqemu.Pid` packet to QEMU's gdbstub to expose the process's PID via `getpid()`.

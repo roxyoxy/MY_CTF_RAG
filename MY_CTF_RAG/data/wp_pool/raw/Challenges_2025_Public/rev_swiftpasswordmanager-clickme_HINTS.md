@@ -1,4 +1,4 @@
-# rev_swiftpasswordmanager-clickme_HINTS
+# rev swiftpasswordmanager clickme HINTS
 
 1. The Flag button in the app will give you the flag if you can click it. Try to look into how it is being disabled.
 2. Try looking through the binary's symbols for anything related to "disable".

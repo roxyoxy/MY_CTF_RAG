@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_.github_PULL_REQUEST_TEMPLATE
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 .github PULL REQUEST TEMPLATE
 
 <!--
 

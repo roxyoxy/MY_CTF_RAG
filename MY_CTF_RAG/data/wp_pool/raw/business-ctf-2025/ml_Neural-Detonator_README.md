@@ -1,4 +1,4 @@
-# ml_Neural-Detonator_README
+# ml Neural Detonator README
 
 # Neural Detonator
 

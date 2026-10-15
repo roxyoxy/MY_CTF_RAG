@@ -1,4 +1,4 @@
-# starctf-2022_news
+# starctf 2022 news
 
 # News
 

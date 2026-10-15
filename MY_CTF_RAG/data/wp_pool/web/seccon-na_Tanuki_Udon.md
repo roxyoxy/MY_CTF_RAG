@@ -1,4 +1,4 @@
-# seccon-na_Tanuki Udon
+# seccon na Tanuki Udon
 
 # Tanuki Udon
 ## Question

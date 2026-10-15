@@ -1,4 +1,4 @@
-# misc_SU_MirrorBus-9_sourcecode_mb9_docs_JUDGE_QUICKREF
+# misc SU MirrorBus 9 sourcecode mb9 docs JUDGE QUICKREF
 
 ﻿# MirrorBus-9 Judge Quick Reference
 

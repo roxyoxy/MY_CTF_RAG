@@ -1,4 +1,4 @@
-# crypto_otwhat-2_solve_writeup
+# crypto otwhat 2 solve writeup
 
 As the flag heavily references the OG talk, this is a known cryptographic failure of PS3 signed software, with the use of a static k.
 

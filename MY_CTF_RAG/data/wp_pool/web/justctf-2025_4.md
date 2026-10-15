@@ -1,4 +1,4 @@
-# justctf-2025_~4
+# justctf 2025 ~4
 
 ### Ticket Master
 Yet another simple and secure event ticketing platform. No databases, just digitally signed images.

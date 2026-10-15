@@ -1,4 +1,4 @@
-# pwn_speedpwn-2_solution_README
+# pwn speedpwn 2 solution README
 
 ## Writeup
 

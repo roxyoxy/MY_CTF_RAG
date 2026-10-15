@@ -1,4 +1,4 @@
-# tbtl-na_cursed_decryption
+# tbtl na cursed decryption
 
 # Cursed Decryption
 

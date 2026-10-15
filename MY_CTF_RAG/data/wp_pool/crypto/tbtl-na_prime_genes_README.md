@@ -1,4 +1,4 @@
-# tbtl-na_prime_genes__README
+# tbtl na prime genes README
 
 # Prime Genes &mdash; Solution
 

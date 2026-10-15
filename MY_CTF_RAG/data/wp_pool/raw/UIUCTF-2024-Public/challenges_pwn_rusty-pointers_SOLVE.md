@@ -1,4 +1,4 @@
-# challenges_pwn_rusty-pointers_SOLVE
+# challenges pwn rusty pointers SOLVE
 
 # Solution
 

@@ -1,4 +1,4 @@
-# seccon-2022_easylfi
+# seccon 2022 easylfi
 
 # web: easylfi
 ## Question

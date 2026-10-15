@@ -1,4 +1,4 @@
-# pearlctf-2024_beautiful-song
+# pearlctf 2024 beautiful song
 
 # beautiful song
 ## Solution

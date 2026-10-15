@@ -1,4 +1,4 @@
-# seccon-2023___solves
+# seccon 2023 solves
 
 # Welcome - Solves
 | Solved Rank | Team name |

@@ -1,4 +1,4 @@
-# pwn_sheep-farm-simulator_README
+# pwn sheep farm simulator README
 
 sheep farm simulator
 ======================

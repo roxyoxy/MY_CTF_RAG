@@ -1,4 +1,4 @@
-# scriptctf-2025_vm
+# scriptctf 2025 vm
 
 # vm | Connor Chang
 

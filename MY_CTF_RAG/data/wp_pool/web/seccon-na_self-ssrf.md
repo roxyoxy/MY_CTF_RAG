@@ -1,4 +1,4 @@
-# seccon-na_self-ssrf
+# seccon na self ssrf
 
 # self-ssrf
 ## Question

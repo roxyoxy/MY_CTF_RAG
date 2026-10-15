@@ -1,4 +1,4 @@
-# beginner_discord_solve_WRITEUP
+# beginner discord solve WRITEUP
 
 discord
 ============

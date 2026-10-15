@@ -1,4 +1,4 @@
-# pwn_ezpz-pwn_README
+# pwn ezpz pwn README
 
 ezpz-pwn
 ============

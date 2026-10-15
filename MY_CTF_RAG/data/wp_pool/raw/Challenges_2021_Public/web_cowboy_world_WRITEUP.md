@@ -1,4 +1,4 @@
-# web_cowboy_world_WRITEUP
+# web cowboy world WRITEUP
 
 # Cowboy World Write Up
 

@@ -1,4 +1,4 @@
-# misc_qr-god_solution_README
+# misc qr god solution README
 
 First thing solver will do is to try and scan the QR code, it won't work. The description of the challenge has few keywords which will drive solver's thought process
 

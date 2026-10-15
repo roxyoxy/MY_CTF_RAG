@@ -1,4 +1,4 @@
-# dfir_shop-logging-for-what_README
+# dfir shop logging for what README
 
 Shop-TEMP JNDI
 ============

@@ -1,4 +1,4 @@
-# reverse_secure-computing_solution_README
+# reverse secure computing solution README
 
 # Secure Computing - Writeup
 

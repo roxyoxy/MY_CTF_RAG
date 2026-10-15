@@ -1,4 +1,4 @@
-# challenges_pwn_qas_SOLUTION
+# challenges pwn qas SOLUTION
 
 # Solution
 

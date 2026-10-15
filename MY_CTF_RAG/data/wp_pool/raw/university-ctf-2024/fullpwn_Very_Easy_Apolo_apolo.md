@@ -1,4 +1,4 @@
-# fullpwn_Very_Easy_Apolo_apolo
+# fullpwn Very Easy Apolo apolo
 
 ![](../../assets/banner.png)
 <img src="../../assets/htb.png" style="margin-left: 20px; zoom: 80%;" align=left />	<font size="10">Apolo</font>

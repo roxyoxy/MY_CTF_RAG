@@ -1,4 +1,4 @@
-# susctf-2025_easyprint
+# susctf 2025 easyprint
 
 
 # easyprint

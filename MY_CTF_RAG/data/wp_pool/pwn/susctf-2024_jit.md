@@ -1,4 +1,4 @@
-# susctf-2024_jit
+# susctf 2024 jit
 
 # Just In Time
 

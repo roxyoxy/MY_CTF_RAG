@@ -1,4 +1,4 @@
-# pearlctf-2025_lost-thoughts__writeup
+# pearlctf 2025 lost thoughts writeup
 
 # PearlCTF2025 : Lost_Thoughts
 

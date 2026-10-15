@@ -1,4 +1,4 @@
-# justctf-2023_~3
+# justctf 2023 ~3
 
 ### thiefcat
 My friend told me they made a terminal based game, but using some issue with stock netcat as an excuse they sent me this netcat-like binary telling me to use it instead! I didn't get the source code, but I took a quick look at it using a well-known state-of-the-art reverse engineering tool and it seemed perfectly safe to run. However, it stole the flag for this task from me! Can you get it back?

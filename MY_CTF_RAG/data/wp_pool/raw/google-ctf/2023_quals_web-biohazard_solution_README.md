@@ -1,4 +1,4 @@
-# 2023_quals_web-biohazard_solution_README
+# 2023 quals web biohazard solution README
 
 # Biohazard
 

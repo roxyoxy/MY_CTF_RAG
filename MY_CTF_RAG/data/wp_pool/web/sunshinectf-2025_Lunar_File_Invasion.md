@@ -1,4 +1,4 @@
-# sunshinectf-2025_Lunar_File_Invasion
+# sunshinectf 2025 Lunar File Invasion
 
 ### NOTE:
 

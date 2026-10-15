@@ -1,4 +1,4 @@
-# seccon-2022_skipinx
+# seccon 2022 skipinx
 
 # web: skipinx
 ## Question

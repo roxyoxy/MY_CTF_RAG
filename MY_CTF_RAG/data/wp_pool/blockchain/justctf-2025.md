@@ -1,4 +1,4 @@
-# justctf-2025_
+# justctf 2025
 
 ### Otternaut Launch
 Stranded on the frozen wastelands of Cryon-7, the Otternaut awakens in a half-buried, decades-old emergency capsule. Life support is failing, communications are dead, and the orbiting relay has gone silent.

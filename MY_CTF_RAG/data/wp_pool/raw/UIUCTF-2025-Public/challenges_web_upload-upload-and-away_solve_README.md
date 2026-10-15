@@ -1,4 +1,4 @@
-# challenges_web_upload-upload-and-away_solve_README
+# challenges web upload upload and away solve README
 
 # Spoilers...
 

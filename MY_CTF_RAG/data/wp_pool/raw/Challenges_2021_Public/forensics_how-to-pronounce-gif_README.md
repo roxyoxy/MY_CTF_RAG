@@ -1,4 +1,4 @@
-# forensics_how-to-pronounce-gif_README
+# forensics how to pronounce gif README
 
 # How to pronounce GIF?
 

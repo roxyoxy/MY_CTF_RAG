@@ -1,4 +1,4 @@
-# osint_bridget-returns_README
+# osint bridget returns README
 
 # Bridget Returns!
 **Category:** OSINT

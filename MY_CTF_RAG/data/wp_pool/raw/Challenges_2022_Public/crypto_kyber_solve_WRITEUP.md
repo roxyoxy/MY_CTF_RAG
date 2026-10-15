@@ -1,4 +1,4 @@
-# crypto_kyber_solve_WRITEUP
+# crypto kyber solve WRITEUP
 
 * [Kyber](#kyber)
     * [Overview](#overview)

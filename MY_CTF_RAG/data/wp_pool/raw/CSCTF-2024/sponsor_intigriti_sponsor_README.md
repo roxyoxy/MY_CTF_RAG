@@ -1,4 +1,4 @@
-# sponsor_intigriti_sponsor_README
+# sponsor intigriti sponsor README
 
 # Intigriti sponsor challenge
 

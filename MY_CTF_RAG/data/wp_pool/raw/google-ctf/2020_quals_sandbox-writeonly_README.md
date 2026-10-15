@@ -1,4 +1,4 @@
-# 2020_quals_sandbox-writeonly_README
+# 2020 quals sandbox writeonly README
 
 # Challenge Description
 

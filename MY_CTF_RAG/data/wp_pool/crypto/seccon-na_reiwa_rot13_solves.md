@@ -1,4 +1,4 @@
-# seccon-na_reiwa_rot13__solves
+# seccon na reiwa rot13 solves
 
 # reiwa_rot13 - Solves
 | Solved Rank | Team name |

@@ -1,4 +1,4 @@
-# susctf-2025_curlbash
+# susctf 2025 curlbash
 
 
 # curlbash

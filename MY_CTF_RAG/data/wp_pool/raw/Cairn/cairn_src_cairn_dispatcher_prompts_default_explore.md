@@ -1,4 +1,4 @@
-# cairn_src_cairn_dispatcher_prompts_default_explore
+# cairn src cairn dispatcher prompts default explore
 
 # Task
 You will receive a YAML snapshot of the task graph. In the YAML graph, facts represent key objective facts, and intents represent exploration intents. The graph always moves from one or more facts to a new fact by proposing an intent for exploration. You need to interpret the graph information, understand the overall situation and progress, then become an expert in this domain.

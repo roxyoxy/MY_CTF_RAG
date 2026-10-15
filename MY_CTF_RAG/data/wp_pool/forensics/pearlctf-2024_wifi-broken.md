@@ -1,4 +1,4 @@
-# pearlctf-2024_wifi-broken
+# pearlctf 2024 wifi broken
 
 # WiFi Broken
 

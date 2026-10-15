@@ -1,4 +1,4 @@
-# 2019_beginners_web-cwo-xss_README
+# 2019 beginners web cwo xss README
 
 # name: "Cookie World Order"
 

@@ -1,4 +1,4 @@
-# pwn_out-backdoor_WRITEUP
+# pwn out backdoor WRITEUP
 
 # outBackdoor solution
 ## Solving the challenge

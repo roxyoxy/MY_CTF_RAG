@@ -1,4 +1,4 @@
-# susctf-2025_xerxes
+# susctf 2025 xerxes
 
 
 # xerxes

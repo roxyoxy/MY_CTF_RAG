@@ -1,4 +1,4 @@
-# 2025_hackceler8_rounds_7_challenge-solutions
+# 2025 hackceler8 rounds 7 challenge solutions
 
 # Forest temple
 

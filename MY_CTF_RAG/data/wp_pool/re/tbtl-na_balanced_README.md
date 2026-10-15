@@ -1,4 +1,4 @@
-# tbtl-na_balanced__README
+# tbtl na balanced README
 
 # Balanced -- Solution
 

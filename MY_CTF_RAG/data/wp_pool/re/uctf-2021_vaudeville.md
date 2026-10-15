@@ -1,4 +1,4 @@
-# uctf-2021_vaudeville
+# uctf 2021 vaudeville
 
 This challenge implements a challenge/reponse protocol that selects a random challenge, XOR shifts it 140 times, and compares it to the response from the user, which is XOR shifted 7 times. If the values match, it prints the contents of flag.txt to stdout.
 

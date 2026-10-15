@@ -1,4 +1,4 @@
-# osint_the_internet_is_written_in_ink_README
+# osint the internet is written in ink README
 
 # The Internet is Written In Ink
 **Category:** OSINT

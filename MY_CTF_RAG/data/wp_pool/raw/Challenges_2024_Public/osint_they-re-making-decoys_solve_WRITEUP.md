@@ -1,4 +1,4 @@
-# osint_they-re-making-decoys_solve_WRITEUP
+# osint they re making decoys solve WRITEUP
 
 # They're Making Decoys
 

@@ -1,4 +1,4 @@
-# seccon-2021_cerberus
+# seccon 2021 cerberus
 
 # crypto: cerberus
 ## Question

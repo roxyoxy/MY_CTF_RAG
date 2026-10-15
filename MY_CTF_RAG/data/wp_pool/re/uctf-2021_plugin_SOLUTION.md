@@ -1,4 +1,4 @@
-# uctf-2021_plugin__SOLUTION
+# uctf 2021 plugin SOLUTION
 
 The file provided is a ZScript as created by ZBrush.  A ZBrush installation is necessary to run the script, and will likely be needed for analysis.  A free 30-day trial is available for ZBrush so this is unlikely to be an issue.
 

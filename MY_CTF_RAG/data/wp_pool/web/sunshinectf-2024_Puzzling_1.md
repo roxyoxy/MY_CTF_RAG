@@ -1,4 +1,4 @@
-# sunshinectf-2024_Puzzling~1
+# sunshinectf 2024 Puzzling~1
 
 # CodeIgniter 4 Application Starter
 

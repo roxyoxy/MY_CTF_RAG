@@ -1,4 +1,4 @@
-# tbtl-na_an_average_challenge__README
+# tbtl na an average challenge README
 
 # An Average Challenge -- Solution
 

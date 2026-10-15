@@ -1,4 +1,4 @@
-# Pwn_CloneArmy_description
+# Pwn CloneArmy description
 
 Hey, you! Want to do a great service for the rebellion? Take this mask, cape,
 and voice changer and go speak with that empire droid. We have a chance to stop

@@ -1,4 +1,4 @@
-# scriptctf-2025_Subtract__coordinates
+# scriptctf 2025 Subtract coordinates
 
 (91, 54)
 (307, 342)

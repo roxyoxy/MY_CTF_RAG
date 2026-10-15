@@ -1,4 +1,4 @@
-# starctf-2022_influxdb
+# starctf 2022 influxdb
 
 # InfluxDB data source 
 

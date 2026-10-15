@@ -1,4 +1,4 @@
-# 2025_quals_rev-circo_attachments_circo-sdk_README
+# 2025 quals rev circo attachments circo sdk README
 
 ## Circo SDK: Revolutionizing Circuit Simulation (No, Really!) 🌀
 

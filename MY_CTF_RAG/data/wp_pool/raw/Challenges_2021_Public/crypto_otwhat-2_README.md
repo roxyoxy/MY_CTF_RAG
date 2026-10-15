@@ -1,4 +1,4 @@
-# crypto_otwhat-2_README
+# crypto otwhat 2 README
 
 # OTWhat 2
 

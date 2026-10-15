@@ -1,4 +1,4 @@
-# wanictf-2024_gates
+# wanictf 2024 gates
 
 ---
 title: gates

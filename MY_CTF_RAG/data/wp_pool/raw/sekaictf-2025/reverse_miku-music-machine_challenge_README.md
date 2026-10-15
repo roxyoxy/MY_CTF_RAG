@@ -1,4 +1,4 @@
-# reverse_miku-music-machine_challenge_README
+# reverse miku music machine challenge README
 
 ## Compiling application
 

@@ -1,4 +1,4 @@
-# web_bad-chess-challenge_challenge_mail_smtp-server_README
+# web bad chess challenge challenge mail smtp server README
 
 # smtp-server
 

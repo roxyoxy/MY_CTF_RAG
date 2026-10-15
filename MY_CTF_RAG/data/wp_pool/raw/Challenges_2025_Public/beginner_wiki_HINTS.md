@@ -1,4 +1,4 @@
-# beginner_wiki_HINTS
+# beginner wiki HINTS
 
 # What wiki?
 

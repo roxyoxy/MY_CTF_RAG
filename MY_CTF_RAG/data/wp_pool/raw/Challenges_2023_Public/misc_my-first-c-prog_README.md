@@ -1,4 +1,4 @@
-# misc_my-first-c-prog_README
+# misc my first c prog README
 
 My First C Program!
 ====================

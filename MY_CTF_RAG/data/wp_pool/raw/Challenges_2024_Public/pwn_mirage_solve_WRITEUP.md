@@ -1,4 +1,4 @@
-# pwn_mirage_solve_WRITEUP
+# pwn mirage solve WRITEUP
 
 This is a bug in turboshaft load elimination. During turboshaft reduction of
 stack argument loading, if the stack slot is first loaded as a WordPtr, then 

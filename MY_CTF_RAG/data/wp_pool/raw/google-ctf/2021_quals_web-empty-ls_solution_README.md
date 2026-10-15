@@ -1,4 +1,4 @@
-# 2021_quals_web-empty-ls_solution_README
+# 2021 quals web empty ls solution README
 
 # License for this file
 

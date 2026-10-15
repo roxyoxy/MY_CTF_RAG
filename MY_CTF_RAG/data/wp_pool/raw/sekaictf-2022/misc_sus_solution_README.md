@@ -1,4 +1,4 @@
-# misc_sus_solution_README
+# misc sus solution README
 
 # Writeup
 

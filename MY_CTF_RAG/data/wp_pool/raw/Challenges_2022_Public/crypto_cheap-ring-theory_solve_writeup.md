@@ -1,4 +1,4 @@
-# crypto_cheap-ring-theory_solve_writeup
+# crypto cheap ring theory solve writeup
 
 # cheap ring theory
 

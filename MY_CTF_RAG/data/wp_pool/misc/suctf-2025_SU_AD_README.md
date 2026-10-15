@@ -1,4 +1,4 @@
-# suctf-2025_SU_AD__README
+# suctf 2025 SU AD README
 
 # SU_AD
 

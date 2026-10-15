@@ -1,4 +1,4 @@
-# sunshinectf-2025_HeapX__writeup
+# sunshinectf 2025 HeapX writeup
 
 0. Leak .rodata segment via writing to a NULL log (write 0 0), use this to get .text base
 1. Unsorted bin attack to leak libc address

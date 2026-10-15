@@ -1,4 +1,4 @@
-# sunshinectf-2024_adventure-on-the-high-c__writeup
+# sunshinectf 2024 adventure on the high c writeup
 
 # Write-Up: Adventure! on the High C
 

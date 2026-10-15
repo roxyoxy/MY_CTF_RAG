@@ -1,4 +1,4 @@
-# web_mutant_HINTS
+# web mutant HINTS
 
 1. The name of the challenge is a hint
 2. The code of the challenge is similar to how DOMPurify works, so that might help your research

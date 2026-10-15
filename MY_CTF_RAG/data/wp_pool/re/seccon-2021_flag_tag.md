@@ -1,4 +1,4 @@
-# seccon-2021_flag_tag
+# seccon 2021 flag tag
 
 # reversing: <flag>
 ## Question

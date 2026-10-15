@@ -1,4 +1,4 @@
-# suctf-2025_SU_hash__README
+# suctf 2025 SU hash README
 
 ### SU_hash
 

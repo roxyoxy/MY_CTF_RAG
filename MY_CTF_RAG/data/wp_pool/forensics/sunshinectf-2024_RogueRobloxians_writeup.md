@@ -1,4 +1,4 @@
-# sunshinectf-2024_RogueRobloxians__writeup
+# sunshinectf 2024 RogueRobloxians writeup
 
 One thing that we can notice off the bat from the game is that it is uncopylocked. This means that any user is able to download the game from ROBLOX. Downloading an uncopylocked game from the context menu that ROBLOX provides will always download the latest version of the game.
 

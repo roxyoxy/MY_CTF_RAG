@@ -1,4 +1,4 @@
-# suctf-2026_SU_West__writeup
+# suctf 2026 SU West writeup
 
 # SU_West Writeup
 

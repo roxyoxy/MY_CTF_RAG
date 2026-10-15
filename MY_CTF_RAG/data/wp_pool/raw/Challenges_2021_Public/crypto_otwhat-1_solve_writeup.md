@@ -1,4 +1,4 @@
-# crypto_otwhat-1_solve_writeup
+# crypto otwhat 1 solve writeup
 
 As the flag shows, this is a known signing failure of early versions of the Wii software.
 

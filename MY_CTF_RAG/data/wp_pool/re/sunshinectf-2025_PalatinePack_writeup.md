@@ -1,4 +1,4 @@
-# sunshinectf-2025_PalatinePack__writeup
+# sunshinectf 2025 PalatinePack writeup
 
 We open up the ELF and see local_40 is the file pointer to "palatinepackflag.txt", and some quite complicated code. 
 

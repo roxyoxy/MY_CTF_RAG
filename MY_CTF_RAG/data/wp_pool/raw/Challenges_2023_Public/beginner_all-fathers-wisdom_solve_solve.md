@@ -1,4 +1,4 @@
-# beginner_all-fathers-wisdom_solve_solve
+# beginner all fathers wisdom solve solve
 
 
 ## How 2 solve:

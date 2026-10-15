@@ -1,4 +1,4 @@
-# pearlctf-2025_horrid-henry__writeup
+# pearlctf 2025 horrid henry writeup
 
 #### Horrid Henry Writeup
 

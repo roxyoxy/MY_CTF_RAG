@@ -1,4 +1,4 @@
-# suctf-2025_SU_baby__README
+# suctf 2025 SU baby README
 
 # SU_BABY 
 

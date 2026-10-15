@@ -1,4 +1,4 @@
-# rev_bullet-hell_solve_writeup
+# rev bullet hell solve writeup
 
 # Challenge Overview
 

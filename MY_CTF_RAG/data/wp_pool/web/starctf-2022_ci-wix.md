@@ -1,4 +1,4 @@
-# starctf-2022_ci-wix
+# starctf 2022 ci wix
 
 # WiX Docker Image
 This directory contains a Dockerfile for building a Windows based image containing

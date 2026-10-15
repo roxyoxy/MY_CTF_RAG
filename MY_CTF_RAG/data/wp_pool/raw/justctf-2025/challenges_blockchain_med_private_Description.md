@@ -1,4 +1,4 @@
-# challenges_blockchain_med_private_Description
+# challenges blockchain med private Description
 
 The launch is a success — barely.
 The Otternaut escapes the crash zone and lands near a Council outpost rumored to hold a Forbidden Fuel Cell, the only known energy source powerful enough to trigger a warp jump and leave Cryon-7 for good.

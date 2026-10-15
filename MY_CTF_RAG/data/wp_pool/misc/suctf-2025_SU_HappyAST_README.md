@@ -1,4 +1,4 @@
-# suctf-2025_SU_HappyAST__README
+# suctf 2025 SU HappyAST README
 
 # SU_HappyAST
 ## 题目设计

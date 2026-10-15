@@ -1,4 +1,4 @@
-# suctf-2026_SU_cmsAgain__writeup
+# suctf 2026 SU cmsAgain writeup
 
 # SU_cmsAgain 归档说明
 

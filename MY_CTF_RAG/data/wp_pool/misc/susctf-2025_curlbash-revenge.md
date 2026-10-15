@@ -1,4 +1,4 @@
-# susctf-2025_curlbash-revenge
+# susctf 2025 curlbash revenge
 
 
 # curlbash-revenge

@@ -1,4 +1,4 @@
-# rev_spacegame_solve_solve
+# rev spacegame solve solve
 
 The game is a LOVE2D packed executable with obfuscated lua scripts.
 

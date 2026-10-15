@@ -1,4 +1,4 @@
-# wanictf-2024_I_wanna_be_a_streamer
+# wanictf 2024 I wanna be a streamer
 
 ---
 title: "I_wanna_be_a_streamer"

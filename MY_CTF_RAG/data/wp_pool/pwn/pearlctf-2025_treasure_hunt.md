@@ -1,4 +1,4 @@
-# pearlctf-2025_treasure hunt
+# pearlctf 2025 treasure hunt
 
 ### Treasure Hunt writeup
 

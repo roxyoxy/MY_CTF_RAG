@@ -1,4 +1,4 @@
-# 2019_beginners_pwn-buffer-overflow_README
+# 2019 beginners pwn buffer overflow README
 
 # name: "STOP GAN (bof)"
 

@@ -1,4 +1,4 @@
-# 2023_quals_pwn-storygen_solution_README
+# 2023 quals pwn storygen solution README
 
 # Google CTF 2023 - pwn: storygen writeup
 

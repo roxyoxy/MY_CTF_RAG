@@ -1,4 +1,4 @@
-# 2022_hackceler8_game_README
+# 2022 hackceler8 game README
 
 ## Game
 

@@ -1,4 +1,4 @@
-# seccon-na_JavaScrypto__solves
+# seccon na JavaScrypto solves
 
 # JavaScrypto - Solves
 | Solved Rank | Team name |

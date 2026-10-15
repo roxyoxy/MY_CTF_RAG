@@ -1,4 +1,4 @@
-# seccon-2023_Sickle
+# seccon 2023 Sickle
 
 # Sickle
 ## Question

@@ -1,4 +1,4 @@
-# pwn_entangled-revenge_README
+# pwn entangled revenge README
 
 entangled revenge
 ======================

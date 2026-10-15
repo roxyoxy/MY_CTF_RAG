@@ -1,4 +1,4 @@
-# reverse_sekai-licensing_solution_README
+# reverse sekai licensing solution README
 
 # Sekai Licensing
 

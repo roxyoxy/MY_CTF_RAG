@@ -1,4 +1,4 @@
-# web_impossible-xss_SOLUTION
+# web impossible xss SOLUTION
 
 use XSLT to use an XXE that loads the flag and sends the flag to your server
 

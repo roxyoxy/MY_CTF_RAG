@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_whatsnew_whats-new-in-v5-1
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources whatsnew whats new in v5 1
 
 +++
 title = "What's new in Grafana v5.1"

@@ -1,4 +1,4 @@
-# justctf-2023_~1
+# justctf 2023 ~1
 
 ### Dangerous
 My friend told me there's a secret page on this forum, but it's only for administrators.

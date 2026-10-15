@@ -1,4 +1,4 @@
-# sunshinectf-2024_certified__writeup
+# sunshinectf 2024 certified writeup
 
 # Writeup for Certified
 

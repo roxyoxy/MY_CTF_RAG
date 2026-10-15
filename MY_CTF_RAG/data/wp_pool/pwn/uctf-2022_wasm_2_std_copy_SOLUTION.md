@@ -1,4 +1,4 @@
-# uctf-2022_wasm_2_std_copy__SOLUTION
+# uctf 2022 wasm 2 std copy SOLUTION
 
 # Solution
 

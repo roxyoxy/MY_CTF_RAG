@@ -1,4 +1,4 @@
-# starctf-2022_stat
+# starctf 2022 stat
 
 # Singlestat Panel -  Native Plugin
 

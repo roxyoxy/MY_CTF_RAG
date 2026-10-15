@@ -1,4 +1,4 @@
-# third_party_2020-quals-reversing-power_src_README
+# third party 2020 quals reversing power src README
 
 # Build Instructions for ACPI challenge
 

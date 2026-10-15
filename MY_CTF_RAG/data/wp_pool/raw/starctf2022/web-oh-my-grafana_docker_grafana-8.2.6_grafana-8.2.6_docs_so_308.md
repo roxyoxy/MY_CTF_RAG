@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_docs_sources_release-notes_release-notes-8-0-2
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 docs sources release notes release notes 8 0 2
 
 +++
 title = "Release notes for Grafana 8.0.2"

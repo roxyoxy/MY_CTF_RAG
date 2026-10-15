@@ -1,4 +1,4 @@
-# starctf-2022_loki
+# starctf 2022 loki
 
 By default this block is setup to scrape logs from /var/logs. If you need to log some service from the docker-compse you can add:
 ```

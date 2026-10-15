@@ -1,4 +1,4 @@
-# 2020_quals_web-pasteurize_README
+# 2020 quals web pasteurize README
 
 # Pasteurize
 

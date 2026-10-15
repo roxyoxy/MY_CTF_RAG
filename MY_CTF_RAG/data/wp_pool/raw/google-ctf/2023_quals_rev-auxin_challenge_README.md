@@ -1,4 +1,4 @@
-# 2023_quals_rev-auxin_challenge_README
+# 2023 quals rev auxin challenge README
 
 See the comments of the `check_flag` function for how the flag checking works.
 The function also decrypts and reencrypts itself with a xorshift16 PRNG.

@@ -1,4 +1,4 @@
-# pwnable_kone_gadget_README
+# pwnable kone gadget README
 
 # pwnable: kone_gadget
 ## Question

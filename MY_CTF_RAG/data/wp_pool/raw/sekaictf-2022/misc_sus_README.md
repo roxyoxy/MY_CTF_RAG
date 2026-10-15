@@ -1,4 +1,4 @@
-# misc_sus_README
+# misc sus README
 
 # Sus
 

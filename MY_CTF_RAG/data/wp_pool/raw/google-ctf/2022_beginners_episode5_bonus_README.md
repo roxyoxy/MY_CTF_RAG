@@ -1,4 +1,4 @@
-# 2022_beginners_episode5_bonus_README
+# 2022 beginners episode5 bonus README
 
 # YouTube solves a CTF challenge
 

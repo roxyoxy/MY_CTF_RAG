@@ -1,4 +1,4 @@
-# 2019_finals_hardware-having-a-blast_README
+# 2019 finals hardware having a blast README
 
 # name: "Having a Blast"
 

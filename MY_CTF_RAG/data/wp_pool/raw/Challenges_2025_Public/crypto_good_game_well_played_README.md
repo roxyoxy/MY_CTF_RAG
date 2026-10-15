@@ -1,4 +1,4 @@
-# crypto_good_game_well_played_README
+# crypto good game well played README
 
 good game well played
 ======================

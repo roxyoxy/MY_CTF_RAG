@@ -1,4 +1,4 @@
-# 2021_quals_web-empty-ls-xss-bot_README
+# 2021 quals web empty ls xss bot README
 
 # License of this file
 

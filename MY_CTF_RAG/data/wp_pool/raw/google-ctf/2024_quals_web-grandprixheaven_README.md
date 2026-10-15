@@ -1,4 +1,4 @@
-# 2024_quals_web-grandprixheaven_README
+# 2024 quals web grandprixheaven README
 
 # Reseting the Database
 Note: this will destroy all data

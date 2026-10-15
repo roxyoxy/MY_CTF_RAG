@@ -1,4 +1,4 @@
-# Pwn_SpaceIsLessThanIdeal_description
+# Pwn SpaceIsLessThanIdeal description
 
 # I think i did a thing.
 I *may* have accessed a satellite.

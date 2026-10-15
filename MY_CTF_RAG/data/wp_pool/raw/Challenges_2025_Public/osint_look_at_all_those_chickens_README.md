@@ -1,4 +1,4 @@
-# osint_look_at_all_those_chickens_README
+# osint look at all those chickens README
 
 Look at all those chickens!
 ======================

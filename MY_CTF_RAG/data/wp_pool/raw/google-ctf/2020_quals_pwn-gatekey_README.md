@@ -1,4 +1,4 @@
-# 2020_quals_pwn-gatekey_README
+# 2020 quals pwn gatekey README
 
 # challenge description
 Our data storage system is full of bugs. But luckily, you still cannot get access to the secret data somewhere in the middle of the 'flagdb' database, because we use gatekey protection (<https://lore.kernel.org/linux-api/20181029112343.27454-1-msammler@mpi-sws.org/>) to harden database access!

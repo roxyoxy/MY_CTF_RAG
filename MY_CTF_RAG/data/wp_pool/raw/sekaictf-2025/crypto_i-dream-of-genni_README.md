@@ -1,4 +1,4 @@
-# crypto_i-dream-of-genni_README
+# crypto i dream of genni README
 
 ## I Dream of Genni
 

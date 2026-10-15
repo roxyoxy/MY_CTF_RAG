@@ -1,4 +1,4 @@
-# tbtl-na_the_flag_is_lit__README
+# tbtl na the flag is lit README
 
 # The Flag is Lit &mdash; Solution
 

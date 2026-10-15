@@ -1,4 +1,4 @@
-# seccon-na_Jump__solves
+# seccon na Jump solves
 
 # Jump - Solves
 | Solved Rank | Team name |

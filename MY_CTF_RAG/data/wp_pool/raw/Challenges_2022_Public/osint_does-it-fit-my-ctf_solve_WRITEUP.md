@@ -1,4 +1,4 @@
-# osint_does-it-fit-my-ctf_solve_WRITEUP
+# osint does it fit my ctf solve WRITEUP
 
 Does It Fit My CTF?
 ============

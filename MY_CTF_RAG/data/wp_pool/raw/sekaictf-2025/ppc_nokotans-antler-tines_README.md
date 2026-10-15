@@ -1,4 +1,4 @@
-# ppc_nokotans-antler-tines_README
+# ppc nokotans antler tines README
 
 ## Nokotan's Antler Tines
 

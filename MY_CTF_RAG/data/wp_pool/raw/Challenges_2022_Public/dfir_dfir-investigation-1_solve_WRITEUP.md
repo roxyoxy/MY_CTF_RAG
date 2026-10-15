@@ -1,4 +1,4 @@
-# dfir_dfir-investigation-1_solve_WRITEUP
+# dfir dfir investigation 1 solve WRITEUP
 
 DFIR Investigation 1
 ============

@@ -1,4 +1,4 @@
-# pwn_nightmare_README
+# pwn nightmare README
 
 ## Setup
 

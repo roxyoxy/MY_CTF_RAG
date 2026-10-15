@@ -1,4 +1,4 @@
-# seccon-2021_case-insensitive
+# seccon 2021 case insensitive
 
 # misc: case-insensitive
 ## Question

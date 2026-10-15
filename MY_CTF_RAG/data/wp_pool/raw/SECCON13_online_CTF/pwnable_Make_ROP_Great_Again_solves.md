@@ -1,4 +1,4 @@
-# pwnable_Make_ROP_Great_Again_solves
+# pwnable Make ROP Great Again solves
 
 # Make ROP Great Again - Solves
 | Solved Rank | Team name |

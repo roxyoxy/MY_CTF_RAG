@@ -1,4 +1,4 @@
-# starctf-2022_tooling
+# starctf 2022 tooling
 
 ## What
 

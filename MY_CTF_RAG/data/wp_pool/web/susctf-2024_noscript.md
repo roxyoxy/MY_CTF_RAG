@@ -1,4 +1,4 @@
-# susctf-2024_noscript
+# susctf 2024 noscript
 
 # noscript
 

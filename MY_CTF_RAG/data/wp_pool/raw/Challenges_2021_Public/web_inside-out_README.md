@@ -1,4 +1,4 @@
-# web_inside-out_README
+# web inside out README
 
 # Inside Out
 

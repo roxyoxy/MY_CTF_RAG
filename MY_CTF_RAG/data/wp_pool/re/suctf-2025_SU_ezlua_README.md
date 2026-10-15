@@ -1,4 +1,4 @@
-# suctf-2025_SU_ezlua__README
+# suctf 2025 SU ezlua README
 
 
 给了一个 lua 二进制文件和一个 luac 文件，简单看看 luac 文件就可以看出来它是被魔改过，需要先还原标准的 luac 。

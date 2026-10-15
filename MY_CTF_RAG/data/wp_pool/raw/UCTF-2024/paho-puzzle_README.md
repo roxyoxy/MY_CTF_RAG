@@ -1,4 +1,4 @@
-# paho-puzzle_README
+# paho puzzle README
 
 # Paho Puzzle
 

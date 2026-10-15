@@ -1,4 +1,4 @@
-# web_bad-chess-challenge_challenge_mail_smtp-server_CHANGELOG
+# web bad chess challenge challenge mail smtp server CHANGELOG
 
 # Changelog
 

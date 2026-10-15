@@ -1,4 +1,4 @@
-# forensics_symbolic-needs_solution_README
+# forensics symbolic needs solution README
 
 # Writeup
 

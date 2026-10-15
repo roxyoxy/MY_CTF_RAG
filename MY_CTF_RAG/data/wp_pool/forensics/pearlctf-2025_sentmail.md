@@ -1,4 +1,4 @@
-# pearlctf-2025_sentmail
+# pearlctf 2025 sentmail
 
 ## CTF Write-Up: SentMail
 

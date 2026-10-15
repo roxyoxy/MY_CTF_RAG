@@ -1,4 +1,4 @@
-# web_SU_cmsAgain_sourcecode_code_Public_ckeditor_CHANGES
+# web SU cmsAgain sourcecode code Public ckeditor CHANGES
 
 CKEditor 4 Changelog
 ====================

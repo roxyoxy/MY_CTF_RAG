@@ -1,4 +1,4 @@
-# 2024_quals_rev-rustyschool_solution_README
+# 2024 quals rev rustyschool solution README
 
 # RE Challenge: 🦀`Rusty School🦀`
 

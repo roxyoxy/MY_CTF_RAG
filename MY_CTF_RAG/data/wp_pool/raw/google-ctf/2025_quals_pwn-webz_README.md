@@ -1,4 +1,4 @@
-# 2025_quals_pwn-webz_README
+# 2025 quals pwn webz README
 
 ### webz
 

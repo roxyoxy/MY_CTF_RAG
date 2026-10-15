@@ -1,4 +1,4 @@
-# third_party_edk2_DynamicTablesPkg_Readme
+# third party edk2 DynamicTablesPkg Readme
 
 Dynamic Tables Framework
 ------------------------

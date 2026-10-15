@@ -1,4 +1,4 @@
-# sunshinectf-2025_WebForge
+# sunshinectf 2025 WebForge
 
 # Deployment Guide
 <br>

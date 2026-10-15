@@ -1,4 +1,4 @@
-# suctf-2026_SU_jdbc-master__writeup
+# suctf 2026 SU jdbc master writeup
 
 
 

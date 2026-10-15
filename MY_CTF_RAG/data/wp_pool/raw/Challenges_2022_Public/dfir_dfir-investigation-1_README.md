@@ -1,4 +1,4 @@
-# dfir_dfir-investigation-1_README
+# dfir dfir investigation 1 README
 
 dfir-investigation-1
 ============

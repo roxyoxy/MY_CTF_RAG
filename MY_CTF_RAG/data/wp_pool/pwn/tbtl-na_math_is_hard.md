@@ -1,4 +1,4 @@
-# tbtl-na_math_is_hard
+# tbtl na math is hard
 
 # Math is Hard
 

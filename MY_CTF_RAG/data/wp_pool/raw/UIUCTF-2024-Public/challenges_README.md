@@ -1,4 +1,4 @@
-# challenges_README
+# challenges README
 
 # Challenges
 Flag format: `uiuctf{...}`.

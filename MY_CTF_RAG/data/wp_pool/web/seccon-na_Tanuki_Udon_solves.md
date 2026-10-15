@@ -1,4 +1,4 @@
-# seccon-na_Tanuki Udon__solves
+# seccon na Tanuki Udon solves
 
 # Tanuki Udon - Solves
 | Solved Rank | Team name |

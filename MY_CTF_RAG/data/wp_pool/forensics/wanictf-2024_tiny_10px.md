@@ -1,4 +1,4 @@
-# wanictf-2024_tiny_10px
+# wanictf 2024 tiny 10px
 
 ---
 title: "tiny_10px"

@@ -1,4 +1,4 @@
-# 2025_quals_misc-mega-rust-1_README
+# 2025 quals misc mega rust 1 README
 
 # MegaRust
 

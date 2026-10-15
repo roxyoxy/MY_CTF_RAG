@@ -1,4 +1,4 @@
-# 2023_quals_crypto-mytls_solution_README
+# 2023 quals crypto mytls solution README
 
 # myTLS - Google CTF 2023 Writeup
 

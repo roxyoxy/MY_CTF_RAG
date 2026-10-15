@@ -1,4 +1,4 @@
-# 2023_quals_rev-zermatt_solution_README
+# 2023 quals rev zermatt solution README
 
 # Google CTF 2023 - RE: Zermatt writeup
 

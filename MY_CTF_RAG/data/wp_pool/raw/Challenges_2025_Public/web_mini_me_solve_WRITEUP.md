@@ -1,4 +1,4 @@
-# web_mini_me_solve_WRITEUP
+# web mini me solve WRITEUP
 
 mini-me
 ============

@@ -1,4 +1,4 @@
-# challenges_rev_summarize_SOLVE
+# challenges rev summarize SOLVE
 
 This challenge asks us to enter six 9-digit positive integers, performs some check on the integers, and prints the flag if the check succeeds. The flag consists of the six integers hex-encoded and wrapped in the flag format. 
 

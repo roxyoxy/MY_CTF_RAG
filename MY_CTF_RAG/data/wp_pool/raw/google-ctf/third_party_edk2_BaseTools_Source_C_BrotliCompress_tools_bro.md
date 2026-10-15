@@ -1,4 +1,4 @@
-# third_party_edk2_BaseTools_Source_C_BrotliCompress_tools_brotli
+# third party edk2 BaseTools Source C BrotliCompress tools brotli
 
 brotli(1) -- brotli, unbrotli - compress or decompress files
 ================================================================

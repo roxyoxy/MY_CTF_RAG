@@ -1,4 +1,4 @@
-# web_notepad_README
+# web notepad README
 
 # Notepad
 

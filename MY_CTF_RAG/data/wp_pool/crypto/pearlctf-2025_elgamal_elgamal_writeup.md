@@ -1,4 +1,4 @@
-# pearlctf-2025_elgamal__elgamal_writeup
+# pearlctf 2025 elgamal elgamal writeup
 
 # Attack on the ElGamal
 

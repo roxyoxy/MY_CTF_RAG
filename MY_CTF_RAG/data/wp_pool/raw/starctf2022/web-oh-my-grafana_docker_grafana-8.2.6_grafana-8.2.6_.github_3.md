@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_.github_ISSUE_TEMPLATE_2-accessibility
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 .github ISSUE TEMPLATE 2 accessibility
 
 ---
 name: Accessibility issue

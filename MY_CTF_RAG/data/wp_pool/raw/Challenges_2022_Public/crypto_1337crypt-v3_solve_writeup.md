@@ -1,4 +1,4 @@
-# crypto_1337crypt-v3_solve_writeup
+# crypto 1337crypt v3 solve writeup
 
 # 1337crypt v3
 

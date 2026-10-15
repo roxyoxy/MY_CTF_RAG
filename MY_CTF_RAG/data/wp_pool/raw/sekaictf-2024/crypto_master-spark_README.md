@@ -1,4 +1,4 @@
-# crypto_master-spark_README
+# crypto master spark README
 
 ## マスタースパーク (Master Spark)
 

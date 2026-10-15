@@ -1,4 +1,4 @@
-# susctf-2024_nfsr2
+# susctf 2024 nfsr2
 
 # nfsr2
 

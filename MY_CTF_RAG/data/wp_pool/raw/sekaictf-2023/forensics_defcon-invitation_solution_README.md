@@ -1,4 +1,4 @@
-# forensics_defcon-invitation_solution_README
+# forensics defcon invitation solution README
 
 ## Writeup
 

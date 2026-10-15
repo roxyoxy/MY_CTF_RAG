@@ -1,4 +1,4 @@
-# uctf-2022_wasm_1_aot__README
+# uctf 2022 wasm 1 aot README
 
 # Real World WASM 1 writeup
 

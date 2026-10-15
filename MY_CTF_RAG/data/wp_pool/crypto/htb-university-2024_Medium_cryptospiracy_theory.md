@@ -1,4 +1,4 @@
-# htb-university-2024_[Medium] cryptospiracy theory
+# htb university 2024 [Medium] cryptospiracy theory
 
 ![img](../../assets/banner.png)
 

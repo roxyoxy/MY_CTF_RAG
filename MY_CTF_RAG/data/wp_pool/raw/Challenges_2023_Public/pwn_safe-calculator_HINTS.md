@@ -1,4 +1,4 @@
-# pwn_safe-calculator_HINTS
+# pwn safe calculator HINTS
 
 It's difficult to hint this chall without giving too much of the fun away :)
 

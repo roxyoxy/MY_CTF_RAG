@@ -1,4 +1,4 @@
-# seccon-2023_Tokyo Payload__solves
+# seccon 2023 Tokyo Payload solves
 
 # Tokyo Payload - Solves
 | Solved Rank | Team name |

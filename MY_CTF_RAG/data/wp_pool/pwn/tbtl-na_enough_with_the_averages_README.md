@@ -1,4 +1,4 @@
-# tbtl-na_enough_with_the_averages__README
+# tbtl na enough with the averages README
 
 # Enough With the Averages -- Solution
 

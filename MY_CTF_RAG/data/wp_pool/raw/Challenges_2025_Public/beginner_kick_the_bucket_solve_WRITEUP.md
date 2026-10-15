@@ -1,4 +1,4 @@
-# beginner_kick_the_bucket_solve_WRITEUP
+# beginner kick the bucket solve WRITEUP
 
 Kick the (S3) Bucket
 ============

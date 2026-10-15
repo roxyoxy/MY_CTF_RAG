@@ -1,4 +1,4 @@
-# starctf-2022_loadtest
+# starctf 2022 loadtest
 
 # Grafana load test
 

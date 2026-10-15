@@ -1,4 +1,4 @@
-# uctf-2021_pwnies_please
+# uctf 2021 pwnies please
 
 # uiuctf-2021
 

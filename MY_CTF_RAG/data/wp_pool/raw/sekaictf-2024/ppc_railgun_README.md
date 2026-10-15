@@ -1,4 +1,4 @@
-# ppc_railgun_README
+# ppc railgun README
 
 ## Railgun
 

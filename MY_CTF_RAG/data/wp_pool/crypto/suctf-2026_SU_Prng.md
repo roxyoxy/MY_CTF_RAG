@@ -1,4 +1,4 @@
-# suctf-2026_SU_Prng
+# suctf 2026 SU Prng
 
 ## 标题
 SU_Prng

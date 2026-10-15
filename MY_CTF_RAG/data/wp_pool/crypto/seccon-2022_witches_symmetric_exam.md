@@ -1,4 +1,4 @@
-# seccon-2022_witches_symmetric_exam
+# seccon 2022 witches symmetric exam
 
 # crypto: witches_symmetric_exam
 ## Question

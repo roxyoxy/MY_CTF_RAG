@@ -1,4 +1,4 @@
-# uctf-2021_emote__SOLUTION
+# uctf 2021 emote SOLUTION
 
 * todo add flag.png as an emote on uiuctf discord
 * this one does not need any files associated with it

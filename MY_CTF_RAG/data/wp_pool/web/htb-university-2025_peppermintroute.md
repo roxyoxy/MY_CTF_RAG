@@ -1,4 +1,4 @@
-# htb-university-2025_peppermintroute
+# htb university 2025 peppermintroute
 
 ![img](../../assets/banner.png)
 

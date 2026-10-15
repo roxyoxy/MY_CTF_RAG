@@ -1,4 +1,4 @@
-# 2025_hackceler8_README
+# 2025 hackceler8 README
 
 # Hackceler8 2025
 

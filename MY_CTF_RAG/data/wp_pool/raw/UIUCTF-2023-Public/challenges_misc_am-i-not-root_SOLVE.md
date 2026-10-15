@@ -1,4 +1,4 @@
-# challenges_misc_am-i-not-root_SOLVE
+# challenges misc am i not root SOLVE
 
 # Am I not root?
 

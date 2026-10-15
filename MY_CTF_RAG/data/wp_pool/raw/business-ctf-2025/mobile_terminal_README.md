@@ -1,4 +1,4 @@
-# mobile_terminal_README
+# mobile terminal README
 
 # Terminal Challenge - Reverse Engineering
 

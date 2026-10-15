@@ -1,4 +1,4 @@
-# blockchain_private-log_solve_WRITEUP
+# blockchain private log solve WRITEUP
 
 # Private Log Writeup 
 

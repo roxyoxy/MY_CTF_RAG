@@ -1,4 +1,4 @@
-# pwn_life-simulator-2_README
+# pwn life simulator 2 README
 
 ## Life Simulator 2
 

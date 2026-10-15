@@ -1,4 +1,4 @@
-# 2026_hackceler8_README
+# 2026 hackceler8 README
 
 # Hackceler8 2026
 

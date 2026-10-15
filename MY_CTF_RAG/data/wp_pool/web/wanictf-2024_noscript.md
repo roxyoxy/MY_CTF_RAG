@@ -1,4 +1,4 @@
-# wanictf-2024_noscript
+# wanictf 2024 noscript
 
 ---
 title: "Noscript"

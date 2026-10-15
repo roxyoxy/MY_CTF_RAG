@@ -1,4 +1,4 @@
-# justctf-2023_
+# justctf 2023
 
 ### ECC for Dummies
 Sometimes you have to force logic to do what you want it to do

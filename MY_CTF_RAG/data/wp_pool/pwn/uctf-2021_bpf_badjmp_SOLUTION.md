@@ -1,4 +1,4 @@
-# uctf-2021_bpf_badjmp__SOLUTION
+# uctf 2021 bpf badjmp SOLUTION
 
 Please stop reading here if you don't want to be spoiled. I still wanna know
 how difficult this challenge is :)

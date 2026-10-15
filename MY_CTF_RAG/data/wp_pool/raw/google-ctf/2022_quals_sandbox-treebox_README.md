@@ -1,4 +1,4 @@
-# 2022_quals_sandbox-treebox_README
+# 2022 quals sandbox treebox README
 
 # sandbox-treebox
 

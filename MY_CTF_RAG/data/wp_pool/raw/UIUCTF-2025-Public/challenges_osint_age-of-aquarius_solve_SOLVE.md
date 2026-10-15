@@ -1,4 +1,4 @@
-# challenges_osint_age-of-aquarius_solve_SOLVE
+# challenges osint age of aquarius solve SOLVE
 
 # "Age of Aquarius" Solution Writeup
 

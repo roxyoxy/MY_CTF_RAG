@@ -1,4 +1,4 @@
-# competition_ranking
+# competition ranking
 
 # Ranking
 | Rank | Name | Score | Eligible |

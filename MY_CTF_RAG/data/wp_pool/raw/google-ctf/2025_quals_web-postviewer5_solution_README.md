@@ -1,4 +1,4 @@
-# 2025_quals_web-postviewer5_solution_README
+# 2025 quals web postviewer5 solution README
 
 ### Exploit
 

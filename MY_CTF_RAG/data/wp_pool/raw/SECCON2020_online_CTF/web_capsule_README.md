@@ -1,4 +1,4 @@
-# web_capsule_README
+# web capsule README
 
 # Capsule
 

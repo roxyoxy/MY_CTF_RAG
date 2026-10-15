@@ -1,4 +1,4 @@
-# crypto_squares-vs-cubes_README
+# crypto squares vs cubes README
 
 ## Squares vs. Cubes
 

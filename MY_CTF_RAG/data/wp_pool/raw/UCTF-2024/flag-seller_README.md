@@ -1,4 +1,4 @@
-# flag-seller_README
+# flag seller README
 
 # Flag Seller
 

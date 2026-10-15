@@ -1,4 +1,4 @@
-# third_party_PEGTL_doc_Errors-and-Exceptions
+# third party PEGTL doc Errors and Exceptions
 
 # Errors and Exceptions
 

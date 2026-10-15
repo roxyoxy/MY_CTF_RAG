@@ -1,4 +1,4 @@
-# tbtl-na_michael_scofield__README
+# tbtl na michael scofield README
 
 # Michael Scofield &mdash; Solution
 

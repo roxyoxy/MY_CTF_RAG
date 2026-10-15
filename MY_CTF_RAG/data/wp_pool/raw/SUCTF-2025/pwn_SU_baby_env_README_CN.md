@@ -1,4 +1,4 @@
-# pwn_SU_baby_env_README_CN
+# pwn SU baby env README CN
 
 # pwn_deploy_chroot
 

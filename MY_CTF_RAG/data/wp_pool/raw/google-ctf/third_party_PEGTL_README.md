@@ -1,4 +1,4 @@
-# third_party_PEGTL_README
+# third party PEGTL README
 
 ## Welcome to the PEGTL
 

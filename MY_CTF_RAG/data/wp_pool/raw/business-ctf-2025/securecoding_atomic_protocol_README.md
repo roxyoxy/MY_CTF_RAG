@@ -1,4 +1,4 @@
-# securecoding_atomic_protocol_README
+# securecoding atomic protocol README
 
 ![img](../../assets/banner.png)
 

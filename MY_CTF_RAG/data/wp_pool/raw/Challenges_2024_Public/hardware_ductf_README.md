@@ -1,4 +1,4 @@
-# hardware_ductf_README
+# hardware ductf README
 
 # DUCTF
 

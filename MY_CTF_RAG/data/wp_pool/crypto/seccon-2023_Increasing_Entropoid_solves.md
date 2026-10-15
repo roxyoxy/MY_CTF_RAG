@@ -1,4 +1,4 @@
-# seccon-2023_Increasing Entropoid__solves
+# seccon 2023 Increasing Entropoid solves
 
 # Increasing Entropoid - Solves
 | Solved Rank | Team name |

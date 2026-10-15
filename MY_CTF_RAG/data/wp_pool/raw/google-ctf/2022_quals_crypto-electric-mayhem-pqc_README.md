@@ -1,4 +1,4 @@
-# 2022_quals_crypto-electric-mayhem-pqc_README
+# 2022 quals crypto electric mayhem pqc README
 
 # Remote power analysis challenge - Post Quantum Crypto edition
 

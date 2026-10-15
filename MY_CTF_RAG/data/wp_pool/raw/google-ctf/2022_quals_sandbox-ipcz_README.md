@@ -1,4 +1,4 @@
-# 2022_quals_sandbox-ipcz_README
+# 2022 quals sandbox ipcz README
 
 # sandbox IPCZ
 

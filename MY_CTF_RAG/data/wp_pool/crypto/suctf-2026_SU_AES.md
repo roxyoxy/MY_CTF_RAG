@@ -1,4 +1,4 @@
-# suctf-2026_SU_AES
+# suctf 2026 SU AES
 
 ## 标题
 SU_AES

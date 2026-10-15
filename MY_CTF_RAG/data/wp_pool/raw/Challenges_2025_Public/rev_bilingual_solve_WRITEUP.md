@@ -1,4 +1,4 @@
-# rev_bilingual_solve_WRITEUP
+# rev bilingual solve WRITEUP
 
 bilingual
 ============

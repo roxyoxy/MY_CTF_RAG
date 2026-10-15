@@ -1,4 +1,4 @@
-# tbtl-na_safe_rust__README
+# tbtl na safe rust README
 
 # Safe Rust &mdash; Solution
 

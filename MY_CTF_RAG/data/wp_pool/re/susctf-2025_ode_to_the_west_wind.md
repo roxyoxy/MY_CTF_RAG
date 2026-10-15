@@ -1,4 +1,4 @@
-# susctf-2025_ode_to_the_west_wind
+# susctf 2025 ode to the west wind
 
 
 # ode_to_the_west_wind

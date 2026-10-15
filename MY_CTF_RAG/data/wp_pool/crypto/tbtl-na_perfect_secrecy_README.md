@@ -1,4 +1,4 @@
-# tbtl-na_perfect_secrecy__README
+# tbtl na perfect secrecy README
 
 # Perfect Secrecy &mdash; Solution
 

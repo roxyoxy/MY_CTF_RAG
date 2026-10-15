@@ -1,4 +1,4 @@
-# web_SU_photogallery_env_src_node
+# web SU photogallery env src node
 
 书鱼哥哥交给我个任务，让我写一个su的图库来存放战队的美好回忆，我需要测试我开发的代码，于是我在服务器上测试，但是我测试的时候并不想大费周章改变我原本配置的环境。
 

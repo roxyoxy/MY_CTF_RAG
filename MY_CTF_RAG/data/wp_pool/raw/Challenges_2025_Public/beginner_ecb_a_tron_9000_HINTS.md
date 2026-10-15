@@ -1,4 +1,4 @@
-# beginner_ecb_a_tron_9000_HINTS
+# beginner ecb a tron 9000 HINTS
 
 # Hints
 

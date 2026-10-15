@@ -1,4 +1,4 @@
-# pwnable_rop-2.35_solves
+# pwnable rop 2.35 solves
 
 # rop-2.35 - Solves
 | Solved Rank | Team name |

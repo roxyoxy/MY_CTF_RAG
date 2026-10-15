@@ -1,4 +1,4 @@
-# starctf-2022_cloud-monitoring
+# starctf 2022 cloud monitoring
 
 # Google Cloud Monitoring data source - native plugin (formerly named Stackdriver)
 

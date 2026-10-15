@@ -1,4 +1,4 @@
-# suctf-2026_SU_Lattice__writeup
+# suctf 2026 SU Lattice writeup
 
 ## SU_Lattice
 

@@ -1,4 +1,4 @@
-# seccon-2022_bffcalc
+# seccon 2022 bffcalc
 
 # web: bffcalc
 ## Question

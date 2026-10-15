@@ -1,4 +1,4 @@
-# starctf-2022_annolist
+# starctf 2022 annolist
 
 # Annotation List Panel - Native Plugin
 

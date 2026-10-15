@@ -1,4 +1,4 @@
-# justctf-2023_unix
+# justctf 2023 unix
 
 # Building `sys/unix`
 

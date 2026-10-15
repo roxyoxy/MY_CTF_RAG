@@ -1,4 +1,4 @@
-# 2021_quals_web-empty-ls-admin_challenge_README
+# 2021 quals web empty ls admin challenge README
 
 # Liencse of this file
 

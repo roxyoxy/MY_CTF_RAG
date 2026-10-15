@@ -1,4 +1,4 @@
-# suctf-2026_moono-lisa
+# suctf 2026 moono lisa
 
 "Moono-lisa" Skin
 =================

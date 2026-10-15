@@ -1,4 +1,4 @@
-# suctf-2026_SU_Protocol__SU_Protocol 31bef3f8bbc880d98410dd9efed3e0d2
+# suctf 2026 SU Protocol SU Protocol 31bef3f8bbc880d98410dd9efed3e0d2
 
 # SU_Protocol
 

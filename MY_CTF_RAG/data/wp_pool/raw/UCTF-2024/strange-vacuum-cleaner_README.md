@@ -1,4 +1,4 @@
-# strange-vacuum-cleaner_README
+# strange vacuum cleaner README
 
 # Strange Vacuum Cleaner
 

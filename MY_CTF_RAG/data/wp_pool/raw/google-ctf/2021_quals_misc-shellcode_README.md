@@ -1,4 +1,4 @@
-# 2021_quals_misc-shellcode_README
+# 2021 quals misc shellcode README
 
 # ABC ARM AND AMD
 

@@ -1,4 +1,4 @@
-# challenges_misc_push-and-pickle_SOLVE
+# challenges misc push and pickle SOLVE
 
 # Part 1: Leak chal.py
 

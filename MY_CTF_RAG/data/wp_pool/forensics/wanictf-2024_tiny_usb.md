@@ -1,4 +1,4 @@
-# wanictf-2024_tiny_usb
+# wanictf 2024 tiny usb
 
 ---
 title: "tiny_usb"

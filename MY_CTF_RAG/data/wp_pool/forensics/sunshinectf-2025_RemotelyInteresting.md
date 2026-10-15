@@ -1,4 +1,4 @@
-# sunshinectf-2025_RemotelyInteresting
+# sunshinectf 2025 RemotelyInteresting
 
 # Remotely Interesting
 

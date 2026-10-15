@@ -1,4 +1,4 @@
-# crypto_rsa-interval-oracle-iii_solve_WRITEUP
+# crypto rsa interval oracle iii solve WRITEUP
 
 # rsa interval oracle
 

@@ -1,4 +1,4 @@
-# challenges_crypto_groups_SOLVE
+# challenges crypto groups SOLVE
 
 
 The solution to this challenge has two main parts: finding a large (>512 bit) carmichael number and solving a discrete log problem modulo that number. 

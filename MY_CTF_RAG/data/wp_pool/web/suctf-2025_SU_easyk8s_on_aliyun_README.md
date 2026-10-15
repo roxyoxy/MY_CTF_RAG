@@ -1,4 +1,4 @@
-# suctf-2025_SU_easyk8s_on_aliyun__README
+# suctf 2025 SU easyk8s on aliyun README
 
 ### SUCTF - easyk8s on aliyun
 

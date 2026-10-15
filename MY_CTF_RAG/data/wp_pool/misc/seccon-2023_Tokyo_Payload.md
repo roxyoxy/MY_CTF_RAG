@@ -1,4 +1,4 @@
-# seccon-2023_Tokyo Payload
+# seccon 2023 Tokyo Payload
 
 # Tokyo Payload
 ## Question

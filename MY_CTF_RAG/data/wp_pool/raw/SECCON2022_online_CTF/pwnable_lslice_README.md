@@ -1,4 +1,4 @@
-# pwnable_lslice_README
+# pwnable lslice README
 
 # pwnable: lslice
 ## Question

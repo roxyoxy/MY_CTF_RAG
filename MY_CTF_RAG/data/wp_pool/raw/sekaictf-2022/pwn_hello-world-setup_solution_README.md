@@ -1,4 +1,4 @@
-# pwn_hello-world-setup_solution_README
+# pwn hello world setup solution README
 
 ## Writeup
 

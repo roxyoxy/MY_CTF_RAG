@@ -1,4 +1,4 @@
-# cairn_src_cairn_dispatcher_prompts_default_bootstrap
+# cairn src cairn dispatcher prompts default bootstrap
 
 # Task
 You will receive a context bundle containing Origin, Goal, and Hints. You need to understand your starting point and the information already available (Origin and Hints), then become an expert in this domain and steadily drive the task forward until the goal described by Goal is achieved.

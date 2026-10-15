@@ -1,4 +1,4 @@
-# 20_questions_ctf_README
+# 20 questions ctf README
 
 <img src="Resources/UCTF.jpg" title="UCTF" alt="UCTF" data-align="center">
 

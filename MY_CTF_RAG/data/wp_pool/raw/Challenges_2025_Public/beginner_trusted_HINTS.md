@@ -1,4 +1,4 @@
-# beginner_trusted_HINTS
+# beginner trusted HINTS
 
 
 # What admin panel? 

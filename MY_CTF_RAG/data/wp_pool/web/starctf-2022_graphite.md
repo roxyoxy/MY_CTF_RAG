@@ -1,4 +1,4 @@
-# starctf-2022_graphite
+# starctf 2022 graphite
 
 # Graphite Data Source -  Native Plugin
 

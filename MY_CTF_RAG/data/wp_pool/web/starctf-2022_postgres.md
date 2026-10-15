@@ -1,4 +1,4 @@
-# starctf-2022_postgres
+# starctf 2022 postgres
 
 # Grafana PostgreSQL Data Source -  Native Plugin
 

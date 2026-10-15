@@ -1,4 +1,4 @@
-# osint_comeacroppa_HINTS
+# osint comeacroppa HINTS
 
 ## Hints from Nosurf via Pix :>
 

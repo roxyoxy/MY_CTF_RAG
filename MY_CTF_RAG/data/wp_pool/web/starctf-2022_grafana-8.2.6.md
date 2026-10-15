@@ -1,4 +1,4 @@
-# starctf-2022_grafana-8.2.6
+# starctf 2022 grafana 8.2.6
 
 ![Grafana](docs/logo-horizontal.png)
 

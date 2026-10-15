@@ -1,4 +1,4 @@
-# justctf-2025_private~1
+# justctf 2025 private~1
 
 ## prospector
 

@@ -1,4 +1,4 @@
-# tbtl-na_free_flag__README
+# tbtl na free flag README
 
 # Free Flag &mdash; Solution
 

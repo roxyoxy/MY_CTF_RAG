@@ -1,4 +1,4 @@
-# susctf-2024_goodwell
+# susctf 2024 goodwell
 
 # goodwell
 

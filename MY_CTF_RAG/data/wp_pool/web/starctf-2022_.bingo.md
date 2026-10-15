@@ -1,4 +1,4 @@
-# starctf-2022_.bingo
+# starctf 2022 .bingo
 
 # Project Development Dependencies.
 

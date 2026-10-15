@@ -1,4 +1,4 @@
-# tbtl-na_safe_rust
+# tbtl na safe rust
 
 # Safe Rust
 

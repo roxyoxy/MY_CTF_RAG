@@ -1,4 +1,4 @@
-# tbtl-na_classical_conundrum__README
+# tbtl na classical conundrum README
 
 # Classical Conundrum &mdash; Solution
 

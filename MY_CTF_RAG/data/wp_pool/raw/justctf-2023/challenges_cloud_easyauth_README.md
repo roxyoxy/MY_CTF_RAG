@@ -1,4 +1,4 @@
-# challenges_cloud_easyauth_README
+# challenges cloud easyauth README
 
 ### Easy Auth
 They said that it's easy to implement authentication and authorization using cloud services. Is it? ( ͡° ͜ʖ ͡°)

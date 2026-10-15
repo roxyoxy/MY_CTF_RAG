@@ -1,4 +1,4 @@
-# misc_beepbeep_solve_WRITEUP
+# misc beepbeep solve WRITEUP
 
 beepbeep
 ============

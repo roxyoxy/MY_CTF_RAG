@@ -1,4 +1,4 @@
-# rev_nimrod_src_admin_docs_getting-started
+# rev nimrod src admin docs getting started
 
 # Getting Started
 Accelerate your next web project and start with this Flask App Blueprint. This Getting Started how-to is for written for OS X / macOS.

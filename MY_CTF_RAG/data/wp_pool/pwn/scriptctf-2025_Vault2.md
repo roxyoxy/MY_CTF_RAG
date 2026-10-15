@@ -1,4 +1,4 @@
-# scriptctf-2025_Vault2
+# scriptctf 2025 Vault2
 
 # Vault2 | Connor Chang
 

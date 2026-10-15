@@ -1,4 +1,4 @@
-# crypto_noisier-crc_solution_README
+# crypto noisier crc solution README
 
 ## Solution
 

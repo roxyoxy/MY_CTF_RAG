@@ -1,4 +1,4 @@
-# 2019_beginners_crypto-caulingo_solution
+# 2019 beginners crypto caulingo solution
 
 # Solution
 

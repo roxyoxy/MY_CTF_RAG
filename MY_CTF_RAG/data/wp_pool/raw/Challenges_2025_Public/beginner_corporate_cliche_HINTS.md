@@ -1,4 +1,4 @@
-# beginner_corporate_cliche_HINTS
+# beginner corporate cliche HINTS
 
 # HINT 1
 

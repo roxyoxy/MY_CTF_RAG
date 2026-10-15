@@ -1,4 +1,4 @@
-# crypto_sharsable_README
+# crypto sharsable README
 
 # sharsable (257pt, 12 solves)
 ## Overview

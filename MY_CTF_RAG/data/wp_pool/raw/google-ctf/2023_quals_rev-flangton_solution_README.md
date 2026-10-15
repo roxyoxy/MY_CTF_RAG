@@ -1,4 +1,4 @@
-# 2023_quals_rev-flangton_solution_README
+# 2023 quals rev flangton solution README
 
 # Google CTF 2023 - RE: Flangton writeup
 

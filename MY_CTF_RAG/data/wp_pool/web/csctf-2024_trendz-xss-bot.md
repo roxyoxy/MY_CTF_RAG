@@ -1,4 +1,4 @@
-# csctf-2024_trendz-xss-bot
+# csctf 2024 trendz xss bot
 
 = Example XSS Bot =
 

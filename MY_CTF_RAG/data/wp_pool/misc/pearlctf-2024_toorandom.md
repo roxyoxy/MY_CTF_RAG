@@ -1,4 +1,4 @@
-# pearlctf-2024_toorandom
+# pearlctf 2024 toorandom
 
 ## Too random
 

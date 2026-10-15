@@ -1,4 +1,4 @@
-# checkin_ez_note_rubbish_maker_zh
+# checkin ez note rubbish maker zh
 
 # checkin & ez\_note & rubbish maker wp
 

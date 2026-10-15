@@ -1,4 +1,4 @@
-# uctf-2021___SOLUTIONS
+# uctf 2021 SOLUTIONS
 
 # UIUCTF 2021 osint Suite
 

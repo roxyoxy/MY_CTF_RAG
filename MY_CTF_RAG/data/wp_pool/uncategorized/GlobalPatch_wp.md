@@ -1,4 +1,4 @@
-# GlobalPatch_wp
+# GlobalPatch wp
 
 # GlobalPatch_wp
 ---

@@ -1,4 +1,4 @@
-# crypto_1337crypt-v3_README
+# crypto 1337crypt v3 README
 
 1337crypt-v3
 ============

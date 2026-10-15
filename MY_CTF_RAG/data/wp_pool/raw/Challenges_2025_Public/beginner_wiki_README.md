@@ -1,4 +1,4 @@
-# beginner_wiki_README
+# beginner wiki README
 
 Wiki
 ======================

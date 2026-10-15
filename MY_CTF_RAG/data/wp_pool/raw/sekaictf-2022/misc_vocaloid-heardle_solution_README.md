@@ -1,4 +1,4 @@
-# misc_vocaloid-heardle_solution_README
+# misc vocaloid heardle solution README
 
 # Writeup
 

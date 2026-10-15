@@ -1,4 +1,4 @@
-# beginner_philtered_HINTS
+# beginner philtered HINTS
 
 # Hints
 

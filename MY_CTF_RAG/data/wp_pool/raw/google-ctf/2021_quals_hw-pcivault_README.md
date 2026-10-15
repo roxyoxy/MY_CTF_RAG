@@ -1,4 +1,4 @@
-# 2021_quals_hw-pcivault_README
+# 2021 quals hw pcivault README
 
 # PCIVault challenge
 

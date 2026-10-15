@@ -1,4 +1,4 @@
-# 2023_quals_pwn-watthewasm_solution_README
+# 2023 quals pwn watthewasm solution README
 
 # Google CTF 2023 - pwn: Wat the WASM writeup
 

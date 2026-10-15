@@ -1,4 +1,4 @@
-# reverse_miku-music-machine_README
+# reverse miku music machine README
 
 ## Miku Music Machine
 

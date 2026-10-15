@@ -1,4 +1,4 @@
-# aiml_Power_Supply_README
+# aiml Power Supply README
 
 ![img](../../assets/banner.png)
 

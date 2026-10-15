@@ -1,4 +1,4 @@
-# ascii-art-studio_README
+# ascii art studio README
 
 # ASCII Art Studio
 

@@ -1,4 +1,4 @@
-# sunshinectf-2025_Lunar_Auth
+# sunshinectf 2025 Lunar Auth
 
 ### NOTE:
 

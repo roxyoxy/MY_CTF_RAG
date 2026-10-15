@@ -1,4 +1,4 @@
-# hardware_birdloader_README
+# hardware birdloader README
 
 Birdloader
 ======================

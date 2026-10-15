@@ -1,4 +1,4 @@
-# misc_discrepancy_solution_README
+# misc discrepancy solution README
 
 ## Writeup
 

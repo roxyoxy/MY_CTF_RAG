@@ -1,4 +1,4 @@
-# misc_ssh_solution_README
+# misc ssh solution README
 
 ### Solution
 

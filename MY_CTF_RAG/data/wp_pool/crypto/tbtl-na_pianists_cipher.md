@@ -1,4 +1,4 @@
-# tbtl-na_pianists_cipher
+# tbtl na pianists cipher
 
 # Pianist's Cipher
 

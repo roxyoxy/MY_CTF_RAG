@@ -1,4 +1,4 @@
-# starctf-2022_~3
+# starctf 2022 ~3
 
 # examination
 

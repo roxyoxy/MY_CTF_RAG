@@ -1,4 +1,4 @@
-# starctf-2023___writeup
+# starctf 2023 writeup
 
 # SIMPLEX-WMM
 ![Success](./pic/s3.png)

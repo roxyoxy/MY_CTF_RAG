@@ -1,4 +1,4 @@
-# Scripting_guessy-programmer-2_description
+# Scripting guessy programmer 2 description
 
 Adventurer beware!
 

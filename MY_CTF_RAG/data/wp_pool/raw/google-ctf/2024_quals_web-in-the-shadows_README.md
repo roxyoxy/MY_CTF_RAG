@@ -1,4 +1,4 @@
-# 2024_quals_web-in-the-shadows_README
+# 2024 quals web in the shadows README
 
 # In the shadows
 

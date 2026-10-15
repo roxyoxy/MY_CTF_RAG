@@ -1,4 +1,4 @@
-# justctf-2023_~4
+# justctf 2023 ~4
 
 ### Safeblog
 I am excited to announce that I have finally created my very own personal blog! However, I must confess that I was feeling a little lazy, so instead of building everything from scratch, I decided to use some existing blogs from past CTF challenges (hugeblog and miniblog#). Some patching was done to their security vulnerabilities to ensure that my blog is completely secure.

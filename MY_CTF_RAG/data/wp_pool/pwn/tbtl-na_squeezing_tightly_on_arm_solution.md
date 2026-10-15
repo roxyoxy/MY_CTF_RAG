@@ -1,4 +1,4 @@
-# tbtl-na_squeezing_tightly_on_arm__solution
+# tbtl na squeezing tightly on arm solution
 
 [a:="".__class__]
 [b:=a.__base__]

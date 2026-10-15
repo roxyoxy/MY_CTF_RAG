@@ -1,4 +1,4 @@
-# htb-university-2025_Tinselwick
+# htb university 2025 Tinselwick
 
 **Challenge Name:** The Tinsel Conspiracy: Registry Corruption Investigation
 **Creator:** Joaquin Iglesias (Joey)

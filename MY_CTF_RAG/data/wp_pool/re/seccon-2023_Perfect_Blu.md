@@ -1,4 +1,4 @@
-# seccon-2023_Perfect Blu
+# seccon 2023 Perfect Blu
 
 # Perfect Blu
 ## Question

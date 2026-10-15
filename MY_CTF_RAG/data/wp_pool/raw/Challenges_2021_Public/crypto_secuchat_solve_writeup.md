@@ -1,4 +1,4 @@
-# crypto_secuchat_solve_writeup
+# crypto secuchat solve writeup
 
 # Solution
 Sift through combinations of the population of RSA keys until a common prime is found (this is improbable in the wild, but is infinitely easier than factoring, see [Ron was wrong, Whit is right](https://eprint.iacr.org/2012/064.pdf).

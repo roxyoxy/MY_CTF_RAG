@@ -1,4 +1,4 @@
-# vrp_v8ctf_README
+# vrp v8ctf README
 
 # v8CTF challenge
 

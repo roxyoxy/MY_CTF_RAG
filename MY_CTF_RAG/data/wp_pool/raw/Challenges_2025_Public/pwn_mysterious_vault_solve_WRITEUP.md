@@ -1,4 +1,4 @@
-# pwn_mysterious_vault_solve_WRITEUP
+# pwn mysterious vault solve WRITEUP
 
 Mysterious Vault
 ============

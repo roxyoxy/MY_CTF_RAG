@@ -1,4 +1,4 @@
-# ai_ductfbank-2_solve_WRITEUP
+# ai ductfbank 2 solve WRITEUP
 
 ductfbank 2
 ===========

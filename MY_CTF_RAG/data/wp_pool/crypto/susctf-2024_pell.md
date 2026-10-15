@@ -1,4 +1,4 @@
-# susctf-2024_pell
+# susctf 2024 pell
 
 # Pell
 

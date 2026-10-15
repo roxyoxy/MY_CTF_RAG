@@ -1,4 +1,4 @@
-# suctf-2026_SU_谁是小偷__writeup
+# suctf 2026 SU 谁是小偷 writeup
 
 # SU_谁是小偷 官方题解
 

@@ -1,4 +1,4 @@
-# Openwrt.bin_wp
+# Openwrt.bin wp
 
 # Openwrt.bin_wp
 ---

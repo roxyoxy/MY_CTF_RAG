@@ -1,4 +1,4 @@
-# seccon-2022_elder_cmp
+# seccon 2022 elder cmp
 
 # reversing: eldercmp
 ## Question

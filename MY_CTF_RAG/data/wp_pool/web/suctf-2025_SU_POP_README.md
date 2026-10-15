@@ -1,4 +1,4 @@
-# suctf-2025_SU_POP__README
+# suctf 2025 SU POP README
 
 # SU_POP
 

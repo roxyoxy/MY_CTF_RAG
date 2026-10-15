@@ -1,4 +1,4 @@
-# misc_my-first-c-prog_solve_solve
+# misc my first c prog solve solve
 
 How 2 Solve Pix's 1st C Program?
 

@@ -1,4 +1,4 @@
-# suctf-2025_SU_DOTNET__README
+# suctf 2025 SU DOTNET README
 
 # SU_DOTNET
 

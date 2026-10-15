@@ -1,4 +1,4 @@
-# justctf-2025_private__README
+# justctf 2025 private README
 
 ### Solution
 

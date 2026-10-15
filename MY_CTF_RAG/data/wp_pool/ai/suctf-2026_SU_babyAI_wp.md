@@ -1,4 +1,4 @@
-# suctf-2026_SU_babyAI__wp
+# suctf 2026 SU babyAI wp
 
 # WriteUp
 

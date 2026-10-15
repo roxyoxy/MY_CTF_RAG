@@ -1,4 +1,4 @@
-# wanictf-2024_elec
+# wanictf 2024 elec
 
 ---
 title: elec

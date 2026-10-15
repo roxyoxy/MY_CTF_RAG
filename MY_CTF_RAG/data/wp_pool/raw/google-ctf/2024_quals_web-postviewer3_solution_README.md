@@ -1,4 +1,4 @@
-# 2024_quals_web-postviewer3_solution_README
+# 2024 quals web postviewer3 solution README
 
 # Postviwer v3
 

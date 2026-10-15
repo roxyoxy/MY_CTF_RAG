@@ -1,4 +1,4 @@
-# sunshinectf-2024_build-a-flag-workshop__writeup
+# sunshinectf 2024 build a flag workshop writeup
 
 The intended solution is roughly:
 1. Find the list of base flags and mechanisms for selecting them.

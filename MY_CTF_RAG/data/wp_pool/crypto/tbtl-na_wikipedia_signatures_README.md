@@ -1,4 +1,4 @@
-# tbtl-na_wikipedia_signatures__README
+# tbtl na wikipedia signatures README
 
 # Wikipedia Signatures &mdash; Solution
 

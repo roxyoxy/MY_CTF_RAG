@@ -1,4 +1,4 @@
-# misc_wackyrecipe_solve_WRITEUP
+# misc wackyrecipe solve WRITEUP
 
 Wacky Recipe
 ============

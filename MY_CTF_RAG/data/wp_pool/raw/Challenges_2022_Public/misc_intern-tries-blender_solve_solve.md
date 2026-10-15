@@ -1,4 +1,4 @@
-# misc_intern-tries-blender_solve_solve
+# misc intern tries blender solve solve
 
 
 The quick and dirty solve -

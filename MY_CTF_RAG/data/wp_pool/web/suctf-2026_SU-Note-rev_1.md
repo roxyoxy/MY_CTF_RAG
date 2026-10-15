@@ -1,4 +1,4 @@
-# suctf-2026_SU-Note-rev~1
+# suctf 2026 SU Note rev~1
 
 # 题目描述
 

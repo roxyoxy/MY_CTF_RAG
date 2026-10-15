@@ -1,4 +1,4 @@
-# starctf-2022_barchart
+# starctf 2022 barchart
 
 # Bar chart
 

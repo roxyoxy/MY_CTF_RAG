@@ -1,4 +1,4 @@
-# hardware_i-see_solve_WRITEUP
+# hardware i see solve WRITEUP
 
 # I See
 

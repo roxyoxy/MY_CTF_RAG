@@ -1,4 +1,4 @@
-# 2020_quals_sandbox-threading_attachments_language_docs
+# 2020 quals sandbox threading attachments language docs
 
 # The DevMaster Sandboxed Programming Language
 *Creating unintentional bugs since 2019™*

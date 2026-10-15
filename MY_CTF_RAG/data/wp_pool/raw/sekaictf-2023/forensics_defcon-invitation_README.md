@@ -1,4 +1,4 @@
-# forensics_defcon-invitation_README
+# forensics defcon invitation README
 
 ## DEFCON Invitation
 

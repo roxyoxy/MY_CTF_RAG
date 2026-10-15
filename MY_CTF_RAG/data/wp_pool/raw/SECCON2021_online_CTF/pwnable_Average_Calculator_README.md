@@ -1,4 +1,4 @@
-# pwnable_Average_Calculator_README
+# pwnable Average Calculator README
 
 # pwnable: Average Calculator
 ## Question

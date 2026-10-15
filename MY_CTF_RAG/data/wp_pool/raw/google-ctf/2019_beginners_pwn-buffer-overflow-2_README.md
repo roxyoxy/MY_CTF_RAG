@@ -1,4 +1,4 @@
-# 2019_beginners_pwn-buffer-overflow-2_README
+# 2019 beginners pwn buffer overflow 2 README
 
 # name: "STOP GAN"
 

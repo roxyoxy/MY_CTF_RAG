@@ -1,4 +1,4 @@
-# 2024_quals_crypto-otp_challenge_README
+# 2024 quals crypto otp challenge README
 
 
 

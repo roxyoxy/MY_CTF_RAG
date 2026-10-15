@@ -1,4 +1,4 @@
-# crypto_substitution-cipher-ii_solve_writeup
+# crypto substitution cipher ii solve writeup
 
 This challenge is a sequel to "Substitution Cipher I". We have a similar situation as with the first challenge, except instead of a function over the integers, we work over a finite field `GF(n)`, which for the purposes of this challenge, we can think of as basically a subset of the integers where addition and multiplication are done modulo `n`. Another difference is that the polynomial `f` is not given, and it is of degree 6. Each coefficient of `f` can be any integer in the range `0, 1, ..., n`, and since there are 7 coefficients, there can be up to `n^7` different possibilities for `f`. In the challenge, `n = 47`, so searching `n^7` possibilities would be unreasonable.
 

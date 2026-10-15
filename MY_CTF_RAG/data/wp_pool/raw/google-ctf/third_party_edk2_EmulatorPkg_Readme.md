@@ -1,4 +1,4 @@
-# third_party_edk2_EmulatorPkg_Readme
+# third party edk2 EmulatorPkg Readme
 
 ## Overview
 

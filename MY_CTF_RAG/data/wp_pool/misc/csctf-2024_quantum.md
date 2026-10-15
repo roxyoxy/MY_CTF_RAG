@@ -1,4 +1,4 @@
-# csctf-2024_quantum
+# csctf 2024 quantum
 
 # Quantum
 

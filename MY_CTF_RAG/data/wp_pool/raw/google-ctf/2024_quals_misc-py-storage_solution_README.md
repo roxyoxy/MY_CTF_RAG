@@ -1,4 +1,4 @@
-# 2024_quals_misc-py-storage_solution_README
+# 2024 quals misc py storage solution README
 
 # Python Storage
 

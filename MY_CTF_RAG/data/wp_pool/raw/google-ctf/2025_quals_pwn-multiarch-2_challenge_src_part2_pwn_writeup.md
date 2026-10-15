@@ -1,4 +1,4 @@
-# 2025_quals_pwn-multiarch-2_challenge_src_part2_pwn_writeup
+# 2025 quals pwn multiarch 2 challenge src part2 pwn writeup
 
 # patch for dumping each insn effect
 

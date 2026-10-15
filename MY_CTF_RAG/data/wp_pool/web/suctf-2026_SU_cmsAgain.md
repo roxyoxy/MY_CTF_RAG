@@ -1,4 +1,4 @@
-# suctf-2026_SU_cmsAgain
+# suctf 2026 SU cmsAgain
 
 ## 标题
 SU_cmsAgain

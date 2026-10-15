@@ -1,4 +1,4 @@
-# VerySuperMario_README
+# VerySuperMario README
 
 <img src="Resources/UCTF.jpg" title="UCTF" alt="UCTF" data-align="center">
 

@@ -1,4 +1,4 @@
-# seccon-na_Trillion Ether__solves
+# seccon na Trillion Ether solves
 
 # Trillion Ether - Solves
 | Solved Rank | Team name |

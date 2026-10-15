@@ -1,4 +1,4 @@
-# scriptctf-2025_JustSomeAvocado
+# scriptctf 2025 JustSomeAvocado
 
 # Just Some Avocado | Connor Chang
 

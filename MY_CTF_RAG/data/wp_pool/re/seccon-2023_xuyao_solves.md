@@ -1,4 +1,4 @@
-# seccon-2023_xuyao__solves
+# seccon 2023 xuyao solves
 
 # xuyao - Solves
 | Solved Rank | Team name |

@@ -1,4 +1,4 @@
-# misc_jimmy-builds-a-kite_README
+# misc jimmy builds a kite README
 
 jimmy-builds-a-kite
 ============

@@ -1,4 +1,4 @@
-# starctf-2023_~2
+# starctf 2023 ~2
 
 *CTF{cve-2023-28303-windows-snipping-tool-is-not-secure-4E9019139D9A}
 

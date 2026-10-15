@@ -1,4 +1,4 @@
-# suctf-2026_SU_signin
+# suctf 2026 SU signin
 
 ## 标题
 

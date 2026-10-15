@@ -1,4 +1,4 @@
-# 2019_finals_web-bsaber_README
+# 2019 finals web bsaber README
 
 # name: "Saber.ninja"
 

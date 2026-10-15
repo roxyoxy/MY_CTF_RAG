@@ -1,4 +1,4 @@
-# susctf-2024_aesplus
+# susctf 2024 aesplus
 
 # AES Plus
 

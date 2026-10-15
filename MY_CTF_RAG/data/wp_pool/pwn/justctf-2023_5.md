@@ -1,4 +1,4 @@
-# justctf-2023_~5
+# justctf 2023 ~5
 
 ### Tic Tac PWN!
 Let's pretend I just learned about this cool thing called RPC and wrote a simple example! Is it secure?

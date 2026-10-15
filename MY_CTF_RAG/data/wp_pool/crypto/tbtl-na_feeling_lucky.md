@@ -1,4 +1,4 @@
-# tbtl-na_feeling_lucky
+# tbtl na feeling lucky
 
 # Feeling Lucky
 

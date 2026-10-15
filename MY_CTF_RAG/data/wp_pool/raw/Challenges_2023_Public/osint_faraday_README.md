@@ -1,4 +1,4 @@
-# osint_faraday_README
+# osint faraday README
 
 faraday
 ==========

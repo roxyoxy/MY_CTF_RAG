@@ -1,4 +1,4 @@
-# suctf-2025_SU_PAS_sport
+# suctf 2025 SU PAS sport
 
 ## 标题
 PAS_sport

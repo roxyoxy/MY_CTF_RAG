@@ -1,4 +1,4 @@
-# osint_LoveGranniE_HINTS
+# osint LoveGranniE HINTS
 
 Love GranniE
 ============

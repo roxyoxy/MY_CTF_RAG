@@ -1,4 +1,4 @@
-# sunshinectf-2025_Intergalactic_Webhook_Service
+# sunshinectf 2025 Intergalactic Webhook Service
 
 # SunshineCTF 2025 Single Challenge Template
 

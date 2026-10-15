@@ -1,4 +1,4 @@
-# pwn_especially-secure-boot_README
+# pwn especially secure boot README
 
 ESPecially secure boot
 ======================

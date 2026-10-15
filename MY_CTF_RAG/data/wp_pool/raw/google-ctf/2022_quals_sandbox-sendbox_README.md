@@ -1,4 +1,4 @@
-# 2022_quals_sandbox-sendbox_README
+# 2022 quals sandbox sendbox README
 
 # sandbox sendbox
 

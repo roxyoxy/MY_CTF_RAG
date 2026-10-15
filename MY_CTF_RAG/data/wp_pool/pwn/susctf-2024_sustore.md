@@ -1,4 +1,4 @@
-# susctf-2024_sustore
+# susctf 2024 sustore
 
 # sustore
 

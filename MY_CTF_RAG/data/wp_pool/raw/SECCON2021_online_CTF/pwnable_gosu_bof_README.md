@@ -1,4 +1,4 @@
-# pwnable_gosu_bof_README
+# pwnable gosu bof README
 
 # pwnable: gosu bof
 ## Question

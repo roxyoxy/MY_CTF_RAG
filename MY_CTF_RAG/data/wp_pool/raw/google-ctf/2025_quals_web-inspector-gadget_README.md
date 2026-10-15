@@ -1,4 +1,4 @@
-# 2025_quals_web-inspector-gadget_README
+# 2025 quals web inspector gadget README
 
 # Inspector Gadget
 

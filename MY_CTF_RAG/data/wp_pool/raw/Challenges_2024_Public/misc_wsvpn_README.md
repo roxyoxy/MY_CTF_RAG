@@ -1,4 +1,4 @@
-# misc_wsvpn_README
+# misc wsvpn README
 
 WebSocket VPN
 ======================

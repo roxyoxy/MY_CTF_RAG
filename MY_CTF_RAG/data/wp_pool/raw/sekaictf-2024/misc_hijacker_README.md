@@ -1,4 +1,4 @@
-# misc_hijacker_README
+# misc hijacker README
 
 ## Hijacker
 

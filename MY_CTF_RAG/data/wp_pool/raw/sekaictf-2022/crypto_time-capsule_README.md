@@ -1,4 +1,4 @@
-# crypto_time-capsule_README
+# crypto time capsule README
 
 # Time Capsule
 

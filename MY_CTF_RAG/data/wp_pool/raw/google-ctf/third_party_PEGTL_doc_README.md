@@ -1,4 +1,4 @@
-# third_party_PEGTL_doc_README
+# third party PEGTL doc README
 
 # PEGTL Documentation
 

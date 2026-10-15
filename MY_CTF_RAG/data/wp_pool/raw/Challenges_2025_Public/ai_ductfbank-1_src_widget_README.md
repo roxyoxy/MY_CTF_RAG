@@ -1,4 +1,4 @@
-# ai_ductfbank-1_src_widget_README
+# ai ductfbank 1 src widget README
 
 # bun-react-tailwind-template
 

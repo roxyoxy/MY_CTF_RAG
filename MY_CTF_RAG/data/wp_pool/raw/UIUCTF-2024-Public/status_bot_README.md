@@ -1,4 +1,4 @@
-# status_bot_README
+# status bot README
 
 # Status bot
 

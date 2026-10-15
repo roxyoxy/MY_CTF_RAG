@@ -1,4 +1,4 @@
-# pwn_outdated_README
+# pwn outdated README
 
 ## Outdated
 

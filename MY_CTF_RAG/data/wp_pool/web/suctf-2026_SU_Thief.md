@@ -1,4 +1,4 @@
-# suctf-2026_SU_Thief
+# suctf 2026 SU Thief
 
 # SUCTF 2026 - Thief
 

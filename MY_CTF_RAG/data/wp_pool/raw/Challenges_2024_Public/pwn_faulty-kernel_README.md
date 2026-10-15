@@ -1,4 +1,4 @@
-# pwn_faulty-kernel_README
+# pwn faulty kernel README
 
 Faulty Kernel
 ======================

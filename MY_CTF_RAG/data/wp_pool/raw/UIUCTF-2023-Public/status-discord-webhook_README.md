@@ -1,4 +1,4 @@
-# status-discord-webhook_README
+# status discord webhook README
 
 UIUCTF chal status bot
 

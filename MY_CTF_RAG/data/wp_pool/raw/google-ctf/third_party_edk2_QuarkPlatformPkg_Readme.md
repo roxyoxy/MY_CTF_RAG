@@ -1,4 +1,4 @@
-# third_party_edk2_QuarkPlatformPkg_Readme
+# third party edk2 QuarkPlatformPkg Readme
 
 # **EDK II firmware for Intel(R) Quark SoC X1000 based platforms**
 

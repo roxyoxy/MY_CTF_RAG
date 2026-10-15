@@ -1,4 +1,4 @@
-# 2018_quals_pwn-drive_README
+# 2018 quals pwn drive README
 
 # name:Drive
 description: File sharing done the hackers way. Besides just uploading and downloading files, you can process them server side using the full x64 instruction set! Just send us an ELF and we'll run it for you.

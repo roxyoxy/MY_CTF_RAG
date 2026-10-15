@@ -1,4 +1,4 @@
-# sandbox_pincette_README
+# sandbox pincette README
 
 # 問題名
 pincette （Pinで作ったCET）

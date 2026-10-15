@@ -1,4 +1,4 @@
-# rev_rocky_solve_WRITEUP
+# rev rocky solve WRITEUP
 
 Rocky
 ============

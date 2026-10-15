@@ -1,4 +1,4 @@
-# wanictf-2024_bad_worker
+# wanictf 2024 bad worker
 
 ---
 title: Bad_Worker # (必須) 問題名

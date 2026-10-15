@@ -1,4 +1,4 @@
-# seccon-na___solves
+# seccon na solves
 
 # Welcome - Solves
 | Solved Rank | Team name |

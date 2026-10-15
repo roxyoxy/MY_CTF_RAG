@@ -1,4 +1,4 @@
-# sunshinectf-2025_missioncritical1__writeup
+# sunshinectf 2025 missioncritical1 writeup
 
 # missioncritical_1
 

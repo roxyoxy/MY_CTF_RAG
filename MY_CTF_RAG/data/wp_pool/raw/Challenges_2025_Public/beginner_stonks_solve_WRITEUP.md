@@ -1,4 +1,4 @@
-# beginner_stonks_solve_WRITEUP
+# beginner stonks solve WRITEUP
 
 stonks
 ============

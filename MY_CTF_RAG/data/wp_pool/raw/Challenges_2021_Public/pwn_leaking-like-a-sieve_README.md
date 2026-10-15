@@ -1,4 +1,4 @@
-# pwn_leaking-like-a-sieve_README
+# pwn leaking like a sieve README
 
 # Leaking like a sieve
 

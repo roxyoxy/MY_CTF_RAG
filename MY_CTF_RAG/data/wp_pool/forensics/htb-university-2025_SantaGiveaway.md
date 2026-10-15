@@ -1,4 +1,4 @@
-# htb-university-2025_SantaGiveaway
+# htb university 2025 SantaGiveaway
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

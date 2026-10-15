@@ -1,4 +1,4 @@
-# susctf-2024_zlxtqbd
+# susctf 2024 zlxtqbd
 
 # 众里寻她千百度
 

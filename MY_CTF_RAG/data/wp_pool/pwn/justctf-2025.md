@@ -1,4 +1,4 @@
-# justctf-2025_
+# justctf 2025
 
 ### Baby Heap
 

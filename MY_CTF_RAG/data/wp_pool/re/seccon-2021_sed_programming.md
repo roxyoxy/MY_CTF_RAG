@@ -1,4 +1,4 @@
-# seccon-2021_sed_programming
+# seccon 2021 sed programming
 
 # reversing: sed programming
 ## Question

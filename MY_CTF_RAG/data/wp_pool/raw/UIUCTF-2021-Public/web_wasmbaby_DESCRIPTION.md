@@ -1,4 +1,4 @@
-# web_wasmbaby_DESCRIPTION
+# web wasmbaby DESCRIPTION
 
 WebAssembly (aka wasm) is a new standard for running performant,
 assembly-like code in web browsers.

@@ -1,4 +1,4 @@
-# seccon-na_OSAKA~1
+# seccon na OSAKA~1
 
 The infra shouldn't be vulnerable.
 It's not necessary to look at anywhere other than the contract files (`src/contracts`) to solve this challenge!

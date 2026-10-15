@@ -1,4 +1,4 @@
-# pearlctf-2024_rusty-proxy
+# pearlctf 2024 rusty proxy
 
 # rusty proxy
 ## Solution

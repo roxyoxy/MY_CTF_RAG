@@ -1,4 +1,4 @@
-# 2023_quals_crypto-primes_solution_README
+# 2023 quals crypto primes solution README
 
 # Google CTF 2023 - crypto: Primes writeup
 

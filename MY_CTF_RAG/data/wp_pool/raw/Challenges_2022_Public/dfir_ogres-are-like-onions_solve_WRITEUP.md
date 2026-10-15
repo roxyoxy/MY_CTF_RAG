@@ -1,4 +1,4 @@
-# dfir_ogres-are-like-onions_solve_WRITEUP
+# dfir ogres are like onions solve WRITEUP
 
 ogres-are-like-onions
 ============

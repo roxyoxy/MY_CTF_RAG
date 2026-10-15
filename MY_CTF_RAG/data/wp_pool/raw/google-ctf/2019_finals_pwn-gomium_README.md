@@ -1,4 +1,4 @@
-# 2019_finals_pwn-gomium_README
+# 2019 finals pwn gomium README
 
 # name: "Gomium Browser"
 

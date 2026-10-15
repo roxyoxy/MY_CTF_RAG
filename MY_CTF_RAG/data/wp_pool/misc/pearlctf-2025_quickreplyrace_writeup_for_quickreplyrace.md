@@ -1,4 +1,4 @@
-# pearlctf-2025_quickreplyrace__writeup_for_quickreplyrace
+# pearlctf 2025 quickreplyrace writeup for quickreplyrace
 
 # Quick Reply Race
 

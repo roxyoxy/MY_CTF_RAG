@@ -1,4 +1,4 @@
-# challenges_misc_nocaml_SOLUTION
+# challenges misc nocaml SOLUTION
 
 # nocaml Solution
 

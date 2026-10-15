@@ -1,4 +1,4 @@
-# 2020_quals_hardware-avr_README
+# 2020 quals hardware avr README
 
 # Timing some AVR
 

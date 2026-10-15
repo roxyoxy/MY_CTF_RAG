@@ -1,4 +1,4 @@
-# 2017_quals_2017-crypto-selfhash_README
+# 2017 quals 2017 crypto selfhash README
 
 {
 

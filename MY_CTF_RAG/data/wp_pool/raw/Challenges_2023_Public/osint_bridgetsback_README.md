@@ -1,4 +1,4 @@
-# osint_bridgetsback_README
+# osint bridgetsback README
 
 Bridget's Back!
 ============

@@ -1,4 +1,4 @@
-# forensics_how-to-pronounce-gif_WRITEUP
+# forensics how to pronounce gif WRITEUP
 
 # How to pronounce GIF?
 

@@ -1,4 +1,4 @@
-# csctf-2024_redacted
+# csctf 2024 redacted
 
 # Redacted
 

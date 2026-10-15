@@ -1,4 +1,4 @@
-# suctf-2026_SU_AES__writeup
+# suctf 2026 SU AES writeup
 
 # AES 随机 S-box 交互题题解（`env/chal.py` / `exp/exp.py`）
 

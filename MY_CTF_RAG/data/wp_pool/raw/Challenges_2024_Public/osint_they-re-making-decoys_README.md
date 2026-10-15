@@ -1,4 +1,4 @@
-# osint_they-re-making-decoys_README
+# osint they re making decoys README
 
 They're Making Decoys
 ======================

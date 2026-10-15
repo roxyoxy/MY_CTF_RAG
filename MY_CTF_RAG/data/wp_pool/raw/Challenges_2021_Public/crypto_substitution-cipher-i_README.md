@@ -1,4 +1,4 @@
-# crypto_substitution-cipher-i_README
+# crypto substitution cipher i README
 
 # Substitution Cipher I
 

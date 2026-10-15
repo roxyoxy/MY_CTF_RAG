@@ -1,4 +1,4 @@
-# sunshinectf-2025_Rocommunications__writeup
+# sunshinectf 2025 Rocommunications writeup
 
 Intended Solve:
 

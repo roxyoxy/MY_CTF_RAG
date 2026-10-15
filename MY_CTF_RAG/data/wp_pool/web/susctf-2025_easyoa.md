@@ -1,4 +1,4 @@
-# susctf-2025_easyoa
+# susctf 2025 easyoa
 
 
 # easyoa

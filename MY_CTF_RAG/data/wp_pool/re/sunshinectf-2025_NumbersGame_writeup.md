@@ -1,4 +1,4 @@
-# sunshinectf-2025_NumbersGame__writeup
+# sunshinectf 2025 NumbersGame writeup
 
 # numbers-game CTF challenge write-up
 

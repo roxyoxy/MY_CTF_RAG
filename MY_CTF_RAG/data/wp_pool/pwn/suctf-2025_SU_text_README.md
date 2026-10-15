@@ -1,4 +1,4 @@
-# suctf-2025_SU_text__README
+# suctf 2025 SU text README
 
 # SU_text
 

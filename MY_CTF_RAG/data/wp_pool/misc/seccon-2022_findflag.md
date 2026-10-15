@@ -1,4 +1,4 @@
-# seccon-2022_findflag
+# seccon 2022 findflag
 
 # misc: find flag
 ## Question

@@ -1,4 +1,4 @@
-# suctf-2026_SU_老年固件__writeup
+# suctf 2026 SU 老年固件 writeup
 
 # SU_老年固件 分析记录
 

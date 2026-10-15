@@ -1,4 +1,4 @@
-# scriptctf-2025_Modulo
+# scriptctf 2025 Modulo
 
 # Modulo | NoobMaster
 - Description: Modulo is so cool!

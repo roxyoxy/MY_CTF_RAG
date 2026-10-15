@@ -1,4 +1,4 @@
-# suctf-2026_SU_MvsicPlayer__writeup
+# suctf 2026 SU MvsicPlayer writeup
 
 # SU_MvsicPlayer
 

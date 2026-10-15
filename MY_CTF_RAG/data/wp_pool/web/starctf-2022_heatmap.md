@@ -1,4 +1,4 @@
-# starctf-2022_heatmap
+# starctf 2022 heatmap
 
 # Heatmap Panel -  Native Plugin
 

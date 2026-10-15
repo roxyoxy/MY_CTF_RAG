@@ -1,4 +1,4 @@
-# seccon-2022_witches_symmetric_exam__requirements
+# seccon 2022 witches symmetric exam requirements
 
 -i https://pypi.org/simple
 certifi==2022.9.24 ; python_version >= '3.6'

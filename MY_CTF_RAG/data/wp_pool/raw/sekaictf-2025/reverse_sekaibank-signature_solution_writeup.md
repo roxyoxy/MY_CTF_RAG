@@ -1,4 +1,4 @@
-# reverse_sekaibank-signature_solution_writeup
+# reverse sekaibank signature solution writeup
 
 ## Sekai Bank - Signature Writeup
 

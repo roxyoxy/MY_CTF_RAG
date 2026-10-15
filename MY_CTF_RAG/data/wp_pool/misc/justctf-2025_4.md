@@ -1,4 +1,4 @@
-# justctf-2025_~4
+# justctf 2025 ~4
 
 ### PyEvaline revange
 We developed a simple Python shell. Did we commit some programming crime here?

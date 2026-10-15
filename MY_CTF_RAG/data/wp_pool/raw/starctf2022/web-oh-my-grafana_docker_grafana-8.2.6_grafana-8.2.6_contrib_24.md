@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_contribute_templates_doc-concept-template
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 contribute templates doc concept template
 
 DELETE THIS LINE: If draft = false, then the document will not be built in the doc site. If the date is earlier than the build date, than the document will not show in the build site. Use these settings to control whether future content is shown in the doc site.
 +++

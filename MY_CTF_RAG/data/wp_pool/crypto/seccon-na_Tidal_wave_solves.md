@@ -1,4 +1,4 @@
-# seccon-na_Tidal wave__solves
+# seccon na Tidal wave solves
 
 # Tidal wave - Solves
 | Solved Rank | Team name |

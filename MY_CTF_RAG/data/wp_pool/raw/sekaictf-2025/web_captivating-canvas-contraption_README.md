@@ -1,4 +1,4 @@
-# web_captivating-canvas-contraption_README
+# web captivating canvas contraption README
 
 ## Captivating Canvas Contraption
 

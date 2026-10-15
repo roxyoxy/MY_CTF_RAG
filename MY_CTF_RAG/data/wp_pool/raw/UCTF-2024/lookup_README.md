@@ -1,4 +1,4 @@
-# lookup_README
+# lookup README
 
 # Look-up
 Unravel the hidden messages buried in the echoes of code.

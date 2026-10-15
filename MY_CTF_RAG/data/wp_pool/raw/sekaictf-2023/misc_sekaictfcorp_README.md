@@ -1,4 +1,4 @@
-# misc_sekaictfcorp_README
+# misc sekaictfcorp README
 
 ## SekaiCTFCorp
 

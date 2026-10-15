@@ -1,4 +1,4 @@
-# rev_js-lock_solve_writeup
+# rev js lock solve writeup
 
 js-lock
 =============

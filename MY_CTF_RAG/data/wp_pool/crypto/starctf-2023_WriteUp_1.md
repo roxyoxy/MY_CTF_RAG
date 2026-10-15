@@ -1,4 +1,4 @@
-# starctf-2023___WriteUp~1
+# starctf 2023 WriteUp~1
 
 # 题目解析
 > 本题参考了RCTF 2022的S2DH，没想到正好是SIDH算法被攻破一周内纪念o(￣▽￣)ｄ 。

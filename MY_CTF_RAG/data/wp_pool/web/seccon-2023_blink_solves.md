@@ -1,4 +1,4 @@
-# seccon-2023_blink__solves
+# seccon 2023 blink solves
 
 # blink - Solves
 | Solved Rank | Team name |

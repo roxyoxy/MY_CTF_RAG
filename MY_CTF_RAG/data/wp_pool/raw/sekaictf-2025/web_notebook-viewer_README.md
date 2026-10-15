@@ -1,4 +1,4 @@
-# web_notebook-viewer_README
+# web notebook viewer README
 
 ## Notebook Viewer
 

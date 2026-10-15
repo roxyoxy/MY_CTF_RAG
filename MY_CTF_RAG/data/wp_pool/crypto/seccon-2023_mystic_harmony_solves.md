@@ -1,4 +1,4 @@
-# seccon-2023_mystic_harmony__solves
+# seccon 2023 mystic harmony solves
 
 # mystic_harmony - Solves
 | Solved Rank | Team name |

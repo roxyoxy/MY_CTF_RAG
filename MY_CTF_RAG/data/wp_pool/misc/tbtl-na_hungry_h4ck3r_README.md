@@ -1,4 +1,4 @@
-# tbtl-na_hungry_h4ck3r__README
+# tbtl na hungry h4ck3r README
 
 # Hungry Hacker &mdash; Solution
 

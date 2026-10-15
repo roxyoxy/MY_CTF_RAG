@@ -1,4 +1,4 @@
-# csctf-2024_chugga
+# csctf 2024 chugga
 
 # Chugga Chugga
 

@@ -1,4 +1,4 @@
-# competition_ranking
+# competition ranking
 
 # Full Ranking
 | # | Team | Score |

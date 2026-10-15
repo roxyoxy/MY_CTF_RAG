@@ -1,4 +1,4 @@
-# EasyToPoison_wp
+# EasyToPoison wp
 
 # EasyToPoison_wp
 ---

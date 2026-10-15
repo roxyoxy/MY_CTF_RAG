@@ -1,4 +1,4 @@
-# htb-business-2025_Industry Secret
+# htb business 2025 Industry Secret
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

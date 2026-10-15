@@ -1,4 +1,4 @@
-# suctf-2025_SU_forensics
+# suctf 2025 SU forensics
 
 bkfish在自己的虚拟机里运行了某些命令之后用"sudo reboot"重启了主机，接着他按照网上清除入侵记录的方法先"rm -rf .bash_history"然后"history -c"删除了所有的命令记录。
 

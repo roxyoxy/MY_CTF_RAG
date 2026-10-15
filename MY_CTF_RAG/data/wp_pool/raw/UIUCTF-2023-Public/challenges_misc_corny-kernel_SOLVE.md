@@ -1,4 +1,4 @@
-# challenges_misc_corny-kernel_SOLVE
+# challenges misc corny kernel SOLVE
 
 # Solution
 

@@ -1,4 +1,4 @@
-# scriptctf-2025_Renderer
+# scriptctf 2025 Renderer
 
 # Renderer | NoobMaster
 - Description: Introducing Renderer! A free-to-use app to render your images!

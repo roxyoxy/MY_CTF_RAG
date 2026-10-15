@@ -1,4 +1,4 @@
-# htaccess-ctf_README
+# htaccess ctf README
 
 <img src="Resources/UCTF.jpg" title="UCTF" alt="UCTF" data-align="center">
 

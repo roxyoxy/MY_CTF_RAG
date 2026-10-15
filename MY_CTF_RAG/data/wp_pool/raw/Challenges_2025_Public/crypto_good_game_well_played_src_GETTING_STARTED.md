@@ -1,4 +1,4 @@
-# crypto_good_game_well_played_src_GETTING_STARTED
+# crypto good game well played src GETTING STARTED
 
 # Some tips to get you started 
 

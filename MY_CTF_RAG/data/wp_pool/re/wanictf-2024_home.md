@@ -1,4 +1,4 @@
-# wanictf-2024_home
+# wanictf 2024 home
 
 ---
 title: "home"

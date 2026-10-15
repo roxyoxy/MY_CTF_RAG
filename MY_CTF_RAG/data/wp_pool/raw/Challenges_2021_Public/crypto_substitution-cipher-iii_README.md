@@ -1,4 +1,4 @@
-# crypto_substitution-cipher-iii_README
+# crypto substitution cipher iii README
 
 # Substitution Cipher III
 

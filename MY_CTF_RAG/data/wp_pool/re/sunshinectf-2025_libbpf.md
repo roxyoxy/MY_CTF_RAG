@@ -1,4 +1,4 @@
-# sunshinectf-2025_libbpf
+# sunshinectf 2025 libbpf
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/libbpf-logo-sideways-darkbg.png" width="40%">

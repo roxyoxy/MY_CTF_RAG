@@ -1,4 +1,4 @@
-# htb-university-2024_[Medium] ColossalBreach
+# htb university 2024 [Medium] ColossalBreach
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

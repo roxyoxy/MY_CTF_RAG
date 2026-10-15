@@ -1,4 +1,4 @@
-# Pwn_AstroJitAi_description
+# Pwn AstroJitAi description
 
 # AstroJIT AI, your new general-purpose chatbot for the future!
 Hello there, user!

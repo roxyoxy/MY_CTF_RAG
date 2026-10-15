@@ -1,4 +1,4 @@
-# challenges_web_supermassive-black-hole_solve_SOLVE
+# challenges web supermassive black hole solve SOLVE
 
 # "Supermassive Black Hole" Solution Writeup
 

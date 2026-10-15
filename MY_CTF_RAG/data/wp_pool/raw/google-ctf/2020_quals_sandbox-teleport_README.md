@@ -1,4 +1,4 @@
-# 2020_quals_sandbox-teleport_README
+# 2020 quals sandbox teleport README
 
 # Challenge Description
 

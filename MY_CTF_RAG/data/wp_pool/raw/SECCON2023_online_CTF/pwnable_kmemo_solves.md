@@ -1,4 +1,4 @@
-# pwnable_kmemo_solves
+# pwnable kmemo solves
 
 # kmemo - Solves
 | Solved Rank | Team name |

@@ -1,4 +1,4 @@
-# https-decryption-ctf_README
+# https decryption ctf README
 
 <img src="Resources/UCTF.jpg" title="UCTF" alt="UCTF" data-align="center">
 

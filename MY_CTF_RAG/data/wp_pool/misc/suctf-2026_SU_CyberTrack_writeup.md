@@ -1,4 +1,4 @@
-# suctf-2026_SU_CyberTrack__writeup
+# suctf 2026 SU CyberTrack writeup
 
 ## 题面
 

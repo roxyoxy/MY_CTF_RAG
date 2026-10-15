@@ -1,4 +1,4 @@
-# misc_slash-flag_solve_WRITEUP
+# misc slash flag solve WRITEUP
 
 # Slash Flag Writeup
 

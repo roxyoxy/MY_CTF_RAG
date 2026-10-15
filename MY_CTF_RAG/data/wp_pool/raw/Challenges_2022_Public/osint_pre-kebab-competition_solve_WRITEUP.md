@@ -1,4 +1,4 @@
-# osint_pre-kebab-competition_solve_WRITEUP
+# osint pre kebab competition solve WRITEUP
 
 Pre-Kebab Competition
 ============

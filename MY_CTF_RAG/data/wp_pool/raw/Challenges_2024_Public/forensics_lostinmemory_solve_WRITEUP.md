@@ -1,4 +1,4 @@
-# forensics_lostinmemory_solve_WRITEUP
+# forensics lostinmemory solve WRITEUP
 
 Lost in Memory
 ============

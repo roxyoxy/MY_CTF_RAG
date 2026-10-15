@@ -1,4 +1,4 @@
-# misc_wackyrecipe_README
+# misc wackyrecipe README
 
 Wacky Recipe
 ======================

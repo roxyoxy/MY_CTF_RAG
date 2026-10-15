@@ -1,4 +1,4 @@
-# drag-n-zip_README
+# drag n zip README
 
 # Drag n Zip
 Finding the Key in "Drag n Zip"

@@ -1,4 +1,4 @@
-# tbtl-na_tower_of_babel__README
+# tbtl na tower of babel README
 
 # Tower of Babel &mdash; Solution
 

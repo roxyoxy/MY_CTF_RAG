@@ -1,4 +1,4 @@
-# suctf-2026_SU_EzRouter
+# suctf 2026 SU EzRouter
 
 # SU_EzRouter
 

@@ -1,4 +1,4 @@
-# suctf-2026_SU_Restaurant__writeup
+# suctf 2026 SU Restaurant writeup
 
 ## SU_Restaurant
 

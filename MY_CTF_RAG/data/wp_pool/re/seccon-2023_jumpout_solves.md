@@ -1,4 +1,4 @@
-# seccon-2023_jumpout__solves
+# seccon 2023 jumpout solves
 
 # jumpout - Solves
 | Solved Rank | Team name |

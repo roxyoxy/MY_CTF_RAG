@@ -1,4 +1,4 @@
-# scriptctf-2025_Secure-Server-2
+# scriptctf 2025 Secure Server 2
 
 # Secure-Server-2 | NoobMaster
 - Description: This time, the server is even more secure, but did it actually receive the secret? Simple brute-force won't work!

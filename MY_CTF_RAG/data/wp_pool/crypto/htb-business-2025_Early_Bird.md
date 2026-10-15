@@ -1,4 +1,4 @@
-# htb-business-2025_Early Bird
+# htb business 2025 Early Bird
 
 ![img](../../assets/banner.png)
 

@@ -1,4 +1,4 @@
-# htb-business-2025_EchoesOfAuthority
+# htb business 2025 EchoesOfAuthority
 
 ![img](../../assets/banner.png)
 

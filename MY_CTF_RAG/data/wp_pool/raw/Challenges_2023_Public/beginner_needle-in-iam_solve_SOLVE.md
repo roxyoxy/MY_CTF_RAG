@@ -1,4 +1,4 @@
-# beginner_needle-in-iam_solve_SOLVE
+# beginner needle in iam solve SOLVE
 
 The user is trying to access the descripition of a single role. Typically you would do this with a DESCRIBE API, and that's exactly what they have tried. Unfortunately, they lack permissions to do this and hence are unable to view the descripition.
 

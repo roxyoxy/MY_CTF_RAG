@@ -1,4 +1,4 @@
-# web_sweet_treat_README
+# web sweet treat README
 
 Sweet Treat
 ======================

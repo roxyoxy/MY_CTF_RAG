@@ -1,4 +1,4 @@
-# susctf-2024_sign_in_sys
+# susctf 2024 sign in sys
 
 # sign_in_sys
 

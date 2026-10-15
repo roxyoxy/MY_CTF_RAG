@@ -1,4 +1,4 @@
-# blockchains_play-to-earn_README
+# blockchains play to earn README
 
 ## Play to Earn
 

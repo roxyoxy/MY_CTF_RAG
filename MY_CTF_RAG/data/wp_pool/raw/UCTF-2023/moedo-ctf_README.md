@@ -1,4 +1,4 @@
-# moedo-ctf_README
+# moedo ctf README
 
 # moedo
 

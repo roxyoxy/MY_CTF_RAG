@@ -1,4 +1,4 @@
-# susctf-2022_tttree__tttree_wp
+# susctf 2022 tttree tttree wp
 
 ## tttree
 

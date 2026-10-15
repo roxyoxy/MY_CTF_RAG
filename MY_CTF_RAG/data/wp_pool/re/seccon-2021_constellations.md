@@ -1,4 +1,4 @@
-# seccon-2021_constellations
+# seccon 2021 constellations
 
 # reversing: constellations
 ## Question

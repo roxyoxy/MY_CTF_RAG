@@ -1,4 +1,4 @@
-# docs_specs_dispatcher-design
+# docs specs dispatcher design
 
 # Dispatcher
 

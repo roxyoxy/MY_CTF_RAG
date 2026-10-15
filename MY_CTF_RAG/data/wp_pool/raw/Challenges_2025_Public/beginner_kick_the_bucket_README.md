@@ -1,4 +1,4 @@
-# beginner_kick_the_bucket_README
+# beginner kick the bucket README
 
 kick the bucket
 ======================

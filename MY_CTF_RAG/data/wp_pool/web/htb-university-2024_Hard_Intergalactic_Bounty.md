@@ -1,4 +1,4 @@
-# htb-university-2024_[Hard] Intergalactic Bounty
+# htb university 2024 [Hard] Intergalactic Bounty
 
 ![img](../../assets/banner.png)
 

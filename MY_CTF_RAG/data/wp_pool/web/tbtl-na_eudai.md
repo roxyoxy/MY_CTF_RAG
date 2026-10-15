@@ -1,4 +1,4 @@
-# tbtl-na_eudai
+# tbtl na eudai
 
 # EUD(A)I
 

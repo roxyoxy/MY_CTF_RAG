@@ -1,4 +1,4 @@
-# scriptctf-2025_diskchal
+# scriptctf 2025 diskchal
 
 # diskchal | Connor Chang
 

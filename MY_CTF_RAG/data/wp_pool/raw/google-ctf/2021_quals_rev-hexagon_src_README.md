@@ -1,4 +1,4 @@
-# 2021_quals_rev-hexagon_src_README
+# 2021 quals rev hexagon src README
 
 # Hexagon reversing challenge
 

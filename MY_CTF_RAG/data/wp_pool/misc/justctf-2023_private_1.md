@@ -1,4 +1,4 @@
-# justctf-2023_private~1
+# justctf 2023 private~1
 
 ### Secure DB
 Task oparty o wykonanie wyszukania wiersza po id w zaszyfrowanej tablicy. 

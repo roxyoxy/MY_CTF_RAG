@@ -1,4 +1,4 @@
-# htb-university-2025_Bauble Sort
+# htb university 2025 Bauble Sort
 
 ![](../../assets/banner.png)
 

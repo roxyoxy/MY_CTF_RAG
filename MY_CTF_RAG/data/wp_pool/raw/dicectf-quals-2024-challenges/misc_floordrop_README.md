@@ -1,4 +1,4 @@
-# misc_floordrop_README
+# misc floordrop README
 
 # Floordrop (dicectf quals 2024)
 

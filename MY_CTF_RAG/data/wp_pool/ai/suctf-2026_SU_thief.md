@@ -1,4 +1,4 @@
-# suctf-2026_SU_thief
+# suctf 2026 SU thief
 
 ## 标题
 SU Thief

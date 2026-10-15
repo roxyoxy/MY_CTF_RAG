@@ -1,4 +1,4 @@
-# htb-university-2024_[Hard] Clutch
+# htb university 2024 [Hard] Clutch
 
 ![](../../assets/banner.png)
 

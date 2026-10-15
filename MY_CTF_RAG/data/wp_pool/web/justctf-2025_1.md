@@ -1,4 +1,4 @@
-# justctf-2025_~1
+# justctf 2025 ~1
 
 ### Notes
 Certified notes classic © ™

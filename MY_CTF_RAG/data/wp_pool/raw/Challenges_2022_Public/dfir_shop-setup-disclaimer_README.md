@@ -1,4 +1,4 @@
-# dfir_shop-setup-disclaimer_README
+# dfir shop setup disclaimer README
 
 Shop-Setup&Disclaimer
 ============

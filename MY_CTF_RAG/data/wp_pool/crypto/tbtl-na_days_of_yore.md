@@ -1,4 +1,4 @@
-# tbtl-na_days_of_yore
+# tbtl na days of yore
 
 # Days of Yore
 

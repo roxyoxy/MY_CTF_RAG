@@ -1,4 +1,4 @@
-# 2020_hackceler8_match-1-package_README
+# 2020 hackceler8 match 1 package README
 
 To run the game just use `docker-compose up` and connect to port :4567 with a
 web browser.

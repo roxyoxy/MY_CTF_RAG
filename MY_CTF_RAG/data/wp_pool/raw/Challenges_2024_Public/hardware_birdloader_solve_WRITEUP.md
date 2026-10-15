@@ -1,4 +1,4 @@
-# hardware_birdloader_solve_WRITEUP
+# hardware birdloader solve WRITEUP
 
 birdloader
 ============

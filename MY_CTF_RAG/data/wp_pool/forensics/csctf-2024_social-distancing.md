@@ -1,4 +1,4 @@
-# csctf-2024_social-distancing
+# csctf 2024 social distancing
 
 # Social Distancing
 

@@ -1,4 +1,4 @@
-# htb-university-2024_[Easy] SecurityInTheFront
+# htb university 2024 [Easy] SecurityInTheFront
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

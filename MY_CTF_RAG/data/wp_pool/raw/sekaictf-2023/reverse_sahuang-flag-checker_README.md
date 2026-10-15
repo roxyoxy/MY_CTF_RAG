@@ -1,4 +1,4 @@
-# reverse_sahuang-flag-checker_README
+# reverse sahuang flag checker README
 
 ## Sahuang Flag Checker
 

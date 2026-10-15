@@ -1,4 +1,4 @@
-# tbtl-na_feeling_lucky__README
+# tbtl na feeling lucky README
 
 # Feeling Lucky &mdash; solution
 

@@ -1,4 +1,4 @@
-# rev_no-strings_WRITEUP
+# rev no strings WRITEUP
 
 When we run the program, we are prompted to enter the flag. If we enter something, the program prints `wrong!` and exits. Presumably, the goal of the challenge is to reverse engineer the program to figure out what input string will cause the program to print something other than `wrong!`.
 

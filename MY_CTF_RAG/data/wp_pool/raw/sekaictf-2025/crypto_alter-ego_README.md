@@ -1,4 +1,4 @@
-# crypto_alter-ego_README
+# crypto alter ego README
 
 ## Alter Ego
 

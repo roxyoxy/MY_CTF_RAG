@@ -1,4 +1,4 @@
-# uctf-2021_smorga__SOLUTION
+# uctf 2021 smorga SOLUTION
 
 Disassemble the binary to understand the main program logic.  It looks like
 this:

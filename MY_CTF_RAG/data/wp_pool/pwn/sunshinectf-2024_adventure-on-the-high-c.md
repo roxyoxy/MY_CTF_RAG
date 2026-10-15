@@ -1,4 +1,4 @@
-# sunshinectf-2024_adventure-on-the-high-c
+# sunshinectf 2024 adventure on the high c
 
 ### Notes from kcolley
 

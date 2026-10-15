@@ -1,4 +1,4 @@
-# ppc_mind-calculator_solution_README
+# ppc mind calculator solution README
 
 # Writeup
 

@@ -1,4 +1,4 @@
-# challenges_crypto_snore-signatures_README
+# challenges crypto snore signatures README
 
 # Snore Signatures
 

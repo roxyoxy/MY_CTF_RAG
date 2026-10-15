@@ -1,4 +1,4 @@
-# sunshinectf-2025_NumbersGame
+# sunshinectf 2025 NumbersGame
 
 # [RE] Numbers Game
 ### Author: Kyle Cahalan

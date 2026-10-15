@@ -1,4 +1,4 @@
-# web_university-of-straya-part1_solution_README
+# web university of straya part1 solution README
 
 # Solution
 

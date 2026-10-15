@@ -1,4 +1,4 @@
-# beginner_corporate_cliche_solve_WRITEUP
+# beginner corporate cliche solve WRITEUP
 
 Corporate Cliche
 ============

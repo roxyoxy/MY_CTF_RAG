@@ -1,4 +1,4 @@
-# sunshinectf-2024_dungeon-keymaster
+# sunshinectf 2024 dungeon keymaster
 
 # Dungeon Keymaster
 

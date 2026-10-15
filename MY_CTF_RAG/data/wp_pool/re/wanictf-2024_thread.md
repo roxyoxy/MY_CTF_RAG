@@ -1,4 +1,4 @@
-# wanictf-2024_thread
+# wanictf 2024 thread
 
 ---
 title: "Thread"

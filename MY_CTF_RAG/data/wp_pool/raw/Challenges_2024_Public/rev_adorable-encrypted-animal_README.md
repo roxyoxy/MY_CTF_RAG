@@ -1,4 +1,4 @@
-# rev_adorable-encrypted-animal_README
+# rev adorable encrypted animal README
 
 adorable encrypted animal
 ======================

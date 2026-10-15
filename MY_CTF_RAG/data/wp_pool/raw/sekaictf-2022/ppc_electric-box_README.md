@@ -1,4 +1,4 @@
-# ppc_electric-box_README
+# ppc electric box README
 
 # Electric Box
 

@@ -1,4 +1,4 @@
-# crypto_urara_writeup
+# crypto urara writeup
 
 1. 問題を見ると楕円曲線だなぁという気持ちとRSAだなぁという気持ちになる
 2. 特に変なことしてなさそうだし素因数分解はできないなぁという気分になる

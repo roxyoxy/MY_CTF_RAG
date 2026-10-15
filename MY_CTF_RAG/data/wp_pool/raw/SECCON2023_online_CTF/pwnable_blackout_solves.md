@@ -1,4 +1,4 @@
-# pwnable_blackout_solves
+# pwnable blackout solves
 
 # blackout - Solves
 | Solved Rank | Team name |

@@ -1,4 +1,4 @@
-# ProjectMeme_README
+# ProjectMeme README
 
 <img src="Resources/UCTF.jpg" title="UCTF" alt="UCTF" data-align="center">
 

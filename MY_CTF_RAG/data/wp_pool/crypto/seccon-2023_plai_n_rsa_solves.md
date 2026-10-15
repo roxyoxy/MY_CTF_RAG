@@ -1,4 +1,4 @@
-# seccon-2023_plai_n_rsa__solves
+# seccon 2023 plai n rsa solves
 
 # plai_n_rsa - Solves
 | Solved Rank | Team name |

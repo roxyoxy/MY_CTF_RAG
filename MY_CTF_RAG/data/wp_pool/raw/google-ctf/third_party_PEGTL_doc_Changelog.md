@@ -1,4 +1,4 @@
-# third_party_PEGTL_doc_Changelog
+# third party PEGTL doc Changelog
 
 # Changelog
 

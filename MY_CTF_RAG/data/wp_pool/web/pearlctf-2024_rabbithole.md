@@ -1,4 +1,4 @@
-# pearlctf-2024_rabbithole
+# pearlctf 2024 rabbithole
 
 # Writeup - Web / Rabbithole
 

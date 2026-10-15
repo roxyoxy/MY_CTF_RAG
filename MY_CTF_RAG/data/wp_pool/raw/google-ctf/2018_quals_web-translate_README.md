@@ -1,4 +1,4 @@
-# 2018_quals_web-translate_README
+# 2018 quals web translate README
 
 # name:translate
 description: Client-side rendering, but not in a browser! Get the flag in ./flag.txt, and seeing the source will likely help.

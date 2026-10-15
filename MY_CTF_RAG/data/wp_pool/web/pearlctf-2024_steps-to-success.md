@@ -1,4 +1,4 @@
-# pearlctf-2024_steps-to-success
+# pearlctf 2024 steps to success
 
 # steps to success
 ## Solution

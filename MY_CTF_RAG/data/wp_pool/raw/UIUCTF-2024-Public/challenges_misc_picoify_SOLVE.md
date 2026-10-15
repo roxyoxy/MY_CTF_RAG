@@ -1,4 +1,4 @@
-# challenges_misc_picoify_SOLVE
+# challenges misc picoify SOLVE
 
 # Picoify solution
 

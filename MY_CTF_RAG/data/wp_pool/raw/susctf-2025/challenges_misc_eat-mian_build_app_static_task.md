@@ -1,4 +1,4 @@
-# challenges_misc_eat-mian_build_app_static_task
+# challenges misc eat mian build app static task
 
 # eat-mian
 

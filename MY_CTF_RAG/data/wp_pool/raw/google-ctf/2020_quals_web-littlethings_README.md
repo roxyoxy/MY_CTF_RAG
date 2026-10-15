@@ -1,4 +1,4 @@
-# 2020_quals_web-littlethings_README
+# 2020 quals web littlethings README
 
 # All the little things
 

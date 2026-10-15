@@ -1,4 +1,4 @@
-# 2020_quals_web-littlethings-fixed_README
+# 2020 quals web littlethings fixed README
 
 # All the fixed things
 

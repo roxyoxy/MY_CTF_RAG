@@ -1,4 +1,4 @@
-# Programming_WindowsToInfinity_README
+# Programming WindowsToInfinity README
 
 # Windows To Infinity and Beyond | Connor Chang
 

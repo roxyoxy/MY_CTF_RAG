@@ -1,4 +1,4 @@
-# sunshinectf-2025_BitsOfSpace__writeup
+# sunshinectf 2025 BitsOfSpace writeup
 
 # Writeup
 We modify the encrypted file `voyager.bin` to change the `device_id` in the first plaintext block from `0x13371337` to `0xDEADBABE` **without** decrypting or knowing the AES key. This works because AES-CBC’s first plaintext block is `AES-DEC(C0) ⊕ IV`, so tampering the IV will flip chosen bytes in the first decrypted block.

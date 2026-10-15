@@ -1,4 +1,4 @@
-# uctf-2021_CEO__SOLUTION
+# uctf 2021 CEO SOLUTION
 
 Steps:
 - Read the instructions and look up MegaCorpOne (https://www.megacorpone.com/) 

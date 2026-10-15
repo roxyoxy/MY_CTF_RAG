@@ -1,4 +1,4 @@
-# crypto_speak-friend-and-enter_README
+# crypto speak friend and enter README
 
 Speak Friend, and Enter
 ======================

@@ -1,4 +1,4 @@
-# dfir_shop-logging-for-what_solve_solve
+# dfir shop logging for what solve solve
 
 By searching around you can see a number of JNDI/Log4j hits in user agents. 
 

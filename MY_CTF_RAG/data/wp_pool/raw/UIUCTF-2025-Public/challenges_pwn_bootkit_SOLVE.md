@@ -1,4 +1,4 @@
-# challenges_pwn_bootkit_SOLVE
+# challenges pwn bootkit SOLVE
 
 # Bootkit
 

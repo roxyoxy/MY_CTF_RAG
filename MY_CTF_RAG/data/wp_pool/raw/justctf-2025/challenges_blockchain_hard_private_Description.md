@@ -1,4 +1,4 @@
-# challenges_blockchain_hard_private_Description
+# challenges blockchain hard private Description
 
 With the guard corrupted and the vault exposed, the Otternaut finally secures the Forbidden Fuel Cell — the last piece needed to escape Cryon-7.
 But the Council was prepared.

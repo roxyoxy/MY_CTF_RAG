@@ -1,4 +1,4 @@
-# 2025_Intro_info_solution_README
+# 2025 Intro info solution README
 
 # Info &mdash; solution
 

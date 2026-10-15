@@ -1,4 +1,4 @@
-# justctf-2023_private__solution-old-not-working-after-changes
+# justctf 2023 private solution old not working after changes
 
 :tmpfile 0 0 0 0 0 0
 :dup2 1 4 0 0 0 0

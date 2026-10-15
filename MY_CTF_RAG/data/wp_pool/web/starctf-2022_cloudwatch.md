@@ -1,4 +1,4 @@
-# starctf-2022_cloudwatch
+# starctf 2022 cloudwatch
 
 # CloudWatch data source - native plugin
 

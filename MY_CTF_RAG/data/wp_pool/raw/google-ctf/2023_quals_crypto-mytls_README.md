@@ -1,4 +1,4 @@
-# 2023_quals_crypto-mytls_README
+# 2023 quals crypto mytls README
 
 # crypto-mytls
 

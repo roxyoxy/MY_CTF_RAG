@@ -1,4 +1,4 @@
-# keep-alive-bingo_README
+# keep alive bingo README
 
 # Keep Alive Bingo
 

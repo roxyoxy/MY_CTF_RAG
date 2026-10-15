@@ -1,4 +1,4 @@
-# beginner_modulus-rsa_README
+# beginner modulus rsa README
 
 # Modulus RSA
 

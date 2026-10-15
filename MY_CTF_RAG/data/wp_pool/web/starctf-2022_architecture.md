@@ -1,4 +1,4 @@
-# starctf-2022_architecture
+# starctf 2022 architecture
 
 # Architecture
 

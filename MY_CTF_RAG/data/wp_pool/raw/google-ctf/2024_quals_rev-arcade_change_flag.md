@@ -1,4 +1,4 @@
-# 2024_quals_rev-arcade_change_flag
+# 2024 quals rev arcade change flag
 
 # How to change the flag
 

@@ -1,4 +1,4 @@
-# osint_fat_donke_diss_HINTS
+# osint fat donke diss HINTS
 
 if completely stuck
 1. MC Fat Monke has released previous songs for DownUnderCTF, you should look where he has published his past music.

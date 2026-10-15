@@ -1,4 +1,4 @@
-# csctf-2024_bad packets
+# csctf 2024 bad packets
 
 # bad packets
 

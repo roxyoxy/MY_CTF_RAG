@@ -1,4 +1,4 @@
-# challenges_cloud_easyauth_private_README
+# challenges cloud easyauth private README
 
 # EasyAuth
 

@@ -1,4 +1,4 @@
-# web_strapi-in_solve_README
+# web strapi in solve README
 
 Checking the dependencies you can see that `strapi-plugin-email-designer` is installed.
 

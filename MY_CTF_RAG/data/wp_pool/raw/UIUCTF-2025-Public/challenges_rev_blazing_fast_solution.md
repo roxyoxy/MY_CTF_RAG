@@ -1,4 +1,4 @@
-# challenges_rev_blazing_fast_solution
+# challenges rev blazing fast solution
 
 ### Platform
 

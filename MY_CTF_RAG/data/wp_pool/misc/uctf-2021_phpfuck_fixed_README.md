@@ -1,4 +1,4 @@
-# uctf-2021_phpfuck_fixed__README
+# uctf 2021 phpfuck fixed README
 
 # charset
 ```

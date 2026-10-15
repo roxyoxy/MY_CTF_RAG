@@ -1,4 +1,4 @@
-# challenges_osint_bad-blood_solve_SOLVE
+# challenges osint bad blood solve SOLVE
 
 # "Bad Blood" Solution Writeup
 

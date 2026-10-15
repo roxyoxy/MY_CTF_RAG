@@ -1,4 +1,4 @@
-# sunshinectf-2024_Secure_Flag_Terminal
+# sunshinectf 2024 Secure Flag Terminal
 
 # Secure Flag Terminal
 

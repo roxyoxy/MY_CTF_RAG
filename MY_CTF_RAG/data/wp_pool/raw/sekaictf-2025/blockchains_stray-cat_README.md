@@ -1,4 +1,4 @@
-# blockchains_stray-cat_README
+# blockchains stray cat README
 
 ## Stray Cat
 

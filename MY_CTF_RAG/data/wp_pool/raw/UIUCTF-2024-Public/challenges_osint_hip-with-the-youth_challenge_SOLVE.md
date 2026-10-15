@@ -1,4 +1,4 @@
-# challenges_osint_hip-with-the-youth_challenge_SOLVE
+# challenges osint hip with the youth challenge SOLVE
 
 # Solution
 

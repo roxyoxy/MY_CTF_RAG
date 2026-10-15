@@ -1,4 +1,4 @@
-# easy简单的越权_wp
+# easy简单的越权 wp
 
 # easy简单的越权_wp
 ---

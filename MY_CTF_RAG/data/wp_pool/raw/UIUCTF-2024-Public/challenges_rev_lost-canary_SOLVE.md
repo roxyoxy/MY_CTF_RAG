@@ -1,4 +1,4 @@
-# challenges_rev_lost-canary_SOLVE
+# challenges rev lost canary SOLVE
 
 This solve explanation goes alongside the `solve.py` script.
 

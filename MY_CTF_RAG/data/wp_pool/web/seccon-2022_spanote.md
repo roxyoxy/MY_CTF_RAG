@@ -1,4 +1,4 @@
-# seccon-2022_spanote
+# seccon 2022 spanote
 
 # web: spanote
 ## Question

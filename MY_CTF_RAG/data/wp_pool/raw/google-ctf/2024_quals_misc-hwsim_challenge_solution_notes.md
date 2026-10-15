@@ -1,4 +1,4 @@
-# 2024_quals_misc-hwsim_challenge_solution_notes
+# 2024 quals misc hwsim challenge solution notes
 
 
 

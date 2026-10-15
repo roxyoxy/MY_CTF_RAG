@@ -1,4 +1,4 @@
-# 2018_finals_crypto-auth_README
+# 2018 finals crypto auth README
 
 # name: Large graph factorization
 description: The evil supervilian Pocket and his minions decided that they can't trust tradional cryptography and decided to write their own, with nodes and vertices. Little does he know that factorizations live in every corner.

@@ -1,4 +1,4 @@
-# seccon-na_Go to Jail
+# seccon na Go to Jail
 
 # Go to Jail
 ## Question

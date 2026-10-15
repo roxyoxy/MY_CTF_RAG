@@ -1,4 +1,4 @@
-# 2023_quals_rev-jxl_README
+# 2023 quals rev jxl README
 
 # JXL challenge
 

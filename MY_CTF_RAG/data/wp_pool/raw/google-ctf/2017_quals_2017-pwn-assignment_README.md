@@ -1,4 +1,4 @@
-# 2017_quals_2017-pwn-assignment_README
+# 2017 quals 2017 pwn assignment README
 
 {
 

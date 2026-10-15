@@ -1,4 +1,4 @@
-# reverse_matrix-lab-2_README
+# reverse matrix lab 2 README
 
 # Matrix Lab 2
 

@@ -1,4 +1,4 @@
-# htb-university-2025_CloudyCore
+# htb university 2025 CloudyCore
 
 <img src="../../assets/banner.png" style="zoom: 80%;" align=center />
 

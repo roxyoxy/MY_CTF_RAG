@@ -1,4 +1,4 @@
-# scriptctf-2025_Enchant
+# scriptctf 2025 Enchant
 
 # Enchant | NoobMaster
 

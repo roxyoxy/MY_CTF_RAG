@@ -1,4 +1,4 @@
-# blockchain_secret-and-ephemeral_README
+# blockchain secret and ephemeral README
 
 Secret and Ephemeral
 ============

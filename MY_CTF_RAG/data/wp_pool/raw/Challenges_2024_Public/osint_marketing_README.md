@@ -1,4 +1,4 @@
-# osint_marketing_README
+# osint marketing README
 
 marketing
 ======================

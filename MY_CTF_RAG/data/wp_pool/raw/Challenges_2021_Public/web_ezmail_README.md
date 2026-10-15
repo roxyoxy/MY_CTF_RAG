@@ -1,4 +1,4 @@
-# web_ezmail_README
+# web ezmail README
 
 # Ezmail
 

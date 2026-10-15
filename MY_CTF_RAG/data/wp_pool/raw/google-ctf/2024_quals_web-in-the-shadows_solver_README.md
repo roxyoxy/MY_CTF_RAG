@@ -1,4 +1,4 @@
-# 2024_quals_web-in-the-shadows_solver_README
+# 2024 quals web in the shadows solver README
 
 # Solver
 

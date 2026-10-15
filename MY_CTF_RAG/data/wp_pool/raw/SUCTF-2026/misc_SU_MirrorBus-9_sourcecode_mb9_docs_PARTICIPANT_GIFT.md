@@ -1,4 +1,4 @@
-# misc_SU_MirrorBus-9_sourcecode_mb9_docs_PARTICIPANT_GIFT
+# misc SU MirrorBus 9 sourcecode mb9 docs PARTICIPANT GIFT
 
 # Participant Gift (Easter Egg)
 

@@ -1,4 +1,4 @@
-# suctf-2026_SU_Isogeny__writeup
+# suctf 2026 SU Isogeny writeup
 
 ## SU_Isogeny
 

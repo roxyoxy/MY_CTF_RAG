@@ -1,4 +1,4 @@
-# suctf-2026_SU_easyLLM__wp
+# suctf 2026 SU easyLLM wp
 
 # WriteUp
 

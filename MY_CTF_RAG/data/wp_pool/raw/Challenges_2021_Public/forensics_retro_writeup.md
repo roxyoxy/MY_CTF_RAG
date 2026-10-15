@@ -1,4 +1,4 @@
-# forensics_retro_writeup
+# forensics retro writeup
 
 # Retro
 We are provided with og.jpg, and the suggestion it hides a secret..

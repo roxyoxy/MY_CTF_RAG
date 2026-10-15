@@ -1,4 +1,4 @@
-# uctf-2021_wasmcloud__README
+# uctf 2021 wasmcloud README
 
 The webassembly runner `sandbox.js` exposes `process` to the webassembly, purportedly to call `process.exit` with the error code. However, other `process` things can be called. Unfortunately, due to how the wasm-JS interface is, we can only call functions with integer arguments, so that rules out almost everything useful.
 

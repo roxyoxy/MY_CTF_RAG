@@ -1,4 +1,4 @@
-# 2025_quals_misc-hwsim_solution
+# 2025 quals misc hwsim solution
 
 # Solution
 

@@ -1,4 +1,4 @@
-# csctf-2024_super-fnv
+# csctf 2024 super fnv
 
 # super-fnv
 

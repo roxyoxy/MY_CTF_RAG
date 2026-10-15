@@ -1,4 +1,4 @@
-# susctf-2024_ezvm
+# susctf 2024 ezvm
 
 # ezvm
 

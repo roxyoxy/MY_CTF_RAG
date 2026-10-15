@@ -1,4 +1,4 @@
-# tbtl-na_squeezing_tightly_on_arm
+# tbtl na squeezing tightly on arm
 
 # Squeezing Tightly on Arm
 

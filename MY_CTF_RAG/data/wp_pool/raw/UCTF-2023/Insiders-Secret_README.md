@@ -1,4 +1,4 @@
-# Insiders-Secret_README
+# Insiders Secret README
 
 # 🔐 Insider's Secret
 

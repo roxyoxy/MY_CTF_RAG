@@ -1,4 +1,4 @@
-# susctf-2024_oj
+# susctf 2024 oj
 
 # Orange Juice
 

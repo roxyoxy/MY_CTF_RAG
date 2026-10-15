@@ -1,4 +1,4 @@
-# seccon-2023_Bad JWT__solves
+# seccon 2023 Bad JWT solves
 
 # Bad JWT - Solves
 | Solved Rank | Team name |

@@ -1,4 +1,4 @@
-# sponsor_README
+# sponsor README
 
 ## Sponsored
 

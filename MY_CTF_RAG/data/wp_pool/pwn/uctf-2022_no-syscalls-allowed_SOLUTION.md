@@ -1,4 +1,4 @@
-# uctf-2022_no-syscalls-allowed__SOLUTION
+# uctf 2022 no syscalls allowed SOLUTION
 
 Solve steps:
 

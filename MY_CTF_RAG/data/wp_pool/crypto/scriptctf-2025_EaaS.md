@@ -1,4 +1,4 @@
-# scriptctf-2025_EaaS
+# scriptctf 2025 EaaS
 
 # EaaS | NoobMaster
 

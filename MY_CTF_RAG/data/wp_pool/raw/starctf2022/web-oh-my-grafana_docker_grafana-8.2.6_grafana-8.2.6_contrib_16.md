@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_contribute_style-guides_e2e-core
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 contribute style guides e2e core
 
 # End-to-End Tests for core Grafana
 

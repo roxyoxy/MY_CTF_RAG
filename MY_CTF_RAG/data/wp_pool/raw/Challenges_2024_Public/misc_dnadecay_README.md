@@ -1,4 +1,4 @@
-# misc_dnadecay_README
+# misc dnadecay README
 
 DNAdecay
 ======================

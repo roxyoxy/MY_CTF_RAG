@@ -1,4 +1,4 @@
-# uctf-2021_gatekeeping__SOLUTION
+# uctf 2021 gatekeeping SOLUTION
 
 The module implements a finite state machine that recognizes the byte sequence
 corresponding to the flag string.  Invalid inputs reset the state to "idle",

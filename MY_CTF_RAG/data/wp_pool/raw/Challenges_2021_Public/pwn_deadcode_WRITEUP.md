@@ -1,4 +1,4 @@
-# pwn_deadcode_WRITEUP
+# pwn deadcode WRITEUP
 
 # deadcode solution
 ## Solving the challenge

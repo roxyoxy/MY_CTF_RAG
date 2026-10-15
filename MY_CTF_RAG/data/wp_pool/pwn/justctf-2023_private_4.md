@@ -1,4 +1,4 @@
-# justctf-2023_private~4
+# justctf 2023 private~4
 
 Here's an example how you can play the game!
 

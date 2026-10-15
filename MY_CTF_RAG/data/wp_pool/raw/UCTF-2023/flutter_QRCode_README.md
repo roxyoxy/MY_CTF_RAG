@@ -1,4 +1,4 @@
-# flutter_QRCode_README
+# flutter QRCode README
 
 <img src="Resources/UCTF.jpg" title="UCTF" alt="UCTF" data-align="center">
 

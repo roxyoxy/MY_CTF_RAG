@@ -1,4 +1,4 @@
-# susctf-2025_05b
+# susctf 2025 05b
 
 
 # 05-ezStream

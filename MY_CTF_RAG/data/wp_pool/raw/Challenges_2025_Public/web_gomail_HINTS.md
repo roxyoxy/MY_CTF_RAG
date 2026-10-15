@@ -1,4 +1,4 @@
-# web_gomail_HINTS
+# web gomail HINTS
 
 
 If completely clueless

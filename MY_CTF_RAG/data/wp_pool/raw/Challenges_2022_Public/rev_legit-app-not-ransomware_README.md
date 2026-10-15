@@ -1,4 +1,4 @@
-# rev_legit-app-not-ransomware_README
+# rev legit app not ransomware README
 
 Legit App Not Ransomware
 ============

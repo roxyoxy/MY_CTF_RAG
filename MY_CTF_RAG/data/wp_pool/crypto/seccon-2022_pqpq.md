@@ -1,4 +1,4 @@
-# seccon-2022_pqpq
+# seccon 2022 pqpq
 
 # crypto: pqpq
 ## Question

@@ -1,4 +1,4 @@
-# htb-university-2024_[Hard] Signaling Victorious
+# htb university 2024 [Hard] Signaling Victorious
 
 ![](../../assets/banner.png)
 

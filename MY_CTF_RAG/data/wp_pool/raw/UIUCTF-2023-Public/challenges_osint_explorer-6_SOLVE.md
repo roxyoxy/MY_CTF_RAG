@@ -1,3 +1,3 @@
-# challenges_osint_explorer-6_SOLVE
+# challenges osint explorer 6 SOLVE
 
 At this point, hopefully one has completed all the challenges previously and this can narrow it down. Looking at the image, you can see in the top right corner the Boeing building. By using google maps and hotel searches, one can narrow down the scope. The resulting flag is uiuctf{hampton_inn} or uiuctf{hilton}

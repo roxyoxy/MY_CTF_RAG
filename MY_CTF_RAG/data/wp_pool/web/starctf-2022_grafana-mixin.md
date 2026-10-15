@@ -1,4 +1,4 @@
-# starctf-2022_grafana-mixin
+# starctf 2022 grafana mixin
 
 # Grafana Mixin
 

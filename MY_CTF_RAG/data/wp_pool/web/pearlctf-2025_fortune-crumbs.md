@@ -1,4 +1,4 @@
-# pearlctf-2025_fortune-crumbs
+# pearlctf 2025 fortune crumbs
 
 # PearlCTF 2025 Writeup: Fortune Crumbs (Web)
 **Credits:** Huge thanks to @benkyou for helping with this writeup!

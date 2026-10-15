@@ -1,4 +1,4 @@
-# pearlctf-2024_flensing
+# pearlctf 2024 flensing
 
 ## Flensing
 

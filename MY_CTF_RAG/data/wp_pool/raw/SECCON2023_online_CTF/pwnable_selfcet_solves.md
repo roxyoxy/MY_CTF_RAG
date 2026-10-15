@@ -1,4 +1,4 @@
-# pwnable_selfcet_solves
+# pwnable selfcet solves
 
 # selfcet - Solves
 | Solved Rank | Team name |

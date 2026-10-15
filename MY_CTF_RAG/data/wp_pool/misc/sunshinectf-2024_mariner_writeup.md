@@ -1,4 +1,4 @@
-# sunshinectf-2024_mariner__writeup
+# sunshinectf 2024 mariner writeup
 
 # CTF Challenge Writeup: Exploiting K3s API to Retrieve Secrets
 

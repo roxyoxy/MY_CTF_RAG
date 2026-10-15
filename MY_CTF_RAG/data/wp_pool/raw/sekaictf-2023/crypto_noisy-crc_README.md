@@ -1,4 +1,4 @@
-# crypto_noisy-crc_README
+# crypto noisy crc README
 
 ## Noisy CRC
 

@@ -1,4 +1,4 @@
-# Programming_Sums_README
+# Programming Sums README
 
 # Sums | Connor Chang
 

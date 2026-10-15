@@ -1,4 +1,4 @@
-# crypto_koharu_writeup
+# crypto koharu writeup
 
 1. Goldwasser-Micali Cryptosystemっぽいなとわかる
 2. 多項式を因数分解してみたらできる

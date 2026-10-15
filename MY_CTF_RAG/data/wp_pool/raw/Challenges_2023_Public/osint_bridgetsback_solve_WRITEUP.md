@@ -1,4 +1,4 @@
-# osint_bridgetsback_solve_WRITEUP
+# osint bridgetsback solve WRITEUP
 
 # Writeup
 The bridge is a very distinct bridge so i searched google for "red bridge" on google images and was met with lots of results which would seem to suggest it was the Golden Gate Bridge in San Francisco.

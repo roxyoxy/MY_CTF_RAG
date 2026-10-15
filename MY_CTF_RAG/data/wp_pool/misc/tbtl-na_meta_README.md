@@ -1,4 +1,4 @@
-# tbtl-na_meta__README
+# tbtl na meta README
 
 # Meta 2.0 &mdash; solution
 

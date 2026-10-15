@@ -1,4 +1,4 @@
-# suctf-2025_SU_Auth__README
+# suctf 2025 SU Auth README
 
 ```python
 if any(priv[i] == SUKEY[i] for i in range(len(ells))) and LIMIT: return "🙅SUKEY"

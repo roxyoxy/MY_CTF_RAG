@@ -1,4 +1,4 @@
-# cloud_whale_blog_README
+# cloud whale blog README
 
 # Whale Blog
 

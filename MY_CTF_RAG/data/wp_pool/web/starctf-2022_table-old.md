@@ -1,4 +1,4 @@
-# starctf-2022_table-old
+# starctf 2022 table old
 
 # Table Panel -  Native Plugin
 

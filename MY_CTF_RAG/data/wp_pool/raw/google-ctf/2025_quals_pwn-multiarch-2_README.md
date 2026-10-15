@@ -1,4 +1,4 @@
-# 2025_quals_pwn-multiarch-2_README
+# 2025 quals pwn multiarch 2 README
 
 # pwn/multiarch-2
 

@@ -1,4 +1,4 @@
-# pwn_cosmic-ray_README
+# pwn cosmic ray README
 
 ## Cosmic Ray
 

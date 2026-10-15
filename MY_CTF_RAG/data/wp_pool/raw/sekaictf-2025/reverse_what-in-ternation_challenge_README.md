@@ -1,4 +1,4 @@
-# reverse_what-in-ternation_challenge_README
+# reverse what in ternation challenge README
 
 # Building Instructions
 

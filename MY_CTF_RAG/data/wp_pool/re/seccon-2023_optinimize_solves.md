@@ -1,4 +1,4 @@
-# seccon-2023_optinimize__solves
+# seccon 2023 optinimize solves
 
 # optinimize - Solves
 | Solved Rank | Team name |

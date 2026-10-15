@@ -1,4 +1,4 @@
-# starctf-2022_~2
+# starctf 2022 ~2
 
 # Usage
 

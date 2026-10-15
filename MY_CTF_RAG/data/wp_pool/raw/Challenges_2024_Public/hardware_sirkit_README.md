@@ -1,4 +1,4 @@
-# hardware_sirkit_README
+# hardware sirkit README
 
 sirkit
 ======================

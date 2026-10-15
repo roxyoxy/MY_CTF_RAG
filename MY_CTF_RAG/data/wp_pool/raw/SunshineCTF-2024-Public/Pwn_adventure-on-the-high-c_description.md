@@ -1,4 +1,4 @@
-# Pwn_adventure-on-the-high-c_description
+# Pwn adventure on the high c description
 
 # Adventure! on the High C
 

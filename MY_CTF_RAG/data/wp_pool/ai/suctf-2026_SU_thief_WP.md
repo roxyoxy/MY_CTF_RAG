@@ -1,4 +1,4 @@
-# suctf-2026_SU_thief__WP
+# suctf 2026 SU thief WP
 
 # WP
 

@@ -1,4 +1,4 @@
-# web_pasta_writeup
+# web pasta writeup
 
 # 解法
 

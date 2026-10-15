@@ -1,4 +1,4 @@
-# misc_simple-ftp-server_HINTS
+# misc simple ftp server HINTS
 
 Can you perform commands without logging in? What about non-existant commands? What happens then?
 

@@ -1,4 +1,4 @@
-# 2025_quals_pwn-the-classic-notes-app_README
+# 2025 quals pwn the classic notes app README
 
 ### The Classic Notes App
 

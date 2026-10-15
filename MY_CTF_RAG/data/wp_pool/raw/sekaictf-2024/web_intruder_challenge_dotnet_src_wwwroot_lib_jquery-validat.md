@@ -1,4 +1,4 @@
-# web_intruder_challenge_dotnet_src_wwwroot_lib_jquery-validation_LICENSE
+# web intruder challenge dotnet src wwwroot lib jquery validation LICENSE
 
 The MIT License (MIT)
 =====================

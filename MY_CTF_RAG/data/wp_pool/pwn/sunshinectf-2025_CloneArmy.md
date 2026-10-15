@@ -1,4 +1,4 @@
-# sunshinectf-2025_CloneArmy
+# sunshinectf 2025 CloneArmy
 
 Build and deploy with `pwnmake` from PwnableHarness. Note that this challenge
 is pretty sensitive to changes to offsets within the binary, so make sure the

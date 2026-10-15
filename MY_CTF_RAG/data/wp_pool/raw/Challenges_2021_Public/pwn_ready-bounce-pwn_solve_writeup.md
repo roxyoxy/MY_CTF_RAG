@@ -1,4 +1,4 @@
-# pwn_ready-bounce-pwn_solve_writeup
+# pwn ready bounce pwn solve writeup
 
 # Challenge Overview
 

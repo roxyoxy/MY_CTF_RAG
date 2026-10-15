@@ -1,4 +1,4 @@
-# tbtl-na_leaky_key_management__README
+# tbtl na leaky key management README
 
 # Leaky Key Management &mdash; Solution
 The challenge is a C binary implementing a simple key management service. The `test_kms` function creates a new 16-byte key, encrypts the user-provided data with the new key, and [wraps](https://cloud.google.com/kms/docs/key-wrapping) the new key with the `MASTER_KEY`. When first started, the program runs the `test_kms` function with the flag value as input.

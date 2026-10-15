@@ -1,4 +1,4 @@
-# beginner_parrot-the-emu_README
+# beginner parrot the emu README
 
 parrot the emu
 ======================

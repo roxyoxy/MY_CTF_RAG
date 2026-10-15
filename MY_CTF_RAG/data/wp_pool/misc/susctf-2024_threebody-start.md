@@ -1,4 +1,4 @@
-# susctf-2024_threebody-start
+# susctf 2024 threebody start
 
 # 智子危机
 

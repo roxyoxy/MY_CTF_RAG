@@ -1,4 +1,4 @@
-# misc_for_golf_hard_solve_WRITEUP
+# misc for golf hard solve WRITEUP
 
 # Forensics Golf
 

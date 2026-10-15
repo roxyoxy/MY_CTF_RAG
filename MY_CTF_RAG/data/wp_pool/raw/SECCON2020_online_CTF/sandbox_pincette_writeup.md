@@ -1,4 +1,4 @@
-# sandbox_pincette_writeup
+# sandbox pincette writeup
 
 README.mdの解答までの流れを参照。
 solverの使い方は以下の通り。

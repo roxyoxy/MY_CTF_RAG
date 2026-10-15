@@ -1,4 +1,4 @@
-# pwn_speedpwn-2_README
+# pwn speedpwn 2 README
 
 ## speedpwn 2
 

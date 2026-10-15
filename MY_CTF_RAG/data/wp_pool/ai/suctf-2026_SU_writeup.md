@@ -1,4 +1,4 @@
-# suctf-2026_SU_我不是神偷__writeup
+# suctf 2026 SU 我不是神偷 writeup
 
 # SU_我不是神偷 官方 WP
 

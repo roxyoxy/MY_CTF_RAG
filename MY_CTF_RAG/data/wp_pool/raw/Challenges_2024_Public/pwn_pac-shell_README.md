@@ -1,4 +1,4 @@
-# pwn_pac-shell_README
+# pwn pac shell README
 
 pac shell
 ======================

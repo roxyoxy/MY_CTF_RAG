@@ -1,4 +1,4 @@
-# beginner_the-bridgekeepers-3rd-question_HINTS
+# beginner the bridgekeepers 3rd question HINTS
 
 Most common support ticket: DUCTF{blue} is not working.
 

@@ -1,4 +1,4 @@
-# 2023_quals_misc-papapapa_README
+# 2023 quals misc papapapa README
 
 # JPEG steg challenge
 

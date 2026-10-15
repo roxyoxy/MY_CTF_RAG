@@ -1,4 +1,4 @@
-# 2018_finals_web-blind-xss_README
+# 2018 finals web blind xss README
 
 # name: Blind XSS
 description: You've found a blind XSS somewhere. You know the JS is going to be executed, but no idea where or why. What information can you extract?

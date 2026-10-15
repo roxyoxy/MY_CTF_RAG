@@ -1,4 +1,4 @@
-# third_party_PEGTL_doc_Performance-Notes
+# third party PEGTL doc Performance Notes
 
 # Performance Notes
 

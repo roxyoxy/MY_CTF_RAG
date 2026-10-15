@@ -1,4 +1,4 @@
-# suctf-2026_wsc
+# suctf 2026 wsc
 
 CKEditor WebSpellChecker Plugin
 ===============================

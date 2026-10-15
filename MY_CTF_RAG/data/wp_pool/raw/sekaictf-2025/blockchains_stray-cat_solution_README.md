@@ -1,4 +1,4 @@
-# blockchains_stray-cat_solution_README
+# blockchains stray cat solution README
 
 1. create instance on remote
 2. swap address in gen.py, then run gen.py and copy output to the variable target_rlp Solve.sol

@@ -1,4 +1,4 @@
-# web-oh-my-grafana_docker_grafana-8.2.6_grafana-8.2.6_scripts_build_ci-msi-build_msigenerator_resources_license_LICENSE
+# web oh my grafana docker grafana 8.2.6 grafana 8.2.6 scripts build ci msi build msigenerator resources license LICENSE
 
 
                                  Apache License

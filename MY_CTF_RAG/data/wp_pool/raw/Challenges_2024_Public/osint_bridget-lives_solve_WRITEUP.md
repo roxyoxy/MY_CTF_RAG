@@ -1,4 +1,4 @@
-# osint_bridget-lives_solve_WRITEUP
+# osint bridget lives solve WRITEUP
 
 # Bridget Lives
 

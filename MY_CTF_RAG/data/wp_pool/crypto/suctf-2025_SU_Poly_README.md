@@ -1,4 +1,4 @@
-# suctf-2025_SU_Poly__README
+# suctf 2025 SU Poly README
 
 Seems like a hidden number problem but pay attention to something in description:
 

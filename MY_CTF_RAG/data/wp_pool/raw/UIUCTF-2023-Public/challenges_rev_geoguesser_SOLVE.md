@@ -1,4 +1,4 @@
-# challenges_rev_geoguesser_SOLVE
+# challenges rev geoguesser SOLVE
 
 # Solve
 

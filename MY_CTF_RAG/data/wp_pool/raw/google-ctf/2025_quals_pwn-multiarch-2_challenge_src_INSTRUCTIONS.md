@@ -1,4 +1,4 @@
-# 2025_quals_pwn-multiarch-2_challenge_src_INSTRUCTIONS
+# 2025 quals pwn multiarch 2 challenge src INSTRUCTIONS
 
 # Syntax
 

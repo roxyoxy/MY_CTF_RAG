@@ -1,4 +1,4 @@
-# blockchains_zoo_README
+# blockchains zoo README
 
 ## ZOO
 

@@ -1,4 +1,4 @@
-# beginner_needle-in-iam_HINTS
+# beginner needle in iam HINTS
 
 Have you seen the attached file? Looks like some kind of credentials. Maybe they could be loaded into something?
 

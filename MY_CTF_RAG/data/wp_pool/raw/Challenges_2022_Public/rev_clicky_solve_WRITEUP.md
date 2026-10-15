@@ -1,4 +1,4 @@
-# rev_clicky_solve_WRITEUP
+# rev clicky solve WRITEUP
 
 Clicky
 ============

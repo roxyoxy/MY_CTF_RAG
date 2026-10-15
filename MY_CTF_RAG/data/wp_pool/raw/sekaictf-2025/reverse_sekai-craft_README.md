@@ -1,4 +1,4 @@
-# reverse_sekai-craft_README
+# reverse sekai craft README
 
 ## sekai-craft
 

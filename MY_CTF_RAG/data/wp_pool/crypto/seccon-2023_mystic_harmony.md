@@ -1,4 +1,4 @@
-# seccon-2023_mystic_harmony
+# seccon 2023 mystic harmony
 
 # mystic_harmony
 ## Question

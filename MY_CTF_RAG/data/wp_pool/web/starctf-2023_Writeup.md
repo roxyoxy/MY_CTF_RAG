@@ -1,4 +1,4 @@
-# starctf-2023___Writeup
+# starctf 2023 Writeup
 
 # Writeup
 

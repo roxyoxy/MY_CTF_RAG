@@ -1,4 +1,4 @@
-# suctf-2026_sourcecode
+# suctf 2026 sourcecode
 
 ## Source Code
 

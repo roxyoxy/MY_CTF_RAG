@@ -1,4 +1,4 @@
-# challenges_crypto_three_time_writeup_SOLVE
+# challenges crypto three time writeup SOLVE
 
 # About the Challenge
 

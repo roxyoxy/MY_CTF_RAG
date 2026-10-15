@@ -1,4 +1,4 @@
-# 2017_finals_2017-finals-pwn-trash_README
+# 2017 finals 2017 finals pwn trash README
 
 {
 

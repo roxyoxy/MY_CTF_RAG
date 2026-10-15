@@ -1,4 +1,4 @@
-# 2025_quals_web-sourceless_solution_README
+# 2025 quals web sourceless solution README
 
 ### Sourceless solution
 

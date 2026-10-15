@@ -1,4 +1,4 @@
-# tbtl-na_rnd_for_data_science
+# tbtl na rnd for data science
 
 # Rnd for Data Science
 

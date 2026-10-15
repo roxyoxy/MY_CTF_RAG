@@ -1,4 +1,4 @@
-# forensics_dumpster-dive_solution_README
+# forensics dumpster dive solution README
 
 ## Brief Walkthrough
 

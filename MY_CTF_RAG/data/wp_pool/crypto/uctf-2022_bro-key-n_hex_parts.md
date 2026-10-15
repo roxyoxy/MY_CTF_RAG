@@ -1,4 +1,4 @@
-# uctf-2022_bro-key-n__hex_parts
+# uctf 2022 bro key n hex parts
 
 30 # Sequence
 

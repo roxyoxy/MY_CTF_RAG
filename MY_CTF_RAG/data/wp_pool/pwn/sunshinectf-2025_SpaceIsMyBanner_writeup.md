@@ -1,4 +1,4 @@
-# sunshinectf-2025_SpaceIsMyBanner__writeup
+# sunshinectf 2025 SpaceIsMyBanner writeup
 
 # Space is my Banner
 This challenge is a "breakout" of tmux.

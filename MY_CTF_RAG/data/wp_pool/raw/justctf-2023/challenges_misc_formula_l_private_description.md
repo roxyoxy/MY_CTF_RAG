@@ -1,4 +1,4 @@
-# challenges_misc_formula_l_private_description
+# challenges misc formula l private description
 
 We didn't get to see a Grand Prix in Italy, but fortunately we got our hands on a telemetry file from another race.
 

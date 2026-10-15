@@ -1,4 +1,4 @@
-# csctf-2024_Geometry Dash 2.1
+# csctf 2024 Geometry Dash 2.1
 
 # Geometry Dash 2.1
 
