@@ -336,10 +336,12 @@ body {
 .detail-title { flex: 1 1 auto; min-width: 0; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .detail-title .path { font-family: var(--mono); font-size: 13.5px; word-break: break-all; }
 .detail-title .id, .detail-title .score { font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
+/* The pane now holds rendered markdown, so the face is the page's sans
+   and the whitespace is the renderer's, not the source's. Code keeps the
+   mono face through .md-scope pre below. */
 .detail-body {
   flex: 1 1 auto; margin: 0; padding: 14px 16px; overflow: auto;
-  font-family: var(--mono); font-size: 13px; line-height: 1.65;
-  white-space: pre-wrap; word-break: break-word;
+  font-size: 13px; line-height: 1.65;
   background: transparent; color: var(--text);
 }
 /* The matched span is marked with a rule in the theme's accent colour
@@ -435,13 +437,95 @@ body {
 }
 .hit.open .hit-snippet { display: none; }
 
-.hit-full { border-top: 1px solid var(--line); }
-.hit-full pre {
-  margin: 0; padding: 14px 18px; max-height: 420px; overflow: auto;
-  font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
-  white-space: pre-wrap; word-break: break-word;
+/* The expanded body is its own scroll box. The locate button scrolls the
+   <mark> to the middle of whichever element scrolls, so that element has
+   to be the one holding the rendered document -- the renderer no longer
+   wraps its output in a single <pre> to aim at. */
+.hit-full {
+  border-top: 1px solid var(--line);
+  max-height: 420px; overflow: auto;
+  padding: 14px 18px; font-size: 12.5px; line-height: 1.6;
 }
 
+
+/* ---------- rendered markdown ----------
+ * Shared by the three surfaces that render a document or an answer: the
+ * expanded row, the detail pane and the answer body. Scoped to .md-scope
+ * so none of it can reach the surrounding chrome.
+ *
+ * These rules have to sit BELOW .answer-body and .detail-body: both still
+ * set `white-space: pre-wrap` for the raw text they used to hold, and the
+ * renderer puts a real newline between its blocks. Without this override
+ * every block would be separated by a blank line.
+ */
+.md-scope { white-space: normal; word-break: break-word; }
+.md-scope > :first-child { margin-top: 0; }
+.md-scope > :last-child { margin-bottom: 0; }
+
+.md-scope p { margin: 0 0 .72em; }
+
+.md-scope h1, .md-scope h2, .md-scope h3,
+.md-scope h4, .md-scope h5, .md-scope h6 {
+  margin: 1.15em 0 .5em; line-height: 1.35; font-weight: 650;
+}
+.md-scope h1 { font-size: 19px; }
+.md-scope h2 { font-size: 17px; }
+.md-scope h3 { font-size: 15.5px; }
+.md-scope h4, .md-scope h5, .md-scope h6 { font-size: 14.5px; }
+
+.md-scope ul, .md-scope ol { margin: 0 0 .72em; padding-left: 1.6em; }
+.md-scope li { margin: .18em 0; }
+
+.md-scope blockquote {
+  margin: 0 0 .72em; padding: .1em 0 .1em .9em;
+  border-left: 3px solid var(--line-strong); color: var(--text-dim);
+}
+
+.md-scope hr { margin: 1.1em 0; border: 0; border-top: 1px solid var(--line); }
+
+.md-scope code {
+  font-family: var(--mono); font-size: .92em;
+  padding: .1em .34em; border-radius: 5px; background: var(--panel-strong);
+}
+.md-scope pre.md-code {
+  margin: 0 0 .8em; padding: 10px 12px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: var(--panel-strong);
+  overflow-x: auto;
+  font-size: 12.5px; line-height: 1.6;
+}
+.md-scope pre.md-code code {
+  background: none; padding: 0; font-size: inherit;
+  font-family: var(--mono); white-space: pre;
+}
+
+/* A wide table scrolls inside its own wrapper, so it can never make the
+   page itself scroll sideways. */
+.md-scope .md-table-wrap { margin: 0 0 .8em; overflow-x: auto; }
+.md-scope table { border-collapse: collapse; font-size: 13px; }
+.md-scope th, .md-scope td {
+  border: 1px solid var(--line); padding: 4px 9px;
+  text-align: left; vertical-align: top;
+}
+.md-scope th { background: var(--panel-strong); font-weight: 600; }
+
+.md-scope a {
+  color: var(--accent); text-decoration: none;
+  border-bottom: 1px solid var(--accent-soft);
+}
+.md-scope a:hover { border-bottom-color: var(--accent); }
+
+/* The corpus is offline, so an image reference shows its alt text rather
+   than a broken-image box. */
+.md-scope .md-figure { color: var(--text-dim); font-style: italic; }
+.md-scope .md-note { color: var(--text-dim); }
+
+/* Inside rendered text the engine's match is a rule in the accent colour,
+   not a filled smear -- the same treatment the raw panes used. */
+.md-scope mark {
+  background: transparent; color: inherit; border-radius: 0;
+  border-bottom: 2px solid var(--accent);
+}
 
 /* ---------- empty & footer ---------- */
 .empty {

@@ -28,7 +28,15 @@ if not defined VCVARS (
 call "%VCVARS%" >nul 2>&1
 if not exist "%TEMP%\traceRAG_web_obj" mkdir "%TEMP%\traceRAG_web_obj"
 
-cl /nologo /std:c++17 /W4 /utf-8 /EHsc /I include /Fo:"%TEMP%\traceRAG_web_obj\" ^
+rem The doubled backslash below is load-bearing, do not "tidy" it to one.
+rem A backslash immediately before the closing quote escapes that quote, so
+rem the /Fo argument never ends and swallows every source file listed after
+rem it -- cl then reports D8003 (missing source file name). Two backslashes
+rem collapse to one literal backslash and leave a quote that still
+rem terminates. Dropping the backslash altogether is not a fix either: cl
+rem then treats the path as a file prefix and scatters the .obj files into
+rem the current directory. Measured both ways on 2026-10-15.
+cl /nologo /std:c++17 /W4 /utf-8 /EHsc /I include /Fo:"%TEMP%\traceRAG_web_obj\\" ^
   src\web_ui.cpp src\engine.cpp src\atom_scan.cpp src\chunker.cpp ^
   src\context.cpp src\corpus_diff.cpp src\embedder.cpp src\generator.cpp ^
   src\indexer.cpp src\loader.cpp src\persist.cpp src\rrf.cpp ^
