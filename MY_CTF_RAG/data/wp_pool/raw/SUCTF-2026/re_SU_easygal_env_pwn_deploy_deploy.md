@@ -1,0 +1,14 @@
+# re_SU_easygal_env_pwn_deploy_deploy
+
+1. 
+```bash
+docker build -t "funheap" . (注意最后的点)
+```
+
+2. 
+```bash
+docker run -d -p "0.0.0.0:pub_port:8888" -h "funheap" --name="funheap" funheap 
+```
+
+`pub_port` 替换成你想要开放给选手的端口
+

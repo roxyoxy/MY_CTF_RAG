@@ -1,0 +1,16 @@
+# osint_fat_donke_diss_README
+
+fat donke diss
+======================
+
+- **Category**: osint
+- **Difficulty**: easy
+- **Author**: MC Fat Monke
+
+ain't no fat donke tryin to spit bars on the fat monke
+
+---
+
+### Handout files
+
+
