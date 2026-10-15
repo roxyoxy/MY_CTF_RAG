@@ -19,6 +19,13 @@
 
 const $ = (id) => document.getElementById(id);
 
+// Crosshair glyph for the per-row locate button.
+const TARGET_SVG =
+  '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">' +
+  '<circle cx="8" cy="8" r="4.6" fill="none" stroke="currentColor" stroke-width="1.4"/>' +
+  '<path d="M8 1.4v2.6M8 12v2.6M1.4 8h2.6M12 8h2.6" stroke="currentColor" ' +
+  'stroke-width="1.4" stroke-linecap="round"/></svg>';
+
 const MODE_SEARCH = "search";   // click a row -> expand in place
 const MODE_ASK = "ask";         // click a row -> open the detail pane
 
@@ -42,6 +49,17 @@ function escapeHtml(value) {
   return String(value)
     .replace(/&/g, "&amp;").replace(/</g, "&lt;")
     .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+// Scroll one element INSIDE another, without dragging the page:
+// scrollIntoView() walks up to the nearest scrollable ancestor, which
+// moved the whole results column instead of just the open document.
+function scrollMarkIntoBox(box, mark) {
+  if (!box || !mark) return;
+  const boxRect = box.getBoundingClientRect();
+  const markRect = mark.getBoundingClientRect();
+  box.scrollTop += (markRect.top - boxRect.top) -
+                   (box.clientHeight - markRect.height) / 2;
 }
 
 /* ---------- byte-offset helpers (see note 1) ---------- */
@@ -76,24 +94,66 @@ async function refreshStatus() {
 const HISTORY_KEY = "traceRAG.history";
 const HISTORY_MAX = 30;
 
+// Entries are { act, q } so a replayed lookup runs the same action it
+// was made with. Plain strings from the first version are read as
+// searches instead of being dropped.
 function loadHistory() {
-  try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
+  let raw;
+  try { raw = JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
   catch (error) { return []; }
+  return raw.map((entry) =>
+    typeof entry === "string" ? { act: "search", q: entry } : entry);
 }
 
-function pushHistory(query) {
-  const list = loadHistory().filter((q) => q !== query);
-  list.unshift(query);
-  try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, HISTORY_MAX))); }
-  catch (error) { /* private mode: history is a convenience, not a feature */ }
+// Entries carry the response payload, so opening one is instant and
+// offline. Payloads are big (whole chunks, whole answers), so the write
+// sheds the oldest entries until it fits; if not even one fits, the
+// queries are kept without their payloads and a click re-runs instead.
+function saveHistory(list) {
+  let items = list.slice(0, HISTORY_MAX);
+  while (items.length > 1) {
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(items));
+      return;
+    } catch (error) {
+      items = items.slice(0, items.length - 1);
+    }
+  }
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(
+      items.map((e) => ({ act: e.act, q: e.q }))));
+  } catch (error) { /* private mode: history is a convenience */ }
+}
+
+function pushHistory(act, query, data) {
+  const list = loadHistory().filter((e) => !(e.act === act && e.q === query));
+  list.unshift({ act, q: query, t: Date.now(), data });
+  saveHistory(list);
   renderHistory();
+}
+
+// Replays a stored response. Nothing is re-requested: the point of
+// keeping history is to get the old answer back, not to run it again.
+function showStored(entry) {
+  $("pane-detail").classList.add("hidden");
+  if (entry.act === "ask") {
+    $("results").innerHTML = "";
+    $("empty-state").classList.add("hidden");
+    CURRENT_MODE = MODE_ASK;
+    rememberResults(entry.data);
+    renderAnswer(entry.data);
+  } else {
+    $("answer-panel").classList.add("hidden");
+    renderResults(entry.data, MODE_SEARCH);
+  }
 }
 
 function renderHistory() {
   const list = loadHistory();
-  const box = $("history");
-  box.innerHTML = list.map((q) =>
-    `<li title="${escapeHtml(q)}">${escapeHtml(q)}</li>`).join("");
+  $("history").innerHTML = list.map((e, i) =>
+    `<li data-i="${i}" title="${escapeHtml(e.q)}">` +
+    `<span class="hist-act ${e.act}">${e.act === "ask" ? "生成" : "检索"}：</span>` +
+    `${escapeHtml(e.q)}</li>`).join("");
   $("history-empty").classList.toggle("hidden", list.length > 0);
 }
 
@@ -106,14 +166,20 @@ function chip(name, value) {
   return `<span class="chip">${name}=<b>${shown}</b></span>`;
 }
 
+// Keeps the last payload for the detail pane and the timing line,
+// without drawing anything -- generate mode shows no result list.
+function rememberResults(data) {
+  LAST_RESULTS = data.results;
+  $("search-time").textContent =
+    `${data.mode} · ${data.ms.toFixed(1)} ms · ${data.results.length} 条`;
+}
+
 function renderResults(data, mode) {
   CURRENT_MODE = mode;
-  LAST_RESULTS = data.results;
+  rememberResults(data);
   const box = $("results");
   box.innerHTML = "";
   $("empty-state").classList.add("hidden");
-  $("search-time").textContent =
-    `${data.mode} · ${data.ms.toFixed(1)} ms · ${data.results.length} 条`;
 
   data.results.forEach((hit, index) => {
     const row = document.createElement("div");
@@ -126,6 +192,8 @@ function renderResults(data, mode) {
         <span class="path">${escapeHtml(hit.doc)}</span>
         <span class="id">#${hit.doc_id}</span>
         ${chip("rrf", hit.rrf)} ${chip("bm25", hit.bm25)} ${chip("vec", hit.vec)}
+        <span class="spacer"></span>
+        <button class="target-btn" title="定位到命中片段">${TARGET_SVG}</button>
       </div>
       <div class="hit-snippet">${escapeHtml(hit.text)}</div>
       <div class="hit-full hidden"></div>`;
@@ -148,11 +216,24 @@ async function fillRowFull(row, hit) {
   }
 }
 
-function collapseAllRows() {
-  document.querySelectorAll(".hit.open").forEach((row) => {
-    row.classList.remove("open");
-    row.querySelector(".hit-full").classList.add("hidden");
-  });
+async function expandRow(row, hit) {
+  row.classList.add("open");
+  row.querySelector(".hit-full").classList.remove("hidden");
+  await fillRowFull(row, hit);
+}
+
+// The crosshair jumps straight to the matched span: expand (if needed)
+// and scroll the <mark> into view.
+async function locateInRow(row) {
+  const hit = LAST_RESULTS[Number(row.dataset.index)];
+  if (!hit) return;
+  if (CURRENT_MODE === MODE_ASK) {
+    openDetail(hit);
+    return;
+  }
+  await expandRow(row, hit);
+  const full = row.querySelector(".hit-full");
+  scrollMarkIntoBox(full.querySelector("pre"), full.querySelector("mark"));
 }
 
 async function onHitHeadClicked(row) {
@@ -166,16 +247,14 @@ async function onHitHeadClicked(row) {
     return;
   }
 
-  const full = row.querySelector(".hit-full");
-  collapseAllRows();
+  // Rows open and close independently, so several documents can be
+  // compared side by side.
   if (row.classList.contains("open")) {
     row.classList.remove("open");
-    full.classList.add("hidden");
+    row.querySelector(".hit-full").classList.add("hidden");
     return;
   }
-  row.classList.add("open");
-  full.classList.remove("hidden");
-  await fillRowFull(row, hit);
+  await expandRow(row, hit);
 }
 
 /* ---------- detail pane ---------- */
@@ -204,11 +283,11 @@ async function openDetail(hit) {
   }
 }
 
-// The full text is long; "命中 chunk" scrolls to the highlighted span.
+// The full text is long; the crosshair scrolls to the highlighted span
+// inside the pane, leaving the rest of the layout where it was.
 function jumpToDetailHit() {
-  const mark = $("detail-body").querySelector("mark");
-  if (!mark) return;
-  mark.scrollIntoView({ behavior: "smooth", block: "center" });
+  const body = $("detail-body");
+  scrollMarkIntoBox(body, body.querySelector("mark"));
 }
 
 /* ---------- answer ---------- */
@@ -294,12 +373,13 @@ function setBusy(busy) {
 async function doSearch() {
   const query = $("query").value.trim();
   if (!query) return;
-  pushHistory(query);
   setBusy(true);
   try {
     $("answer-panel").classList.add("hidden");
     $("pane-detail").classList.add("hidden");
-    renderResults(await api("/api/search", { query }), MODE_SEARCH);
+    const data = await api("/api/search", { query });
+    renderResults(data, MODE_SEARCH);
+    pushHistory("search", query, data);
   } catch (error) {
     $("search-time").textContent = "请求失败: " + error.message;
   } finally {
@@ -310,9 +390,13 @@ async function doSearch() {
 async function doAsk() {
   const query = $("query").value.trim();
   if (!query) return;
-  pushHistory(query);
   setBusy(true);
 
+  // Generate mode shows the answer and its citation ledger only --
+  // the ledger already lists every source, so a second ranking list
+  // below it would just repeat itself.
+  $("results").innerHTML = "";
+  $("empty-state").classList.add("hidden");
   $("pane-detail").classList.add("hidden");
   $("answer-panel").classList.remove("hidden");
   $("answer-body").innerHTML =
@@ -321,11 +405,15 @@ async function doAsk() {
   $("sources").innerHTML = "";
 
   try {
-    // Phase 1: hits land almost immediately, and they are rendered in
-    // ask mode so a click opens the detail pane.
-    renderResults(await api("/api/search", { query }), MODE_ASK);
-    // Phase 2: the grounded answer.
-    renderAnswer(await api("/api/ask", { query }));
+    // Phase 1: keep the hits (the detail pane shows their scores) but
+    // draw nothing; phase 2 answers.
+    CURRENT_MODE = MODE_ASK;
+    rememberResults(await api("/api/search", { query }));
+    // Phase 2: the grounded answer (its payload carries the hits too,
+    // so it is what the history entry stores).
+    const data = await api("/api/ask", { query });
+    renderAnswer(data);
+    pushHistory("ask", query, data);
   } catch (error) {
     $("answer-body").textContent = "请求失败: " + error.message;
   } finally {
@@ -384,13 +472,23 @@ $("btn-clear-history").addEventListener("click", () => {
 $("history").addEventListener("click", (event) => {
   const item = event.target.closest("li");
   if (!item) return;
-  $("query").value = item.textContent;
-  doSearch();
+  const entry = loadHistory()[Number(item.dataset.i)];
+  if (!entry) return;
+  $("query").value = entry.q;
+  setAction(entry.act);
+  closeSendMenu();
+  if (entry.data) showStored(entry);
+  else runAction();   // an entry saved before payloads existed
 });
 
 $("results").addEventListener("click", (event) => {
-  const head = event.target.closest(".hit-head");
-  if (head) onHitHeadClicked(head.parentElement);
+  const row = event.target.closest(".hit");
+  if (!row) return;
+  if (event.target.closest(".target-btn")) {
+    locateInRow(row);
+    return;
+  }
+  if (event.target.closest(".hit-head")) onHitHeadClicked(row);
 });
 
 $("answer-body").addEventListener("click", (event) => {

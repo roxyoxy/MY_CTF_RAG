@@ -125,6 +125,8 @@ body {
 }
 .history li:hover { background: var(--panel-strong); color: var(--text); }
 .history-empty { padding: 10px 16px; color: var(--text-faint); font-size: 12.5px; }
+.hist-act { color: var(--text-faint); }
+.hist-act.ask { color: var(--accent); }
 
 .main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
 
@@ -173,6 +175,7 @@ body {
   color: #06202b;
 }
 .send-btn button {
+  display: inline-flex; align-items: center; justify-content: center;
   border: 0; background: transparent; color: inherit; cursor: pointer;
   font-size: 13.5px; font-weight: 600; padding: 7px 12px;
   transition: filter .12s;
@@ -180,7 +183,7 @@ body {
 .send-btn button:hover:not(:disabled) { filter: brightness(1.08); }
 .send-btn button:disabled { opacity: .45; cursor: not-allowed; }
 .send-caret {
-  padding: 7px 9px !important;
+  padding: 0 11px !important;   /* height comes from the parent's stretch */
   border-left: 1px solid rgba(0, 0, 0, .18) !important;
 }
 .caret-down {
@@ -232,6 +235,18 @@ body {
   width: 30px; height: 30px; border-color: transparent;
 }
 .icon-btn.small:hover { background: var(--panel-strong); border-color: transparent; }
+
+/* Crosshair button: jump to the matched span. An inline SVG keeps it
+   crisp at any zoom and adds no icon dependency. */
+.target-btn {
+  flex: 0 0 auto; width: 26px; height: 26px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 7px; cursor: pointer;
+  border: 1px solid transparent; background: transparent;
+  color: var(--text-dim);
+  transition: color .15s, background .15s, border-color .15s;
+}
+.target-btn:hover { color: var(--accent); background: var(--panel-strong); border-color: var(--line); }
 
 /* A small clock-with-arrow glyph, drawn in CSS so there is no icon
    dependency to load -- the toggle is meant to read as "history". */
@@ -330,6 +345,7 @@ body {
 .hit-head .rank { font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--accent); min-width: 20px; }
 .hit-head .path { font-family: var(--mono); font-size: 13.5px; word-break: break-all; }
 .hit-head .id { font-family: var(--mono); font-size: 11.5px; color: var(--text-faint); }
+.hit-head .spacer { flex: 1 1 auto; }   /* pushes the locate button right */
 
 .chip {
   font-family: var(--mono); font-size: 11.5px;
@@ -373,6 +389,23 @@ footer {
   border-radius: 50%; animation: spin .8s linear infinite; vertical-align: -2px;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* Scrollbars follow the theme instead of the OS chrome: thin and
+   translucent, so a scrolling pane does not shout. */
+* {
+  scrollbar-width: thin;                                  /* Firefox */
+  scrollbar-color: var(--line-strong) transparent;
+}
+*::-webkit-scrollbar { width: 9px; height: 9px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--text-faint); background-clip: content-box; }
+*::-webkit-scrollbar-corner { background: transparent; }
 
 @media (max-width: 900px) {
   .sidebar { flex-basis: 200px; }

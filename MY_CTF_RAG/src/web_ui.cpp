@@ -20,7 +20,9 @@
 #include <cstddef>
 #include <exception>
 #include <iostream>
+#include <mutex>
 #include <string>
+#include <unordered_map>
 
 #ifdef _WIN32
 #define NOMINMAX             // keep windows.h min/max macros out of std::min
@@ -135,30 +137,42 @@ int main() {
             << "), BM25-only this session\n";
     }
 
+    // The web UI is read-only, so everything it says about the corpus
+    // is fixed for the life of the process. Snapshot it once instead of
+    // asking the engine per request: a generation holds the engine for
+    // tens of seconds, and a document lookup must not queue behind one.
+    const std::vector<DocInfo> docs_snapshot = engine.documents();
+    std::unordered_map<int, std::string> doc_text;
+    for (const DocInfo& doc : docs_snapshot) {
+        std::string content;
+        if (engine.document_text(doc.id, content))
+            doc_text.emplace(doc.id, std::move(content));
+    }
+    const json status_snapshot = json{
+        {"docs", status.documents},
+        {"chunks", status.chunks},
+        {"dense_ready", status.dense_ready},
+        {"mode", status.dense_ready ? "hybrid" : "bm25-only"},
+        {"dense_model", status.dense_model_id},
+        {"gen_model", engine.config().generation_model},
+        {"generation_ready", status.generation_ready},
+    };
+
     httplib::Server server;
 
-    // The engine is NOT thread-safe by contract -- "one thread at a
-    // time". So the server gets exactly one worker: requests serialize
-    // themselves and no lock is needed anywhere. For a single-user local
-    // tool that is the right trade, and it makes the contract literal
-    // instead of aspirational.
-    server.new_task_queue = [] { return new httplib::ThreadPool(1); };
+    // Only /api/search and /api/ask touch the engine, and its contract
+    // allows one thread at a time -- so those two take a mutex while the
+    // snapshot-backed routes run free. The caller does the serializing,
+    // exactly as the contract asks.
+    std::mutex engine_mutex;
+    server.new_task_queue = [] { return new httplib::ThreadPool(4); };
 
-    server.Get("/api/status", [&engine](const httplib::Request&,
-                                        httplib::Response& res) {
-        const EngineStatus& s = engine.status();
-        send_json(res, json{
-            {"docs", s.documents},
-            {"chunks", s.chunks},
-            {"dense_ready", s.dense_ready},
-            {"mode", s.dense_ready ? "hybrid" : "bm25-only"},
-            {"dense_model", s.dense_model_id},
-            {"gen_model", engine.config().generation_model},
-            {"generation_ready", s.generation_ready},
-        });
+    server.Get("/api/status", [&status_snapshot](const httplib::Request&,
+                                               httplib::Response& res) {
+        send_json(res, status_snapshot);
     });
 
-    server.Post("/api/search", [&engine](const httplib::Request& req,
+    server.Post("/api/search", [&engine, &engine_mutex](const httplib::Request& req,
                                          httplib::Response& res) {
         std::string query;
         std::size_t top_k = 0;
@@ -167,10 +181,11 @@ int main() {
             send_json(res, error, 400);
             return;
         }
+        std::lock_guard<std::mutex> lock(engine_mutex);
         send_json(res, base_json(engine.retrieve(query, top_k)));
     });
 
-    server.Post("/api/ask", [&engine](const httplib::Request& req,
+    server.Post("/api/ask", [&engine, &engine_mutex](const httplib::Request& req,
                                       httplib::Response& res) {
         std::string query;
         std::size_t top_k = 0;
@@ -180,6 +195,7 @@ int main() {
             return;
         }
 
+        std::lock_guard<std::mutex> lock(engine_mutex);
         QueryOutcome outcome = engine.retrieve(query, top_k);
         json out = base_json(outcome);
 
@@ -220,7 +236,8 @@ int main() {
     // into this, and the detail pane renders it with the matched chunk
     // highlighted -- which is why hits carry begin/end rather than
     // only a snippet.
-    server.Get("/api/doc", [&engine](const httplib::Request& req,
+    server.Get("/api/doc", [&doc_text, &docs_snapshot](
+                                     const httplib::Request& req,
                                      httplib::Response& res) {
         const std::string raw = req.get_param_value("id");
         if (raw.empty() || raw.size() > 6) {
@@ -235,13 +252,14 @@ int main() {
             }
             id = id * 10 + (ch - '0');
         }
-        std::string content;
-        if (!engine.document_text(id, content)) {
+        const auto found = doc_text.find(id);
+        if (found == doc_text.end()) {
             send_json(res, json{{"error", "no such document"}}, 404);
             return;
         }
+        const std::string& content = found->second;
         std::string path;
-        for (const DocInfo& doc : engine.documents()) {
+        for (const DocInfo& doc : docs_snapshot) {
             if (doc.id == id) {
                 path = doc.path;
                 break;
