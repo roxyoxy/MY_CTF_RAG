@@ -15,9 +15,13 @@
 //   GET  /*            static files from web/
 //
 // Run it from the code area (the working directory must contain data/,
-// index.bin, vector.bin and web/).
+// index.bin, vector.bin and web/). It runs in the foreground, prints the
+// URL it is serving, and stops on Ctrl+C -- or on Ctrl+Break, or on the
+// window being closed, all three of which land in the same handler and
+// close the listening socket before returning.
 
 #include <atomic>
+#include <csignal>
 #include <cstddef>
 #include <exception>
 #include <iostream>
@@ -163,6 +167,51 @@ json starting_json(const StartupState& state) {
 
 const json kStillStarting = json{{"error", "starting"}};
 
+// Stopping cleanly means reaching the Server object to close the listening
+// socket, which is what makes listen_after_bind() return. Neither a signal
+// handler nor a console handler can capture anything, so the object is
+// parked here. Both kinds of handler run on a thread the system creates
+// for them, never on a serving thread, so calling into Server from one
+// does not race the request loop.
+httplib::Server* g_server = nullptr;
+
+#ifdef _WIN32
+// One handler covers every way a user ends a console program: Ctrl+C,
+// Ctrl+Break, and closing the window. std::signal would only reach
+// Ctrl+C, leaving the other two to kill the process outright -- which is
+// the state this replaced, where the window could be closed while the
+// server kept running.
+BOOL WINAPI on_console_event(DWORD type) {
+    switch (type) {
+    case CTRL_C_EVENT:
+    case CTRL_BREAK_EVENT:
+    case CTRL_CLOSE_EVENT:
+    case CTRL_LOGOFF_EVENT:
+    case CTRL_SHUTDOWN_EVENT:
+        if (g_server) {
+            g_server->stop();
+        }
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+#else
+void on_interrupt(int) {
+    if (g_server) {
+        g_server->stop();
+    }
+}
+#endif
+
+void install_shutdown_handler() {
+#ifdef _WIN32
+    SetConsoleCtrlHandler(on_console_event, TRUE);
+#else
+    std::signal(SIGINT, on_interrupt);
+#endif
+}
+
 }  // namespace
 
 int main() {
@@ -170,6 +219,47 @@ int main() {
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 #endif
+
+    // Bind before anything else. A port still held by a previous run is
+    // the failure a user is most likely to hit, and it is cheap to
+    // detect -- so it is detected here, where saying so costs nothing,
+    // rather than after the engine has spent time loading snapshots.
+    httplib::Server server;
+
+#ifdef _WIN32
+    // httplib's default socket options set SO_REUSEADDR and then
+    // SO_EXCLUSIVEADDRUSE on Windows. Measured 2026-10-15: with both set,
+    // a second instance bound the same port successfully and printed its
+    // banner, so the check below never fired -- two servers answered on
+    // one port and neither could tell. Setting the exclusive option on
+    // its own is what actually refuses the second bind.
+    // A generic lambda rather than naming the socket type: httplib keeps
+    // socket_t out of its public namespace, and the parameter is deduced
+    // from the std::function this is stored into anyway.
+    server.set_socket_options([](auto sock) {
+        int exclusive = 1;
+        setsockopt(sock, SOL_SOCKET, SO_EXCLUSIVEADDRUSE,
+            reinterpret_cast<const char*>(&exclusive), sizeof(exclusive));
+    });
+#endif
+
+    if (!server.bind_to_port(kBindAddress, kPort)) {
+        std::cerr << "cannot bind " << kBindAddress << ":" << kPort
+            << " -- is another instance still running?\n";
+        return 1;
+    }
+
+    // Ctrl+C (and Ctrl+Break, and closing the window) stops the server
+    // instead of killing the process, so the listening socket closes and
+    // in-flight requests finish. The banner cannot be printed before the
+    // bind, or a failed start would be preceded by "open this URL".
+    g_server = &server;
+    install_shutdown_handler();
+
+    std::cout << "\n  TraceRAG web UI  ->  http://"
+        << kBindAddress << ":" << kPort << "\n"
+        << "  Press Ctrl+C in this window to stop the server.\n\n";
+    std::cout.flush();
 
     RagEngine engine;
     StartupState startup;
@@ -239,8 +329,6 @@ int main() {
             << " documents\n";
     });
     startup_thread.detach();
-
-    httplib::Server server;
 
     // Only /api/search and /api/ask touch the engine, and its contract
     // allows one thread at a time -- so those two take a mutex while the
@@ -375,12 +463,9 @@ int main() {
 
     server.set_mount_point("/", kWebRoot);
 
-    std::cout << "TraceRAG web UI: http://" << kBindAddress << ":" << kPort
-        << "\n";
-    if (!server.listen(kBindAddress, kPort)) {
-        std::cerr << "cannot bind " << kBindAddress << ":" << kPort
-            << " -- is another instance still running?\n";
-        return 1;
-    }
+    // Blocks until Ctrl+C. The socket is already bound, so the only way
+    // out of here is a signal, and stop() is what makes this return.
+    server.listen_after_bind();
+    std::cout << "server stopped.\n";
     return 0;
 }

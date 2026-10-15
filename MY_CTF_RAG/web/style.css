@@ -135,6 +135,12 @@ body {
 .badge.bm25 { color: #2a1a06; background: linear-gradient(135deg, var(--warn), #ffd39b); }
 .corpus { color: var(--text-dim); font-size: 12px; font-family: var(--mono); }
 
+/* A degraded session says so in words beside the corpus line. The badge's
+   "BM25-only" is engine jargon and easy to read straight past, and the
+   consequence -- that a differently worded question stops being found --
+   is not something a viewer would infer from the term alone. */
+.degraded { color: var(--warn); }
+
 /* ---------- shell: sidebar | main ---------- */
 .shell { flex: 1 1 auto; display: flex; min-height: 0; }
 

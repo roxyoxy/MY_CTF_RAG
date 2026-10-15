@@ -2897,3 +2897,66 @@ app.js 中切出、在 node 里跑，**535 项全过**：
 于是控制台要多等 8–125 秒才打印任何命中；拆成 retrieve() + generate() 之后，
 前端才能"先出结果卡、再出答案"。这个问题的发现方式同样值得记：靠**改动
 前后二进制输出的逐字节比对**，否则它会静默上线。
+
+## [2026-10-15 15:20] AI-C
+
+【竣工】web 服务器开关可控：前台运行 + Ctrl+C 优雅停止；附两个顺带
+挖出的真 bug，以及降级提示的补齐。
+
+一、问题。此前 run_web.bat 用 start /min 把服务器从终端上摘了出去，
+后果有二：① 结尾那句 pause 毫无意义——按任意键关掉窗口，服务照跑；
+② 进程脱离终端后没有任何入口，只能去任务管理器找。用户诉求：手动起
+服务 → 终端提示访问地址 → 终端不退出 → Ctrl+C 停服。
+
+二、改动两处。
+  · run_web.bat：去掉 start /min、timeout、自动开浏览器、pause，改为
+    前台直接运行 exe。终端被服务占住，Ctrl+C 天然可达。
+  · src/web_ui.cpp：
+    - bind 提到最前，bind_to_port() + listen_after_bind() 取代 listen()
+    - SetConsoleCtrlHandler 接管 CTRL_C / CTRL_BREAK / CTRL_CLOSE /
+      CTRL_LOGOFF / CTRL_SHUTDOWN，回调里调 server.stop()，listen 返回
+      后正常 exit 0。一个 handler 覆盖 Ctrl+C、Ctrl+Break、关窗口三种
+    - banner 在 bind 成功后才打印（失败先报错，不能先说"打开这个网址"）
+    - 收尾打印 "server stopped." 作为回执
+
+三、bind 提前的附带收益：端口被占是最可能撞上的失败，而检测极便宜。
+提前之后撞端口立即报错退出，不必先花时间加载快照。
+
+四、验证。Ctrl+C 无法指向单个进程组（CTRL_C_EVENT 会打到共享控制台的
+所有进程，包括工具链），故写了个 C++ 探针发 Ctrl+Break——它与 Ctrl+C
+落在同一个 switch 分支。实测：
+  banner（确实排在引擎进度之前）→ corpus/engine ready → server stopped.
+  → after the event: exited, exit code 0 → 无残留进程
+链路成立：handler → stop() → listen 返回 → 正常退出。
+Ctrl+C 本身仍待人工确认（同一分支，但广播 CTRL_C_EVENT 会波及工具链）。
+
+五、顺带挖出并修掉两个真 bug，都属于"代码看起来对、在 Windows 上不成立"：
+ ① **端口冲突检测在 Windows 上是死代码。** httplib 的
+    default_socket_options 在 Windows 上先设 SO_REUSEADDR 再设
+    SO_EXCLUSIVEADDRUSE，实测后者不起作用：先起实例 1，再起实例 2，
+    实例 2 **也绑定成功并打出了 banner**（早先那次测试里它 exit=124，
+    那是超时打死的，不是"绑定失败"，差点被误读成检测有效）。即两个
+    服务同时绑住 18080，端口归属不确定，而 "is another instance still
+    running?" 从未有机会打印。→ set_socket_options 只设
+    SO_EXCLUSIVEADDRUSE。修后实例 2 立即 exit=1 且提示正确，实例 1
+    不受影响。
+    附带：用的是泛型 lambda [](auto sock) 而非命名 socket_t——httplib
+    不把它放进公开命名空间，这一点是编译报 C2039 才知道的。
+ ② **run_web.bat 里裸写 web_ui.exe。** 这依赖 cmd 的"搜索当前目录"，
+    而该行为在设置 NoDefaultCurrentDirectoryInExePath 时被关闭（Git
+    Bash / mintty 会设，本机实测值为 1）。C 的 VSCode 终端没设它，
+    所以此前一直能跑——但这是隐性的环境依赖，且失败现象看起来像
+    "没编译过"。→ 改为 "%~dp0web_ui.exe"。
+
+六、附带竣工：【降级可视化】补上。此前只有徽章 hybrid / BM25-only 与
+语料行省略模型名，状态是如实的，但不够自解释——BM25-only 是引擎行话，
+且"换个说法问同一件事会召回变差"这一后果无法从术语本身推出来。现给
+徽章加 title 说明，并在语料行尾追加橙色「语义检索未启用」（.degraded）；
+starting 与错误分支里清 title，避免残留上一条提示。
+**此条未经自动验证**：它只在 dense 不可用时出现，触发需挪走 vector.bin
+或改代码。留待人工在降级会话中确认。
+
+七、一条认知记以备查：**"进程能正常退出"这件事本身也会被平台差异吃掉。**
+本条两个 bug 都只有实测才现形——一个靠对照启动两次，一个靠换一个 shell
+环境跑同一个 bat。凡是"启动/停止/端口"这类与平台强耦合的行为，测一遍
+再下结论。

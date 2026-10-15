@@ -568,26 +568,39 @@ async function refreshStatus() {
         ? `${name} ${s.done}/${s.total}`
         : `${name}…`;
       badge.classList.add("bm25");
+      badge.title = "";
       $("corpus-info").textContent = "";
       nextDelay = 2000;
     } else {
       const hybrid = s.mode === "hybrid";
       badge.textContent = hybrid ? "hybrid 检索" : "BM25-only";
       badge.classList.toggle("bm25", !hybrid);
+      // A degraded session still answers every query -- it answers from
+      // the lexical route alone. "BM25-only" is the badge's word for
+      // that, which means nothing to someone who has not read the
+      // engine, so the tooltip and the trailing note say it in plain
+      // language: what is off, and what it costs.
+      badge.title = hybrid
+        ? "词法（BM25）与语义（向量）双路并行"
+        : "语义（向量）检索未启用：本次会话只用语料词法匹配，" +
+          "换个说法问同一件事的召回会变差";
       // Defensive: a payload missing the corpus fields must never
       // render "undefined documents". The starting payload has no
       // docs/chunks at all, and a degraded payload has no model name.
       const docs = s.docs ?? 0;
       const chunks = s.chunks ?? 0;
       const model = s.dense_model || "";
-      $("corpus-info").textContent = model
-        ? `${docs} 文档 · ${chunks} chunks · ${model}`
-        : `${docs} 文档 · ${chunks} chunks`;
+      const corpus = `${docs} 文档 · ${chunks} chunks` +
+        (model ? ` · ${model}` : "");
+      $("corpus-info").innerHTML = hybrid
+        ? escapeHtml(corpus)
+        : escapeHtml(corpus) + ' <span class="degraded">语义检索未启用</span>';
     }
   } catch (error) {
     badge.textContent = error.message === "引擎未连接"
       ? error.message : "引擎未连接";
     badge.classList.add("bm25");
+    badge.title = "";
     $("corpus-info").textContent = "";
     nextDelay = 5000;
   }
