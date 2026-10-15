@@ -472,7 +472,7 @@ body {
  * renders into it. 12px of padding meant 12px of the third line, 22px
  * meant 22px of it, which is exactly the "the more room I ask for the
  * more it leaks" behaviour. It also cost the ellipsis: with padding on
- * the clamped box the second line ended in a hard cut instead of "…".
+ * the clamped box the second line ended in a hard cut instead of "...".
  * Measured in Chromium: 2.60 visible lines with 12px of padding, 3.10
  * with 22px, and a clean 2.00 with the padding moved out here.
  *
