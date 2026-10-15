@@ -3010,3 +3010,75 @@ web/app.js 与 web/style.css 两个文件。
   clamp_leak.html       用 20px 条纹背景把"泄漏"画出来，一眼可见第三行
   clamp_ellipsis.html   对照 line-clamp 是否生效、是否给出省略号
 以后遇到"裁剪/留白/多行截断"类问题可直接改这两个页面来定位。
+
+## [2026-10-15 16:19] AI-C
+
+【竣工 + 检查】网页前端三处小改与两项检查；附 build_web.bat 改用 vswhere
+定位 Visual Studio。
+
+一、【改动】发送菜单改为"只选择，不发送"。
+原 #send-menu 的处理器在 setAction() 之后直接调用 doSearch()/doAsk()，
+即"选即发送"，选完没有反悔余地。现改为只 setAction(act)：菜单只负责切换
+发送按钮的标签并收起，真正的发送发生在按下该按钮时（或输入框回车）。
+顺带确认了这条路径成立：doSearch/doAsk 是在发送那一刻才读输入框并清空，
+所以选动作不会清掉已输入的内容，"打字 → 选动作 → 再改字 → 发送"可行。
+
+二、【改动】设置面板新增"检索返回条数"滑动条（5–20，默认 10）。
+关键结论：**后端一个字节都不用改**。top_k 自路由写成起就是 /api/search
+与 /api/ask 的可选参数（web_ui.cpp:109 `body.value("top_k", 0)`，>0 用它，
+否则退回引擎注册的 TOP_K=10），只是前端三处调用此前都只发 {query}，从未
+用过它。所以这是纯前端改动：加控件 + 存 localStorage + 三处带上 top_k。
+范围与默认值写在 input 元素上作为唯一真源，app.js 从元素读，避免两处
+数字漂移。生效时机为"下一次动作"，拖动过程不发请求。
+生成模式的两相调用共用同一个值（doAsk 里先取一次再传两次），否则两相
+之间滑块若被拖动，账本会引用排名阶段没见过的来源。
+实测 /api/search：不带 top_k→10，5→5，10→10，20→20，1→1，100→26
+（26 是引擎实际候选上限，与滑块无关）。
+
+三、【bug】Number(null) 是 0 不是 NaN，滑条默认值被夹到最小值。
+localStorage 无该键时 getItem 返回 null，Number(null)=0 且
+Number.isFinite(0) 为真，于是被当成"用户存的 0"，再被 max(5,…) 夹到 5 ——
+滑条永远从 5 起步而非 10。主题那段没踩到，是因为它写作
+getItem(...) || "system"，|| 顺手兜住了 null。修法：先判 null/空串再转数字。
+**这个 bug 只有跑真实页面看 DOM 才会现形**，光读代码它是"对的"。定位方式：
+headless Chrome 加载真实页面后 dump DOM，比对 #topk-value 的实际值。
+
+四、【检查】前端路径审计：全部相对，无机器相关引用。
+index.html 用 href="style.css" / src="app.js"（相对），favicon 是内联
+data: URI（不发请求）；style.css 无 url() 外链（字体全用系统字体）；
+app.js 的请求是 /api/... **根相对** —— 相对的是"页面由哪个 origin 服务"，
+不是磁盘路径，因此只要页面由本服务器提供就正确，A/B 跑 run_web.bat 亦然。
+web/ 里没有任何盘符、file://、localhost、127.0.0.1。
+因此该页面不能用 file:// 直接双击打开 —— 这是 HTTP 应用的正常形态，
+不是缺陷，但值得写下来，免得下次有人误判。
+
+五、【检查】.gitignore 审计：正确，无需改动。
+11 个被忽略条目全部是真产物：VS 构建目录与中间文件（x64/ x86/ Debug/
+Release/ .vs/ *.obj *.pdb *.ilk）、逐用户设置（*.user/*.suo，命中 2 个
+.vcxproj.user）、构建产物（*.exe，含 web_ui.exe）、派生缓存
+（index.bin/vector.bin 及 .tmp，data/ 才是真源）、__pycache__/、
+Qt VS Tools 生成的 QtMsBuild/、测试编译日志 tests/_b_*.txt、.claude/。
+反向也验了：`git status --untracked-files=all` **零未跟踪文件**（没有该
+忽略而漏掉的）；关键文件全部被跟踪 —— third_party 的 httplib.h 与
+json.hpp、两个 .bat、web/ 三件、data/ 58、gui/ 6、src/ 17、include/ 16、
+tests/ 17、scripts/ 3、docs/ 14。
+git 折叠出的 3 个目录逐一摊开确认过：x64/Debug（18 个 .obj + .tlog +
+.pdb/.ilk）、Qt 的 qmake 中间目录（.qmake.stash、qtvars.pro/.vcxproj）、
+include/output/（一个孤立 exe）——**没有任何源码被误伤**。
+顺带一处观察（非 gitignore 问题）：include/output/ 里躺着一个孤立的
+atom_scan.exe，这个目录名出现在 include/ 下有点怪，可能原本另有所图。
+
+六、【改进】build_web.bat 改用 vswhere.exe 定位 Visual Studio。
+原先是一份硬编码的 4 条候选路径（Program Files 下三版 + C:\VS\2022），
+A/B 若把 VS 装在别处就得手改脚本。现改为先用 vswhere（VS 安装器自带，
+位置固定）询问"最新且带 x64 C++ 工具的安装路径"，找不到再退回原候选。
+实测：本机 VS 恰在非标准的 C:\VS\2022，vswhere 正确返回该路径，脚本打印
+`[info] Visual Studio found at C:\VS\2022\VC\Auxiliary\Build\vcvars64.bat`
+并编译成功。
+cmd 陷阱记一笔：%ProgramFiles(x86)% 的变量名里带 ")"，**不能写在
+if(...) 这类括号块内**，否则那个 ")" 会提前闭合块；本脚本因此在块外先把它
+展开进 VSWHERE 再使用。
+综上，A/B 拉下仓库后：(1) 路径层面无任何机器相关引用；(2) 前置条件
+VS2022 与两个 Ollama 模型，README 第 103 与 113-117 行已写明（含 tag 陷阱：
+是 qwen3:4b-instruct，不是 qwen3:4b）；(3) web_ui.exe 与 index.bin/
+vector.bin 不进仓库是刻意为之 —— 先 build，首启由引擎重建快照（#7）。

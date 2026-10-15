@@ -179,6 +179,41 @@ body {
 }
 .setting-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .setting-label { font-size: 13px; color: var(--text-dim); }
+.setting-value { font-family: var(--mono); font-size: 13px; color: var(--text); }
+
+/* The slider needs its own line: a label, a number and a track do not fit
+   across 260px, and the track wants the full width to be draggable. */
+.setting-block {
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+/* A range input is drawn by the platform unless every part is replaced,
+   and the platform's colours ignore the theme. Track and thumb are
+   therefore both built here, for WebKit and for Gecko. */
+.slider {
+  -webkit-appearance: none; appearance: none;
+  display: block; width: 100%; height: 18px;
+  margin: 6px 0 0; padding: 0;
+  background: transparent; cursor: pointer;
+}
+.slider::-webkit-slider-runnable-track {
+  height: 4px; border-radius: 2px; background: var(--line-strong);
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 14px; height: 14px; margin-top: -5px;
+  border-radius: 50%; background: var(--accent);
+  border: 2px solid var(--bg-panel);
+}
+.slider::-moz-range-track {
+  height: 4px; border-radius: 2px; background: var(--line-strong);
+}
+.slider::-moz-range-thumb {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--bg-panel);
+}
+.slider:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
 .seg button {
   border: 0; background: transparent; color: var(--text-dim); cursor: pointer;

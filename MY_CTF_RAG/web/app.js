@@ -551,6 +551,46 @@ function applyTheme(theme) {
 
 function closeSettings() { $("settings-menu").classList.add("hidden"); }
 
+/* ---------- settings: how many hits to ask for ----------
+ *
+ * top_k has been a parameter of /api/search and /api/ask since the routes
+ * were written: read_query() in src/web_ui.cpp reads it out of the request
+ * body and falls back to the engine's registered TOP_K when it is absent.
+ * So this is a front-end-only setting -- no server change, and leaving the
+ * slider alone reproduces the previous behaviour exactly.
+ *
+ * The range and the default live on the input element itself, so there is
+ * one place to change them instead of two that can drift apart.
+ */
+const TOP_K_KEY = "traceRAG.topK";
+
+function loadTopK() {
+  const slider = $("topk");
+  const min = Number(slider.min);
+  const max = Number(slider.max);
+  const fallback = Number(slider.value);
+  // Number(null) is 0, not NaN: an absent key would otherwise read as a
+  // stored zero and clamp up to the minimum, so the slider would silently
+  // start at 5 instead of at the default. Only a real string is converted.
+  let raw = null;
+  try { raw = localStorage.getItem(TOP_K_KEY); } catch (error) { raw = null; }
+  const stored = (raw === null || raw === "") ? NaN : Number(raw);
+  const wanted = Number.isFinite(stored) ? stored : fallback;
+  // Clamp. A value left behind by an older build must not land outside the
+  // range this build offers, or the thumb renders somewhere it cannot be
+  // dragged back from.
+  return Math.min(max, Math.max(min, Math.round(wanted)));
+}
+
+function applyTopK(value) {
+  $("topk").value = String(value);
+  $("topk-value").textContent = String(value);
+  try { localStorage.setItem(TOP_K_KEY, String(value)); } catch (error) { /* ignore */ }
+}
+
+// What the next request should carry.
+function topK() { return Number($("topk").value); }
+
 /* ---------- status ---------- */
 const STAGE_TEXT = { plan: "准备中", index: "重建词法索引", vectors: "嵌入向量" };
 
@@ -907,7 +947,7 @@ async function doSearch() {
   try {
     $("answer-panel").classList.add("hidden");
     $("pane-detail").classList.add("hidden");
-    const data = await api("/api/search", { query });
+    const data = await api("/api/search", { query, top_k: topK() });
     renderResults(data, MODE_SEARCH);
     pushHistory("search", query, data);
   } catch (error) {
@@ -935,14 +975,18 @@ async function doAsk() {
   $("gen-meta").textContent = "";
   $("sources").innerHTML = "";
 
+  // Read once: both phases must ask for the same number, or the ledger
+  // would cite sources the ranking pass never saw.
+  const limit = topK();
+
   try {
     // Phase 1: keep the hits (the detail pane shows their scores) but
     // draw nothing; phase 2 answers.
     CURRENT_MODE = MODE_ASK;
-    rememberResults(await api("/api/search", { query }));
+    rememberResults(await api("/api/search", { query, top_k: limit }));
     // Phase 2: the grounded answer (its payload carries the hits too,
     // so it is what the history entry stores).
-    const data = await api("/api/ask", { query });
+    const data = await api("/api/ask", { query, top_k: limit });
     renderAnswer(data);
     pushHistory("ask", query, data);
   } catch (error) {
@@ -971,17 +1015,16 @@ $("btn-menu").addEventListener("click", (event) => {
   $("send-menu").classList.toggle("hidden");
 });
 
+// The menu is a selector, not a pair of send buttons. Choosing an action
+// only relabels the send button and closes the menu; the press that sends
+// is the one on that button, or Enter in the query box. Picking from the
+// menu used to fire the request immediately, which meant there was no way
+// to change your mind after choosing.
 $("send-menu").addEventListener("click", (event) => {
   const item = event.target.closest("button[data-act]");
   if (!item) return;
   closeSendMenu();
-  if (item.dataset.act === "search") {
-    setAction("search");
-    doSearch();
-  } else {
-    setAction("ask");
-    doAsk();
-  }
+  setAction(item.dataset.act);
 });
 
 // Settings: same click-outside pattern as the send menu, and each one
@@ -990,6 +1033,13 @@ $("btn-settings").addEventListener("click", (event) => {
   event.stopPropagation();
   closeSendMenu();
   $("settings-menu").classList.toggle("hidden");
+});
+
+// The slider applies to the next request, never to one already answered.
+// Re-running on every input event would fire a request per pixel of drag,
+// and in generate mode each of those is a model call.
+$("topk").addEventListener("input", (event) => {
+  applyTopK(Number(event.target.value));
 });
 
 // Theme picks are handled at the document level so they work even if the
@@ -1001,6 +1051,10 @@ document.addEventListener("click", (event) => {
     applyTheme(themeButton.dataset.theme);
     return;
   }
+  // Working inside the menu must not dismiss it. The slider in particular
+  // is dragged rather than clicked, and a menu that closes on the first
+  // press cannot be dragged at all.
+  if (event.target.closest("#settings-menu")) return;
   closeSendMenu();
   closeSettings();
 });
@@ -1061,6 +1115,7 @@ $("btn-jump").addEventListener("click", jumpToDetailHit);
 
 renderHistory();
 applyTheme(loadTheme());
+applyTopK(loadTopK());
 refreshStatus();   // schedules its own next run
 
 /* Still open (see the task list):

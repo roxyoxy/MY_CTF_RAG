@@ -48,6 +48,18 @@
             <button data-theme="light">浅色</button>
           </div>
         </div>
+        <!-- min/max/value are the single source of truth for the range:
+             app.js reads them off the element rather than repeating them,
+             so the two cannot drift apart. 10 is the engine's registered
+             TOP_K, which is what the page used before this existed. -->
+        <div class="setting-block">
+          <div class="setting-row">
+            <span class="setting-label">检索返回条数</span>
+            <span id="topk-value" class="setting-value">10</span>
+          </div>
+          <input id="topk" class="slider" type="range" min="5" max="20" step="1"
+                 value="10" aria-label="检索返回条数">
+        </div>
       </div>
     </div>
   </div>
