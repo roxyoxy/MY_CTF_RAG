@@ -48,6 +48,11 @@ json hit_json(const QueryHit& hit) {
     json out{
         {"rank", hit.rank},
         {"chunk_id", hit.chunk_id},
+        // Where the chunk sits in its document. The page needs the
+        // byte range to open the full text and highlight the match.
+        {"doc_id", hit.location.document_id},
+        {"begin", hit.location.begin},
+        {"end", hit.location.end},
         {"rrf", hit.rrf},
         {"bm25", nullptr},
         {"vec", nullptr},
@@ -198,6 +203,9 @@ int main() {
                         {"n", c.n},
                         {"source", c.doc_path},
                         {"chunk_id", c.chunk_id},
+                        {"doc_id", c.location.document_id},
+                        {"begin", c.location.begin},
+                        {"end", c.location.end},
                     });
                 }
                 out["sources"] = sources;
@@ -206,6 +214,45 @@ int main() {
             }
         }
         send_json(res, out);
+    });
+
+    // Full text of one document. The collapsible result rows expand
+    // into this, and the detail pane renders it with the matched chunk
+    // highlighted -- which is why hits carry begin/end rather than
+    // only a snippet.
+    server.Get("/api/doc", [&engine](const httplib::Request& req,
+                                     httplib::Response& res) {
+        const std::string raw = req.get_param_value("id");
+        if (raw.empty() || raw.size() > 6) {
+            send_json(res, json{{"error", "bad id"}}, 400);
+            return;
+        }
+        int id = 0;
+        for (const char ch : raw) {
+            if (ch < '0' || ch > '9') {
+                send_json(res, json{{"error", "bad id"}}, 400);
+                return;
+            }
+            id = id * 10 + (ch - '0');
+        }
+        std::string content;
+        if (!engine.document_text(id, content)) {
+            send_json(res, json{{"error", "no such document"}}, 404);
+            return;
+        }
+        std::string path;
+        for (const DocInfo& doc : engine.documents()) {
+            if (doc.id == id) {
+                path = doc.path;
+                break;
+            }
+        }
+        send_json(res, json{
+            {"id", id},
+            {"path", path},
+            {"bytes", content.size()},
+            {"content", content},
+        });
     });
 
     server.set_mount_point("/", kWebRoot);

@@ -8,11 +8,8 @@
 </head>
 <body>
 
-<div class="orbs" aria-hidden="true">
-  <span class="orb a"></span><span class="orb b"></span><span class="orb c"></span>
-</div>
-
-<header class="topbar glass">
+<!-- Full-bleed top bar: the mark sits in the page's top-left corner. -->
+<header class="topbar">
   <div class="brand">
     <span class="logo">Trace<span>RAG</span></span>
     <span class="tagline">让每一次提问，都有出处可查</span>
@@ -23,36 +20,94 @@
   </div>
 </header>
 
-<main>
-  <section class="search-card glass">
-    <div class="search-row">
-      <input id="query" type="text" autocomplete="off" autofocus
-             placeholder="试试：金丝雀保护与跳转地址覆盖　/　ret2libc with NX enabled">
-      <button id="btn-search" class="btn primary">检索</button>
-      <button id="btn-ask" class="btn ghost">生成答案</button>
-    </div>
-    <div class="search-meta">
-      <span id="search-time"></span>
-      <span class="note">BM25 + 语义向量 · RRF 融合 · 全本地</span>
-    </div>
-  </section>
+<div class="shell">
 
-  <section id="answer-panel" class="answer glass hidden">
-    <div class="answer-head">
-      <h2>回答</h2>
-      <span id="gen-meta"></span>
+  <!-- Left: collapsible panel holding the search history. Its toggle
+       lives inside the composer, at the input box's bottom-left. -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-head">
+      <span>检索记录</span>
+      <button id="btn-clear-history" class="icon-btn" title="清空记录">清空</button>
     </div>
-    <div id="answer-body" class="answer-body"></div>
-    <div id="sources" class="sources"></div>
-  </section>
+    <ul id="history" class="history"></ul>
+    <p id="history-empty" class="history-empty">还没有检索记录</p>
+  </aside>
 
-  <section id="results" class="results"></section>
+  <main class="main">
 
-  <div id="empty-state" class="empty glass">
-    <p class="empty-big">输入一个问题，开始检索</p>
-    <p class="empty-sub">词法（BM25）与语义（向量）双路并行 · 融合排名 · 答案带 [n] 出处</p>
-  </div>
-</main>
+    <div id="workspace" class="workspace">
+
+      <section id="pane-main" class="pane-main">
+
+        <div id="empty-state" class="empty">
+          <p class="empty-big">输入一个问题，开始检索</p>
+          <p class="empty-sub">词法（BM25）与语义（向量）双路并行 · 融合排名 · 答案带 [n] 出处</p>
+        </div>
+
+        <section id="answer-panel" class="answer hidden">
+          <div class="answer-head">
+            <h2>回答</h2>
+            <span id="gen-meta"></span>
+          </div>
+          <div id="answer-body" class="answer-body"></div>
+          <div id="sources" class="sources"></div>
+        </section>
+
+        <section id="results" class="results"></section>
+
+      </section>
+
+      <!-- Right half: the detail pane. Opened by a click in generate
+           mode -- the result rows do not expand in place there. -->
+      <section id="pane-detail" class="pane-detail hidden">
+        <div class="detail-head">
+          <button id="btn-detail-close" class="icon-btn" title="关闭">×</button>
+          <div class="detail-title">
+            <span id="detail-path" class="path"></span>
+            <span id="detail-id" class="id"></span>
+            <span id="detail-score" class="score"></span>
+          </div>
+          <button id="btn-jump" class="btn small">命中 chunk</button>
+        </div>
+        <pre id="detail-body" class="detail-body"></pre>
+      </section>
+
+    </div>
+
+    <!-- Composer, anchored at the bottom: history toggle bottom-left
+         inside the box, send button bottom-right opening the two
+         actions. -->
+    <div class="composer">
+      <div class="search-meta">
+        <span id="search-time"></span>
+        <span class="note">BM25 + 语义向量 · RRF 融合 · 全本地</span>
+      </div>
+
+      <div class="composer-box">
+        <input id="query" type="text" autocomplete="off" autofocus
+               placeholder="试试：金丝雀保护与跳转地址覆盖　/　ret2libc with NX enabled">
+        <div class="composer-bar">
+          <button id="btn-sidebar" class="icon-btn small" title="检索记录" aria-label="检索记录">
+            <span class="hist-icon" aria-hidden="true"></span>
+          </button>
+          <div class="send-wrap">
+            <div class="send-btn">
+              <button id="btn-act" class="send-act">检索</button>
+              <button id="btn-menu" class="send-caret" title="选择动作">
+                <span class="caret-down" aria-hidden="true"></span>
+              </button>
+            </div>
+            <div id="send-menu" class="send-menu hidden">
+              <button data-act="search">检索<span>只看命中片段</span></button>
+              <button data-act="ask">生成<span>检索 + 本地模型作答</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
 
 <footer>TraceRAG · C++17 全本地引擎 · 检索亚毫秒</footer>
 
