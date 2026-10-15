@@ -73,6 +73,28 @@ function highlightRange(text, begin, end) {
          escapeHtml(after);
 }
 
+/* ---------- settings ---------- */
+const THEME_KEY = "traceRAG.theme";
+
+function loadTheme() {
+  try { return localStorage.getItem(THEME_KEY) || "system"; }
+  catch (error) { return "system"; }
+}
+
+// "system" means no attribute at all, so the CSS media query decides;
+// an explicit choice sets data-theme and wins over it.
+function applyTheme(theme) {
+  const root = document.documentElement;
+  if (theme === "system") root.removeAttribute("data-theme");
+  else root.setAttribute("data-theme", theme);
+  document.querySelectorAll("#theme-seg button").forEach((button) => {
+    button.classList.toggle("on", button.dataset.theme === theme);
+  });
+  try { localStorage.setItem(THEME_KEY, theme); } catch (error) { /* ignore */ }
+}
+
+function closeSettings() { $("settings-menu").classList.add("hidden"); }
+
 /* ---------- status ---------- */
 async function refreshStatus() {
   const badge = $("mode-badge");
@@ -373,6 +395,7 @@ function setBusy(busy) {
 async function doSearch() {
   const query = $("query").value.trim();
   if (!query) return;
+  $("query").value = "";   // the query lives on in the history
   setBusy(true);
   try {
     $("answer-panel").classList.add("hidden");
@@ -390,6 +413,7 @@ async function doSearch() {
 async function doAsk() {
   const query = $("query").value.trim();
   if (!query) return;
+  $("query").value = "";   // the query lives on in the history
   setBusy(true);
 
   // Generate mode shows the answer and its citation ledger only --
@@ -436,6 +460,7 @@ $("btn-act").addEventListener("click", (event) => {
 
 $("btn-menu").addEventListener("click", (event) => {
   event.stopPropagation();   // otherwise the document handler re-closes it
+  closeSettings();
   $("send-menu").classList.toggle("hidden");
 });
 
@@ -452,7 +477,23 @@ $("send-menu").addEventListener("click", (event) => {
   }
 });
 
-document.addEventListener("click", closeSendMenu);
+// Settings: same click-outside pattern as the send menu, and each one
+// closes the other so only one dropdown is ever open.
+$("btn-settings").addEventListener("click", (event) => {
+  event.stopPropagation();
+  closeSendMenu();
+  $("settings-menu").classList.toggle("hidden");
+});
+
+$("theme-seg").addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-theme]");
+  if (button) applyTheme(button.dataset.theme);
+});
+
+document.addEventListener("click", () => {
+  closeSendMenu();
+  closeSettings();
+});
 
 $("query").addEventListener("keydown", (event) => {
   if (event.key !== "Enter") return;
@@ -509,6 +550,7 @@ $("btn-detail-close").addEventListener("click", () => {
 $("btn-jump").addEventListener("click", jumpToDetailHit);
 
 renderHistory();
+applyTheme(loadTheme());
 refreshStatus();
 setInterval(refreshStatus, 10000);
 
