@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TraceRAG · 全本地 CTF 检索问答</title>
+<!-- Inline so there is no favicon.ico request to 404. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0f14'/%3E%3Ctext x='16' y='23' font-size='19' text-anchor='middle' fill='%234cc9f0' font-family='monospace' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="style.css">
 <script>
   /* Runs before the body paints, so a stored non-system theme does not
@@ -16,6 +18,13 @@
 </script>
 </head>
 <body>
+
+<!-- Blurred colour wash behind everything. Purely decorative, never
+     interactive; the panels above it are translucent so it shows
+     through. -->
+<div class="orbs" aria-hidden="true">
+  <span class="orb a"></span><span class="orb b"></span><span class="orb c"></span>
+</div>
 
 <!-- Full-bleed top bar: the mark sits in the page's top-left corner. -->
 <header class="topbar">

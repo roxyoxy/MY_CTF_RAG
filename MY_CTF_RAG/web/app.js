@@ -41,7 +41,14 @@ async function api(path, body) {
     : {};
   const response = await fetch(path, opts);
   const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+  if (!response.ok) {
+    // A first run embeds the corpus before anything can be asked;
+    // "starting" is a state to wait out, not a failure to report.
+    const message = data.error === "starting"
+      ? "引擎正在建立索引，请稍候…"
+      : (data.error || `HTTP ${response.status}`);
+    throw new Error(message);
+  }
   return data;
 }
 
@@ -96,20 +103,46 @@ function applyTheme(theme) {
 function closeSettings() { $("settings-menu").classList.add("hidden"); }
 
 /* ---------- status ---------- */
+const STAGE_TEXT = { plan: "准备中", index: "重建词法索引", vectors: "嵌入向量" };
+
+// Self-scheduling rather than setInterval: while the engine is still
+// coming up the badge should move every couple of seconds, and once it
+// is ready there is nothing to watch that often.
 async function refreshStatus() {
   const badge = $("mode-badge");
+  let nextDelay = 10000;
   try {
     const s = await api("/api/status");
-    const hybrid = s.mode === "hybrid";
-    badge.textContent = hybrid ? "hybrid 检索" : "BM25-only（语义路已降级）";
-    badge.classList.toggle("bm25", !hybrid);
-    $("corpus-info").textContent =
-      `${s.docs} 文档 · ${s.chunks} chunks · ${s.dense_model}`;
+    if (s.starting) {
+      const name = STAGE_TEXT[s.stage] || "建立索引";
+      badge.textContent = s.total > 0
+        ? `${name} ${s.done}/${s.total}`
+        : `${name}…`;
+      badge.classList.add("bm25");
+      $("corpus-info").textContent = "";
+      nextDelay = 2000;
+    } else {
+      const hybrid = s.mode === "hybrid";
+      badge.textContent = hybrid ? "hybrid 检索" : "BM25-only";
+      badge.classList.toggle("bm25", !hybrid);
+      // Defensive: a payload missing the corpus fields must never
+      // render "undefined documents". The starting payload has no
+      // docs/chunks at all, and a degraded payload has no model name.
+      const docs = s.docs ?? 0;
+      const chunks = s.chunks ?? 0;
+      const model = s.dense_model || "";
+      $("corpus-info").textContent = model
+        ? `${docs} 文档 · ${chunks} chunks · ${model}`
+        : `${docs} 文档 · ${chunks} chunks`;
+    }
   } catch (error) {
-    badge.textContent = "引擎未连接";
+    badge.textContent = error.message === "引擎未连接"
+      ? error.message : "引擎未连接";
     badge.classList.add("bm25");
     $("corpus-info").textContent = "";
+    nextDelay = 5000;
   }
+  setTimeout(refreshStatus, nextDelay);
 }
 
 /* ---------- search history (localStorage) ---------- */
@@ -424,7 +457,7 @@ async function doAsk() {
   $("pane-detail").classList.add("hidden");
   $("answer-panel").classList.remove("hidden");
   $("answer-body").innerHTML =
-    `<span class="spin"></span>本地模型生成中（约 8–10 秒）…`;
+    `<span class="spin"></span>本地模型生成中…`;
   $("gen-meta").textContent = "";
   $("sources").innerHTML = "";
 
@@ -485,12 +518,15 @@ $("btn-settings").addEventListener("click", (event) => {
   $("settings-menu").classList.toggle("hidden");
 });
 
-$("theme-seg").addEventListener("click", (event) => {
-  const button = event.target.closest("button[data-theme]");
-  if (button) applyTheme(button.dataset.theme);
-});
-
-document.addEventListener("click", () => {
+// Theme picks are handled at the document level so they work even if the
+// menu's own listener never attached; the menu deliberately stays open so
+// both options can be tried without reopening it.
+document.addEventListener("click", (event) => {
+  const themeButton = event.target.closest("button[data-theme]");
+  if (themeButton) {
+    applyTheme(themeButton.dataset.theme);
+    return;
+  }
   closeSendMenu();
   closeSettings();
 });
@@ -551,8 +587,7 @@ $("btn-jump").addEventListener("click", jumpToDetailHit);
 
 renderHistory();
 applyTheme(loadTheme());
-refreshStatus();
-setInterval(refreshStatus, 10000);
+refreshStatus();   // schedules its own next run
 
 /* Still open (see the task list):
  *   - keyword highlighting in the snippet (escape first, then wrap)

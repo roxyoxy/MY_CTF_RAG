@@ -17,11 +17,13 @@
 // Run it from the code area (the working directory must contain data/,
 // index.bin, vector.bin and web/).
 
+#include <atomic>
 #include <cstddef>
 #include <exception>
 #include <iostream>
 #include <mutex>
 #include <string>
+#include <thread>
 #include <unordered_map>
 
 #ifdef _WIN32
@@ -111,6 +113,56 @@ void send_json(httplib::Response& res, const json& body, int status = 200) {
     res.set_content(body.dump(), "application/json; charset=utf-8");
 }
 
+// Startup runs on its own thread so the server can answer immediately.
+// A first run with no vector.bin embeds the whole corpus -- minutes on
+// CPU -- and the browser must be able to load the page and watch
+// progress instead of finding nothing listening.
+//
+// Nothing here touches the engine: the progress callback writes these
+// atomics from the startup thread, and handlers read them. The engine
+// itself is only ever reached by ONE thread at a time -- the startup
+// thread before ready, the search/ask handlers after.
+struct StartupState {
+    std::atomic<bool> ready{false};
+    std::atomic<bool> failed{false};
+    std::atomic<int> stage{0};        // 0 plan, 1 index, 2 vectors, 3 done
+    std::atomic<unsigned long long> done{0};
+    std::atomic<unsigned long long> total{0};
+    std::string error;                // written before failed is published
+};
+
+int stage_code(const std::string& stage) {
+    if (stage == "index")
+        return 1;
+    if (stage == "vectors")
+        return 2;
+    return 0;
+}
+
+const char* stage_name(int stage) {
+    switch (stage) {
+    case 1:  return "index";
+    case 2:  return "vectors";
+    case 3:  return "done";
+    default: return "plan";
+    }
+}
+
+// What a caller gets while the engine is still coming up. `starting`
+// is the flag the page keys on; the stage and counts drive its progress
+// line. 503 for the data routes, 200 for /api/status -- asking how it
+// is going is always a valid question.
+json starting_json(const StartupState& state) {
+    return json{
+        {"starting", true},
+        {"stage", stage_name(state.stage.load(std::memory_order_relaxed))},
+        {"done", state.done.load(std::memory_order_relaxed)},
+        {"total", state.total.load(std::memory_order_relaxed)},
+    };
+}
+
+const json kStillStarting = json{{"error", "starting"}};
+
 }  // namespace
 
 int main() {
@@ -120,43 +172,73 @@ int main() {
 #endif
 
     RagEngine engine;
-    EngineStatus status;
-    try {
-        status = engine.open(EngineConfig{});
-    } catch (const std::exception& e) {
-        std::cerr << "startup failed: " << e.what() << "\n";
-        return 1;
-    }
-    std::cout << "corpus: " << status.documents << " docs / "
-        << status.chunks << " chunks\n";
-    if (status.dense_ready) {
-        std::cout << "dense route ready: " << status.vectors_total
-            << " vectors, dim " << status.dimension << "\n";
-    } else if (!status.dense_error.empty()) {
-        std::cout << "dense route unavailable (" << status.dense_error
-            << "), BM25-only this session\n";
-    }
-
-    // The web UI is read-only, so everything it says about the corpus
-    // is fixed for the life of the process. Snapshot it once instead of
-    // asking the engine per request: a generation holds the engine for
-    // tens of seconds, and a document lookup must not queue behind one.
-    const std::vector<DocInfo> docs_snapshot = engine.documents();
+    StartupState startup;
+    std::vector<DocInfo> docs_snapshot;
     std::unordered_map<int, std::string> doc_text;
-    for (const DocInfo& doc : docs_snapshot) {
-        std::string content;
-        if (engine.document_text(doc.id, content))
-            doc_text.emplace(doc.id, std::move(content));
-    }
-    const json status_snapshot = json{
-        {"docs", status.documents},
-        {"chunks", status.chunks},
-        {"dense_ready", status.dense_ready},
-        {"mode", status.dense_ready ? "hybrid" : "bm25-only"},
-        {"dense_model", status.dense_model_id},
-        {"gen_model", engine.config().generation_model},
-        {"generation_ready", status.generation_ready},
-    };
+    json status_snapshot = json::object();
+    std::mutex engine_mutex;
+
+    // The engine comes up on its own thread; the server starts listening
+    // right away and tells callers how far along it is. The two never
+    // overlap: handlers stay off the engine until ready is published, and
+    // the snapshot below is written before that release.
+    std::thread startup_thread([&]() {
+        EngineStatus status;
+        try {
+            status = engine.open(EngineConfig{},
+                [&startup](const EngineProgress& p) {
+                    startup.stage.store(stage_code(p.stage),
+                                        std::memory_order_relaxed);
+                    startup.done.store(p.done, std::memory_order_relaxed);
+                    startup.total.store(p.total, std::memory_order_relaxed);
+                    if (p.total > 0) {
+                        std::cout << "  " << p.stage << ": " << p.done
+                            << "/" << p.total << "\n";
+                    }
+                    return true;
+                });
+        } catch (const std::exception& e) {
+            startup.error = e.what();
+            startup.failed.store(true, std::memory_order_release);
+            std::cerr << "startup failed: " << e.what() << "\n";
+            return;
+        }
+
+        std::cout << "corpus: " << status.documents << " docs / "
+            << status.chunks << " chunks\n";
+        if (status.dense_ready) {
+            std::cout << "dense route ready: " << status.vectors_total
+                << " vectors, dim " << status.dimension << "\n";
+        } else if (!status.dense_error.empty()) {
+            std::cout << "dense route unavailable (" << status.dense_error
+                << "), BM25-only this session\n";
+        }
+
+        // The web UI is read-only, so everything it says about the corpus
+        // is fixed for the life of the process. Snapshot it once instead
+        // of asking the engine per request: a generation holds the engine
+        // for tens of seconds, and a document lookup must not queue.
+        docs_snapshot = engine.documents();
+        for (const DocInfo& doc : docs_snapshot) {
+            std::string content;
+            if (engine.document_text(doc.id, content))
+                doc_text.emplace(doc.id, std::move(content));
+        }
+        status_snapshot = json{
+            {"docs", status.documents},
+            {"chunks", status.chunks},
+            {"dense_ready", status.dense_ready},
+            {"mode", status.dense_ready ? "hybrid" : "bm25-only"},
+            {"dense_model", status.dense_model_id},
+            {"gen_model", engine.config().generation_model},
+            {"generation_ready", status.generation_ready},
+        };
+        startup.stage.store(3, std::memory_order_relaxed);
+        startup.ready.store(true, std::memory_order_release);
+        std::cout << "engine ready -- " << docs_snapshot.size()
+            << " documents\n";
+    });
+    startup_thread.detach();
 
     httplib::Server server;
 
@@ -164,16 +246,27 @@ int main() {
     // allows one thread at a time -- so those two take a mutex while the
     // snapshot-backed routes run free. The caller does the serializing,
     // exactly as the contract asks.
-    std::mutex engine_mutex;
     server.new_task_queue = [] { return new httplib::ThreadPool(4); };
 
-    server.Get("/api/status", [&status_snapshot](const httplib::Request&,
-                                               httplib::Response& res) {
+    server.Get("/api/status", [&](const httplib::Request&,
+                                   httplib::Response& res) {
+        if (startup.failed.load(std::memory_order_acquire)) {
+            send_json(res, json{{"error", startup.error}}, 500);
+            return;
+        }
+        if (!startup.ready.load(std::memory_order_acquire)) {
+            send_json(res, starting_json(startup));   // 200: asking is always valid
+            return;
+        }
         send_json(res, status_snapshot);
     });
 
-    server.Post("/api/search", [&engine, &engine_mutex](const httplib::Request& req,
+    server.Post("/api/search", [&](const httplib::Request& req,
                                          httplib::Response& res) {
+        if (!startup.ready.load(std::memory_order_acquire)) {
+            send_json(res, kStillStarting, 503);
+            return;
+        }
         std::string query;
         std::size_t top_k = 0;
         json error;
@@ -185,8 +278,12 @@ int main() {
         send_json(res, base_json(engine.retrieve(query, top_k)));
     });
 
-    server.Post("/api/ask", [&engine, &engine_mutex](const httplib::Request& req,
+    server.Post("/api/ask", [&](const httplib::Request& req,
                                       httplib::Response& res) {
+        if (!startup.ready.load(std::memory_order_acquire)) {
+            send_json(res, kStillStarting, 503);
+            return;
+        }
         std::string query;
         std::size_t top_k = 0;
         json error;
@@ -236,9 +333,12 @@ int main() {
     // into this, and the detail pane renders it with the matched chunk
     // highlighted -- which is why hits carry begin/end rather than
     // only a snippet.
-    server.Get("/api/doc", [&doc_text, &docs_snapshot](
-                                     const httplib::Request& req,
-                                     httplib::Response& res) {
+    server.Get("/api/doc", [&](const httplib::Request& req,
+                                   httplib::Response& res) {
+        if (!startup.ready.load(std::memory_order_acquire)) {
+            send_json(res, kStillStarting, 503);
+            return;
+        }
         const std::string raw = req.get_param_value("id");
         if (raw.empty() || raw.size() > 6) {
             send_json(res, json{{"error", "bad id"}}, 400);
